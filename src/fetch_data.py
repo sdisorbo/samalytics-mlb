@@ -145,7 +145,7 @@ def fetch_pitcher_stats(season):
 
 
 def fetch_batter_stats(season):
-    """Fetch season batting splits for qualified hitters. Returns list of split dicts."""
+    """Fetch season batting splits for all hitters. Returns list of split dicts."""
     splits = []
     offset = 0
     limit = 500
@@ -157,7 +157,7 @@ def fetch_batter_stats(season):
                 "stats": "season",
                 "group": "hitting",
                 "season": season,
-                "playerPool": "Qualified",
+                "playerPool": "All",
                 "limit": limit,
                 "offset": offset,
             },

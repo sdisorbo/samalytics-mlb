@@ -1,15 +1,16 @@
 """
-players.py — Qualified batter stat processor
+players.py — Batter stat processor
 
-Pulls season hitting stats and computes percentile ranks for Statcast-adjacent metrics.
-Full Statcast data (exit velocity, xBA, xSLG, barrel%, etc.) is not available via the
-MLB Stats API — this module uses standard counting stats as approximations.
+Pulls season hitting stats for all players and filters to those with at least
+PA_PER_GAME * games_played plate appearances (default 2.5 PA/game).
 
 TODO: integrate Baseball Savant CSV export for full Statcast metrics
       (avg_exit_velocity, hard_hit_pct, xba, xslg, barrel_pct, whiff_pct, chase_rate)
 """
 
-from fetch_data import fetch_batter_stats, fetch_teams
+from fetch_data import fetch_batter_stats, fetch_teams, fetch_standings
+
+PA_PER_GAME = 2.5  # minimum plate appearances per team game played
 
 
 def _safe_float(value, default=None):
@@ -31,7 +32,8 @@ def _percentile(values, target, higher_is_better=True):
 
 def process_players(season):
     """
-    Fetch and process qualified batter stats for `season`.
+    Fetch and process batter stats for `season`.
+    Includes players with PA >= PA_PER_GAME * max_team_games_played.
     Returns a list of player dicts enriched with percentile ranks.
 
     Note: Statcast fields are None until Baseball Savant integration is added.
@@ -39,6 +41,16 @@ def process_players(season):
     """
     teams = fetch_teams(season)
     splits = fetch_batter_stats(season)
+
+    # Derive games played threshold from current standings
+    standings = fetch_standings(season)
+    max_games = 1
+    for record in standings:
+        for team_rec in record.get("teamRecords", []):
+            games = team_rec.get("wins", 0) + team_rec.get("losses", 0)
+            if games > max_games:
+                max_games = games
+    min_pa = int(PA_PER_GAME * max_games)
 
     players = []
 
@@ -52,8 +64,11 @@ def process_players(season):
         team_info = teams.get(team_id, {})
         abbr = team_info.get("abbreviation") or team.get("abbreviation", "")
 
-        ab = int(stat.get("atBats", 0) or 0)
         pa = int(stat.get("plateAppearances", 0) or 0)
+        if pa < min_pa:
+            continue
+
+        ab = int(stat.get("atBats", 0) or 0)
         k = int(stat.get("strikeOuts", 0) or 0)
         bb = int(stat.get("baseOnBalls", 0) or 0)
 
