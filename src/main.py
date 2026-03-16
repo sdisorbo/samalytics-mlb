@@ -145,7 +145,7 @@ def main():
     export.export_playoff_odds(sim_results, N_PLAYOFF_SIMS)
 
     print(f"\n=== Pipeline complete! ===")
-    print(f"    Output → {os.path.abspath(export.OUTPUT_DIR)}")
+    print(f"    Output -> {os.path.abspath(export.OUTPUT_DIR)}")
 
 
 if __name__ == "__main__":

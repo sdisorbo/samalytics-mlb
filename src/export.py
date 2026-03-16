@@ -22,7 +22,7 @@ def _write(filename, data):
     path = os.path.join(OUTPUT_DIR, filename)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-    print(f"  ✓ {filename}  ({os.path.getsize(path):,} bytes)")
+    print(f"  [ok] {filename}  ({os.path.getsize(path):,} bytes)")
     return path
 
 

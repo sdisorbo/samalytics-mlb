@@ -8,9 +8,9 @@ TODO: integrate Baseball Savant CSV export for full Statcast metrics
       (avg_exit_velocity, hard_hit_pct, xba, xslg, barrel_pct, whiff_pct, chase_rate)
 """
 
-from fetch_data import fetch_batter_stats, fetch_teams, fetch_standings
+from fetch_data import fetch_batter_stats, fetch_teams
 
-PA_PER_GAME = 2.5  # minimum plate appearances per team game played
+MIN_AB = 2  # minimum at-bats to be included
 
 
 def _safe_float(value, default=None):
@@ -42,15 +42,6 @@ def process_players(season):
     teams = fetch_teams(season)
     splits = fetch_batter_stats(season)
 
-    # Derive games played threshold from current standings
-    standings = fetch_standings(season)
-    max_games = 1
-    for record in standings:
-        for team_rec in record.get("teamRecords", []):
-            games = team_rec.get("wins", 0) + team_rec.get("losses", 0)
-            if games > max_games:
-                max_games = games
-    min_pa = int(PA_PER_GAME * max_games)
 
     players = []
 
@@ -64,11 +55,11 @@ def process_players(season):
         team_info = teams.get(team_id, {})
         abbr = team_info.get("abbreviation") or team.get("abbreviation", "")
 
-        pa = int(stat.get("plateAppearances", 0) or 0)
-        if pa < min_pa:
+        ab = int(stat.get("atBats", 0) or 0)
+        if ab < MIN_AB:
             continue
 
-        ab = int(stat.get("atBats", 0) or 0)
+        pa = int(stat.get("plateAppearances", 0) or 0)
         k = int(stat.get("strikeOuts", 0) or 0)
         bb = int(stat.get("baseOnBalls", 0) or 0)
 
