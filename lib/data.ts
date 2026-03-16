@@ -6,6 +6,8 @@ import type {
   Pitcher,
   Player,
   PlayoffOdds,
+  PitcherArsenal,
+  BatterVsPitch,
 } from './types'
 
 // Resolve data directory: env var → data/output at repo root
@@ -45,4 +47,12 @@ export function getPlayers(): Player[] {
 
 export function getPlayoffOdds(): PlayoffOdds {
   return readJson<PlayoffOdds>('playoff_odds.json')
+}
+
+export function getPitcherArsenal(): PitcherArsenal[] {
+  return readJson<PitcherArsenal[]>('pitcher_arsenal.json')
+}
+
+export function getBatterVsPitch(): BatterVsPitch[] {
+  return readJson<BatterVsPitch[]>('batter_vs_pitch.json')
 }

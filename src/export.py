@@ -74,6 +74,16 @@ def export_players(players_list):
     _write("players.json", players_list)
 
 
+def export_pitcher_arsenal(arsenal_list):
+    """Export pitcher_arsenal.json (Statcast pitch arsenal per pitcher)."""
+    _write("pitcher_arsenal.json", arsenal_list)
+
+
+def export_batter_vs_pitch(batter_list):
+    """Export batter_vs_pitch.json (Statcast batter performance vs each pitch type)."""
+    _write("batter_vs_pitch.json", batter_list)
+
+
 def export_playoff_odds(sim_results, n_sims):
     """
     Export playoff_odds.json

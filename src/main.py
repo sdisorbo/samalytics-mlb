@@ -24,6 +24,7 @@ from playoff_sim import run_simulations
 from bubble_weights import calculate_playoff_probabilities
 from pitchers import process_pitchers
 from players import process_players
+from savant import fetch_pitcher_arsenal, fetch_batter_vs_pitch
 import export
 
 # Months with no MLB regular-season games
@@ -94,7 +95,7 @@ def main():
         sys.exit(0)
 
     # ── 1. Teams ──────────────────────────────────────────────────────────────
-    print(f"[1/7] Fetching team info for {SEASON}...")
+    print(f"[1/8] Fetching team info for {SEASON}...")
     teams = fetch_teams(SEASON)
     id_to_abbr = {tid: info["abbreviation"] for tid, info in teams.items()}
     print(f"      {len(teams)} teams loaded.")
@@ -133,6 +134,13 @@ def main():
     players = process_players(SEASON)
     print(f"      {len(players)} qualified batters processed.")
 
+    # ── 8. Savant pitch data ───────────────────────────────────────────────────
+    print(f"\n[8/8] Fetching Baseball Savant pitch arsenal + batter splits...")
+    pitcher_arsenal = fetch_pitcher_arsenal(SEASON)
+    print(f"      {len(pitcher_arsenal)} pitchers with arsenal data.")
+    batter_vs_pitch = fetch_batter_vs_pitch(SEASON)
+    print(f"      {len(batter_vs_pitch)} batters with vs-pitch data.")
+
     # ── Export ────────────────────────────────────────────────────────────────
     print(f"\n[Export] Writing output JSON files to {export.OUTPUT_DIR} ...")
     standings_output = _build_standings_output(
@@ -143,6 +151,8 @@ def main():
     export.export_pitchers(pitchers)
     export.export_players(players)
     export.export_playoff_odds(sim_results, N_PLAYOFF_SIMS)
+    export.export_pitcher_arsenal(pitcher_arsenal)
+    export.export_batter_vs_pitch(batter_vs_pitch)
 
     print(f"\n=== Pipeline complete! ===")
     print(f"    Output -> {os.path.abspath(export.OUTPUT_DIR)}")

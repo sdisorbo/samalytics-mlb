@@ -71,6 +71,47 @@ export interface Player {
   bb_pct_percentile: number
 }
 
+export interface PitchArsenal {
+  pitch_type: string
+  pitch_name: string
+  usage_pct: number | null
+  whiff_pct: number | null
+  woba_against: number | null
+  xwoba_against: number | null
+  hard_hit_pct: number | null
+  run_value_per_100: number | null
+  avg_speed: number | null
+  break_x: number | null
+  break_z: number | null
+}
+
+export interface PitcherArsenal {
+  player_id: number
+  name: string
+  team: string
+  pitches: PitchArsenal[]
+}
+
+export interface PitchVsStats {
+  pitch_type: string
+  pitch_name: string
+  pa: number
+  woba: number | null
+  xwoba: number | null
+  ba: number | null
+  slg: number | null
+  whiff_pct: number | null
+  hard_hit_pct: number | null
+  run_value_per_100: number | null
+}
+
+export interface BatterVsPitch {
+  player_id: number
+  name: string
+  team: string
+  vs_pitches: PitchVsStats[]
+}
+
 export interface PlayoffOdds {
   last_updated: string
   simulations: number
