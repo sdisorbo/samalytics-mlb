@@ -9,8 +9,8 @@
     "losses": 65,
     "run_diff": 172,
     "playoff_probability": 1.0,
-    "win_ds": 0.5,
-    "win_cs": 0.3,
+    "win_ds": 0.6,
+    "win_cs": 0.2,
     "win_ws": 0.1
   },
   {
@@ -23,8 +23,8 @@
     "losses": 66,
     "run_diff": 130,
     "playoff_probability": 1.0,
-    "win_ds": 0.5,
-    "win_cs": 0.2,
+    "win_ds": 0.6,
+    "win_cs": 0.3,
     "win_ws": 0.1
   },
   {
@@ -37,9 +37,9 @@
     "losses": 68,
     "run_diff": 77,
     "playoff_probability": 1.0,
-    "win_ds": 0.2,
-    "win_cs": 0.1,
-    "win_ws": 0.1
+    "win_ds": 0.1,
+    "win_cs": 0.0,
+    "win_ws": 0.0
   },
   {
     "team": "Yankees",
@@ -51,9 +51,9 @@
     "losses": 68,
     "run_diff": 164,
     "playoff_probability": 1.0,
-    "win_ds": 0.7,
-    "win_cs": 0.6,
-    "win_ws": 0.3
+    "win_ds": 0.9,
+    "win_cs": 0.7,
+    "win_ws": 0.5
   },
   {
     "team": "Dodgers",
@@ -65,8 +65,8 @@
     "losses": 69,
     "run_diff": 142,
     "playoff_probability": 0.884,
-    "win_ds": 0.3,
-    "win_cs": 0.2,
+    "win_ds": 0.4,
+    "win_cs": 0.3,
     "win_ws": 0.0
   },
   {
@@ -79,9 +79,9 @@
     "losses": 70,
     "run_diff": 144,
     "playoff_probability": 1.0,
-    "win_ds": 0.3,
-    "win_cs": 0.0,
-    "win_ws": 0.0
+    "win_ds": 0.2,
+    "win_cs": 0.1,
+    "win_ws": 0.1
   },
   {
     "team": "Mariners",
@@ -93,7 +93,7 @@
     "losses": 72,
     "run_diff": 72,
     "playoff_probability": 0.829,
-    "win_ds": 0.5,
+    "win_ds": 0.3,
     "win_cs": 0.1,
     "win_ws": 0.1
   },
@@ -107,9 +107,9 @@
     "losses": 72,
     "run_diff": 81,
     "playoff_probability": 0.482,
-    "win_ds": 0.3,
-    "win_cs": 0.3,
-    "win_ws": 0.1
+    "win_ds": 0.2,
+    "win_cs": 0.1,
+    "win_ws": 0.0
   },
   {
     "team": "Red Sox",
@@ -121,9 +121,9 @@
     "losses": 73,
     "run_diff": 110,
     "playoff_probability": 0.228,
-    "win_ds": 0.2,
-    "win_cs": 0.2,
-    "win_ws": 0.2
+    "win_ds": 0.1,
+    "win_cs": 0.1,
+    "win_ws": 0.0
   },
   {
     "team": "Guardians",
@@ -135,9 +135,9 @@
     "losses": 74,
     "run_diff": -6,
     "playoff_probability": 0.64,
-    "win_ds": 0.3,
-    "win_cs": 0.0,
-    "win_ws": 0.0
+    "win_ds": 0.5,
+    "win_cs": 0.1,
+    "win_ws": 0.1
   },
   {
     "team": "Tigers",
@@ -191,7 +191,7 @@
     "losses": 79,
     "run_diff": 35,
     "playoff_probability": 0.005,
-    "win_ds": 0.1,
+    "win_ds": 0.0,
     "win_cs": 0.0,
     "win_ws": 0.0
   },
