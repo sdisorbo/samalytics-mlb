@@ -1,0 +1,39 @@
+name: Daily MLB Update
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # 10:00 AM ET = 14:00 UTC (runs every day year-round;
+                            # main.py exits gracefully during the offseason)
+  workflow_dispatch:        # allow manual trigger from the GitHub UI
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run MLB prediction pipeline
+        run: python src/main.py
+
+      - name: Commit updated JSON files
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add data/output/
+          git diff --cached --quiet || git commit -m "Daily MLB update $(date +'%Y-%m-%d')"
+
+      - name: Push changes
+        run: git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
