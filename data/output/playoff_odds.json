@@ -1,17 +1,10 @@
 {
-  "last_updated": "2026-03-18T15:03:45",
+  "last_updated": "2026-03-19T14:49:17",
   "simulations": 10,
   "results": [
     {
       "team": "NYY",
-      "win_wildcard": 0.2,
-      "win_ds": 0.7,
-      "win_cs": 0.6,
-      "win_ws": 0.4
-    },
-    {
-      "team": "PHI",
-      "win_wildcard": 0.0,
+      "win_wildcard": 0.5,
       "win_ds": 0.6,
       "win_cs": 0.4,
       "win_ws": 0.3
@@ -19,75 +12,82 @@
     {
       "team": "TOR",
       "win_wildcard": 0.3,
-      "win_ds": 0.3,
-      "win_cs": 0.2,
+      "win_ds": 0.6,
+      "win_cs": 0.3,
+      "win_ws": 0.2
+    },
+    {
+      "team": "SEA",
+      "win_wildcard": 0.0,
+      "win_ds": 0.4,
+      "win_cs": 0.1,
       "win_ws": 0.1
     },
     {
-      "team": "LAD",
-      "win_wildcard": 0.6,
+      "team": "CLE",
+      "win_wildcard": 0.3,
+      "win_ds": 0.2,
+      "win_cs": 0.1,
+      "win_ws": 0.1
+    },
+    {
+      "team": "MIL",
+      "win_wildcard": 0.0,
       "win_ds": 0.5,
       "win_cs": 0.3,
       "win_ws": 0.1
     },
     {
-      "team": "CIN",
-      "win_wildcard": 0.2,
-      "win_ds": 0.1,
-      "win_cs": 0.1,
+      "team": "LAD",
+      "win_wildcard": 0.9,
+      "win_ds": 0.4,
+      "win_cs": 0.2,
       "win_ws": 0.1
     },
     {
-      "team": "SEA",
-      "win_wildcard": 0.1,
+      "team": "CHC",
+      "win_wildcard": 0.5,
       "win_ds": 0.3,
-      "win_cs": 0.1,
-      "win_ws": 0.0
-    },
-    {
-      "team": "CLE",
-      "win_wildcard": 0.4,
-      "win_ds": 0.4,
-      "win_cs": 0.0,
-      "win_ws": 0.0
+      "win_cs": 0.2,
+      "win_ws": 0.1
     },
     {
       "team": "BOS",
-      "win_wildcard": 0.5,
+      "win_wildcard": 0.2,
       "win_ds": 0.1,
       "win_cs": 0.1,
       "win_ws": 0.0
     },
     {
-      "team": "KC",
-      "win_wildcard": 0.1,
+      "team": "HOU",
+      "win_wildcard": 0.3,
       "win_ds": 0.1,
       "win_cs": 0.0,
       "win_ws": 0.0
     },
     {
-      "team": "MIL",
-      "win_wildcard": 0.2,
-      "win_ds": 0.4,
+      "team": "PHI",
+      "win_wildcard": 0.0,
+      "win_ds": 0.6,
       "win_cs": 0.2,
-      "win_ws": 0.0
-    },
-    {
-      "team": "CHC",
-      "win_wildcard": 0.4,
-      "win_ds": 0.2,
-      "win_cs": 0.0,
       "win_ws": 0.0
     },
     {
       "team": "SD",
       "win_wildcard": 0.5,
       "win_ds": 0.2,
+      "win_cs": 0.1,
+      "win_ws": 0.0
+    },
+    {
+      "team": "AZ",
+      "win_wildcard": 0.0,
+      "win_ds": 0.0,
       "win_cs": 0.0,
       "win_ws": 0.0
     },
     {
-      "team": "NYM",
+      "team": "CIN",
       "win_wildcard": 0.0,
       "win_ds": 0.0,
       "win_cs": 0.0,
@@ -95,27 +95,13 @@
     },
     {
       "team": "DET",
-      "win_wildcard": 0.2,
-      "win_ds": 0.1,
-      "win_cs": 0.0,
-      "win_ws": 0.0
-    },
-    {
-      "team": "HOU",
-      "win_wildcard": 0.2,
+      "win_wildcard": 0.4,
       "win_ds": 0.0,
       "win_cs": 0.0,
       "win_ws": 0.0
     },
     {
-      "team": "STL",
-      "win_wildcard": 0.0,
-      "win_ds": 0.0,
-      "win_cs": 0.0,
-      "win_ws": 0.0
-    },
-    {
-      "team": "SF",
+      "team": "NYM",
       "win_wildcard": 0.1,
       "win_ds": 0.0,
       "win_cs": 0.0,
