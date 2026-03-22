@@ -7,13 +7,14 @@ Everything else in the codebase reads from this single variable.
 
 import sys
 import os
+import json
 from datetime import date
 
 # ── Season config ──────────────────────────────────────────
-SEASON = 2025   # Change to 2026 when next season begins
+SEASON = 2026   # Updated for 2026 season
 # ───────────────────────────────────────────────────────────
 
-N_PLAYOFF_SIMS = 10
+N_PLAYOFF_SIMS = 100
 
 # Allow running directly from /src or from the project root
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +34,30 @@ _OFFSEASON_MONTHS = {11, 12, 1, 2}
 
 def _is_offseason():
     return date.today().month in _OFFSEASON_MONTHS
+
+
+def _load_prior_season_initial_ratings(season):
+    """
+    Load prior season's final ELO ratings and apply mean regression.
+    Returns dict of abbr -> regressed_rating, or None if no prior data exists.
+    """
+    _src_dir = os.path.dirname(os.path.abspath(__file__))
+    prior_standings_path = os.path.normpath(
+        os.path.join(_src_dir, "..", "data", str(season - 1), "standings.json")
+    )
+    if not os.path.exists(prior_standings_path):
+        return None
+    try:
+        with open(prior_standings_path, encoding="utf-8") as f:
+            prior = json.load(f)
+        return {
+            row["team_abbr"]: regress_to_mean(row["elo_rating"])
+            for row in prior
+            if "team_abbr" in row and "elo_rating" in row
+        }
+    except Exception as e:
+        print(f"      Warning: could not load prior season ratings: {e}")
+        return None
 
 
 def _remap_games(games, id_to_abbr):
@@ -112,7 +137,10 @@ def main():
     print(f"      {len(games_abbr)} completed games loaded.")
 
     team_abbrs = set(id_to_abbr.values())
-    ratings, history = build_ratings(games_abbr, team_abbrs)
+    prior_ratings = _load_prior_season_initial_ratings(SEASON)
+    if prior_ratings:
+        print(f"      Using regressed {SEASON - 1} ratings as initial ELO values.")
+    ratings, history = build_ratings(games_abbr, team_abbrs, initial_ratings=prior_ratings)
     print(f"      ELO ratings built for {len(ratings)} teams.")
 
     # ── 4. Playoff probabilities ──────────────────────────────────────────────

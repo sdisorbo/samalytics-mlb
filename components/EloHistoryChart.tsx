@@ -23,12 +23,38 @@ interface Props {
   allTeams: string[]
 }
 
+// ── Season scaffold ────────────────────────────────────────────────────────────
+
+/** Generate weekly date strings (every 7 days) from start to end inclusive. */
+function weeklyScaffold(start: string, end: string): string[] {
+  const dates: string[] = []
+  const cur = new Date(start + 'T12:00:00Z')
+  const last = new Date(end + 'T12:00:00Z')
+  while (cur <= last) {
+    dates.push(cur.toISOString().slice(0, 10))
+    cur.setUTCDate(cur.getUTCDate() + 7)
+  }
+  return dates
+}
+
+/** Infer the season year from history data (falls back to current year). */
+function inferYear(history: TeamRatingsHistory): number {
+  for (const abbr of Object.keys(history)) {
+    const pts = history[abbr]
+    if (pts?.length) return parseInt(pts[0].date.slice(0, 4))
+  }
+  return new Date().getFullYear()
+}
+
 // ── Data helpers ───────────────────────────────────────────────────────────────
 
 function buildChartData(history: TeamRatingsHistory, selected: string[], allTeams: string[]) {
-  // Collect all dates across ALL teams (for league min/max)
-  const dateMap = new Map<string, Record<string, number>>()
+  const year = inferYear(history)
+  // Fixed X-axis: opening day (late March) through end of regular season (early Oct)
+  const scaffold = weeklyScaffold(`${year}-03-20`, `${year}-10-05`)
 
+  // Collect all real data points
+  const dateMap = new Map<string, Record<string, number>>()
   for (const abbr of allTeams) {
     for (const { date, rating } of history[abbr] ?? []) {
       if (!dateMap.has(date)) dateMap.set(date, {} as Record<string, number>)
@@ -36,44 +62,45 @@ function buildChartData(history: TeamRatingsHistory, selected: string[], allTeam
     }
   }
 
-  const sorted: Record<string, unknown>[] = Array.from(dateMap.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([date, vals]) => ({ date, ...vals } as Record<string, unknown>))
+  const allRealDates = Array.from(dateMap.keys()).sort()
+  const lastRealDate = allRealDates.length > 0 ? allRealDates[allRealDates.length - 1] : null
 
-  // Forward-fill every team value
-  const last: Record<string, number> = {}
-  for (const row of sorted) {
-    for (const abbr of allTeams) {
-      const v = row[abbr] as number | undefined
-      if (v != null) last[abbr] = v
-      else if (last[abbr] != null) row[abbr] = last[abbr]
+  // The last scaffold slot that should carry data = first scaffold date >= lastRealDate.
+  // This ensures the terminal dot lands on the scaffold (even if the last game date falls
+  // between two scaffold slots) while nothing beyond that slot draws a line.
+  const cutoff = lastRealDate ? (scaffold.find(d => d >= lastRealDate) ?? null) : null
+
+  const lastVal: Record<string, number> = {}
+  let realIdx = 0
+
+  const rows = scaffold.map(scaffoldDate => {
+    const row: Record<string, unknown> = { date: scaffoldDate }
+
+    // Consume all real data points whose date falls on or before this scaffold slot
+    while (realIdx < allRealDates.length && allRealDates[realIdx] <= scaffoldDate) {
+      const vals = dateMap.get(allRealDates[realIdx])!
+      for (const abbr of allTeams) {
+        if (vals[abbr] != null) lastVal[abbr] = vals[abbr]
+      }
+      realIdx++
     }
-  }
 
-  // Compute league high/low from all 30 teams at each date
-  for (const row of sorted) {
-    const vals = allTeams.map(a => row[a] as number | undefined).filter((v): v is number => v != null)
-    if (vals.length) {
-      ;(row as Record<string, unknown>).leagueHigh = Math.max(...vals)
-      ;(row as Record<string, unknown>).leagueLow = Math.min(...vals)
+    // Only draw up to the cutoff slot, and only once we have real data
+    if (cutoff && scaffoldDate <= cutoff && Object.keys(lastVal).length > 0) {
+      for (const abbr of allTeams) {
+        if (lastVal[abbr] != null) row[abbr] = lastVal[abbr]
+      }
+      const vals = allTeams.map(a => row[a] as number | undefined).filter((v): v is number => v != null)
+      if (vals.length) {
+        row.leagueHigh = Math.max(...vals)
+        row.leagueLow  = Math.min(...vals)
+      }
     }
-  }
 
-  // Weekly sample (keep one point per ISO week) for smooth lines
-  const seen = new Set<string>()
-  const weekly = sorted.filter((row: Record<string, unknown>) => {
-    const d = new Date(row.date as string)
-    const year = d.getFullYear()
-    const jan1 = new Date(year, 0, 1)
-    const week = Math.ceil(((d.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7)
-    const key = `${year}-${week}`
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
+    return row
   })
 
-  // Keep only selected team keys + date + leagueHigh/Low in final rows
-  return weekly.map((row: Record<string, unknown>) => {
+  return rows.map(row => {
     const out: Record<string, unknown> = {
       date:       row.date,
       leagueHigh: row.leagueHigh,
@@ -179,15 +206,17 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
     return map
   }, [chartData, selectedArr])
 
-  // X-axis tick labels (monthly)
+  // X-axis tick labels: one per month across the full season scaffold
   const ticks = useMemo(() => {
-    const result: string[] = []
-    let lastMonth = ''
-    for (const row of chartData) {
-      const m = (row.date as string).slice(0, 7)
-      if (m !== lastMonth) { result.push(row.date as string); lastMonth = m }
-    }
-    return result
+    const seen = new Set<string>()
+    return chartData
+      .map(row => row.date as string)
+      .filter(date => {
+        const m = date.slice(0, 7)
+        if (seen.has(m)) return false
+        seen.add(m)
+        return true
+      })
   }, [chartData])
 
   function toggle(abbr: string) {
