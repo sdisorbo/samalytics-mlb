@@ -1,21 +1,17 @@
-import { getStandings, getRatingsHistory } from '@/lib/data'
+import { getStandings, getPlayoffOdds } from '@/lib/data'
 import StandingsTable from '@/components/StandingsTable'
 
 export const dynamic = 'force-dynamic'
 
 export default function StandingsPage() {
   const standings = getStandings()
-  const history = getRatingsHistory()
+  const odds = getPlayoffOdds()
 
-  // Use the latest date in the ELO history data, not the server clock
-  const latestDate = Object.values(history)
-    .flatMap(entries => entries.map(e => e.date))
-    .sort()
-    .at(-1)
-
-  const lastUpdated = latestDate
-    ? new Date(latestDate + 'T12:00:00Z').toLocaleDateString('en-US', {
+  // last_updated is set by the pipeline at run time (10 AM ET = 2 PM UTC, always same calendar day)
+  const lastUpdated = odds.last_updated
+    ? new Date(odds.last_updated + 'Z').toLocaleDateString('en-US', {
         month: 'long', day: 'numeric', year: 'numeric',
+        timeZone: 'America/New_York',
       })
     : '—'
 
