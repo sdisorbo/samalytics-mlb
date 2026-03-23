@@ -1,14 +1,23 @@
-import { getStandings } from '@/lib/data'
+import { getStandings, getRatingsHistory } from '@/lib/data'
 import StandingsTable from '@/components/StandingsTable'
 
 export const dynamic = 'force-dynamic'
 
 export default function StandingsPage() {
   const standings = getStandings()
+  const history = getRatingsHistory()
 
-  const lastUpdated = new Date().toLocaleDateString('en-US', {
-    month: 'long', day: 'numeric', year: 'numeric',
-  })
+  // Use the latest date in the ELO history data, not the server clock
+  const latestDate = Object.values(history)
+    .flatMap(entries => entries.map(e => e.date))
+    .sort()
+    .at(-1)
+
+  const lastUpdated = latestDate
+    ? new Date(latestDate + 'T12:00:00Z').toLocaleDateString('en-US', {
+        month: 'long', day: 'numeric', year: 'numeric',
+      })
+    : '—'
 
   return (
     <div>
@@ -25,7 +34,7 @@ export default function StandingsPage() {
         <p><strong>ELO</strong> — team strength rating. League average = 1500. Higher is better.</p>
         <p><strong>Δ7d</strong> — ELO change over the past 7 days.</p>
         <p><strong>Playoff%</strong> — probability of clinching any of the 12 playoff spots.</p>
-        <p><strong>Win DS/CS/WS</strong> — fraction of {10} playoff simulations in which the team won that round.</p>
+        <p><strong>Win DS/CS/WS</strong> — fraction of {100} playoff simulations in which the team won that round.</p>
       </div>
     </div>
   )
