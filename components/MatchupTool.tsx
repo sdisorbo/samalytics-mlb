@@ -368,7 +368,7 @@ function MatchupEdge({
             <th className="text-right py-2 px-2 font-semibold text-538-orange">P wOBA</th>
             <th className="text-right py-2 px-2 font-semibold text-538-orange">P RV/100</th>
             <th className="w-8" />
-            <th className="text-right py-2 px-2 font-semibold text-[#1565C0]">B wOBA</th>
+            <th className="text-right py-2 px-2 font-semibold text-[#1565C0]">B xwOBA</th>
             <th className="text-right py-2 px-2 font-semibold text-[#1565C0]">B Whiff%</th>
             <th className="text-right py-2 pl-2 font-semibold text-[#1565C0]">B HH%</th>
             <th className="text-right py-2 pl-4 font-semibold">Edge</th>
@@ -379,9 +379,9 @@ function MatchupEdge({
             const pp = pitcherMap.get(pt)!
             const bp = batterMap.get(pt)!
 
-            // Edge: negative pitcher rv/100 = pitcher dominates; high batter wOBA = batter wins
-            // Combine: batter wOBA vs .320 avg and pitcher whiff vs 23% avg
-            const wobaEdge = ((bp.woba ?? 0.32) - 0.32) * 5   // positive = batter
+            // Edge: negative pitcher rv/100 = pitcher dominates; high batter xwOBA = batter wins
+            // Combine: batter xwOBA vs .320 avg and pitcher whiff vs 23% avg
+            const wobaEdge = ((bp.xwoba ?? 0.32) - 0.32) * 5   // positive = batter
             const whiffEdge = ((pp.whiff_pct ?? 23) - 23) / 23  // positive = pitcher
             const edgeScore = wobaEdge - whiffEdge               // positive = batter, negative = pitcher
 
@@ -413,7 +413,7 @@ function MatchupEdge({
                 <td className="px-1 text-538-border text-center">|</td>
                 {/* Batter stats */}
                 <td className="text-right py-2.5 px-2 text-538-text">
-                  {fmtWoba(bp.woba)}
+                  {fmtWoba(bp.xwoba)}
                 </td>
                 <td className="text-right py-2.5 px-2 text-538-text">
                   {fmt(bp.whiff_pct, 1, '%')}
@@ -600,7 +600,7 @@ export default function MatchupTool({
             <span><b>RV/100</b>: run value per 100 pitches — negative favors pitcher, positive favors batter. </span>
             <span><b>HH%</b>: hard-hit rate (exit velo ≥ 95 mph). </span>
             <span><b>PA</b>: plate appearances faced on this pitch type. </span>
-            Edge bar: pitcher whiff% vs lg avg (23%) and batter wOBA vs lg avg (.320). Data: Baseball Savant 2025.
+            Edge bar: pitcher whiff% vs lg avg (23%) and batter xwOBA vs lg avg (.320). Data: Baseball Savant 2025.
           </div>
         </div>
       )}
