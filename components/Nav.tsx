@@ -9,7 +9,8 @@ const LINKS = [
   { href: '/ratings',   label: 'ELO Ratings' },
   { href: '/pitchers',  label: 'Pitchers' },
   { href: '/players',   label: 'Players' },
-  { href: '/matchup',   label: 'Matchup Lab' },
+  { href: '/matchup',     label: 'Pitch Lab' },
+  { href: '/matchup-lab', label: 'Matchup Lab' },
 ]
 
 export default function Nav() {
