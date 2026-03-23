@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Orbitron } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import Nav from '@/components/Nav'
 import './globals.css'
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-538-bg text-538-text">
         <Nav />
         <main className="max-w-screen-xl mx-auto px-4 py-6">{children}</main>
+        <Analytics />
       </body>
     </html>
   )
