@@ -70,9 +70,13 @@ function buildChartData(history: TeamRatingsHistory, selected: string[], allTeam
   const lastRealDate = allRealDates.length > 0 ? allRealDates[allRealDates.length - 1] : null
 
   // The last scaffold slot that should carry data = first scaffold date >= lastRealDate.
-  // This ensures the terminal dot lands on the scaffold (even if the last game date falls
-  // between two scaffold slots) while nothing beyond that slot draws a line.
-  const cutoff = lastRealDate ? (scaffold.find(d => d >= lastRealDate) ?? null) : null
+  // Also extend to today so the line is always visible (handles season-start / stale data).
+  const today = new Date().toISOString().slice(0, 10)
+  const dataCutoff = lastRealDate ? (scaffold.find(d => d >= lastRealDate) ?? null) : null
+  const todayCutoff = scaffold.find(d => d >= today) ?? scaffold[scaffold.length - 1]
+  const cutoff = dataCutoff
+    ? (todayCutoff > dataCutoff ? todayCutoff : dataCutoff)
+    : null
 
   const lastVal: Record<string, number> = {}
   let realIdx = 0
@@ -296,7 +300,10 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
               tickLine={false}
             />
             <YAxis
-              domain={['auto', 'auto']}
+              domain={[
+                (dataMin: number) => (isFinite(dataMin) ? Math.floor((dataMin - 40) / 10) * 10 : 1400),
+                (dataMax: number) => (isFinite(dataMax) ? Math.ceil((dataMax + 40) / 10) * 10  : 1600),
+              ]}
               tick={{ fontSize: 11, fill: '#8A6248' }}
               axisLine={false}
               tickLine={false}
