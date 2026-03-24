@@ -41,7 +41,10 @@ function weeklyScaffold(start: string, end: string): string[] {
 function inferYear(history: TeamRatingsHistory): number {
   for (const abbr of Object.keys(history)) {
     const pts = history[abbr]
-    if (pts?.length) return parseInt(pts[0].date.slice(0, 4))
+    if (pts?.length) {
+      const y = parseInt(pts[0].date.slice(0, 4))
+      if (!isNaN(y)) return y
+    }
   }
   return new Date().getFullYear()
 }
