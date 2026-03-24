@@ -870,6 +870,32 @@ function MatchupCard({
             </div>
           </div>
 
+          {/* NRFI / YRFI */}
+          <div className="border border-538-border rounded-sm bg-white p-4">
+            <div className="text-2xs font-semibold uppercase tracking-widest text-538-muted mb-3">
+              First Inning Scoring
+              <span className="font-normal normal-case ml-1 text-538-muted">(top of order vs SP — projected lineup)</span>
+            </div>
+            <div className="grid grid-cols-2 gap-4 text-center mb-3">
+              <div>
+                <div className="text-2xs text-538-muted uppercase tracking-wider mb-1">NRFI</div>
+                <div className="text-3xl font-black text-538-orange">{(sr.nrfiPct * 100).toFixed(0)}%</div>
+                <div className="text-2xs text-538-muted mt-0.5">No run first inning</div>
+              </div>
+              <div>
+                <div className="text-2xs text-538-muted uppercase tracking-wider mb-1">YRFI</div>
+                <div className="text-3xl font-black text-538-text">{(sr.yrfiPct * 100).toFixed(0)}%</div>
+                <div className="text-2xs text-538-muted mt-0.5">Yes run first inning</div>
+              </div>
+            </div>
+            <div className="h-2 rounded-full overflow-hidden bg-538-border">
+              <div
+                className="h-full rounded-full bg-538-orange"
+                style={{ width: `${sr.nrfiPct * 100}%` }}
+              />
+            </div>
+          </div>
+
           {/* Run distribution */}
           <div className="border border-538-border rounded-sm bg-white p-4">
             <RunDistChart

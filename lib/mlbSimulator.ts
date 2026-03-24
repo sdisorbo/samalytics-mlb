@@ -92,6 +92,8 @@ export interface GameResult {
   awayRuns: number
   homeRuns: number
   innings: number
+  firstInningAwayRuns: number
+  firstInningHomeRuns: number
   // per-batter outcome lists indexed by lineup slot [0..8]
   awayBatterOutcomes: PAOutcome[][]
   homeBatterOutcomes: PAOutcome[][]
@@ -137,6 +139,8 @@ export interface SimResults {
   mostCommonScore: string
   highScore: string
   lowScore: string
+  nrfiPct: number   // probability neither team scores in the 1st inning
+  yrfiPct: number   // complement
 }
 
 export interface GameSetup {
@@ -344,6 +348,9 @@ export function simulateGame(setup: GameSetup): GameResult {
   const awayBatterOutcomes: PAOutcome[][] = awayLineup.map(() => [])
   const homeBatterOutcomes: PAOutcome[][] = homeLineup.map(() => [])
 
+  let firstInningAwayRuns = 0
+  let firstInningHomeRuns = 0
+
   for (let inn = 1; inn <= 9; inn++) {
     // Top: away bats vs home pitcher
     const top = simulateHalfInning(awayLineup, homePitcher, awayBatterIdx, homePitcherPitches)
@@ -352,6 +359,7 @@ export function simulateGame(setup: GameSetup): GameResult {
     homePitcherPitches = top.pitchesThrown
     homePitcherKs += top.ks; homePitcherBb += top.bbs; homePitcherOuts += 3
     for (const [bIdx, outs] of top.batterOutcomes) awayBatterOutcomes[bIdx].push(...outs)
+    if (inn === 1) firstInningAwayRuns = top.runs
 
     // Bottom: home bats vs away pitcher
     const bot = simulateHalfInning(homeLineup, awayPitcher, homeBatterIdx, awayPitcherPitches)
@@ -360,6 +368,7 @@ export function simulateGame(setup: GameSetup): GameResult {
     awayPitcherPitches = bot.pitchesThrown
     awayPitcherKs += bot.ks; awayPitcherBb += bot.bbs; awayPitcherOuts += 3
     for (const [bIdx, outs] of bot.batterOutcomes) homeBatterOutcomes[bIdx].push(...outs)
+    if (inn === 1) firstInningHomeRuns = bot.runs
   }
 
   // Extra innings (capped at 15 to prevent infinite loops)
@@ -378,6 +387,7 @@ export function simulateGame(setup: GameSetup): GameResult {
 
   return {
     awayRuns, homeRuns, innings,
+    firstInningAwayRuns, firstInningHomeRuns,
     awayBatterOutcomes, homeBatterOutcomes,
     awayPitcherKs, awayPitcherBb, awayPitcherOuts,
     homePitcherKs, homePitcherBb, homePitcherOuts,
@@ -464,10 +474,17 @@ export function runSimulations(setup: GameSetup, n = 100): SimResults {
   const maxIdx = allTotals.indexOf(Math.max(...allTotals))
   const minIdx = allTotals.indexOf(Math.min(...allTotals))
 
+  const nrfiCount = results.filter(
+    (r) => r.firstInningAwayRuns === 0 && r.firstInningHomeRuns === 0,
+  ).length
+  const nrfiPct = nrfiCount / n
+
   return {
     awayWinPct,
     homeWinPct,
     tiePct: ties / n,
+    nrfiPct,
+    yrfiPct: 1 - nrfiPct,
     avgAwayRuns: mean(awayRunsArr),
     avgHomeRuns: mean(homeRunsArr),
     confidenceInterval: ci,

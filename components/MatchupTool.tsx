@@ -595,8 +595,8 @@ export default function MatchupTool({
             <span><b>Use%</b>: share of pitches thrown of this type. </span>
             <span><b>Velo</b>: avg release speed (mph). </span>
             <span><b>Whiff%</b>: swings that miss. </span>
-            <span><b>wOBA</b>: weighted on-base average; scale ~.250–.450, lg avg ~.320. </span>
-            <span><b>xwOBA</b>: expected wOBA based on exit velocity &amp; launch angle. </span>
+            <span><b>wOBA</b>: weighted on-base average allowed — measures the quality of contact a pitcher gives up per pitch of this type. Lower is better for a pitcher (lg avg ~.320); a .250 means the pitch is dominant, a .380+ means batters are teeing off on it. </span>
+            <span><b>xwOBA</b>: expected wOBA based on exit velocity &amp; launch angle — strips out luck (bloop singles, etc.) to show true quality of contact allowed. </span>
             <span><b>RV/100</b>: run value per 100 pitches — negative favors pitcher, positive favors batter. </span>
             <span><b>HH%</b>: hard-hit rate (exit velo ≥ 95 mph). </span>
             <span><b>PA</b>: plate appearances faced on this pitch type. </span>
