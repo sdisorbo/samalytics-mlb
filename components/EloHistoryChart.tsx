@@ -48,17 +48,21 @@ function inferYear(history: TeamRatingsHistory): number {
 
 // ── Data helpers ───────────────────────────────────────────────────────────────
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+
 function buildChartData(history: TeamRatingsHistory, selected: string[], allTeams: string[]) {
   const year = inferYear(history)
+  const seasonStart = `${year}-03-20`
   // Fixed X-axis: opening day (late March) through end of regular season (early Oct)
-  const scaffold = weeklyScaffold(`${year}-03-20`, `${year}-10-05`)
+  const scaffold = weeklyScaffold(seasonStart, `${year}-10-05`)
 
-  // Collect all real data points
+  // Collect all real data points; normalize sentinel dates to season start
   const dateMap = new Map<string, Record<string, number>>()
   for (const abbr of allTeams) {
     for (const { date, rating } of history[abbr] ?? []) {
-      if (!dateMap.has(date)) dateMap.set(date, {} as Record<string, number>)
-      dateMap.get(date)![abbr] = rating
+      const d = DATE_RE.test(date) ? date : seasonStart
+      if (!dateMap.has(d)) dateMap.set(d, {} as Record<string, number>)
+      dateMap.get(d)![abbr] = rating
     }
   }
 
