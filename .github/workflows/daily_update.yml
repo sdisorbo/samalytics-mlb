@@ -2,8 +2,8 @@ name: Daily MLB Update
 
 on:
   schedule:
-    - cron: '0 14 * * *'   # 10:00 AM ET = 14:00 UTC
-    - cron: '0 2 * * *'    # 10:00 PM ET = 02:00 UTC (next day)
+    - cron: '0 10 * * *'   # 6:00 AM ET = 14:00 UTC
+    - cron: '0 1 * * *'    # 9:00 PM ET = 02:00 UTC (next day)
   workflow_dispatch:        # allow manual trigger from the GitHub UI
 
 jobs:
