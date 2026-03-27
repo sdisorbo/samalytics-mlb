@@ -1,5 +1,145 @@
 [
   {
+    "player_id": 671096,
+    "name": "Andrew Abbott",
+    "team": "CIN",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 54.2,
+        "whiff_pct": 4.3,
+        "woba_against": 0.262,
+        "xwoba_against": 0.25,
+        "hard_hit_pct": 30.8,
+        "run_value_per_100": 2.0,
+        "avg_speed": 93.0,
+        "break_x": 8.3,
+        "break_z": 16.0
+      }
+    ]
+  },
+  {
+    "player_id": 650911,
+    "name": "Cristopher Sánchez",
+    "team": "PHI",
+    "pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "usage_pct": 51.7,
+        "whiff_pct": 12.0,
+        "woba_against": 0.235,
+        "xwoba_against": 0.23,
+        "hard_hit_pct": 80.0,
+        "run_value_per_100": 3.9,
+        "avg_speed": 94.4,
+        "break_x": 19.8,
+        "break_z": 4.9
+      }
+    ]
+  },
+  {
+    "player_id": 642547,
+    "name": "Freddy Peralta",
+    "team": "NYM",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 48.8,
+        "whiff_pct": 22.2,
+        "woba_against": 0.264,
+        "xwoba_against": 0.276,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": -0.3,
+        "avg_speed": 94.2,
+        "break_x": 7.6,
+        "break_z": 16.4
+      }
+    ]
+  },
+  {
+    "player_id": 676979,
+    "name": "Garrett Crochet",
+    "team": "BOS",
+    "pitches": [
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "usage_pct": 31.3,
+        "whiff_pct": 23.5,
+        "woba_against": 0.283,
+        "xwoba_against": 0.278,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": 3.9,
+        "avg_speed": 91.1,
+        "break_x": 1.0,
+        "break_z": 5.6
+      }
+    ]
+  },
+  {
+    "player_id": 686613,
+    "name": "Hunter Brown",
+    "team": "HOU",
+    "pitches": [
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "usage_pct": 27.5,
+        "whiff_pct": 37.5,
+        "woba_against": 0.16,
+        "xwoba_against": 0.138,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": 3.3,
+        "avg_speed": 83.6,
+        "break_x": 6.2,
+        "break_z": -16.5
+      }
+    ]
+  },
+  {
+    "player_id": 694819,
+    "name": "Jacob Misiorowski",
+    "team": "MIL",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 64.9,
+        "whiff_pct": 65.5,
+        "woba_against": 0.287,
+        "xwoba_against": 0.264,
+        "hard_hit_pct": 75.0,
+        "run_value_per_100": 1.1,
+        "avg_speed": 98.3,
+        "break_x": 10.7,
+        "break_z": 16.3
+      }
+    ]
+  },
+  {
+    "player_id": 667755,
+    "name": "José Soriano",
+    "team": "LAA",
+    "pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "usage_pct": 34.1,
+        "whiff_pct": 42.1,
+        "woba_against": 0.0,
+        "xwoba_against": 0.102,
+        "hard_hit_pct": 14.3,
+        "run_value_per_100": 8.0,
+        "avg_speed": 97.9,
+        "break_x": 14.8,
+        "break_z": 3.4
+      }
+    ]
+  },
+  {
     "player_id": 657277,
     "name": "Logan Webb",
     "team": "SF",
@@ -13,9 +153,49 @@
         "xwoba_against": 0.346,
         "hard_hit_pct": 25.0,
         "run_value_per_100": -3.6,
-        "avg_speed": null,
-        "break_x": null,
-        "break_z": null
+        "avg_speed": 85.9,
+        "break_x": 11.2,
+        "break_z": -5.3
+      }
+    ]
+  },
+  {
+    "player_id": 669461,
+    "name": "Matthew Liberatore",
+    "team": "STL",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 35.9,
+        "whiff_pct": 6.3,
+        "woba_against": 0.417,
+        "xwoba_against": 0.343,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -1.7,
+        "avg_speed": 94.2,
+        "break_x": 5.5,
+        "break_z": 15.5
+      }
+    ]
+  },
+  {
+    "player_id": 669432,
+    "name": "Trevor Rogers",
+    "team": "BAL",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 38.6,
+        "whiff_pct": 25.0,
+        "woba_against": 0.436,
+        "xwoba_against": 0.388,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": -3.0,
+        "avg_speed": 92.8,
+        "break_x": 9.9,
+        "break_z": 15.3
       }
     ]
   }
