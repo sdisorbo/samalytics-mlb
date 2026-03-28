@@ -20,6 +20,46 @@
     ]
   },
   {
+    "player_id": 519242,
+    "name": "Chris Sale",
+    "team": "ATL",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 48.9,
+        "whiff_pct": 22.7,
+        "woba_against": 0.315,
+        "xwoba_against": 0.418,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 1.4,
+        "avg_speed": 95.9,
+        "break_x": 14.0,
+        "break_z": 9.4
+      }
+    ]
+  },
+  {
+    "player_id": 666142,
+    "name": "Cole Ragans",
+    "team": "KC",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 50.0,
+        "whiff_pct": 30.0,
+        "woba_against": 0.41,
+        "xwoba_against": 0.475,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": -0.8,
+        "avg_speed": 94.5,
+        "break_x": 12.1,
+        "break_z": 16.7
+      }
+    ]
+  },
+  {
     "player_id": 650911,
     "name": "Cristopher Sánchez",
     "team": "PHI",
@@ -36,6 +76,26 @@
         "avg_speed": 94.4,
         "break_x": 19.8,
         "break_z": 4.9
+      }
+    ]
+  },
+  {
+    "player_id": 664285,
+    "name": "Framber Valdez",
+    "team": "DET",
+    "pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "usage_pct": 51.8,
+        "whiff_pct": 26.3,
+        "woba_against": 0.465,
+        "xwoba_against": 0.374,
+        "hard_hit_pct": 75.0,
+        "run_value_per_100": -2.4,
+        "avg_speed": 94.6,
+        "break_x": 15.8,
+        "break_z": 4.4
       }
     ]
   },
@@ -80,6 +140,46 @@
     ]
   },
   {
+    "player_id": 668909,
+    "name": "Gavin Williams",
+    "team": "CLE",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 32.6,
+        "whiff_pct": 33.3,
+        "woba_against": 0.436,
+        "xwoba_against": 0.505,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -4.3,
+        "avg_speed": 97.5,
+        "break_x": 11.9,
+        "break_z": 15.4
+      }
+    ]
+  },
+  {
+    "player_id": 669923,
+    "name": "George Kirby",
+    "team": "SEA",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 48.9,
+        "whiff_pct": 21.7,
+        "woba_against": 0.09,
+        "xwoba_against": 0.221,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": 4.5,
+        "avg_speed": 95.7,
+        "break_x": 8.0,
+        "break_z": 14.2
+      }
+    ]
+  },
+  {
     "player_id": 686613,
     "name": "Hunter Brown",
     "team": "HOU",
@@ -93,9 +193,9 @@
         "xwoba_against": 0.138,
         "hard_hit_pct": 0.0,
         "run_value_per_100": 3.3,
-        "avg_speed": 83.6,
-        "break_x": 6.2,
-        "break_z": -16.5
+        "avg_speed": 83.7,
+        "break_x": 6.0,
+        "break_z": -16.1
       }
     ]
   },
@@ -140,6 +240,26 @@
     ]
   },
   {
+    "player_id": 592332,
+    "name": "Kevin Gausman",
+    "team": "TOR",
+    "pitches": [
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "usage_pct": 43.4,
+        "whiff_pct": 52.6,
+        "woba_against": 0.182,
+        "xwoba_against": 0.156,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 1.8,
+        "avg_speed": 84.0,
+        "break_x": 15.2,
+        "break_z": 2.4
+      }
+    ]
+  },
+  {
     "player_id": 657277,
     "name": "Logan Webb",
     "team": "SF",
@@ -176,6 +296,26 @@
         "avg_speed": 94.2,
         "break_x": 5.5,
         "break_z": 15.5
+      }
+    ]
+  },
+  {
+    "player_id": 592662,
+    "name": "Robbie Ray",
+    "team": "SF",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 51.7,
+        "whiff_pct": 11.5,
+        "woba_against": 0.319,
+        "xwoba_against": 0.291,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 2.3,
+        "avg_speed": 93.9,
+        "break_x": 8.3,
+        "break_z": 17.7
       }
     ]
   },
