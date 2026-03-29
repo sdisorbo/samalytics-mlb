@@ -47,7 +47,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 99,
     "ops_percentile": 99,
     "k_pct_percentile": 100,
@@ -77,8 +77,8 @@
     "obp_percentile": 97,
     "slg_percentile": 99,
     "ops_percentile": 99,
-    "k_pct_percentile": 54,
-    "bb_pct_percentile": 63
+    "k_pct_percentile": 55,
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 808959,
@@ -104,7 +104,7 @@
     "obp_percentile": 95,
     "slg_percentile": 99,
     "ops_percentile": 99,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 97
   },
   {
@@ -155,7 +155,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 99,
     "ops_percentile": 98,
     "k_pct_percentile": 100,
@@ -213,7 +213,7 @@
     "slg_percentile": 98,
     "ops_percentile": 98,
     "k_pct_percentile": 100,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 805367,
@@ -237,9 +237,9 @@
     "chase_rate": null,
     "avg_percentile": 89,
     "obp_percentile": 95,
-    "slg_percentile": 97,
+    "slg_percentile": 96,
     "ops_percentile": 97,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 87
   },
   {
@@ -267,7 +267,7 @@
     "slg_percentile": 94,
     "ops_percentile": 97,
     "k_pct_percentile": 100,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 669394,
@@ -290,7 +290,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 96,
-    "obp_percentile": 91,
+    "obp_percentile": 92,
     "slg_percentile": 97,
     "ops_percentile": 97,
     "k_pct_percentile": 17,
@@ -344,11 +344,38 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 98,
     "ops_percentile": 96,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
+  },
+  {
+    "player_id": 670042,
+    "name": "Luke Raley",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "RF",
+    "avg": 0.333,
+    "obp": 0.4,
+    "slg": 1.333,
+    "ops": 1.733,
+    "k_pct": 30.0,
+    "bb_pct": 10.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 71,
+    "obp_percentile": 70,
+    "slg_percentile": 98,
+    "ops_percentile": 96,
+    "k_pct_percentile": 37,
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 645302,
@@ -378,6 +405,33 @@
     "bb_pct_percentile": 0
   },
   {
+    "player_id": 800050,
+    "name": "Chase DeLauter",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "RF",
+    "avg": 0.357,
+    "obp": 0.357,
+    "slg": 1.214,
+    "ops": 1.571,
+    "k_pct": 35.7,
+    "bb_pct": 0.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 80,
+    "obp_percentile": 63,
+    "slg_percentile": 97,
+    "ops_percentile": 95,
+    "k_pct_percentile": 27,
+    "bb_pct_percentile": 0
+  },
+  {
     "player_id": 676475,
     "name": "Alec Burleson",
     "team": "STL",
@@ -398,11 +452,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 97,
-    "obp_percentile": 91,
+    "obp_percentile": 92,
     "slg_percentile": 94,
-    "ops_percentile": 96,
+    "ops_percentile": 95,
     "k_pct_percentile": 100,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 686527,
@@ -426,7 +480,7 @@
     "chase_rate": null,
     "avg_percentile": 68,
     "obp_percentile": 65,
-    "slg_percentile": 97,
+    "slg_percentile": 96,
     "ops_percentile": 95,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 67
@@ -453,37 +507,10 @@
     "chase_rate": null,
     "avg_percentile": 96,
     "obp_percentile": 93,
-    "slg_percentile": 93,
-    "ops_percentile": 95,
+    "slg_percentile": 94,
+    "ops_percentile": 94,
     "k_pct_percentile": 79,
-    "bb_pct_percentile": 59
-  },
-  {
-    "player_id": 680977,
-    "name": "Brendan Donovan",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "3B",
-    "avg": 0.444,
-    "obp": 0.545,
-    "slg": 0.889,
-    "ops": 1.434,
-    "k_pct": 18.2,
-    "bb_pct": 18.2,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 88,
-    "obp_percentile": 90,
-    "slg_percentile": 93,
-    "ops_percentile": 95,
-    "k_pct_percentile": 61,
-    "bb_pct_percentile": 79
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 608369,
@@ -506,38 +533,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 91,
+    "obp_percentile": 92,
     "slg_percentile": 93,
     "ops_percentile": 94,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 63
-  },
-  {
-    "player_id": 800050,
-    "name": "Chase DeLauter",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "RF",
-    "avg": 0.333,
-    "obp": 0.333,
-    "slg": 1.083,
-    "ops": 1.416,
-    "k_pct": 41.7,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 71,
-    "obp_percentile": 53,
-    "slg_percentile": 96,
-    "ops_percentile": 94,
-    "k_pct_percentile": 19,
-    "bb_pct_percentile": 0
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 666018,
@@ -587,10 +587,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 93,
     "ops_percentile": 93,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -615,7 +615,7 @@
     "chase_rate": null,
     "avg_percentile": 89,
     "obp_percentile": 93,
-    "slg_percentile": 89,
+    "slg_percentile": 90,
     "ops_percentile": 93,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 81
@@ -668,10 +668,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 71,
-    "obp_percentile": 81,
-    "slg_percentile": 92,
+    "obp_percentile": 82,
+    "slg_percentile": 93,
     "ops_percentile": 92,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 67
   },
   {
@@ -725,7 +725,7 @@
     "obp_percentile": 95,
     "slg_percentile": 86,
     "ops_percentile": 92,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 87
   },
   {
@@ -749,10 +749,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
-    "slg_percentile": 89,
+    "obp_percentile": 82,
+    "slg_percentile": 90,
     "ops_percentile": 90,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -776,10 +776,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
-    "slg_percentile": 89,
+    "obp_percentile": 82,
+    "slg_percentile": 90,
     "ops_percentile": 90,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -803,10 +803,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
-    "slg_percentile": 89,
+    "obp_percentile": 82,
+    "slg_percentile": 90,
     "ops_percentile": 90,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -830,38 +830,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 81,
-    "obp_percentile": 81,
-    "slg_percentile": 89,
+    "obp_percentile": 82,
+    "slg_percentile": 90,
     "ops_percentile": 90,
     "k_pct_percentile": 79,
     "bb_pct_percentile": 81
-  },
-  {
-    "player_id": 670042,
-    "name": "Luke Raley",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "RF",
-    "avg": 0.25,
-    "obp": 0.25,
-    "slg": 1.0,
-    "ops": 1.25,
-    "k_pct": 37.5,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 54,
-    "obp_percentile": 37,
-    "slg_percentile": 94,
-    "ops_percentile": 90,
-    "k_pct_percentile": 27,
-    "bb_pct_percentile": 0
   },
   {
     "player_id": 642086,
@@ -883,11 +856,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 94,
     "ops_percentile": 90,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -910,12 +883,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 78,
     "slg_percentile": 92,
     "ops_percentile": 90,
     "k_pct_percentile": 68,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 663586,
@@ -941,8 +914,35 @@
     "obp_percentile": 95,
     "slg_percentile": 79,
     "ops_percentile": 90,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 67
+  },
+  {
+    "player_id": 680977,
+    "name": "Brendan Donovan",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "3B",
+    "avg": 0.364,
+    "obp": 0.462,
+    "slg": 0.727,
+    "ops": 1.189,
+    "k_pct": 23.1,
+    "bb_pct": 15.4,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 80,
+    "obp_percentile": 80,
+    "slg_percentile": 89,
+    "ops_percentile": 90,
+    "k_pct_percentile": 52,
+    "bb_pct_percentile": 76
   },
   {
     "player_id": 680574,
@@ -995,7 +995,7 @@
     "obp_percentile": 70,
     "slg_percentile": 91,
     "ops_percentile": 89,
-    "k_pct_percentile": 40,
+    "k_pct_percentile": 41,
     "bb_pct_percentile": 72
   },
   {
@@ -1047,7 +1047,7 @@
     "chase_rate": null,
     "avg_percentile": 86,
     "obp_percentile": 77,
-    "slg_percentile": 89,
+    "slg_percentile": 90,
     "ops_percentile": 88,
     "k_pct_percentile": 63,
     "bb_pct_percentile": 0
@@ -1077,7 +1077,7 @@
     "slg_percentile": 78,
     "ops_percentile": 88,
     "k_pct_percentile": 59,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 691785,
@@ -1127,7 +1127,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 97,
-    "obp_percentile": 92,
+    "obp_percentile": 93,
     "slg_percentile": 79,
     "ops_percentile": 87,
     "k_pct_percentile": 68,
@@ -1155,7 +1155,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 91,
+    "slg_percentile": 92,
     "ops_percentile": 87,
     "k_pct_percentile": 75,
     "bb_pct_percentile": 0
@@ -1185,7 +1185,7 @@
     "slg_percentile": 78,
     "ops_percentile": 87,
     "k_pct_percentile": 61,
-    "bb_pct_percentile": 79
+    "bb_pct_percentile": 80
   },
   {
     "player_id": 691406,
@@ -1209,37 +1209,10 @@
     "chase_rate": null,
     "avg_percentile": 83,
     "obp_percentile": 98,
-    "slg_percentile": 63,
-    "ops_percentile": 86,
+    "slg_percentile": 64,
+    "ops_percentile": 87,
     "k_pct_percentile": 79,
     "bb_pct_percentile": 99
-  },
-  {
-    "player_id": 677587,
-    "name": "Brayan Rocchio",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "2B",
-    "avg": 0.333,
-    "obp": 0.6,
-    "slg": 0.5,
-    "ops": 1.1,
-    "k_pct": 10.0,
-    "bb_pct": 20.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 71,
-    "obp_percentile": 93,
-    "slg_percentile": 71,
-    "ops_percentile": 86,
-    "k_pct_percentile": 79,
-    "bb_pct_percentile": 81
   },
   {
     "player_id": 669257,
@@ -1265,7 +1238,7 @@
     "obp_percentile": 48,
     "slg_percentile": 92,
     "ops_percentile": 86,
-    "k_pct_percentile": 81,
+    "k_pct_percentile": 80,
     "bb_pct_percentile": 0
   },
   {
@@ -1291,7 +1264,7 @@
     "avg_percentile": 68,
     "obp_percentile": 65,
     "slg_percentile": 88,
-    "ops_percentile": 85,
+    "ops_percentile": 86,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 67
   },
@@ -1318,8 +1291,8 @@
     "avg_percentile": 68,
     "obp_percentile": 65,
     "slg_percentile": 88,
-    "ops_percentile": 85,
-    "k_pct_percentile": 72,
+    "ops_percentile": 86,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 67
   },
   {
@@ -1374,7 +1347,7 @@
     "slg_percentile": 86,
     "ops_percentile": 85,
     "k_pct_percentile": 79,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 670541,
@@ -1399,9 +1372,9 @@
     "avg_percentile": 67,
     "obp_percentile": 78,
     "slg_percentile": 85,
-    "ops_percentile": 84,
-    "k_pct_percentile": 55,
-    "bb_pct_percentile": 73
+    "ops_percentile": 85,
+    "k_pct_percentile": 56,
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 672724,
@@ -1454,7 +1427,7 @@
     "obp_percentile": 80,
     "slg_percentile": 81,
     "ops_percentile": 84,
-    "k_pct_percentile": 51,
+    "k_pct_percentile": 52,
     "bb_pct_percentile": 53
   },
   {
@@ -1506,10 +1479,10 @@
     "chase_rate": null,
     "avg_percentile": 83,
     "obp_percentile": 95,
-    "slg_percentile": 63,
+    "slg_percentile": 64,
     "ops_percentile": 83,
     "k_pct_percentile": 75,
-    "bb_pct_percentile": 94
+    "bb_pct_percentile": 95
   },
   {
     "player_id": 682829,
@@ -1531,7 +1504,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 83,
     "ops_percentile": 83,
@@ -1560,9 +1533,9 @@
     "chase_rate": null,
     "avg_percentile": 80,
     "obp_percentile": 80,
-    "slg_percentile": 78,
+    "slg_percentile": 77,
     "ops_percentile": 83,
-    "k_pct_percentile": 65,
+    "k_pct_percentile": 64,
     "bb_pct_percentile": 76
   },
   {
@@ -1586,7 +1559,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
     "k_pct_percentile": 100,
@@ -1613,10 +1586,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -1640,7 +1613,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
     "k_pct_percentile": 100,
@@ -1667,7 +1640,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
     "k_pct_percentile": 68,
@@ -1694,7 +1667,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
     "k_pct_percentile": 63,
@@ -1721,10 +1694,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 0
   },
   {
@@ -1748,7 +1721,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
     "k_pct_percentile": 100,
@@ -1775,7 +1748,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
     "k_pct_percentile": 100,
@@ -1802,7 +1775,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
     "k_pct_percentile": 100,
@@ -1860,6 +1833,33 @@
     "slg_percentile": 81,
     "ops_percentile": 77,
     "k_pct_percentile": 100,
+    "bb_pct_percentile": 0
+  },
+  {
+    "player_id": 681807,
+    "name": "David Fry",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "C",
+    "avg": 0.4,
+    "obp": 0.4,
+    "slg": 0.6,
+    "ops": 1.0,
+    "k_pct": 60.0,
+    "bb_pct": 0.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 83,
+    "obp_percentile": 70,
+    "slg_percentile": 81,
+    "ops_percentile": 77,
+    "k_pct_percentile": 7,
     "bb_pct_percentile": 0
   },
   {
@@ -1940,7 +1940,7 @@
     "obp_percentile": 65,
     "slg_percentile": 83,
     "ops_percentile": 77,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -1967,7 +1967,7 @@
     "obp_percentile": 65,
     "slg_percentile": 83,
     "ops_percentile": 77,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -1994,7 +1994,7 @@
     "obp_percentile": 53,
     "slg_percentile": 86,
     "ops_percentile": 77,
-    "k_pct_percentile": 6,
+    "k_pct_percentile": 5,
     "bb_pct_percentile": 0
   },
   {
@@ -2018,10 +2018,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 71,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 0
   },
   {
@@ -2075,7 +2075,7 @@
     "obp_percentile": 53,
     "slg_percentile": 86,
     "ops_percentile": 77,
-    "k_pct_percentile": 6,
+    "k_pct_percentile": 5,
     "bb_pct_percentile": 0
   },
   {
@@ -2099,10 +2099,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 71,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 71,
     "ops_percentile": 77,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 87
   },
   {
@@ -2130,21 +2130,21 @@
     "slg_percentile": 67,
     "ops_percentile": 76,
     "k_pct_percentile": 40,
-    "bb_pct_percentile": 79
+    "bb_pct_percentile": 80
   },
   {
-    "player_id": 668227,
-    "name": "Randy Arozarena",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "LF",
+    "player_id": 677587,
+    "name": "Brayan Rocchio",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "2B",
     "avg": 0.286,
     "obp": 0.545,
     "slg": 0.429,
     "ops": 0.974,
     "k_pct": 9.1,
-    "bb_pct": 36.4,
+    "bb_pct": 18.2,
     "avg_exit_velocity": null,
     "hard_hit_pct": null,
     "xba": null,
@@ -2154,10 +2154,10 @@
     "chase_rate": null,
     "avg_percentile": 68,
     "obp_percentile": 90,
-    "slg_percentile": 66,
+    "slg_percentile": 67,
     "ops_percentile": 76,
-    "k_pct_percentile": 81,
-    "bb_pct_percentile": 96
+    "k_pct_percentile": 80,
+    "bb_pct_percentile": 80
   },
   {
     "player_id": 802139,
@@ -2206,12 +2206,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
     "slg_percentile": 83,
     "ops_percentile": 75,
     "k_pct_percentile": 100,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 691781,
@@ -2233,12 +2233,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
     "slg_percentile": 83,
     "ops_percentile": 75,
     "k_pct_percentile": 17,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 691718,
@@ -2261,11 +2261,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 88,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 67,
     "ops_percentile": 75,
     "k_pct_percentile": 37,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 665489,
@@ -2289,7 +2289,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 93,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 74,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 98
@@ -2316,7 +2316,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 93,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 74,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 98
@@ -2341,12 +2341,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 69,
+    "avg_percentile": 70,
     "obp_percentile": 77,
     "slg_percentile": 71,
     "ops_percentile": 74,
     "k_pct_percentile": 81,
-    "bb_pct_percentile": 78
+    "bb_pct_percentile": 79
   },
   {
     "player_id": 686948,
@@ -2373,7 +2373,7 @@
     "slg_percentile": 79,
     "ops_percentile": 73,
     "k_pct_percentile": 75,
-    "bb_pct_percentile": 84
+    "bb_pct_percentile": 85
   },
   {
     "player_id": 686217,
@@ -2399,8 +2399,8 @@
     "obp_percentile": 53,
     "slg_percentile": 79,
     "ops_percentile": 73,
-    "k_pct_percentile": 54,
-    "bb_pct_percentile": 84
+    "k_pct_percentile": 55,
+    "bb_pct_percentile": 85
   },
   {
     "player_id": 693304,
@@ -2425,7 +2425,7 @@
     "avg_percentile": 83,
     "obp_percentile": 70,
     "slg_percentile": 71,
-    "ops_percentile": 72,
+    "ops_percentile": 73,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 0
   },
@@ -2449,10 +2449,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 69,
+    "avg_percentile": 70,
     "obp_percentile": 51,
     "slg_percentile": 81,
-    "ops_percentile": 72,
+    "ops_percentile": 73,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 0
   },
@@ -2476,10 +2476,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 71,
-    "ops_percentile": 72,
+    "ops_percentile": 73,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 81
   },
@@ -2504,8 +2504,8 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 81,
-    "obp_percentile": 81,
-    "slg_percentile": 60,
+    "obp_percentile": 82,
+    "slg_percentile": 61,
     "ops_percentile": 71,
     "k_pct_percentile": 37,
     "bb_pct_percentile": 81
@@ -2557,7 +2557,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 95,
     "slg_percentile": 43,
     "ops_percentile": 71,
@@ -2584,12 +2584,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
-    "obp_percentile": 81,
-    "slg_percentile": 60,
+    "avg_percentile": 55,
+    "obp_percentile": 82,
+    "slg_percentile": 61,
     "ops_percentile": 71,
     "k_pct_percentile": 63,
-    "bb_pct_percentile": 94
+    "bb_pct_percentile": 95
   },
   {
     "player_id": 521692,
@@ -2611,7 +2611,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 83,
     "ops_percentile": 71,
@@ -2638,11 +2638,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 83,
     "ops_percentile": 71,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -2667,7 +2667,7 @@
     "chase_rate": null,
     "avg_percentile": 87,
     "obp_percentile": 78,
-    "slg_percentile": 66,
+    "slg_percentile": 67,
     "ops_percentile": 70,
     "k_pct_percentile": 68,
     "bb_pct_percentile": 0
@@ -2694,9 +2694,9 @@
     "chase_rate": null,
     "avg_percentile": 83,
     "obp_percentile": 80,
-    "slg_percentile": 63,
+    "slg_percentile": 64,
     "ops_percentile": 70,
-    "k_pct_percentile": 81,
+    "k_pct_percentile": 80,
     "bb_pct_percentile": 57
   },
   {
@@ -2747,8 +2747,8 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 71,
-    "obp_percentile": 81,
-    "slg_percentile": 53,
+    "obp_percentile": 82,
+    "slg_percentile": 54,
     "ops_percentile": 69,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 87
@@ -2774,8 +2774,8 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 71,
-    "obp_percentile": 81,
-    "slg_percentile": 53,
+    "obp_percentile": 82,
+    "slg_percentile": 54,
     "ops_percentile": 69,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 87
@@ -2828,8 +2828,8 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 71,
-    "obp_percentile": 81,
-    "slg_percentile": 53,
+    "obp_percentile": 82,
+    "slg_percentile": 54,
     "ops_percentile": 69,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 87
@@ -2854,11 +2854,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 52,
     "slg_percentile": 71,
     "ops_percentile": 68,
-    "k_pct_percentile": 65,
+    "k_pct_percentile": 64,
     "bb_pct_percentile": 53
   },
   {
@@ -2882,11 +2882,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 53,
-    "obp_percentile": 65,
+    "obp_percentile": 64,
     "slg_percentile": 67,
     "ops_percentile": 68,
-    "k_pct_percentile": 81,
-    "bb_pct_percentile": 79
+    "k_pct_percentile": 80,
+    "bb_pct_percentile": 80
   },
   {
     "player_id": 665161,
@@ -2910,7 +2910,7 @@
     "chase_rate": null,
     "avg_percentile": 83,
     "obp_percentile": 70,
-    "slg_percentile": 63,
+    "slg_percentile": 64,
     "ops_percentile": 67,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 0
@@ -2935,12 +2935,39 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 93,
     "slg_percentile": 38,
     "ops_percentile": 67,
     "k_pct_percentile": 79,
     "bb_pct_percentile": 99
+  },
+  {
+    "player_id": 668227,
+    "name": "Randy Arozarena",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "LF",
+    "avg": 0.222,
+    "obp": 0.462,
+    "slg": 0.333,
+    "ops": 0.795,
+    "k_pct": 7.7,
+    "bb_pct": 30.8,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 53,
+    "obp_percentile": 80,
+    "slg_percentile": 54,
+    "ops_percentile": 67,
+    "k_pct_percentile": 82,
+    "bb_pct_percentile": 94
   },
   {
     "player_id": 666139,
@@ -2964,7 +2991,7 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 37,
-    "slg_percentile": 78,
+    "slg_percentile": 77,
     "ops_percentile": 67,
     "k_pct_percentile": 19,
     "bb_pct_percentile": 55
@@ -2989,7 +3016,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 38,
+    "avg_percentile": 39,
     "obp_percentile": 24,
     "slg_percentile": 83,
     "ops_percentile": 67,
@@ -3016,9 +3043,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 69,
-    "obp_percentile": 65,
-    "slg_percentile": 63,
+    "avg_percentile": 70,
+    "obp_percentile": 64,
+    "slg_percentile": 64,
     "ops_percentile": 66,
     "k_pct_percentile": 15,
     "bb_pct_percentile": 57
@@ -3072,10 +3099,10 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 78,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 65,
     "k_pct_percentile": 68,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 681082,
@@ -3099,37 +3126,10 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 78,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 65,
     "k_pct_percentile": 68,
-    "bb_pct_percentile": 73
-  },
-  {
-    "player_id": 660844,
-    "name": "Leo Rivas",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "SS",
-    "avg": 0.143,
-    "obp": 0.333,
-    "slg": 0.429,
-    "ops": 0.762,
-    "k_pct": 22.2,
-    "bb_pct": 22.2,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 32,
-    "obp_percentile": 53,
-    "slg_percentile": 66,
-    "ops_percentile": 65,
-    "k_pct_percentile": 54,
-    "bb_pct_percentile": 84
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 701675,
@@ -3153,9 +3153,9 @@
     "chase_rate": null,
     "avg_percentile": 81,
     "obp_percentile": 65,
-    "slg_percentile": 60,
+    "slg_percentile": 61,
     "ops_percentile": 64,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 0
   },
   {
@@ -3180,9 +3180,9 @@
     "chase_rate": null,
     "avg_percentile": 81,
     "obp_percentile": 65,
-    "slg_percentile": 60,
+    "slg_percentile": 61,
     "ops_percentile": 64,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 0
   },
   {
@@ -3207,9 +3207,9 @@
     "chase_rate": null,
     "avg_percentile": 81,
     "obp_percentile": 65,
-    "slg_percentile": 60,
+    "slg_percentile": 61,
     "ops_percentile": 64,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -3232,7 +3232,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 71,
     "ops_percentile": 64,
@@ -3261,10 +3261,10 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 70,
-    "slg_percentile": 53,
-    "ops_percentile": 63,
+    "slg_percentile": 54,
+    "ops_percentile": 64,
     "k_pct_percentile": 23,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 665742,
@@ -3288,10 +3288,10 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 70,
-    "slg_percentile": 53,
-    "ops_percentile": 63,
+    "slg_percentile": 54,
+    "ops_percentile": 64,
     "k_pct_percentile": 100,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 687263,
@@ -3313,12 +3313,39 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 38,
+    "avg_percentile": 39,
     "obp_percentile": 48,
-    "slg_percentile": 71,
+    "slg_percentile": 70,
     "ops_percentile": 63,
     "k_pct_percentile": 59,
     "bb_pct_percentile": 72
+  },
+  {
+    "player_id": 702284,
+    "name": "Cole Young",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "2B",
+    "avg": 0.182,
+    "obp": 0.182,
+    "slg": 0.545,
+    "ops": 0.727,
+    "k_pct": 63.6,
+    "bb_pct": 0.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 44,
+    "obp_percentile": 27,
+    "slg_percentile": 77,
+    "ops_percentile": 63,
+    "k_pct_percentile": 6,
+    "bb_pct_percentile": 0
   },
   {
     "player_id": 650402,
@@ -3341,10 +3368,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 53,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 41,
     "ops_percentile": 63,
-    "k_pct_percentile": 55,
+    "k_pct_percentile": 56,
     "bb_pct_percentile": 96
   },
   {
@@ -3368,10 +3395,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 71,
-    "obp_percentile": 70,
-    "slg_percentile": 53,
-    "ops_percentile": 63,
-    "k_pct_percentile": 65,
+    "obp_percentile": 69,
+    "slg_percentile": 54,
+    "ops_percentile": 62,
+    "k_pct_percentile": 64,
     "bb_pct_percentile": 53
   },
   {
@@ -3395,7 +3422,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 32,
-    "obp_percentile": 21,
+    "obp_percentile": 20,
     "slg_percentile": 79,
     "ops_percentile": 62,
     "k_pct_percentile": 39,
@@ -3421,12 +3448,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
-    "slg_percentile": 60,
+    "slg_percentile": 61,
     "ops_percentile": 61,
-    "k_pct_percentile": 54,
-    "bb_pct_percentile": 63
+    "k_pct_percentile": 55,
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 700250,
@@ -3448,12 +3475,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
-    "slg_percentile": 60,
+    "slg_percentile": 61,
     "ops_percentile": 61,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 543760,
@@ -3475,11 +3502,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
-    "slg_percentile": 60,
+    "slg_percentile": 61,
     "ops_percentile": 61,
-    "k_pct_percentile": 54,
+    "k_pct_percentile": 55,
     "bb_pct_percentile": 0
   },
   {
@@ -3502,12 +3529,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
-    "slg_percentile": 60,
+    "slg_percentile": 61,
     "ops_percentile": 61,
     "k_pct_percentile": 17,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 691023,
@@ -3531,7 +3558,7 @@
     "chase_rate": null,
     "avg_percentile": 39,
     "obp_percentile": 65,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 61,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 87
@@ -3556,10 +3583,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 28,
     "slg_percentile": 71,
-    "ops_percentile": 60,
+    "ops_percentile": 59,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 0
   },
@@ -3583,10 +3610,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
     "slg_percentile": 71,
-    "ops_percentile": 60,
+    "ops_percentile": 59,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 0
   },
@@ -3610,11 +3637,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
-    "obp_percentile": 81,
+    "avg_percentile": 48,
+    "obp_percentile": 82,
     "slg_percentile": 38,
-    "ops_percentile": 60,
-    "k_pct_percentile": 50,
+    "ops_percentile": 59,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 97
   },
   {
@@ -3637,10 +3664,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
     "slg_percentile": 71,
-    "ops_percentile": 60,
+    "ops_percentile": 59,
     "k_pct_percentile": 79,
     "bb_pct_percentile": 0
   },
@@ -3691,9 +3718,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 48,
-    "slg_percentile": 63,
+    "slg_percentile": 64,
     "ops_percentile": 59,
     "k_pct_percentile": 61,
     "bb_pct_percentile": 57
@@ -3720,7 +3747,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 56,
     "k_pct_percentile": 34,
     "bb_pct_percentile": 0
@@ -3747,36 +3774,9 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 56,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 0
-  },
-  {
-    "player_id": 681807,
-    "name": "David Fry",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "C",
-    "avg": 0.333,
-    "obp": 0.333,
-    "slg": 0.333,
-    "ops": 0.666,
-    "k_pct": 66.7,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 71,
-    "obp_percentile": 53,
-    "slg_percentile": 53,
-    "ops_percentile": 56,
-    "k_pct_percentile": 6,
     "bb_pct_percentile": 0
   },
   {
@@ -3801,7 +3801,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 56,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 0
@@ -3828,7 +3828,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 56,
     "k_pct_percentile": 34,
     "bb_pct_percentile": 0
@@ -3855,7 +3855,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 56,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 0
@@ -3882,7 +3882,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 56,
     "k_pct_percentile": 75,
     "bb_pct_percentile": 0
@@ -3909,7 +3909,7 @@
     "chase_rate": null,
     "avg_percentile": 71,
     "obp_percentile": 53,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 56,
     "k_pct_percentile": 34,
     "bb_pct_percentile": 0
@@ -3961,10 +3961,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 43,
-    "ops_percentile": 54,
+    "ops_percentile": 55,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 81
   },
@@ -3988,12 +3988,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 43,
-    "ops_percentile": 54,
+    "ops_percentile": 55,
     "k_pct_percentile": 59,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 663604,
@@ -4015,10 +4015,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 43,
-    "ops_percentile": 54,
+    "ops_percentile": 55,
     "k_pct_percentile": 59,
     "bb_pct_percentile": 81
   },
@@ -4042,10 +4042,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 43,
-    "ops_percentile": 54,
+    "ops_percentile": 55,
     "k_pct_percentile": 59,
     "bb_pct_percentile": 81
   },
@@ -4069,10 +4069,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 43,
-    "ops_percentile": 54,
+    "ops_percentile": 55,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 81
   },
@@ -4096,10 +4096,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 70,
     "slg_percentile": 43,
-    "ops_percentile": 54,
+    "ops_percentile": 55,
     "k_pct_percentile": 79,
     "bb_pct_percentile": 81
   },
@@ -4128,7 +4128,7 @@
     "slg_percentile": 67,
     "ops_percentile": 54,
     "k_pct_percentile": 79,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 518692,
@@ -4150,9 +4150,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 52,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 54,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 53
@@ -4204,12 +4204,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 78,
     "slg_percentile": 38,
     "ops_percentile": 53,
     "k_pct_percentile": 39,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 643289,
@@ -4233,10 +4233,10 @@
     "chase_rate": null,
     "avg_percentile": 39,
     "obp_percentile": 49,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 53,
     "k_pct_percentile": 39,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 663538,
@@ -4263,7 +4263,7 @@
     "slg_percentile": 52,
     "ops_percentile": 53,
     "k_pct_percentile": 75,
-    "bb_pct_percentile": 84
+    "bb_pct_percentile": 85
   },
   {
     "player_id": 666176,
@@ -4285,10 +4285,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
-    "obp_percentile": 64,
+    "avg_percentile": 55,
+    "obp_percentile": 63,
     "slg_percentile": 43,
-    "ops_percentile": 52,
+    "ops_percentile": 53,
     "k_pct_percentile": 68,
     "bb_pct_percentile": 53
   },
@@ -4314,7 +4314,7 @@
     "chase_rate": null,
     "avg_percentile": 67,
     "obp_percentile": 53,
-    "slg_percentile": 51,
+    "slg_percentile": 50,
     "ops_percentile": 51,
     "k_pct_percentile": 81,
     "bb_pct_percentile": 55
@@ -4341,9 +4341,9 @@
     "chase_rate": null,
     "avg_percentile": 67,
     "obp_percentile": 53,
-    "slg_percentile": 51,
+    "slg_percentile": 50,
     "ops_percentile": 51,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 55
   },
   {
@@ -4368,10 +4368,37 @@
     "chase_rate": null,
     "avg_percentile": 67,
     "obp_percentile": 53,
-    "slg_percentile": 51,
+    "slg_percentile": 50,
     "ops_percentile": 51,
     "k_pct_percentile": 19,
     "bb_pct_percentile": 0
+  },
+  {
+    "player_id": 660844,
+    "name": "Leo Rivas",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "SS",
+    "avg": 0.111,
+    "obp": 0.273,
+    "slg": 0.333,
+    "ops": 0.606,
+    "k_pct": 27.3,
+    "bb_pct": 18.2,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 25,
+    "obp_percentile": 48,
+    "slg_percentile": 54,
+    "ops_percentile": 51,
+    "k_pct_percentile": 40,
+    "bb_pct_percentile": 80
   },
   {
     "player_id": 502671,
@@ -4393,9 +4420,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
-    "slg_percentile": 63,
+    "slg_percentile": 64,
     "ops_percentile": 50,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 0
@@ -4420,38 +4447,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
-    "slg_percentile": 63,
+    "slg_percentile": 64,
     "ops_percentile": 50,
     "k_pct_percentile": 23,
-    "bb_pct_percentile": 0
-  },
-  {
-    "player_id": 682657,
-    "name": "Angel Martínez",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "LF",
-    "avg": 0.2,
-    "obp": 0.2,
-    "slg": 0.4,
-    "ops": 0.6,
-    "k_pct": 60.0,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 47,
-    "obp_percentile": 28,
-    "slg_percentile": 63,
-    "ops_percentile": 50,
-    "k_pct_percentile": 7,
     "bb_pct_percentile": 0
   },
   {
@@ -4474,38 +4474,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
-    "slg_percentile": 63,
+    "slg_percentile": 64,
     "ops_percentile": 50,
     "k_pct_percentile": 2,
-    "bb_pct_percentile": 0
-  },
-  {
-    "player_id": 682177,
-    "name": "Daniel Schneemann",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "2B",
-    "avg": 0.2,
-    "obp": 0.2,
-    "slg": 0.4,
-    "ops": 0.6,
-    "k_pct": 20.0,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 47,
-    "obp_percentile": 28,
-    "slg_percentile": 63,
-    "ops_percentile": 50,
-    "k_pct_percentile": 59,
     "bb_pct_percentile": 0
   },
   {
@@ -4555,11 +4528,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
-    "obp_percentile": 70,
+    "avg_percentile": 48,
+    "obp_percentile": 69,
     "slg_percentile": 38,
-    "ops_percentile": 49,
-    "k_pct_percentile": 51,
+    "ops_percentile": 50,
+    "k_pct_percentile": 52,
     "bb_pct_percentile": 86
   },
   {
@@ -4582,10 +4555,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
-    "slg_percentile": 53,
-    "ops_percentile": 48,
+    "slg_percentile": 54,
+    "ops_percentile": 49,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 0
   },
@@ -4609,10 +4582,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
-    "slg_percentile": 53,
-    "ops_percentile": 48,
+    "slg_percentile": 54,
+    "ops_percentile": 49,
     "k_pct_percentile": 34,
     "bb_pct_percentile": 0
   },
@@ -4636,12 +4609,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
     "slg_percentile": 43,
-    "ops_percentile": 48,
-    "k_pct_percentile": 54,
-    "bb_pct_percentile": 63
+    "ops_percentile": 49,
+    "k_pct_percentile": 55,
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 607043,
@@ -4663,12 +4636,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 53,
     "slg_percentile": 43,
-    "ops_percentile": 48,
-    "k_pct_percentile": 54,
-    "bb_pct_percentile": 63
+    "ops_percentile": 49,
+    "k_pct_percentile": 55,
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 663656,
@@ -4692,10 +4665,37 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 52,
-    "slg_percentile": 51,
+    "slg_percentile": 50,
     "ops_percentile": 48,
     "k_pct_percentile": 35,
     "bb_pct_percentile": 76
+  },
+  {
+    "player_id": 680757,
+    "name": "Steven Kwan",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "CF",
+    "avg": 0.286,
+    "obp": 0.286,
+    "slg": 0.286,
+    "ops": 0.572,
+    "k_pct": 14.3,
+    "bb_pct": 0.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 68,
+    "obp_percentile": 49,
+    "slg_percentile": 52,
+    "ops_percentile": 48,
+    "k_pct_percentile": 68,
+    "bb_pct_percentile": 0
   },
   {
     "player_id": 656941,
@@ -4752,33 +4752,6 @@
     "bb_pct_percentile": 0
   },
   {
-    "player_id": 702284,
-    "name": "Cole Young",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "2B",
-    "avg": 0.111,
-    "obp": 0.111,
-    "slg": 0.444,
-    "ops": 0.555,
-    "k_pct": 66.7,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 25,
-    "obp_percentile": 14,
-    "slg_percentile": 67,
-    "ops_percentile": 47,
-    "k_pct_percentile": 6,
-    "bb_pct_percentile": 0
-  },
-  {
     "player_id": 672580,
     "name": "Maikel Garcia",
     "team": "KC",
@@ -4801,8 +4774,8 @@
     "avg_percentile": 39,
     "obp_percentile": 65,
     "slg_percentile": 33,
-    "ops_percentile": 46,
-    "k_pct_percentile": 72,
+    "ops_percentile": 47,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 87
   },
   {
@@ -4828,8 +4801,8 @@
     "avg_percentile": 39,
     "obp_percentile": 65,
     "slg_percentile": 33,
-    "ops_percentile": 46,
-    "k_pct_percentile": 50,
+    "ops_percentile": 47,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 87
   },
   {
@@ -4852,12 +4825,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 53,
     "slg_percentile": 38,
-    "ops_percentile": 46,
+    "ops_percentile": 47,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 78
+    "bb_pct_percentile": 79
   },
   {
     "player_id": 701538,
@@ -4881,9 +4854,9 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 37,
-    "slg_percentile": 51,
+    "slg_percentile": 50,
     "ops_percentile": 46,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 55
   },
   {
@@ -4906,11 +4879,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -4933,7 +4906,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
@@ -4960,11 +4933,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -4987,7 +4960,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
@@ -5014,11 +4987,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -5041,11 +5014,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -5068,11 +5041,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 0
   },
   {
@@ -5095,7 +5068,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
@@ -5122,7 +5095,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
@@ -5149,11 +5122,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -5176,7 +5149,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
@@ -5203,7 +5176,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 54,
+    "avg_percentile": 55,
     "obp_percentile": 37,
     "slg_percentile": 43,
     "ops_percentile": 41,
@@ -5230,7 +5203,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
     "slg_percentile": 53,
     "ops_percentile": 41,
@@ -5238,12 +5211,39 @@
     "bb_pct_percentile": 0
   },
   {
-    "player_id": 608070,
-    "name": "José Ramírez",
+    "player_id": 682657,
+    "name": "Angel Martínez",
     "team": "CLE",
     "team_name": "Cleveland Guardians",
     "division": "American League Central",
-    "position": "3B",
+    "position": "LF",
+    "avg": 0.167,
+    "obp": 0.167,
+    "slg": 0.333,
+    "ops": 0.5,
+    "k_pct": 50.0,
+    "bb_pct": 0.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 39,
+    "obp_percentile": 24,
+    "slg_percentile": 54,
+    "ops_percentile": 41,
+    "k_pct_percentile": 13,
+    "bb_pct_percentile": 0
+  },
+  {
+    "player_id": 682177,
+    "name": "Daniel Schneemann",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "2B",
     "avg": 0.167,
     "obp": 0.167,
     "slg": 0.333,
@@ -5259,7 +5259,7 @@
     "chase_rate": null,
     "avg_percentile": 39,
     "obp_percentile": 24,
-    "slg_percentile": 53,
+    "slg_percentile": 54,
     "ops_percentile": 41,
     "k_pct_percentile": 63,
     "bb_pct_percentile": 0
@@ -5285,7 +5285,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 81,
+    "obp_percentile": 82,
     "slg_percentile": 0,
     "ops_percentile": 41,
     "k_pct_percentile": 100,
@@ -5313,7 +5313,7 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 52,
-    "slg_percentile": 36,
+    "slg_percentile": 37,
     "ops_percentile": 41,
     "k_pct_percentile": 24,
     "bb_pct_percentile": 76
@@ -5338,39 +5338,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 48,
     "slg_percentile": 38,
     "ops_percentile": 41,
     "k_pct_percentile": 40,
     "bb_pct_percentile": 57
-  },
-  {
-    "player_id": 680757,
-    "name": "Steven Kwan",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "CF",
-    "avg": 0.231,
-    "obp": 0.231,
-    "slg": 0.231,
-    "ops": 0.462,
-    "k_pct": 15.4,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 54,
-    "obp_percentile": 36,
-    "slg_percentile": 43,
-    "ops_percentile": 40,
-    "k_pct_percentile": 65,
-    "bb_pct_percentile": 0
   },
   {
     "player_id": 660162,
@@ -5392,11 +5365,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 22,
-    "obp_percentile": 64,
-    "slg_percentile": 22,
-    "ops_percentile": 40,
-    "k_pct_percentile": 55,
+    "avg_percentile": 23,
+    "obp_percentile": 63,
+    "slg_percentile": 23,
+    "ops_percentile": 41,
+    "k_pct_percentile": 56,
     "bb_pct_percentile": 84
   },
   {
@@ -5424,7 +5397,7 @@
     "slg_percentile": 33,
     "ops_percentile": 40,
     "k_pct_percentile": 18,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 666023,
@@ -5451,7 +5424,7 @@
     "slg_percentile": 33,
     "ops_percentile": 40,
     "k_pct_percentile": 39,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 607208,
@@ -5477,7 +5450,7 @@
     "obp_percentile": 33,
     "slg_percentile": 41,
     "ops_percentile": 39,
-    "k_pct_percentile": 54,
+    "k_pct_percentile": 55,
     "bb_pct_percentile": 0
   },
   {
@@ -5504,7 +5477,7 @@
     "obp_percentile": 33,
     "slg_percentile": 41,
     "ops_percentile": 39,
-    "k_pct_percentile": 54,
+    "k_pct_percentile": 55,
     "bb_pct_percentile": 0
   },
   {
@@ -5556,37 +5529,10 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 37,
-    "slg_percentile": 36,
-    "ops_percentile": 38,
+    "slg_percentile": 37,
+    "ops_percentile": 39,
     "k_pct_percentile": 34,
     "bb_pct_percentile": 0
-  },
-  {
-    "player_id": 700932,
-    "name": "Kyle Manzardo",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "DH",
-    "avg": 0.182,
-    "obp": 0.25,
-    "slg": 0.182,
-    "ops": 0.432,
-    "k_pct": 58.3,
-    "bb_pct": 8.3,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 44,
-    "obp_percentile": 37,
-    "slg_percentile": 36,
-    "ops_percentile": 38,
-    "k_pct_percentile": 7,
-    "bb_pct_percentile": 55
   },
   {
     "player_id": 665487,
@@ -5610,9 +5556,9 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 37,
-    "slg_percentile": 36,
-    "ops_percentile": 38,
-    "k_pct_percentile": 50,
+    "slg_percentile": 37,
+    "ops_percentile": 39,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 55
   },
   {
@@ -5636,10 +5582,37 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 32,
-    "obp_percentile": 21,
+    "obp_percentile": 20,
     "slg_percentile": 52,
-    "ops_percentile": 37,
+    "ops_percentile": 38,
     "k_pct_percentile": 18,
+    "bb_pct_percentile": 0
+  },
+  {
+    "player_id": 608070,
+    "name": "José Ramírez",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "3B",
+    "avg": 0.143,
+    "obp": 0.143,
+    "slg": 0.286,
+    "ops": 0.429,
+    "k_pct": 14.3,
+    "bb_pct": 0.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 32,
+    "obp_percentile": 20,
+    "slg_percentile": 52,
+    "ops_percentile": 38,
+    "k_pct_percentile": 68,
     "bb_pct_percentile": 0
   },
   {
@@ -5665,7 +5638,7 @@
     "avg_percentile": 29,
     "obp_percentile": 51,
     "slg_percentile": 26,
-    "ops_percentile": 37,
+    "ops_percentile": 38,
     "k_pct_percentile": 37,
     "bb_pct_percentile": 81
   },
@@ -5694,7 +5667,7 @@
     "slg_percentile": 41,
     "ops_percentile": 37,
     "k_pct_percentile": 37,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 670623,
@@ -5718,7 +5691,7 @@
     "chase_rate": null,
     "avg_percentile": 21,
     "obp_percentile": 36,
-    "slg_percentile": 36,
+    "slg_percentile": 37,
     "ops_percentile": 37,
     "k_pct_percentile": 35,
     "bb_pct_percentile": 76
@@ -5743,10 +5716,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
     "slg_percentile": 38,
-    "ops_percentile": 35,
+    "ops_percentile": 36,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 0
   },
@@ -5770,10 +5743,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
     "slg_percentile": 38,
-    "ops_percentile": 35,
+    "ops_percentile": 36,
     "k_pct_percentile": 59,
     "bb_pct_percentile": 0
   },
@@ -5797,10 +5770,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 47,
+    "avg_percentile": 48,
     "obp_percentile": 28,
     "slg_percentile": 38,
-    "ops_percentile": 35,
+    "ops_percentile": 36,
     "k_pct_percentile": 59,
     "bb_pct_percentile": 0
   },
@@ -5827,7 +5800,7 @@
     "avg_percentile": 0,
     "obp_percentile": 70,
     "slg_percentile": 0,
-    "ops_percentile": 35,
+    "ops_percentile": 36,
     "k_pct_percentile": 37,
     "bb_pct_percentile": 93
   },
@@ -5854,7 +5827,7 @@
     "avg_percentile": 39,
     "obp_percentile": 36,
     "slg_percentile": 33,
-    "ops_percentile": 35,
+    "ops_percentile": 36,
     "k_pct_percentile": 24,
     "bb_pct_percentile": 53
   },
@@ -5880,9 +5853,9 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
-    "k_pct_percentile": 72,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 67
   },
   {
@@ -5907,9 +5880,9 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
-    "k_pct_percentile": 27,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 67
   },
   {
@@ -5934,9 +5907,9 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
-    "k_pct_percentile": 50,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 67
   },
   {
@@ -5961,9 +5934,9 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
-    "k_pct_percentile": 27,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 67
   },
   {
@@ -5988,9 +5961,9 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
-    "k_pct_percentile": 72,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 67
   },
   {
@@ -6015,9 +5988,9 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
-    "k_pct_percentile": 50,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 67
   },
   {
@@ -6042,8 +6015,8 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
     "k_pct_percentile": 13,
     "bb_pct_percentile": 67
   },
@@ -6069,8 +6042,8 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
     "k_pct_percentile": 7,
     "bb_pct_percentile": 0
   },
@@ -6096,9 +6069,9 @@
     "chase_rate": null,
     "avg_percentile": 32,
     "obp_percentile": 37,
-    "slg_percentile": 28,
-    "ops_percentile": 32,
-    "k_pct_percentile": 50,
+    "slg_percentile": 29,
+    "ops_percentile": 33,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 67
   },
   {
@@ -6121,10 +6094,10 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 22,
+    "avg_percentile": 23,
     "obp_percentile": 27,
     "slg_percentile": 38,
-    "ops_percentile": 32,
+    "ops_percentile": 33,
     "k_pct_percentile": 61,
     "bb_pct_percentile": 57
   },
@@ -6149,10 +6122,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 29,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 43,
     "ops_percentile": 31,
-    "k_pct_percentile": 27,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 0
   },
   {
@@ -6176,10 +6149,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 29,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 43,
     "ops_percentile": 31,
-    "k_pct_percentile": 27,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 0
   },
   {
@@ -6233,8 +6206,35 @@
     "obp_percentile": 65,
     "slg_percentile": 0,
     "ops_percentile": 31,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 97
+  },
+  {
+    "player_id": 700932,
+    "name": "Kyle Manzardo",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "DH",
+    "avg": 0.154,
+    "obp": 0.214,
+    "slg": 0.154,
+    "ops": 0.368,
+    "k_pct": 57.1,
+    "bb_pct": 7.1,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 39,
+    "obp_percentile": 33,
+    "slg_percentile": 33,
+    "ops_percentile": 31,
+    "k_pct_percentile": 7,
+    "bb_pct_percentile": 53
   },
   {
     "player_id": 671056,
@@ -6285,7 +6285,7 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 24,
-    "slg_percentile": 36,
+    "slg_percentile": 37,
     "ops_percentile": 30,
     "k_pct_percentile": 63,
     "bb_pct_percentile": 0
@@ -6313,9 +6313,9 @@
     "avg_percentile": 29,
     "obp_percentile": 33,
     "slg_percentile": 26,
-    "ops_percentile": 29,
+    "ops_percentile": 30,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 624413,
@@ -6340,9 +6340,9 @@
     "avg_percentile": 29,
     "obp_percentile": 33,
     "slg_percentile": 26,
-    "ops_percentile": 29,
+    "ops_percentile": 30,
     "k_pct_percentile": 17,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 666310,
@@ -6367,9 +6367,9 @@
     "avg_percentile": 29,
     "obp_percentile": 33,
     "slg_percentile": 26,
-    "ops_percentile": 29,
+    "ops_percentile": 30,
     "k_pct_percentile": 75,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 694497,
@@ -6449,7 +6449,7 @@
     "obp_percentile": 24,
     "slg_percentile": 33,
     "ops_percentile": 28,
-    "k_pct_percentile": 6,
+    "k_pct_percentile": 5,
     "bb_pct_percentile": 0
   },
   {
@@ -6585,7 +6585,7 @@
     "slg_percentile": 0,
     "ops_percentile": 26,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 94
+    "bb_pct_percentile": 95
   },
   {
     "player_id": 701762,
@@ -6612,7 +6612,7 @@
     "slg_percentile": 0,
     "ops_percentile": 26,
     "k_pct_percentile": 9,
-    "bb_pct_percentile": 94
+    "bb_pct_percentile": 95
   },
   {
     "player_id": 592626,
@@ -6639,7 +6639,7 @@
     "slg_percentile": 0,
     "ops_percentile": 26,
     "k_pct_percentile": 100,
-    "bb_pct_percentile": 94
+    "bb_pct_percentile": 95
   },
   {
     "player_id": 678246,
@@ -6665,8 +6665,62 @@
     "obp_percentile": 53,
     "slg_percentile": 0,
     "ops_percentile": 26,
-    "k_pct_percentile": 6,
-    "bb_pct_percentile": 94
+    "k_pct_percentile": 5,
+    "bb_pct_percentile": 95
+  },
+  {
+    "player_id": 663728,
+    "name": "Cal Raleigh",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "C",
+    "avg": 0.091,
+    "obp": 0.231,
+    "slg": 0.091,
+    "ops": 0.322,
+    "k_pct": 69.2,
+    "bb_pct": 15.4,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 21,
+    "obp_percentile": 36,
+    "slg_percentile": 21,
+    "ops_percentile": 25,
+    "k_pct_percentile": 3,
+    "bb_pct_percentile": 76
+  },
+  {
+    "player_id": 677594,
+    "name": "Julio Rodríguez",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "CF",
+    "avg": 0.091,
+    "obp": 0.231,
+    "slg": 0.091,
+    "ops": 0.322,
+    "k_pct": 46.2,
+    "bb_pct": 15.4,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 21,
+    "obp_percentile": 36,
+    "slg_percentile": 21,
+    "ops_percentile": 25,
+    "k_pct_percentile": 14,
+    "bb_pct_percentile": 76
   },
   {
     "player_id": 701358,
@@ -6691,7 +6745,7 @@
     "avg_percentile": 21,
     "obp_percentile": 36,
     "slg_percentile": 21,
-    "ops_percentile": 26,
+    "ops_percentile": 25,
     "k_pct_percentile": 24,
     "bb_pct_percentile": 76
   },
@@ -6720,7 +6774,7 @@
     "slg_percentile": 24,
     "ops_percentile": 25,
     "k_pct_percentile": 59,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 542303,
@@ -6747,7 +6801,7 @@
     "slg_percentile": 24,
     "ops_percentile": 25,
     "k_pct_percentile": 79,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 807713,
@@ -6770,9 +6824,9 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 39,
-    "obp_percentile": 21,
+    "obp_percentile": 20,
     "slg_percentile": 33,
-    "ops_percentile": 25,
+    "ops_percentile": 24,
     "k_pct_percentile": 68,
     "bb_pct_percentile": 0
   },
@@ -6796,7 +6850,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 22,
+    "avg_percentile": 23,
     "obp_percentile": 12,
     "slg_percentile": 38,
     "ops_percentile": 24,
@@ -6854,8 +6908,8 @@
     "obp_percentile": 33,
     "slg_percentile": 21,
     "ops_percentile": 24,
-    "k_pct_percentile": 55,
-    "bb_pct_percentile": 73
+    "k_pct_percentile": 56,
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 682668,
@@ -6878,8 +6932,8 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 32,
-    "obp_percentile": 21,
-    "slg_percentile": 28,
+    "obp_percentile": 20,
+    "slg_percentile": 29,
     "ops_percentile": 22,
     "k_pct_percentile": 100,
     "bb_pct_percentile": 0
@@ -6905,8 +6959,8 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 32,
-    "obp_percentile": 21,
-    "slg_percentile": 28,
+    "obp_percentile": 20,
+    "slg_percentile": 29,
     "ops_percentile": 22,
     "k_pct_percentile": 18,
     "bb_pct_percentile": 0
@@ -6932,8 +6986,8 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 32,
-    "obp_percentile": 21,
-    "slg_percentile": 28,
+    "obp_percentile": 20,
+    "slg_percentile": 29,
     "ops_percentile": 22,
     "k_pct_percentile": 7,
     "bb_pct_percentile": 0
@@ -6959,38 +7013,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 32,
-    "obp_percentile": 21,
-    "slg_percentile": 28,
+    "obp_percentile": 20,
+    "slg_percentile": 29,
     "ops_percentile": 22,
     "k_pct_percentile": 39,
     "bb_pct_percentile": 0
-  },
-  {
-    "player_id": 692216,
-    "name": "CJ Kayfus",
-    "team": "CLE",
-    "team_name": "Cleveland Guardians",
-    "division": "American League Central",
-    "position": "LF",
-    "avg": 0.0,
-    "obp": 0.286,
-    "slg": 0.0,
-    "ops": 0.286,
-    "k_pct": 14.3,
-    "bb_pct": 28.6,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 0,
-    "obp_percentile": 49,
-    "slg_percentile": 0,
-    "ops_percentile": 22,
-    "k_pct_percentile": 68,
-    "bb_pct_percentile": 92
   },
   {
     "player_id": 691723,
@@ -7017,34 +7044,7 @@
     "slg_percentile": 0,
     "ops_percentile": 22,
     "k_pct_percentile": 39,
-    "bb_pct_percentile": 92
-  },
-  {
-    "player_id": 663728,
-    "name": "Cal Raleigh",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "C",
-    "avg": 0.1,
-    "obp": 0.182,
-    "slg": 0.1,
-    "ops": 0.282,
-    "k_pct": 72.7,
-    "bb_pct": 9.1,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 22,
-    "obp_percentile": 27,
-    "slg_percentile": 22,
-    "ops_percentile": 22,
-    "k_pct_percentile": 3,
-    "bb_pct_percentile": 57
+    "bb_pct_percentile": 93
   },
   {
     "player_id": 807712,
@@ -7067,10 +7067,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 32,
-    "obp_percentile": 18,
-    "slg_percentile": 28,
+    "obp_percentile": 17,
+    "slg_percentile": 29,
     "ops_percentile": 22,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 0
   },
   {
@@ -7094,10 +7094,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 29,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 26,
     "ops_percentile": 19,
-    "k_pct_percentile": 27,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 0
   },
   {
@@ -7121,10 +7121,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 29,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 26,
     "ops_percentile": 19,
-    "k_pct_percentile": 27,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 0
   },
   {
@@ -7148,11 +7148,38 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 29,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 26,
     "ops_percentile": 19,
     "k_pct_percentile": 7,
     "bb_pct_percentile": 0
+  },
+  {
+    "player_id": 692216,
+    "name": "CJ Kayfus",
+    "team": "CLE",
+    "team_name": "Cleveland Guardians",
+    "division": "American League Central",
+    "position": "LF",
+    "avg": 0.0,
+    "obp": 0.25,
+    "slg": 0.0,
+    "ops": 0.25,
+    "k_pct": 25.0,
+    "bb_pct": 25.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 0,
+    "obp_percentile": 37,
+    "slg_percentile": 0,
+    "ops_percentile": 19,
+    "k_pct_percentile": 51,
+    "bb_pct_percentile": 87
   },
   {
     "player_id": 663616,
@@ -7178,7 +7205,7 @@
     "obp_percentile": 37,
     "slg_percentile": 0,
     "ops_percentile": 19,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 87
   },
   {
@@ -7232,7 +7259,7 @@
     "obp_percentile": 37,
     "slg_percentile": 0,
     "ops_percentile": 19,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 87
   },
   {
@@ -7286,7 +7313,7 @@
     "obp_percentile": 14,
     "slg_percentile": 24,
     "ops_percentile": 18,
-    "k_pct_percentile": 54,
+    "k_pct_percentile": 55,
     "bb_pct_percentile": 0
   },
   {
@@ -7340,7 +7367,7 @@
     "obp_percentile": 14,
     "slg_percentile": 24,
     "ops_percentile": 18,
-    "k_pct_percentile": 6,
+    "k_pct_percentile": 5,
     "bb_pct_percentile": 0
   },
   {
@@ -7395,7 +7422,7 @@
     "slg_percentile": 0,
     "ops_percentile": 18,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 84
+    "bb_pct_percentile": 85
   },
   {
     "player_id": 621493,
@@ -7421,8 +7448,8 @@
     "obp_percentile": 33,
     "slg_percentile": 0,
     "ops_percentile": 18,
-    "k_pct_percentile": 54,
-    "bb_pct_percentile": 84
+    "k_pct_percentile": 55,
+    "bb_pct_percentile": 85
   },
   {
     "player_id": 666182,
@@ -7471,9 +7498,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 22,
+    "avg_percentile": 23,
     "obp_percentile": 12,
-    "slg_percentile": 22,
+    "slg_percentile": 23,
     "ops_percentile": 16,
     "k_pct_percentile": 23,
     "bb_pct_percentile": 0
@@ -7498,9 +7525,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 22,
+    "avg_percentile": 23,
     "obp_percentile": 12,
-    "slg_percentile": 22,
+    "slg_percentile": 23,
     "ops_percentile": 16,
     "k_pct_percentile": 13,
     "bb_pct_percentile": 0
@@ -7525,9 +7552,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 22,
+    "avg_percentile": 23,
     "obp_percentile": 12,
-    "slg_percentile": 22,
+    "slg_percentile": 23,
     "ops_percentile": 16,
     "k_pct_percentile": 37,
     "bb_pct_percentile": 0
@@ -7587,33 +7614,6 @@
     "bb_pct_percentile": 0
   },
   {
-    "player_id": 677594,
-    "name": "Julio Rodríguez",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "CF",
-    "avg": 0.0,
-    "obp": 0.182,
-    "slg": 0.0,
-    "ops": 0.182,
-    "k_pct": 54.5,
-    "bb_pct": 18.2,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 0,
-    "obp_percentile": 27,
-    "slg_percentile": 0,
-    "ops_percentile": 16,
-    "k_pct_percentile": 9,
-    "bb_pct_percentile": 79
-  },
-  {
     "player_id": 695600,
     "name": "Carter Jensen",
     "team": "KC",
@@ -7636,9 +7636,9 @@
     "avg_percentile": 0,
     "obp_percentile": 24,
     "slg_percentile": 0,
-    "ops_percentile": 15,
+    "ops_percentile": 16,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 78
+    "bb_pct_percentile": 79
   },
   {
     "player_id": 681481,
@@ -7668,6 +7668,33 @@
     "bb_pct_percentile": 76
   },
   {
+    "player_id": 647304,
+    "name": "Josh Naylor",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "1B",
+    "avg": 0.0,
+    "obp": 0.154,
+    "slg": 0.0,
+    "ops": 0.154,
+    "k_pct": 15.4,
+    "bb_pct": 15.4,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 0,
+    "obp_percentile": 24,
+    "slg_percentile": 0,
+    "ops_percentile": 15,
+    "k_pct_percentile": 64,
+    "bb_pct_percentile": 76
+  },
+  {
     "player_id": 680718,
     "name": "Addison Barger",
     "team": "TOR",
@@ -7688,11 +7715,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 21,
+    "obp_percentile": 20,
     "slg_percentile": 0,
     "ops_percentile": 14,
     "k_pct_percentile": 68,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 686555,
@@ -7715,11 +7742,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 21,
+    "obp_percentile": 20,
     "slg_percentile": 0,
     "ops_percentile": 14,
     "k_pct_percentile": 39,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 677592,
@@ -7742,11 +7769,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 21,
+    "obp_percentile": 20,
     "slg_percentile": 0,
     "ops_percentile": 14,
     "k_pct_percentile": 3,
-    "bb_pct_percentile": 73
+    "bb_pct_percentile": 72
   },
   {
     "player_id": 605137,
@@ -7769,7 +7796,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 0,
     "ops_percentile": 13,
     "k_pct_percentile": 13,
@@ -7796,10 +7823,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 0,
     "ops_percentile": 13,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 67
   },
   {
@@ -7823,10 +7850,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 0,
     "ops_percentile": 13,
-    "k_pct_percentile": 27,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 67
   },
   {
@@ -7850,10 +7877,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 0,
-    "obp_percentile": 18,
+    "obp_percentile": 17,
     "slg_percentile": 0,
     "ops_percentile": 13,
-    "k_pct_percentile": 72,
+    "k_pct_percentile": 73,
     "bb_pct_percentile": 0
   },
   {
@@ -7881,7 +7908,7 @@
     "slg_percentile": 0,
     "ops_percentile": 12,
     "k_pct_percentile": 75,
-    "bb_pct_percentile": 63
+    "bb_pct_percentile": 62
   },
   {
     "player_id": 683002,
@@ -7935,7 +7962,7 @@
     "slg_percentile": 0,
     "ops_percentile": 12,
     "k_pct_percentile": 59,
-    "bb_pct_percentile": 59
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 669477,
@@ -7992,6 +8019,33 @@
     "bb_pct_percentile": 0
   },
   {
+    "player_id": 669208,
+    "name": "Ryan Bliss",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "position": "DH",
+    "avg": 0.0,
+    "obp": 0.0,
+    "slg": 0.0,
+    "ops": 0.0,
+    "k_pct": 100.0,
+    "bb_pct": 0.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 0,
+    "obp_percentile": 0,
+    "slg_percentile": 0,
+    "ops_percentile": 0,
+    "k_pct_percentile": 2,
+    "bb_pct_percentile": 0
+  },
+  {
     "player_id": 671732,
     "name": "Lawrence Butler",
     "team": "ATH",
@@ -8042,7 +8096,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 1,
+    "k_pct_percentile": 2,
     "bb_pct_percentile": 0
   },
   {
@@ -8123,7 +8177,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 1,
+    "k_pct_percentile": 2,
     "bb_pct_percentile": 0
   },
   {
@@ -8150,7 +8204,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 6,
+    "k_pct_percentile": 5,
     "bb_pct_percentile": 0
   },
   {
@@ -8204,7 +8258,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 1,
+    "k_pct_percentile": 2,
     "bb_pct_percentile": 0
   },
   {
@@ -8285,7 +8339,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -8339,7 +8393,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -8420,7 +8474,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 1,
+    "k_pct_percentile": 2,
     "bb_pct_percentile": 0
   },
   {
@@ -8474,7 +8528,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 6,
+    "k_pct_percentile": 5,
     "bb_pct_percentile": 0
   },
   {
@@ -8501,7 +8555,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 2,
+    "k_pct_percentile": 3,
     "bb_pct_percentile": 0
   },
   {
@@ -8532,33 +8586,6 @@
     "bb_pct_percentile": 0
   },
   {
-    "player_id": 647304,
-    "name": "Josh Naylor",
-    "team": "SEA",
-    "team_name": "Seattle Mariners",
-    "division": "American League West",
-    "position": "1B",
-    "avg": 0.0,
-    "obp": 0.0,
-    "slg": 0.0,
-    "ops": 0.0,
-    "k_pct": 18.2,
-    "bb_pct": 0.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 0,
-    "obp_percentile": 0,
-    "slg_percentile": 0,
-    "ops_percentile": 0,
-    "k_pct_percentile": 61,
-    "bb_pct_percentile": 0
-  },
-  {
     "player_id": 680700,
     "name": "Richie Palacios",
     "team": "TB",
@@ -8582,7 +8609,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 50,
+    "k_pct_percentile": 51,
     "bb_pct_percentile": 0
   },
   {
@@ -8609,7 +8636,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 2,
+    "k_pct_percentile": 3,
     "bb_pct_percentile": 0
   },
   {
@@ -8690,7 +8717,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 1,
+    "k_pct_percentile": 2,
     "bb_pct_percentile": 0
   },
   {
@@ -8798,7 +8825,7 @@
     "obp_percentile": 0,
     "slg_percentile": 0,
     "ops_percentile": 0,
-    "k_pct_percentile": 27,
+    "k_pct_percentile": 26,
     "bb_pct_percentile": 0
   },
   {
