@@ -40,6 +40,26 @@
     ]
   },
   {
+    "player_id": 687075,
+    "name": "Brandon Sproat",
+    "team": "MIL",
+    "pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "usage_pct": 37.2,
+        "whiff_pct": 17.6,
+        "woba_against": 0.436,
+        "xwoba_against": 0.421,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": -1.9,
+        "avg_speed": 96.8,
+        "break_x": 16.2,
+        "break_z": 6.5
+      }
+    ]
+  },
+  {
     "player_id": 693433,
     "name": "Bryan Woo",
     "team": "SEA",
@@ -70,7 +90,7 @@
         "usage_pct": 45.3,
         "whiff_pct": 21.1,
         "woba_against": 0.345,
-        "xwoba_against": 0.384,
+        "xwoba_against": 0.386,
         "hard_hit_pct": 40.0,
         "run_value_per_100": 2.5,
         "avg_speed": 95.4,
@@ -140,6 +160,26 @@
     ]
   },
   {
+    "player_id": 800311,
+    "name": "Didier Fuentes",
+    "team": "ATL",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 66.1,
+        "whiff_pct": 16.7,
+        "woba_against": 0.145,
+        "xwoba_against": 0.283,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 4.5,
+        "avg_speed": 95.8,
+        "break_x": 9.5,
+        "break_z": 15.6
+      }
+    ]
+  },
+  {
     "player_id": 656302,
     "name": "Dylan Cease",
     "team": "TOR",
@@ -156,6 +196,46 @@
         "avg_speed": 90.0,
         "break_x": 1.1,
         "break_z": 3.5
+      }
+    ]
+  },
+  {
+    "player_id": 676106,
+    "name": "Emerson Hancock",
+    "team": "SEA",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 52.6,
+        "whiff_pct": 24.3,
+        "woba_against": 0.07,
+        "xwoba_against": 0.078,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": 4.5,
+        "avg_speed": 93.5,
+        "break_x": 13.5,
+        "break_z": 14.2
+      }
+    ]
+  },
+  {
+    "player_id": 641778,
+    "name": "Eric Lauer",
+    "team": "TOR",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 59.8,
+        "whiff_pct": 38.7,
+        "woba_against": 0.24,
+        "xwoba_against": 0.188,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 3.4,
+        "avg_speed": 91.2,
+        "break_x": 10.3,
+        "break_z": 16.4
       }
     ]
   },
@@ -420,6 +500,46 @@
     ]
   },
   {
+    "player_id": 806960,
+    "name": "Luis Morales",
+    "team": "ATH",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 39.4,
+        "whiff_pct": 12.5,
+        "woba_against": 0.76,
+        "xwoba_against": 0.853,
+        "hard_hit_pct": 87.5,
+        "run_value_per_100": -12.2,
+        "avg_speed": 96.9,
+        "break_x": 8.4,
+        "break_z": 15.2
+      }
+    ]
+  },
+  {
+    "player_id": 682254,
+    "name": "Mason Montgomery",
+    "team": "PIT",
+    "pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "usage_pct": 56.5,
+        "whiff_pct": 37.5,
+        "woba_against": 0.273,
+        "xwoba_against": 0.371,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": 2.1,
+        "avg_speed": 98.3,
+        "break_x": 3.4,
+        "break_z": 18.0
+      }
+    ]
+  },
+  {
     "player_id": 669461,
     "name": "Matthew Liberatore",
     "team": "STL",
@@ -500,6 +620,26 @@
     ]
   },
   {
+    "player_id": 696147,
+    "name": "Sam Bachman",
+    "team": "LAA",
+    "pitches": [
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "usage_pct": 59.0,
+        "whiff_pct": 46.7,
+        "woba_against": 0.14,
+        "xwoba_against": 0.352,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": 4.1,
+        "avg_speed": 88.7,
+        "break_x": 2.5,
+        "break_z": -1.2
+      }
+    ]
+  },
+  {
     "player_id": 680732,
     "name": "Sean Burke",
     "team": "CWS",
@@ -516,6 +656,46 @@
         "avg_speed": 93.6,
         "break_x": 5.5,
         "break_z": 19.2
+      }
+    ]
+  },
+  {
+    "player_id": 684007,
+    "name": "Shota Imanaga",
+    "team": "CHC",
+    "pitches": [
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "usage_pct": 34.1,
+        "whiff_pct": 52.9,
+        "woba_against": 0.441,
+        "xwoba_against": 0.259,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -5.4,
+        "avg_speed": 83.8,
+        "break_x": 8.7,
+        "break_z": 5.2
+      }
+    ]
+  },
+  {
+    "player_id": 571927,
+    "name": "Steven Matz",
+    "team": "TB",
+    "pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "usage_pct": 48.1,
+        "whiff_pct": 20.0,
+        "woba_against": 0.423,
+        "xwoba_against": 0.394,
+        "hard_hit_pct": 44.4,
+        "run_value_per_100": -1.4,
+        "avg_speed": 93.8,
+        "break_x": 15.9,
+        "break_z": 11.4
       }
     ]
   },

@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "player_id": 545361,
+    "name": "Mike Trout",
+    "team": "LAA",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.682,
+        "xwoba": 0.66,
+        "ba": 0.571,
+        "slg": 1.0,
+        "whiff_pct": 0.0,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 7.7
+      }
+    ]
+  },
+  {
+    "player_id": 660162,
+    "name": "Yoán Moncada",
+    "team": "LAA",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.14,
+        "xwoba": 0.221,
+        "ba": 0.0,
+        "slg": 0.0,
+        "whiff_pct": 23.5,
+        "hard_hit_pct": 20.0,
+        "run_value_per_100": -4.2
+      }
+    ]
+  }
+]
