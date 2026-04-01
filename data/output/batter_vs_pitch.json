@@ -19,6 +19,44 @@
     ]
   },
   {
+    "player_id": 607043,
+    "name": "Brandon Nimmo",
+    "team": "TEX",
+    "vs_pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.391,
+        "xwoba": 0.356,
+        "ba": 0.4,
+        "slg": 0.4,
+        "whiff_pct": 10.5,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 0.0
+      }
+    ]
+  },
+  {
+    "player_id": 680977,
+    "name": "Brendan Donovan",
+    "team": "SEA",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.935,
+        "xwoba": 0.544,
+        "ba": 0.75,
+        "slg": 1.625,
+        "whiff_pct": 21.4,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 12.8
+      }
+    ]
+  },
+  {
     "player_id": 683146,
     "name": "Brett Baty",
     "team": "NYM",
@@ -26,14 +64,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.3,
-        "xwoba": 0.213,
-        "ba": 0.333,
-        "slg": 0.333,
-        "whiff_pct": 15.0,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -1.2
+        "pa": 13,
+        "woba": 0.277,
+        "xwoba": 0.208,
+        "ba": 0.308,
+        "slg": 0.308,
+        "whiff_pct": 17.4,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -1.9
+      }
+    ]
+  },
+  {
+    "player_id": 701358,
+    "name": "Cam Smith",
+    "team": "HOU",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.625,
+        "xwoba": 0.423,
+        "ba": 0.429,
+        "slg": 1.0,
+        "whiff_pct": 28.6,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 6.4
       }
     ]
   },
@@ -45,14 +102,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.291,
-        "xwoba": 0.273,
-        "ba": 0.111,
-        "slg": 0.111,
-        "whiff_pct": 31.0,
-        "hard_hit_pct": 60.0,
-        "run_value_per_100": -1.0
+        "pa": 13,
+        "woba": 0.246,
+        "xwoba": 0.237,
+        "ba": 0.091,
+        "slg": 0.091,
+        "whiff_pct": 27.3,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -1.9
       }
     ]
   },
@@ -64,14 +121,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.225,
-        "xwoba": 0.188,
-        "ba": 0.091,
-        "slg": 0.364,
-        "whiff_pct": 38.5,
-        "hard_hit_pct": 80.0,
-        "run_value_per_100": -4.5
+        "pa": 13,
+        "woba": 0.208,
+        "xwoba": 0.17,
+        "ba": 0.083,
+        "slg": 0.333,
+        "whiff_pct": 35.7,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": -4.7
+      }
+    ]
+  },
+  {
+    "player_id": 641355,
+    "name": "Cody Bellinger",
+    "team": "NYY",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.355,
+        "xwoba": 0.337,
+        "ba": 0.222,
+        "slg": 0.444,
+        "whiff_pct": 18.2,
+        "hard_hit_pct": 14.3,
+        "run_value_per_100": 0.2
       }
     ]
   },
@@ -83,14 +159,52 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.391,
+        "xwoba": 0.435,
+        "ba": 0.444,
+        "slg": 0.444,
+        "whiff_pct": 10.5,
+        "hard_hit_pct": 70.0,
+        "run_value_per_100": 1.0
+      }
+    ]
+  },
+  {
+    "player_id": 686948,
+    "name": "Drake Baldwin",
+    "team": "ATL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
         "pa": 10,
-        "woba": 0.34,
-        "xwoba": 0.405,
-        "ba": 0.375,
-        "slg": 0.375,
-        "whiff_pct": 11.1,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": -0.4
+        "woba": 0.76,
+        "xwoba": 0.82,
+        "ba": 0.444,
+        "slg": 1.444,
+        "whiff_pct": 0.0,
+        "hard_hit_pct": 77.8,
+        "run_value_per_100": 16.0
+      }
+    ]
+  },
+  {
+    "player_id": 682829,
+    "name": "Elly De La Cruz",
+    "team": "CIN",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.45,
+        "xwoba": 0.359,
+        "ba": 0.222,
+        "slg": 0.556,
+        "whiff_pct": 5.6,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -1.3
       }
     ]
   },
@@ -102,14 +216,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.367,
-        "xwoba": 0.413,
-        "ba": 0.143,
-        "slg": 0.143,
-        "whiff_pct": 16.7,
-        "hard_hit_pct": 16.7,
-        "run_value_per_100": 0.2
+        "pa": 15,
+        "woba": 0.34,
+        "xwoba": 0.397,
+        "ba": 0.111,
+        "slg": 0.111,
+        "whiff_pct": 13.3,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -0.3
+      }
+    ]
+  },
+  {
+    "player_id": 695578,
+    "name": "James Wood",
+    "team": "WSH",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.295,
+        "xwoba": 0.326,
+        "ba": 0.182,
+        "slg": 0.545,
+        "whiff_pct": 23.8,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": -2.1
       }
     ]
   },
@@ -133,6 +266,94 @@
     ]
   },
   {
+    "player_id": 514888,
+    "name": "Jose Altuve",
+    "team": "HOU",
+    "vs_pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.482,
+        "xwoba": 0.455,
+        "ba": 0.333,
+        "slg": 0.333,
+        "whiff_pct": 12.5,
+        "hard_hit_pct": 20.0,
+        "run_value_per_100": 2.8
+      }
+    ]
+  },
+  {
+    "player_id": 608070,
+    "name": "José Ramírez",
+    "team": "CLE",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.125,
+        "xwoba": 0.23,
+        "ba": 0.1,
+        "slg": 0.2,
+        "whiff_pct": 14.8,
+        "hard_hit_pct": 22.2,
+        "run_value_per_100": -4.4
+      }
+    ]
+  },
+  {
+    "player_id": 677594,
+    "name": "Julio Rodríguez",
+    "team": "SEA",
+    "vs_pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.145,
+        "xwoba": 0.185,
+        "ba": 0.0,
+        "slg": 0.0,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -6.2
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.39,
+        "xwoba": 0.37,
+        "ba": 0.286,
+        "slg": 0.286,
+        "whiff_pct": 52.6,
+        "hard_hit_pct": 100.0,
+        "run_value_per_100": 1.1
+      }
+    ]
+  },
+  {
+    "player_id": 691406,
+    "name": "Junior Caminero",
+    "team": "TB",
+    "vs_pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.436,
+        "xwoba": 0.416,
+        "ba": 0.375,
+        "slg": 0.375,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 1.1
+      }
+    ]
+  },
+  {
     "player_id": 660844,
     "name": "Leo Rivas",
     "team": "SEA",
@@ -140,14 +361,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.25,
-        "xwoba": 0.23,
-        "ba": 0.222,
-        "slg": 0.222,
-        "whiff_pct": 16.7,
+        "pa": 12,
+        "woba": 0.208,
+        "xwoba": 0.231,
+        "ba": 0.182,
+        "slg": 0.182,
+        "whiff_pct": 14.3,
         "hard_hit_pct": 0.0,
-        "run_value_per_100": -1.1
+        "run_value_per_100": -2.3
+      }
+    ]
+  },
+  {
+    "player_id": 650333,
+    "name": "Luis Arraez",
+    "team": "SF",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.09,
+        "xwoba": 0.141,
+        "ba": 0.111,
+        "slg": 0.111,
+        "whiff_pct": 5.6,
+        "hard_hit_pct": 11.1,
+        "run_value_per_100": -5.3
       }
     ]
   },
@@ -166,7 +406,26 @@
         "slg": 0.364,
         "whiff_pct": 11.8,
         "hard_hit_pct": 30.0,
-        "run_value_per_100": -2.6
+        "run_value_per_100": -2.4
+      }
+    ]
+  },
+  {
+    "player_id": 683737,
+    "name": "Michael Busch",
+    "team": "CHC",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.445,
+        "xwoba": 0.335,
+        "ba": 0.25,
+        "slg": 0.375,
+        "whiff_pct": 9.1,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": 4.6
       }
     ]
   },
@@ -183,9 +442,47 @@
         "xwoba": 0.616,
         "ba": 0.444,
         "slg": 0.778,
-        "whiff_pct": 4.3,
+        "whiff_pct": 3.7,
         "hard_hit_pct": 37.5,
-        "run_value_per_100": 5.2
+        "run_value_per_100": 4.7
+      }
+    ]
+  },
+  {
+    "player_id": 680757,
+    "name": "Steven Kwan",
+    "team": "CLE",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.32,
+        "xwoba": 0.328,
+        "ba": 0.25,
+        "slg": 0.25,
+        "whiff_pct": 5.0,
+        "hard_hit_pct": 12.5,
+        "run_value_per_100": -1.6
+      }
+    ]
+  },
+  {
+    "player_id": 694671,
+    "name": "Wyatt Langford",
+    "team": "TEX",
+    "vs_pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 12,
+        "woba": 0.283,
+        "xwoba": 0.376,
+        "ba": 0.25,
+        "slg": 0.417,
+        "whiff_pct": 29.4,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": -2.3
       }
     ]
   },
@@ -205,6 +502,25 @@
         "whiff_pct": 21.1,
         "hard_hit_pct": 16.7,
         "run_value_per_100": -4.0
+      }
+    ]
+  },
+  {
+    "player_id": 687263,
+    "name": "Zach Neto",
+    "team": "LAA",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.309,
+        "xwoba": 0.291,
+        "ba": 0.111,
+        "slg": 0.444,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": -0.2
       }
     ]
   }
