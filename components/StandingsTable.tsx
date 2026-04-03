@@ -158,14 +158,20 @@ export default function StandingsTable({ standings }: Props) {
     col,
     children,
     align = 'right',
+    className: extraClass,
   }: {
     col: SortKey
     children: React.ReactNode
-    align?: 'left' | 'right'
+    align?: 'left' | 'right' | 'center'
+    className?: string
   }) {
     return (
       <th
-        className={clsx('select-none', align === 'right' ? 'text-right' : 'text-left')}
+        className={clsx(
+          'select-none',
+          align === 'left' ? 'text-left' : align === 'center' ? 'text-center' : 'text-right',
+          extraClass,
+        )}
         onClick={() => handleSort(col)}
       >
         {children}
@@ -221,9 +227,9 @@ export default function StandingsTable({ standings }: Props) {
               <Th col="elo_rating">ELO</Th>
               <Th col="elo_change_7d">Δ7d</Th>
               <Th col="playoff_probability">Playoff%</Th>
-              <Th col="win_ds">Win DS</Th>
-              <Th col="win_cs">Win CS</Th>
-              <Th col="win_ws">Win WS</Th>
+              <Th col="win_ds" align="center" className="w-[3.2rem]">Win DS</Th>
+              <Th col="win_cs" align="center" className="w-[3.2rem]">Win CS</Th>
+              <Th col="win_ws" align="center" className="w-[3.2rem]">Win WS</Th>
             </tr>
           </thead>
           <tbody>
@@ -321,17 +327,17 @@ function TeamRow({ row, colStats }: { row: TeamStanding; colStats: ColStats }) {
       </td>
 
       {/* Win DS */}
-      <td className="text-right tabular" style={winStageStyleSmooth(row.win_ds, colStats.ds.median, colStats.ds.max)}>
+      <td className="text-center tabular w-[3.2rem]" style={{ padding: '5px 4px', ...winStageStyleSmooth(row.win_ds, colStats.ds.median, colStats.ds.max) }}>
         {pct(row.win_ds)}
       </td>
 
       {/* Win CS */}
-      <td className="text-right tabular" style={winStageStyleSmooth(row.win_cs, colStats.cs.median, colStats.cs.max)}>
+      <td className="text-center tabular w-[3.2rem]" style={{ padding: '5px 4px', ...winStageStyleSmooth(row.win_cs, colStats.cs.median, colStats.cs.max) }}>
         {pct(row.win_cs)}
       </td>
 
       {/* Win WS */}
-      <td className="text-right tabular font-semibold" style={winStageStyleSmooth(row.win_ws, colStats.ws.median, colStats.ws.max)}>
+      <td className="text-center tabular font-semibold w-[3.2rem]" style={{ padding: '5px 4px', ...winStageStyleSmooth(row.win_ws, colStats.ws.median, colStats.ws.max) }}>
         {pct(row.win_ws)}
       </td>
     </tr>
