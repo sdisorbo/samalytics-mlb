@@ -32,13 +32,51 @@ function probBarColor(p: number): string {
   return '#E74C3C'
 }
 
-function winStageStyle(p: number): { backgroundColor?: string; color?: string } {
-  if (p >= 0.15) return { backgroundColor: '#00CDD1', color: '#fff' }
-  if (p >= 0.08) return { backgroundColor: '#09E8DE', color: '#1a1a1a' }
-  if (p >= 0.03) return {}  // neutral / median
-  if (p >= 0.01) return { backgroundColor: '#E0007C', color: '#fff' }
-  if (p > 0)     return { backgroundColor: '#F4308F', color: '#fff' }
-  return {}
+// Smooth color interpolation for win stage columns
+// Turquoise scale (above median): #CFE8E8 → #8EC6C8 → #5BAEB3 → #3C999E
+// Pink scale (below median):      #F3D6DB → #E5A8B5 → #C96E85 → #9B405A
+// White at median, text always black
+
+function hexToRgb(hex: string): [number, number, number] {
+  const n = parseInt(hex.slice(1), 16)
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+}
+
+function rgbToHex(r: number, g: number, b: number): string {
+  return '#' + [r, g, b].map(v => Math.round(v).toString(16).padStart(2, '0')).join('')
+}
+
+function lerpColor(c1: string, c2: string, t: number): string {
+  const [r1, g1, b1] = hexToRgb(c1)
+  const [r2, g2, b2] = hexToRgb(c2)
+  return rgbToHex(r1 + (r2 - r1) * t, g1 + (g2 - g1) * t, b1 + (b2 - b1) * t)
+}
+
+function interpolateScale(colors: string[], t: number): string {
+  // t goes from 0 to 1, spread across N colors
+  const clamped = Math.max(0, Math.min(1, t))
+  const segments = colors.length - 1
+  const segment = Math.min(Math.floor(clamped * segments), segments - 1)
+  const localT = (clamped * segments) - segment
+  return lerpColor(colors[segment], colors[segment + 1], localT)
+}
+
+const TURQ_SCALE = ['#CFE8E8', '#8EC6C8', '#5BAEB3', '#3C999E']
+const PINK_SCALE = ['#F3D6DB', '#E5A8B5', '#C96E85', '#9B405A']
+
+function winStageStyleSmooth(value: number, median: number, max: number): { backgroundColor?: string; color?: string } {
+  if (value === 0) return {}
+  if (Math.abs(value - median) < 0.005) return {} // very close to median = white
+
+  if (value > median) {
+    // Above median → turquoise scale
+    const t = Math.min((value - median) / (max - median), 1)
+    return { backgroundColor: interpolateScale(TURQ_SCALE, t), color: '#1a1a1a' }
+  } else {
+    // Below median → pink scale
+    const t = Math.min((median - value) / median, 1)
+    return { backgroundColor: interpolateScale(PINK_SCALE, t), color: '#1a1a1a' }
+  }
 }
 
 function EloChange({ val }: { val: number }) {
@@ -136,6 +174,21 @@ export default function StandingsTable({ standings }: Props) {
     )
   }
 
+  // Compute median and max for smooth color scaling
+  const colStats = useMemo(() => {
+    function medianAndMax(vals: number[]) {
+      const sorted = [...vals].sort((a, b) => a - b)
+      const mid = Math.floor(sorted.length / 2)
+      const median = sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+      return { median, max: sorted[sorted.length - 1] }
+    }
+    return {
+      ds: medianAndMax(standings.map(s => s.win_ds)),
+      cs: medianAndMax(standings.map(s => s.win_cs)),
+      ws: medianAndMax(standings.map(s => s.win_ws)),
+    }
+  }, [standings])
+
   const rows = groupByDivision ? null : sortedStandings
 
   return (
@@ -186,11 +239,11 @@ export default function StandingsTable({ standings }: Props) {
                       </td>
                     </tr>
                     {teams.map(row => (
-                      <TeamRow key={row.team_abbr} row={row} />
+                      <TeamRow key={row.team_abbr} row={row} colStats={colStats} />
                     ))}
                   </Fragment>
                 ))
-              : rows!.map(row => <TeamRow key={row.team_abbr} row={row} />)}
+              : rows!.map(row => <TeamRow key={row.team_abbr} row={row} colStats={colStats} />)}
           </tbody>
         </table>
       </div>
@@ -198,7 +251,13 @@ export default function StandingsTable({ standings }: Props) {
   )
 }
 
-function TeamRow({ row }: { row: TeamStanding }) {
+interface ColStats {
+  ds: { median: number; max: number }
+  cs: { median: number; max: number }
+  ws: { median: number; max: number }
+}
+
+function TeamRow({ row, colStats }: { row: TeamStanding; colStats: ColStats }) {
   const total = row.wins + row.losses
   const pctVal = total > 0 ? (row.wins / total).toFixed(3) : '.000'
   const playoffProb = row.playoff_probability
@@ -247,8 +306,8 @@ function TeamRow({ row }: { row: TeamStanding }) {
 
       {/* Playoff% — bar + number */}
       <td className="text-right">
-        <div className="flex items-center gap-2 justify-end">
-          <div className="w-20 prob-bar">
+        <div className="flex items-center gap-1.5 justify-end">
+          <div className="w-14 prob-bar">
             <div
               className="prob-bar-fill"
               style={{
@@ -257,22 +316,22 @@ function TeamRow({ row }: { row: TeamStanding }) {
               }}
             />
           </div>
-          <span className="w-9 text-right tabular">{pct(playoffProb)}</span>
+          <span className="w-8 text-right tabular">{pct(playoffProb)}</span>
         </div>
       </td>
 
       {/* Win DS */}
-      <td className="text-right tabular" style={winStageStyle(row.win_ds)}>
+      <td className="text-right tabular" style={winStageStyleSmooth(row.win_ds, colStats.ds.median, colStats.ds.max)}>
         {pct(row.win_ds)}
       </td>
 
       {/* Win CS */}
-      <td className="text-right tabular" style={winStageStyle(row.win_cs)}>
+      <td className="text-right tabular" style={winStageStyleSmooth(row.win_cs, colStats.cs.median, colStats.cs.max)}>
         {pct(row.win_cs)}
       </td>
 
       {/* Win WS */}
-      <td className="text-right tabular font-semibold" style={winStageStyle(row.win_ws)}>
+      <td className="text-right tabular font-semibold" style={winStageStyleSmooth(row.win_ws, colStats.ws.median, colStats.ws.max)}>
         {pct(row.win_ws)}
       </td>
     </tr>
