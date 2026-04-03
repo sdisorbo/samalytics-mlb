@@ -25,18 +25,7 @@ function pct(n: number) {
   return `${Math.round(n * 100)}%`
 }
 
-function probBarColor(p: number): string {
-  if (p >= 0.9)  return '#27AE60'
-  if (p >= 0.6)  return '#2ECC71'
-  if (p >= 0.35) return '#F39C12'
-  if (p >= 0.1)  return '#E67E22'
-  return '#E74C3C'
-}
-
-// Smooth color interpolation for win stage columns
-// Turquoise scale (above median): #CFE8E8 → #8EC6C8 → #5BAEB3 → #3C999E
-// Pink scale (below median):      #F3D6DB → #E5A8B5 → #C96E85 → #9B405A
-// White at median, text always black
+// ── Color interpolation utilities ────────────────────────────────────────────
 
 function hexToRgb(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16)
@@ -54,7 +43,6 @@ function lerpColor(c1: string, c2: string, t: number): string {
 }
 
 function interpolateScale(colors: string[], t: number): string {
-  // t goes from 0 to 1, spread across N colors
   const clamped = Math.max(0, Math.min(1, t))
   const segments = colors.length - 1
   const segment = Math.min(Math.floor(clamped * segments), segments - 1)
@@ -64,6 +52,17 @@ function interpolateScale(colors: string[], t: number): string {
 
 const TURQ_SCALE = ['#CFE8E8', '#8EC6C8', '#5BAEB3', '#3C999E']
 const PINK_SCALE = ['#F3D6DB', '#E5A8B5', '#C96E85', '#9B405A']
+
+// ── Playoff bar color (smooth pink→turquoise) ───────────────────────────────
+
+function probBarColor(p: number): string {
+  if (p <= 0.5) {
+    // 0→0.5: dark pink → light pink
+    return interpolateScale(['#9B405A', '#C96E85', '#E5A8B5', '#F3D6DB'], p / 0.5)
+  }
+  // 0.5→1.0: light turquoise → dark turquoise
+  return interpolateScale(TURQ_SCALE, (p - 0.5) / 0.5)
+}
 
 function winStageStyleSmooth(value: number, median: number, max: number): { backgroundColor?: string; color?: string } {
   if (value === 0) return {}
