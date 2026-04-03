@@ -21,8 +21,9 @@ const SORT_DEFAULTS: Partial<Record<SortKey, SortDir>> = {
 }
 
 function pct(n: number) {
-  if (n > 0 && n < 0.01) return '<1%'
-  return `${Math.round(n * 100)}%`
+  const rounded = Math.round(n * 100)
+  if (n > 0 && rounded < 1) return '<1%'
+  return `${rounded}%`
 }
 
 // ── Color interpolation utilities ────────────────────────────────────────────
