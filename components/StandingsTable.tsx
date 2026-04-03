@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import clsx from 'clsx'
 import type { TeamStanding } from '@/lib/types'
-import { teamColor, DIVISION_ORDER, divisionColor } from '@/lib/teamColors'
+import { teamColor, teamLogoUrl, DIVISION_ORDER, divisionColor } from '@/lib/teamColors'
 
 type SortKey = keyof TeamStanding
 type SortDir = 'asc' | 'desc'
@@ -32,6 +32,14 @@ function probBarColor(p: number): string {
   return '#E74C3C'
 }
 
+function winStageColor(p: number): string | undefined {
+  if (p >= 0.15) return '#00CDD1'
+  if (p >= 0.08) return '#09E8DE'
+  if (p >= 0.03) return undefined   // neutral / median
+  if (p >= 0.01) return '#E0007C'
+  return p > 0 ? '#F4308F' : undefined
+}
+
 function EloChange({ val }: { val: number }) {
   if (val > 0) return <span className="elo-up">+{val}</span>
   if (val < 0) return <span className="elo-down">{val}</span>
@@ -39,6 +47,16 @@ function EloChange({ val }: { val: number }) {
 }
 
 function TeamBadge({ abbr }: { abbr: string }) {
+  const logo = teamLogoUrl(abbr)
+  if (logo) {
+    return (
+      <img
+        src={logo}
+        alt={abbr}
+        className="w-6 h-6 shrink-0 object-contain"
+      />
+    )
+  }
   const bg = teamColor(abbr)
   return (
     <span
@@ -125,7 +143,7 @@ export default function StandingsTable({ standings }: Props) {
         <button
           onClick={() => setGroupByDivision(v => !v)}
           className={clsx(
-            'text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded border transition-colors',
+            'text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-lg border transition-colors',
             groupByDivision
               ? 'bg-538-orange text-white border-538-orange'
               : 'bg-white text-538-muted border-538-border hover:border-538-text'
@@ -136,7 +154,7 @@ export default function StandingsTable({ standings }: Props) {
         <span className="text-xs text-538-muted">Click column headers to sort</span>
       </div>
 
-      <div className="table-scroll stat-card p-0 overflow-hidden">
+      <div className="table-scroll stat-card p-0 overflow-hidden rounded-xl">
         <table className="data-table">
           <thead>
             <tr>
@@ -216,8 +234,13 @@ function TeamRow({ row }: { row: TeamStanding }) {
       <td className="text-right font-semibold tabular">{Math.round(row.elo_rating)}</td>
 
       {/* Δ7d */}
-      <td className="text-right tabular text-sm">
-        <EloChange val={row.elo_change_7d} />
+      <td
+        className={clsx(
+          'text-right tabular',
+          row.elo_change_7d > 0 ? 'text-green-600' : row.elo_change_7d < 0 ? 'text-red-500' : 'text-538-muted'
+        )}
+      >
+        {row.elo_change_7d > 0 ? `+${Math.round(row.elo_change_7d)}` : row.elo_change_7d < 0 ? Math.round(row.elo_change_7d) : '—'}
       </td>
 
       {/* Playoff% — bar + number */}
@@ -237,13 +260,17 @@ function TeamRow({ row }: { row: TeamStanding }) {
       </td>
 
       {/* Win DS */}
-      <td className="text-right tabular">{pct(row.win_ds)}</td>
+      <td className="text-right tabular" style={{ color: winStageColor(row.win_ds) }}>
+        {pct(row.win_ds)}
+      </td>
 
       {/* Win CS */}
-      <td className="text-right tabular">{pct(row.win_cs)}</td>
+      <td className="text-right tabular" style={{ color: winStageColor(row.win_cs) }}>
+        {pct(row.win_cs)}
+      </td>
 
       {/* Win WS */}
-      <td className="text-right tabular font-semibold" style={{ color: row.win_ws > 0.15 ? '#008FD5' : undefined }}>
+      <td className="text-right tabular font-semibold" style={{ color: winStageColor(row.win_ws) }}>
         {pct(row.win_ws)}
       </td>
     </tr>

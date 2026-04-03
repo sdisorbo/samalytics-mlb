@@ -2,18 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── 538-inspired base styles ─────────────────────────────────────────── */
+/* ── base styles ─────────────────────────────────────────── */
 :root {
   --font-inter: 'Inter', system-ui, sans-serif;
-  --color-bg:       #F5EDE4;
-  --color-surface:  #FEFCF9;
-  --color-border:   #DDD0C0;
-  --color-text:     #2A1610;
-  --color-muted:    #8A6248;
+  --color-bg:       #FFFFFF;
+  --color-surface:  #FFFFFF;
+  --color-border:   #E5E7EB;
+  --color-text:     #1F2937;
+  --color-muted:    #6B7280;
   --color-accent:   #7C2B1A;
   --color-blue:     #9B5A3A;
   --color-green:    #3A7A3A;
   --color-red:      #C04030;
+  --color-hover:    #F9FAFB;
+}
+
+[data-theme="dark"] {
+  --color-bg:       #111111;
+  --color-surface:  #1A1A1A;
+  --color-border:   #333333;
+  --color-text:     #E5E7EB;
+  --color-muted:    #9CA3AF;
+  --color-accent:   #E07A5F;
+  --color-blue:     #C4896E;
+  --color-green:    #4ADE80;
+  --color-red:      #F87171;
+  --color-hover:    #222222;
 }
 
 * {
@@ -25,6 +39,7 @@ html {
   color: var(--color-text);
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 body {
@@ -73,12 +88,12 @@ table,
 }
 
 .data-table tbody tr:hover td {
-  background: #EDE0D0;
+  background: var(--color-hover);
 }
 
 /* Division header rows */
 .division-header td {
-  background: var(--color-bg);
+  background: var(--color-hover);
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -124,7 +139,7 @@ table,
 .stat-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 14px;
   padding: 16px;
 }
 
@@ -136,9 +151,11 @@ table,
 /* Recharts tooltip override */
 .recharts-tooltip-wrapper .recharts-default-tooltip {
   border: 1px solid var(--color-border) !important;
-  border-radius: 4px !important;
+  border-radius: 10px !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
   font-size: 0.78rem !important;
+  background: var(--color-surface) !important;
+  color: var(--color-text) !important;
 }
 
 /* Scrollable table wrapper */
