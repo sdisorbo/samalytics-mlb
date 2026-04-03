@@ -128,7 +128,7 @@ export default function PlayerList({ players, allTeams }: Props) {
             placeholder="Player or team…"
             value={search}
             onChange={e => { setSearch(e.target.value); resetPage() }}
-            className="border border-538-border rounded px-2.5 py-1 text-xs bg-white focus:outline-none focus:border-538-blue w-44"
+            className="border border-538-border rounded px-2.5 py-1 text-xs bg-surface focus:outline-none focus:border-538-blue w-44"
           />
         </div>
 
@@ -137,7 +137,7 @@ export default function PlayerList({ players, allTeams }: Props) {
           <select
             value={team}
             onChange={e => { setTeam(e.target.value); resetPage() }}
-            className="border border-538-border rounded px-2 py-1 text-xs bg-white"
+            className="border border-538-border rounded px-2 py-1 text-xs bg-surface"
           >
             <option value="All">All Teams</option>
             {allTeams.map(t => <option key={t} value={t}>{t}</option>)}
@@ -149,7 +149,7 @@ export default function PlayerList({ players, allTeams }: Props) {
           <select
             value={pos}
             onChange={e => { setPos(e.target.value); resetPage() }}
-            className="border border-538-border rounded px-2 py-1 text-xs bg-white"
+            className="border border-538-border rounded px-2 py-1 text-xs bg-surface"
           >
             {positions.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
@@ -160,7 +160,7 @@ export default function PlayerList({ players, allTeams }: Props) {
           <select
             value={sortStat as string}
             onChange={e => { setSortStat(e.target.value as keyof Player); resetPage() }}
-            className="border border-538-border rounded px-2 py-1 text-xs bg-white"
+            className="border border-538-border rounded px-2 py-1 text-xs bg-surface"
           >
             {STATS.map(s => <option key={s.key as string} value={s.key as string}>{s.label}</option>)}
           </select>

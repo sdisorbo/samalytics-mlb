@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, Fragment } from 'react'
 import clsx from 'clsx'
 import type { TeamStanding } from '@/lib/types'
-import { teamColor, teamLogoUrl, DIVISION_ORDER, divisionColor } from '@/lib/teamColors'
+import { teamColor, teamLogoUrl, DIVISION_ORDER, divisionColor, normalizeDivision } from '@/lib/teamColors'
 
 type SortKey = keyof TeamStanding
 type SortDir = 'asc' | 'desc'
@@ -32,12 +32,13 @@ function probBarColor(p: number): string {
   return '#E74C3C'
 }
 
-function winStageColor(p: number): string | undefined {
-  if (p >= 0.15) return '#00CDD1'
-  if (p >= 0.08) return '#09E8DE'
-  if (p >= 0.03) return undefined   // neutral / median
-  if (p >= 0.01) return '#E0007C'
-  return p > 0 ? '#F4308F' : undefined
+function winStageStyle(p: number): { backgroundColor?: string; color?: string } {
+  if (p >= 0.15) return { backgroundColor: '#00CDD1', color: '#fff' }
+  if (p >= 0.08) return { backgroundColor: '#09E8DE', color: '#1a1a1a' }
+  if (p >= 0.03) return {}  // neutral / median
+  if (p >= 0.01) return { backgroundColor: '#E0007C', color: '#fff' }
+  if (p > 0)     return { backgroundColor: '#F4308F', color: '#fff' }
+  return {}
 }
 
 function EloChange({ val }: { val: number }) {
@@ -99,7 +100,8 @@ export default function StandingsTable({ standings }: Props) {
     const map = new Map<string, TeamStanding[]>()
     for (const div of DIVISION_ORDER) map.set(div, [])
     for (const row of standings) {
-      const bucket = map.get(row.division)
+      const normalized = normalizeDivision(row.division)
+      const bucket = map.get(normalized)
       if (bucket) bucket.push(row)
     }
     // Sort within each division by wins desc
@@ -146,7 +148,7 @@ export default function StandingsTable({ standings }: Props) {
             'text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-lg border transition-colors',
             groupByDivision
               ? 'bg-538-orange text-white border-538-orange'
-              : 'bg-white text-538-muted border-538-border hover:border-538-text'
+              : 'bg-surface text-538-muted border-538-border hover:border-538-text'
           )}
         >
           {groupByDivision ? 'By Division' : 'By Division'}
@@ -174,8 +176,8 @@ export default function StandingsTable({ standings }: Props) {
           <tbody>
             {groupByDivision && grouped
               ? Array.from(grouped.entries()).map(([division, teams]) => (
-                  <>
-                    <tr key={`header-${division}`} className="division-header">
+                  <Fragment key={division}>
+                    <tr className="division-header">
                       <td
                         colSpan={11}
                         style={{ borderLeft: `3px solid ${divisionColor(division)}` }}
@@ -186,7 +188,7 @@ export default function StandingsTable({ standings }: Props) {
                     {teams.map(row => (
                       <TeamRow key={row.team_abbr} row={row} />
                     ))}
-                  </>
+                  </Fragment>
                 ))
               : rows!.map(row => <TeamRow key={row.team_abbr} row={row} />)}
           </tbody>
@@ -260,17 +262,17 @@ function TeamRow({ row }: { row: TeamStanding }) {
       </td>
 
       {/* Win DS */}
-      <td className="text-right tabular" style={{ color: winStageColor(row.win_ds) }}>
+      <td className="text-right tabular" style={winStageStyle(row.win_ds)}>
         {pct(row.win_ds)}
       </td>
 
       {/* Win CS */}
-      <td className="text-right tabular" style={{ color: winStageColor(row.win_cs) }}>
+      <td className="text-right tabular" style={winStageStyle(row.win_cs)}>
         {pct(row.win_cs)}
       </td>
 
       {/* Win WS */}
-      <td className="text-right tabular font-semibold" style={{ color: winStageColor(row.win_ws) }}>
+      <td className="text-right tabular font-semibold" style={winStageStyle(row.win_ws)}>
         {pct(row.win_ws)}
       </td>
     </tr>

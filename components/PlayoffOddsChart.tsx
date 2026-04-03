@@ -40,7 +40,7 @@ function pct(n: number) { return `${Math.round(n * 100)}%` }
 function CustomTooltip({ active, payload, label }: TooltipProps<number, string>) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-white border border-538-border rounded shadow-sm px-3 py-2 text-xs min-w-[130px]">
+    <div className="bg-surface border border-538-border rounded shadow-sm px-3 py-2 text-xs min-w-[130px]">
       <p className="font-bold mb-1.5" style={{ color: teamColor(label as string) }}>{label}</p>
       {[...payload].reverse().map(entry => (
         <div key={entry.dataKey} className="flex justify-between gap-4">

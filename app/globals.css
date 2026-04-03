@@ -163,3 +163,33 @@ table,
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+/* Theme-aware surface background */
+.bg-surface {
+  background-color: var(--color-surface);
+}
+
+/* Recharts dark mode overrides */
+[data-theme="dark"] .recharts-cartesian-axis-tick text,
+[data-theme="dark"] .recharts-label,
+[data-theme="dark"] .recharts-legend-item-text {
+  fill: var(--color-muted) !important;
+  color: var(--color-muted) !important;
+}
+
+[data-theme="dark"] .recharts-cartesian-grid line,
+[data-theme="dark"] .recharts-cartesian-axis line,
+[data-theme="dark"] .recharts-reference-line line {
+  stroke: var(--color-border) !important;
+}
+
+[data-theme="dark"] .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* Recharts SVG background for dark mode */
+[data-theme="dark"] .recharts-surface {
+  background: var(--color-surface);
+}

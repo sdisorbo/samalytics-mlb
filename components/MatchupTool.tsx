@@ -86,7 +86,7 @@ function SearchDropdown<T extends { player_id: number; name: string; team: strin
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <div className="flex items-center border border-538-border rounded-sm bg-white">
+      <div className="flex items-center border border-538-border rounded-sm bg-surface">
         {selected && !open ? (
           <div className="flex items-center flex-1 px-3 py-2 gap-2">
             <span className="font-semibold text-538-text text-sm">{selected.name}</span>
@@ -121,7 +121,7 @@ function SearchDropdown<T extends { player_id: number; name: string; team: strin
       </div>
 
       {open && filtered.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-538-border rounded-sm shadow-xl max-h-64 overflow-y-auto">
+        <div className="absolute z-50 w-full mt-1 bg-surface border border-538-border rounded-sm shadow-xl max-h-64 overflow-y-auto">
           {filtered.map((item) => (
             <button
               key={item.player_id}
@@ -208,7 +208,7 @@ function MovementPlot({ pitches }: { pitches: PitchArsenal[] }) {
               if (!active || !payload?.length) return null
               const d = payload[0].payload
               return (
-                <div className="bg-white border border-538-border rounded px-3 py-2 text-xs shadow-lg">
+                <div className="bg-surface border border-538-border rounded px-3 py-2 text-xs shadow-lg">
                   <div className="font-semibold" style={{ color: pitchColor(d.pitch_type) }}>
                     {d.pitch_name}
                   </div>
@@ -512,7 +512,7 @@ export default function MatchupTool({
       {(selectedPitcher || selectedBatter) && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Pitcher Panel */}
-          <div className="border border-538-border rounded-sm bg-white">
+          <div className="border border-538-border rounded-sm bg-surface">
             {selectedPitcher ? (
               <>
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-538-border bg-538-bg">
@@ -545,7 +545,7 @@ export default function MatchupTool({
           </div>
 
           {/* Batter Panel */}
-          <div className="border border-538-border rounded-sm bg-white">
+          <div className="border border-538-border rounded-sm bg-surface">
             {selectedBatter ? (
               <>
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-538-border bg-538-bg">
@@ -578,7 +578,7 @@ export default function MatchupTool({
 
       {/* Matchup Edge */}
       {selectedPitcher && selectedBatter && (
-        <div className="border border-538-border rounded-sm bg-white">
+        <div className="border border-538-border rounded-sm bg-surface">
           <div className="px-4 py-3 border-b border-538-border bg-538-bg flex items-center gap-2">
             <span className="font-bold text-538-text">Matchup Edge</span>
             <span className="text-xs text-538-muted">

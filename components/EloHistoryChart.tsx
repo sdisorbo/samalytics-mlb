@@ -179,7 +179,7 @@ function CustomTooltip({ active, payload, label }: TooltipProps<number, string>)
     .sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
   if (!sorted.length) return null
   return (
-    <div className="bg-white border border-538-border rounded shadow-sm px-3 py-2 text-xs">
+    <div className="bg-surface border border-538-border rounded shadow-sm px-3 py-2 text-xs">
       <p className="font-semibold text-538-muted mb-1 uppercase tracking-wide" style={{ fontSize: '0.6rem' }}>
         {label as string}
       </p>
@@ -244,19 +244,19 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
       <div className="flex items-center gap-3 mb-3 flex-wrap">
         <button
           onClick={() => setSelected(new Set(topTeams.slice(0, 8)))}
-          className="text-xs font-semibold px-3 py-1 rounded border border-538-border bg-white text-538-muted hover:text-538-text transition-colors"
+          className="text-xs font-semibold px-3 py-1 rounded border border-538-border bg-surface text-538-muted hover:text-538-text transition-colors"
         >
           Top 8
         </button>
         <button
           onClick={() => setSelected(new Set(allTeams))}
-          className="text-xs font-semibold px-3 py-1 rounded border border-538-border bg-white text-538-muted hover:text-538-text transition-colors"
+          className="text-xs font-semibold px-3 py-1 rounded border border-538-border bg-surface text-538-muted hover:text-538-text transition-colors"
         >
           All 30
         </button>
         <button
           onClick={() => setSelected(new Set())}
-          className="text-xs font-semibold px-3 py-1 rounded border border-538-border bg-white text-538-muted hover:text-538-text transition-colors"
+          className="text-xs font-semibold px-3 py-1 rounded border border-538-border bg-surface text-538-muted hover:text-538-text transition-colors"
         >
           Clear All
         </button>
@@ -274,7 +274,7 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
               onClick={() => toggle(abbr)}
               className={clsx(
                 'px-2 py-0.5 rounded text-xs font-bold border transition-all',
-                active ? 'text-white' : 'text-538-muted bg-white hover:bg-538-header'
+                active ? 'text-white' : 'text-538-muted bg-surface hover:bg-538-header'
               )}
               style={
                 active

@@ -50,7 +50,7 @@ function PitcherTooltip({ active, payload }: TooltipProps<number, string>) {
   const d = payload[0].payload as PlotPitcher
   const color = teamColor(d.team)
   return (
-    <div className="bg-white border border-538-border rounded shadow-md px-3 py-2.5 text-xs min-w-[170px] z-50">
+    <div className="bg-surface border border-538-border rounded shadow-md px-3 py-2.5 text-xs min-w-[170px] z-50">
       <div className="flex items-center gap-2 mb-1.5">
         <span
           className="inline-flex items-center justify-center w-8 h-5 rounded text-white font-bold shrink-0"
@@ -222,7 +222,7 @@ export default function PitcherScatter({ pitchers }: Props) {
               i > 0 && 'border-l border-538-border',
               div === activeDivision
                 ? 'bg-538-orange text-white'
-                : 'bg-white text-538-muted hover:bg-538-header hover:text-538-text'
+                : 'bg-surface text-538-muted hover:bg-538-header hover:text-538-text'
             )}
           >
             {div}
@@ -240,7 +240,7 @@ export default function PitcherScatter({ pitchers }: Props) {
           <select
             value={minIP}
             onChange={e => setMinIP(Number(e.target.value))}
-            className="border border-538-border rounded px-1.5 py-0.5 text-xs bg-white"
+            className="border border-538-border rounded px-1.5 py-0.5 text-xs bg-surface"
           >
             {[20, 40, 60, 80, 100].map(v => <option key={v} value={v}>{v}</option>)}
           </select>

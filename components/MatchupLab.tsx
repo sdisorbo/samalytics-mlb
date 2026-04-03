@@ -297,7 +297,7 @@ function SwapSearch({
   }, [query, isPitcher, pitchers, players])
 
   return (
-    <div className="border border-538-border rounded-sm bg-white shadow-lg mt-1 z-30">
+    <div className="border border-538-border rounded-sm bg-surface shadow-lg mt-1 z-30">
       <div className="flex items-center border-b border-538-border px-3 py-2 gap-2">
         <input
           ref={inputRef}
@@ -666,7 +666,7 @@ function MatchupCard({
   const swapTarget = game.swapTarget
 
   return (
-    <div className="border border-538-border rounded-sm bg-white overflow-hidden">
+    <div className="border border-538-border rounded-sm bg-surface overflow-hidden">
       {/* Collapsed header */}
       <div className="p-4">
         {/* Teams row */}
@@ -871,7 +871,7 @@ function MatchupCard({
           </div>
 
           {/* NRFI / YRFI */}
-          <div className="border border-538-border rounded-sm bg-white p-4">
+          <div className="border border-538-border rounded-sm bg-surface p-4">
             <div className="text-2xs font-semibold uppercase tracking-widest text-538-muted mb-3">
               First Inning Scoring
               <span className="font-normal normal-case ml-1 text-538-muted">(top of order vs SP — projected lineup)</span>
@@ -897,7 +897,7 @@ function MatchupCard({
           </div>
 
           {/* Run distribution */}
-          <div className="border border-538-border rounded-sm bg-white p-4">
+          <div className="border border-538-border rounded-sm bg-surface p-4">
             <RunDistChart
               simResults={sr}
               awayAbbr={game.awayTeamAbbr}
@@ -1056,7 +1056,7 @@ export default function MatchupLab({
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-white outline-none focus:border-538-orange"
+            className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-surface outline-none focus:border-538-orange"
           />
           <button
             onClick={loadDateSchedule}
@@ -1077,7 +1077,7 @@ export default function MatchupLab({
             <select
               value={awayTeamId}
               onChange={(e) => setAwayTeamId(Number(e.target.value))}
-              className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-white outline-none focus:border-538-orange"
+              className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-surface outline-none focus:border-538-orange"
             >
               {MLB_TEAMS.map((t) => (
                 <option key={t.id} value={t.id}>{t.name}</option>
@@ -1092,7 +1092,7 @@ export default function MatchupLab({
             <select
               value={homeTeamId}
               onChange={(e) => setHomeTeamId(Number(e.target.value))}
-              className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-white outline-none focus:border-538-orange"
+              className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-surface outline-none focus:border-538-orange"
             >
               {MLB_TEAMS.map((t) => (
                 <option key={t.id} value={t.id}>{t.name}</option>
@@ -1107,7 +1107,7 @@ export default function MatchupLab({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-white outline-none focus:border-538-orange"
+              className="border border-538-border rounded-sm px-3 py-1.5 text-sm text-538-text bg-surface outline-none focus:border-538-orange"
             />
           </div>
           <div className="mt-4">
@@ -1138,7 +1138,7 @@ export default function MatchupLab({
       {scheduleLoading && (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="border border-538-border rounded-sm bg-white p-4 animate-pulse">
+            <div key={i} className="border border-538-border rounded-sm bg-surface p-4 animate-pulse">
               <div className="flex justify-between mb-3">
                 <div className="h-8 bg-538-border rounded w-40" />
                 <div className="h-8 bg-538-border rounded w-40" />
@@ -1155,7 +1155,7 @@ export default function MatchupLab({
 
       {/* No games state */}
       {!scheduleLoading && !scheduleError && games.length === 0 && mode === 'date' && (
-        <div className="border border-538-border rounded-sm bg-white px-4 py-10 text-center text-538-muted text-sm">
+        <div className="border border-538-border rounded-sm bg-surface px-4 py-10 text-center text-538-muted text-sm">
           No games found for {date}. Try a different date or switch to Two Teams mode.
         </div>
       )}
