@@ -26,14 +26,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.395,
-        "xwoba": 0.318,
-        "ba": 0.3,
-        "slg": 0.4,
-        "whiff_pct": 28.0,
-        "hard_hit_pct": 57.1,
-        "run_value_per_100": 0.0
+        "pa": 12,
+        "woba": 0.404,
+        "xwoba": 0.331,
+        "ba": 0.333,
+        "slg": 0.417,
+        "whiff_pct": 25.9,
+        "hard_hit_pct": 55.6,
+        "run_value_per_100": 0.8
       }
     ]
   },
@@ -45,14 +45,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 10,
-        "woba": 0.36,
-        "xwoba": 0.339,
-        "ba": 0.4,
-        "slg": 0.4,
-        "whiff_pct": 20.0,
-        "hard_hit_pct": 37.5,
-        "run_value_per_100": 0.2
+        "pa": 11,
+        "woba": 0.327,
+        "xwoba": 0.332,
+        "ba": 0.364,
+        "slg": 0.364,
+        "whiff_pct": 18.8,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": -0.8
       }
     ]
   },
@@ -64,14 +64,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.44,
-        "xwoba": 0.398,
-        "ba": 0.0,
-        "slg": 0.0,
-        "whiff_pct": 25.0,
-        "hard_hit_pct": 20.0,
-        "run_value_per_100": 0.8
+        "pa": 13,
+        "woba": 0.408,
+        "xwoba": 0.345,
+        "ba": 0.125,
+        "slg": 0.125,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": 0.4
+      }
+    ]
+  },
+  {
+    "player_id": 676475,
+    "name": "Alec Burleson",
+    "team": "STL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 12,
+        "woba": 0.433,
+        "xwoba": 0.559,
+        "ba": 0.3,
+        "slg": 0.6,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 87.5,
+        "run_value_per_100": 3.5
       }
     ]
   },
@@ -95,6 +114,37 @@
     ]
   },
   {
+    "player_id": 608324,
+    "name": "Alex Bregman",
+    "team": "CHC",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.45,
+        "xwoba": 0.512,
+        "ba": 0.333,
+        "slg": 0.667,
+        "whiff_pct": 10.0,
+        "hard_hit_pct": 88.9,
+        "run_value_per_100": 2.5
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 10,
+        "woba": 0.18,
+        "xwoba": 0.247,
+        "ba": 0.1,
+        "slg": 0.1,
+        "whiff_pct": 0.0,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": -3.6
+      }
+    ]
+  },
+  {
     "player_id": 665926,
     "name": "Andrés Giménez",
     "team": "TOR",
@@ -102,14 +152,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.567,
-        "xwoba": 0.39,
-        "ba": 0.4,
-        "slg": 0.9,
-        "whiff_pct": 19.0,
+        "pa": 13,
+        "woba": 0.523,
+        "xwoba": 0.36,
+        "ba": 0.364,
+        "slg": 0.818,
+        "whiff_pct": 26.1,
         "hard_hit_pct": 62.5,
-        "run_value_per_100": 4.6
+        "run_value_per_100": 3.9
       }
     ]
   },
@@ -121,14 +171,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.525,
-        "xwoba": 0.278,
+        "pa": 13,
+        "woba": 0.538,
+        "xwoba": 0.311,
         "ba": 0.455,
         "slg": 0.727,
-        "whiff_pct": 14.3,
+        "whiff_pct": 16.0,
         "hard_hit_pct": 44.4,
-        "run_value_per_100": 1.9
+        "run_value_per_100": 2.4
       }
     ]
   },
@@ -159,14 +209,14 @@
       {
         "pitch_type": "SL",
         "pitch_name": "Slider",
-        "pa": 11,
-        "woba": 0.368,
-        "xwoba": 0.319,
+        "pa": 12,
+        "woba": 0.396,
+        "xwoba": 0.351,
         "ba": 0.143,
         "slg": 0.286,
         "whiff_pct": 46.7,
         "hard_hit_pct": 50.0,
-        "run_value_per_100": 1.2
+        "run_value_per_100": 2.0
       }
     ]
   },
@@ -178,14 +228,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.341,
-        "xwoba": 0.353,
-        "ba": 0.3,
+        "pa": 12,
+        "woba": 0.313,
+        "xwoba": 0.342,
+        "ba": 0.273,
+        "slg": 0.364,
+        "whiff_pct": 9.5,
+        "hard_hit_pct": 44.4,
+        "run_value_per_100": -0.7
+      }
+    ]
+  },
+  {
+    "player_id": 663368,
+    "name": "Blake Perkins",
+    "team": "MIL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.34,
+        "xwoba": 0.193,
+        "ba": 0.2,
         "slg": 0.4,
-        "whiff_pct": 10.0,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 0.1
+        "whiff_pct": 40.0,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": 1.5
       }
     ]
   },
@@ -197,14 +266,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.164,
-        "xwoba": 0.227,
+        "pa": 12,
+        "woba": 0.208,
+        "xwoba": 0.267,
         "ba": 0.182,
         "slg": 0.182,
-        "whiff_pct": 24.1,
+        "whiff_pct": 21.2,
         "hard_hit_pct": 40.0,
-        "run_value_per_100": -1.7
+        "run_value_per_100": -0.9
+      }
+    ]
+  },
+  {
+    "player_id": 666310,
+    "name": "Bo Naylor",
+    "team": "CLE",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 12,
+        "woba": 0.075,
+        "xwoba": 0.378,
+        "ba": 0.083,
+        "slg": 0.083,
+        "whiff_pct": 9.1,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": -7.8
       }
     ]
   },
@@ -216,14 +304,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 16,
-        "woba": 0.3,
-        "xwoba": 0.373,
-        "ba": 0.231,
-        "slg": 0.231,
-        "whiff_pct": 23.5,
-        "hard_hit_pct": 62.5,
-        "run_value_per_100": -1.9
+        "pa": 20,
+        "woba": 0.32,
+        "xwoba": 0.449,
+        "ba": 0.25,
+        "slg": 0.25,
+        "whiff_pct": 21.1,
+        "hard_hit_pct": 63.6,
+        "run_value_per_100": -1.3
       }
     ]
   },
@@ -235,14 +323,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.386,
-        "xwoba": 0.425,
-        "ba": 0.308,
-        "slg": 0.538,
-        "whiff_pct": 4.3,
-        "hard_hit_pct": 54.5,
-        "run_value_per_100": -0.3
+        "pa": 16,
+        "woba": 0.472,
+        "xwoba": 0.44,
+        "ba": 0.333,
+        "slg": 0.6,
+        "whiff_pct": 3.7,
+        "hard_hit_pct": 53.8,
+        "run_value_per_100": 2.0
       }
     ]
   },
@@ -254,14 +342,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 14,
-        "woba": 0.471,
-        "xwoba": 0.416,
-        "ba": 0.455,
-        "slg": 0.455,
-        "whiff_pct": 8.0,
+        "pa": 15,
+        "woba": 0.44,
+        "xwoba": 0.389,
+        "ba": 0.417,
+        "slg": 0.417,
+        "whiff_pct": 11.1,
         "hard_hit_pct": 44.4,
-        "run_value_per_100": 2.3
+        "run_value_per_100": 1.7
       }
     ]
   },
@@ -273,14 +361,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.369,
-        "xwoba": 0.325,
-        "ba": 0.3,
-        "slg": 0.3,
-        "whiff_pct": 0.0,
-        "hard_hit_pct": 36.4,
-        "run_value_per_100": -0.1
+        "pa": 17,
+        "woba": 0.344,
+        "xwoba": 0.308,
+        "ba": 0.25,
+        "slg": 0.25,
+        "whiff_pct": 5.7,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": -0.3
       }
     ]
   },
@@ -311,14 +399,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.209,
-        "xwoba": 0.337,
-        "ba": 0.111,
-        "slg": 0.111,
-        "whiff_pct": 38.5,
-        "hard_hit_pct": 75.0,
-        "run_value_per_100": -2.6
+        "pa": 15,
+        "woba": 0.42,
+        "xwoba": 0.491,
+        "ba": 0.25,
+        "slg": 0.75,
+        "whiff_pct": 29.4,
+        "hard_hit_pct": 87.5,
+        "run_value_per_100": 1.3
       }
     ]
   },
@@ -349,26 +437,26 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.329,
-        "xwoba": 0.387,
-        "ba": 0.182,
-        "slg": 0.545,
-        "whiff_pct": 11.5,
-        "hard_hit_pct": 71.4,
-        "run_value_per_100": -1.1
+        "pa": 14,
+        "woba": 0.282,
+        "xwoba": 0.337,
+        "ba": 0.154,
+        "slg": 0.462,
+        "whiff_pct": 12.9,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": -1.7
       },
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 10,
-        "woba": 0.535,
-        "xwoba": 0.364,
+        "pa": 11,
+        "woba": 0.55,
+        "xwoba": 0.395,
         "ba": 0.444,
         "slg": 0.778,
         "whiff_pct": 0.0,
         "hard_hit_pct": 42.9,
-        "run_value_per_100": 10.0
+        "run_value_per_100": 9.8
       }
     ]
   },
@@ -380,14 +468,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 15,
-        "woba": 0.563,
-        "xwoba": 0.548,
+        "pa": 16,
+        "woba": 0.572,
+        "xwoba": 0.558,
         "ba": 0.385,
         "slg": 0.923,
-        "whiff_pct": 14.3,
+        "whiff_pct": 17.4,
         "hard_hit_pct": 70.0,
-        "run_value_per_100": 6.1
+        "run_value_per_100": 6.2
       }
     ]
   },
@@ -399,14 +487,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.386,
-        "xwoba": 0.345,
-        "ba": 0.222,
-        "slg": 0.556,
-        "whiff_pct": 25.0,
+        "pa": 12,
+        "woba": 0.354,
+        "xwoba": 0.316,
+        "ba": 0.2,
+        "slg": 0.5,
+        "whiff_pct": 35.7,
         "hard_hit_pct": 57.1,
-        "run_value_per_100": 3.3
+        "run_value_per_100": 2.1
       }
     ]
   },
@@ -418,14 +506,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 15,
-        "woba": 0.177,
-        "xwoba": 0.117,
-        "ba": 0.077,
-        "slg": 0.154,
-        "whiff_pct": 60.6,
+        "pa": 17,
+        "woba": 0.156,
+        "xwoba": 0.104,
+        "ba": 0.067,
+        "slg": 0.133,
+        "whiff_pct": 61.5,
         "hard_hit_pct": 25.0,
-        "run_value_per_100": -2.7
+        "run_value_per_100": -2.8
       }
     ]
   },
@@ -437,26 +525,26 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.0,
-        "xwoba": 0.112,
+        "pa": 11,
+        "woba": 0.064,
+        "xwoba": 0.165,
         "ba": 0.0,
         "slg": 0.0,
         "whiff_pct": 16.7,
         "hard_hit_pct": 28.6,
-        "run_value_per_100": -9.7
+        "run_value_per_100": -8.5
       },
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 10,
-        "woba": 0.09,
-        "xwoba": 0.291,
-        "ba": 0.1,
-        "slg": 0.1,
+        "pa": 11,
+        "woba": 0.082,
+        "xwoba": 0.273,
+        "ba": 0.091,
+        "slg": 0.091,
         "whiff_pct": 0.0,
-        "hard_hit_pct": 44.4,
-        "run_value_per_100": -7.4
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -6.8
       }
     ]
   },
@@ -468,14 +556,26 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 13,
-        "woba": 0.581,
-        "xwoba": 0.422,
-        "ba": 0.364,
-        "slg": 1.0,
-        "whiff_pct": 31.6,
+        "pa": 15,
+        "woba": 0.563,
+        "xwoba": 0.405,
+        "ba": 0.385,
+        "slg": 0.923,
+        "whiff_pct": 30.8,
+        "hard_hit_pct": 62.5,
+        "run_value_per_100": 8.9
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.373,
+        "xwoba": 0.444,
+        "ba": 0.333,
+        "slg": 0.333,
+        "whiff_pct": 25.0,
         "hard_hit_pct": 57.1,
-        "run_value_per_100": 10.6
+        "run_value_per_100": -1.3
       }
     ]
   },
@@ -487,14 +587,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 11,
-        "woba": 0.423,
-        "xwoba": 0.465,
-        "ba": 0.4,
+        "pa": 13,
+        "woba": 0.427,
+        "xwoba": 0.496,
+        "ba": 0.417,
         "slg": 0.5,
-        "whiff_pct": 5.0,
-        "hard_hit_pct": 30.0,
-        "run_value_per_100": 2.9
+        "whiff_pct": 4.5,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 3.1
       }
     ]
   },
@@ -506,14 +606,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.229,
-        "xwoba": 0.222,
-        "ba": 0.083,
-        "slg": 0.083,
-        "whiff_pct": 27.8,
-        "hard_hit_pct": 42.9,
-        "run_value_per_100": -1.9
+        "pa": 15,
+        "woba": 0.213,
+        "xwoba": 0.223,
+        "ba": 0.077,
+        "slg": 0.077,
+        "whiff_pct": 27.0,
+        "hard_hit_pct": 37.5,
+        "run_value_per_100": -2.2
+      }
+    ]
+  },
+  {
+    "player_id": 608348,
+    "name": "Carson Kelly",
+    "team": "CHC",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.455,
+        "xwoba": 0.422,
+        "ba": 0.444,
+        "slg": 0.444,
+        "whiff_pct": 11.8,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": 2.2
       }
     ]
   },
@@ -525,14 +644,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.129,
-        "xwoba": 0.068,
-        "ba": 0.143,
-        "slg": 0.143,
-        "whiff_pct": 28.1,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -4.8
+        "pa": 17,
+        "woba": 0.106,
+        "xwoba": 0.079,
+        "ba": 0.118,
+        "slg": 0.118,
+        "whiff_pct": 27.5,
+        "hard_hit_pct": 36.4,
+        "run_value_per_100": -5.3
       }
     ]
   },
@@ -544,14 +663,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.43,
-        "xwoba": 0.38,
-        "ba": 0.444,
-        "slg": 0.444,
-        "whiff_pct": 12.5,
-        "hard_hit_pct": 22.2,
-        "run_value_per_100": -0.1
+        "pa": 12,
+        "woba": 0.433,
+        "xwoba": 0.377,
+        "ba": 0.455,
+        "slg": 0.455,
+        "whiff_pct": 10.5,
+        "hard_hit_pct": 27.3,
+        "run_value_per_100": 0.2
       }
     ]
   },
@@ -563,14 +682,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 15,
-        "woba": 0.373,
-        "xwoba": 0.329,
-        "ba": 0.214,
-        "slg": 0.643,
-        "whiff_pct": 32.3,
-        "hard_hit_pct": 75.0,
-        "run_value_per_100": 1.1
+        "pa": 18,
+        "woba": 0.35,
+        "xwoba": 0.326,
+        "ba": 0.2,
+        "slg": 0.6,
+        "whiff_pct": 30.3,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": 0.8
       }
     ]
   },
@@ -582,14 +701,45 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
+        "pa": 13,
+        "woba": 0.423,
+        "xwoba": 0.317,
+        "ba": 0.2,
+        "slg": 0.4,
+        "whiff_pct": 28.6,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 1.4
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 10,
+        "woba": 0.59,
+        "xwoba": 0.582,
+        "ba": 0.5,
+        "slg": 0.9,
+        "whiff_pct": 5.6,
+        "hard_hit_pct": 80.0,
+        "run_value_per_100": 7.4
+      }
+    ]
+  },
+  {
+    "player_id": 592885,
+    "name": "Christian Yelich",
+    "team": "MIL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
         "pa": 12,
-        "woba": 0.458,
-        "xwoba": 0.343,
-        "ba": 0.222,
-        "slg": 0.444,
-        "whiff_pct": 23.5,
-        "hard_hit_pct": 57.1,
-        "run_value_per_100": 2.8
+        "woba": 0.613,
+        "xwoba": 0.303,
+        "ba": 0.583,
+        "slg": 0.833,
+        "whiff_pct": 20.6,
+        "hard_hit_pct": 27.3,
+        "run_value_per_100": 6.0
       }
     ]
   },
@@ -601,14 +751,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 16,
-        "woba": 0.331,
-        "xwoba": 0.359,
+        "pa": 17,
+        "woba": 0.353,
+        "xwoba": 0.379,
         "ba": 0.167,
         "slg": 0.333,
         "whiff_pct": 21.1,
         "hard_hit_pct": 30.0,
-        "run_value_per_100": -1.7
+        "run_value_per_100": -1.1
       }
     ]
   },
@@ -625,9 +775,21 @@
         "xwoba": 0.414,
         "ba": 0.5,
         "slg": 0.7,
-        "whiff_pct": 13.3,
+        "whiff_pct": 16.7,
         "hard_hit_pct": 44.4,
-        "run_value_per_100": 6.0
+        "run_value_per_100": 5.0
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.325,
+        "xwoba": 0.136,
+        "ba": 0.2,
+        "slg": 0.6,
+        "whiff_pct": 26.7,
+        "hard_hit_pct": 14.3,
+        "run_value_per_100": 0.2
       }
     ]
   },
@@ -639,14 +801,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 13,
-        "woba": 0.231,
-        "xwoba": 0.267,
-        "ba": 0.1,
-        "slg": 0.1,
-        "whiff_pct": 57.9,
-        "hard_hit_pct": 75.0,
-        "run_value_per_100": -1.8
+        "pa": 14,
+        "woba": 0.279,
+        "xwoba": 0.313,
+        "ba": 0.182,
+        "slg": 0.182,
+        "whiff_pct": 55.0,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": -0.9
       }
     ]
   },
@@ -658,14 +820,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
+        "pa": 12,
+        "woba": 0.358,
+        "xwoba": 0.419,
+        "ba": 0.364,
+        "slg": 0.364,
+        "whiff_pct": 8.3,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -1.3
+      }
+    ]
+  },
+  {
+    "player_id": 681393,
+    "name": "Connor Norby",
+    "team": "MIA",
+    "vs_pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
         "pa": 11,
-        "woba": 0.391,
-        "xwoba": 0.405,
-        "ba": 0.4,
-        "slg": 0.4,
-        "whiff_pct": 9.1,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -0.5
+        "woba": 0.259,
+        "xwoba": 0.309,
+        "ba": 0.2,
+        "slg": 0.3,
+        "whiff_pct": 0.0,
+        "hard_hit_pct": 20.0,
+        "run_value_per_100": -3.0
       }
     ]
   },
@@ -689,14 +870,14 @@
       {
         "pitch_type": "SL",
         "pitch_name": "Slider",
-        "pa": 11,
-        "woba": 0.359,
-        "xwoba": 0.357,
-        "ba": 0.2,
-        "slg": 0.6,
-        "whiff_pct": 34.8,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": 1.8
+        "pa": 12,
+        "woba": 0.463,
+        "xwoba": 0.406,
+        "ba": 0.273,
+        "slg": 0.818,
+        "whiff_pct": 33.3,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": 3.9
       }
     ]
   },
@@ -716,6 +897,37 @@
         "whiff_pct": 17.4,
         "hard_hit_pct": 72.7,
         "run_value_per_100": -1.0
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.41,
+        "xwoba": 0.395,
+        "ba": 0.143,
+        "slg": 0.571,
+        "whiff_pct": 46.2,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": 7.0
+      }
+    ]
+  },
+  {
+    "player_id": 682177,
+    "name": "Daniel Schneemann",
+    "team": "CLE",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.227,
+        "xwoba": 0.261,
+        "ba": 0.182,
+        "slg": 0.364,
+        "whiff_pct": 33.3,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -2.7
       }
     ]
   },
@@ -734,7 +946,26 @@
         "slg": 0.364,
         "whiff_pct": 11.1,
         "hard_hit_pct": 60.0,
-        "run_value_per_100": -2.0
+        "run_value_per_100": -2.1
+      }
+    ]
+  },
+  {
+    "player_id": 621020,
+    "name": "Dansby Swanson",
+    "team": "CHC",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.16,
+        "xwoba": 0.217,
+        "ba": 0.111,
+        "slg": 0.111,
+        "whiff_pct": 42.9,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": -3.9
       }
     ]
   },
@@ -746,14 +977,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
+        "pa": 11,
         "woba": 0.09,
         "xwoba": 0.117,
-        "ba": 0.1,
-        "slg": 0.1,
-        "whiff_pct": 22.7,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -4.6
+        "ba": 0.182,
+        "slg": 0.182,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": -3.4
       }
     ]
   },
@@ -785,13 +1016,32 @@
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
         "pa": 10,
-        "woba": 0.29,
-        "xwoba": 0.243,
-        "ba": 0.2,
-        "slg": 0.5,
-        "whiff_pct": 11.8,
+        "woba": 0.38,
+        "xwoba": 0.261,
+        "ba": 0.3,
+        "slg": 0.6,
+        "whiff_pct": 21.1,
         "hard_hit_pct": 42.9,
-        "run_value_per_100": 2.6
+        "run_value_per_100": 4.0
+      }
+    ]
+  },
+  {
+    "player_id": 700337,
+    "name": "Edgar Quero",
+    "team": "CWS",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.356,
+        "xwoba": 0.346,
+        "ba": 0.286,
+        "slg": 0.286,
+        "whiff_pct": 31.3,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -0.5
       }
     ]
   },
@@ -803,14 +1053,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 15,
-        "woba": 0.431,
-        "xwoba": 0.343,
-        "ba": 0.214,
-        "slg": 0.643,
-        "whiff_pct": 7.1,
+        "pa": 19,
+        "woba": 0.382,
+        "xwoba": 0.301,
+        "ba": 0.222,
+        "slg": 0.556,
+        "whiff_pct": 9.4,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -0.8
+      }
+    ]
+  },
+  {
+    "player_id": 676391,
+    "name": "Ernie Clement",
+    "team": "TOR",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.245,
+        "xwoba": 0.362,
+        "ba": 0.273,
+        "slg": 0.273,
+        "whiff_pct": 0.0,
         "hard_hit_pct": 45.5,
-        "run_value_per_100": -0.9
+        "run_value_per_100": -3.2
       }
     ]
   },
@@ -822,14 +1091,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.427,
-        "xwoba": 0.483,
-        "ba": 0.364,
-        "slg": 0.636,
-        "whiff_pct": 27.3,
-        "hard_hit_pct": 37.5,
-        "run_value_per_100": 2.4
+        "pa": 14,
+        "woba": 0.386,
+        "xwoba": 0.43,
+        "ba": 0.308,
+        "slg": 0.538,
+        "whiff_pct": 30.8,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 1.4
       }
     ]
   },
@@ -841,14 +1110,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 12,
-        "woba": 0.533,
-        "xwoba": 0.492,
-        "ba": 0.333,
-        "slg": 0.556,
-        "whiff_pct": 20.0,
-        "hard_hit_pct": 75.0,
-        "run_value_per_100": 4.4
+        "pa": 15,
+        "woba": 0.473,
+        "xwoba": 0.552,
+        "ba": 0.3,
+        "slg": 0.5,
+        "whiff_pct": 23.8,
+        "hard_hit_pct": 80.0,
+        "run_value_per_100": 3.0
       }
     ]
   },
@@ -868,6 +1137,18 @@
         "whiff_pct": 21.4,
         "hard_hit_pct": 27.3,
         "run_value_per_100": -1.3
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 10,
+        "woba": 0.25,
+        "xwoba": 0.337,
+        "ba": 0.1,
+        "slg": 0.3,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 37.5,
+        "run_value_per_100": -1.6
       }
     ]
   },
@@ -879,14 +1160,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.509,
-        "xwoba": 0.596,
-        "ba": 0.3,
-        "slg": 0.9,
-        "whiff_pct": 14.3,
-        "hard_hit_pct": 55.6,
-        "run_value_per_100": 6.4
+        "pa": 12,
+        "woba": 0.467,
+        "xwoba": 0.556,
+        "ba": 0.273,
+        "slg": 0.818,
+        "whiff_pct": 13.0,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": 5.4
       }
     ]
   },
@@ -898,14 +1179,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 13,
-        "woba": 0.385,
-        "xwoba": 0.398,
-        "ba": 0.333,
-        "slg": 0.5,
-        "whiff_pct": 5.6,
+        "pa": 14,
+        "woba": 0.357,
+        "xwoba": 0.369,
+        "ba": 0.308,
+        "slg": 0.462,
+        "whiff_pct": 10.5,
         "hard_hit_pct": 41.7,
-        "run_value_per_100": 1.1
+        "run_value_per_100": 0.6
       }
     ]
   },
@@ -917,14 +1198,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.358,
-        "xwoba": 0.345,
-        "ba": 0.2,
-        "slg": 0.5,
-        "whiff_pct": 25.9,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": -0.1
+        "pa": 13,
+        "woba": 0.331,
+        "xwoba": 0.324,
+        "ba": 0.182,
+        "slg": 0.455,
+        "whiff_pct": 25.8,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": -0.5
       }
     ]
   },
@@ -936,14 +1217,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.496,
-        "xwoba": 0.44,
-        "ba": 0.417,
-        "slg": 0.75,
-        "whiff_pct": 3.8,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 1.3
+        "pa": 13,
+        "woba": 0.458,
+        "xwoba": 0.407,
+        "ba": 0.385,
+        "slg": 0.692,
+        "whiff_pct": 3.6,
+        "hard_hit_pct": 46.2,
+        "run_value_per_100": 0.8
       }
     ]
   },
@@ -955,14 +1236,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.34,
-        "xwoba": 0.157,
-        "ba": 0.333,
-        "slg": 0.333,
-        "whiff_pct": 27.3,
-        "hard_hit_pct": 14.3,
-        "run_value_per_100": -0.4
+        "pa": 12,
+        "woba": 0.358,
+        "xwoba": 0.2,
+        "ba": 0.364,
+        "slg": 0.364,
+        "whiff_pct": 29.2,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": 0.2
       }
     ]
   },
@@ -979,9 +1260,21 @@
         "xwoba": 0.362,
         "ba": 0.143,
         "slg": 0.143,
-        "whiff_pct": 41.2,
+        "whiff_pct": 38.9,
         "hard_hit_pct": 25.0,
-        "run_value_per_100": 1.4
+        "run_value_per_100": 1.1
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.455,
+        "xwoba": 0.307,
+        "ba": 0.25,
+        "slg": 0.625,
+        "whiff_pct": 13.0,
+        "hard_hit_pct": 14.3,
+        "run_value_per_100": 2.0
       }
     ]
   },
@@ -991,6 +1284,18 @@
     "team": "SF",
     "vs_pitches": [
       {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 10,
+        "woba": 0.18,
+        "xwoba": 0.395,
+        "ba": 0.222,
+        "slg": 0.222,
+        "whiff_pct": 6.7,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -2.4
+      },
+      {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
         "pa": 10,
@@ -998,9 +1303,9 @@
         "xwoba": 0.163,
         "ba": 0.0,
         "slg": 0.0,
-        "whiff_pct": 27.3,
+        "whiff_pct": 26.1,
         "hard_hit_pct": 16.7,
-        "run_value_per_100": -7.0
+        "run_value_per_100": -6.6
       }
     ]
   },
@@ -1017,9 +1322,9 @@
         "xwoba": 0.205,
         "ba": 0.214,
         "slg": 0.214,
-        "whiff_pct": 22.7,
+        "whiff_pct": 21.7,
         "hard_hit_pct": 50.0,
-        "run_value_per_100": -3.3
+        "run_value_per_100": -3.2
       }
     ]
   },
@@ -1038,7 +1343,7 @@
         "slg": 0.1,
         "whiff_pct": 30.8,
         "hard_hit_pct": 40.0,
-        "run_value_per_100": -4.8
+        "run_value_per_100": -4.2
       }
     ]
   },
@@ -1050,14 +1355,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.259,
-        "xwoba": 0.326,
+        "pa": 16,
+        "woba": 0.303,
+        "xwoba": 0.339,
         "ba": 0.2,
-        "slg": 0.3,
-        "whiff_pct": 23.5,
-        "hard_hit_pct": 60.0,
-        "run_value_per_100": -3.3
+        "slg": 0.467,
+        "whiff_pct": 35.7,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": -2.4
       },
       {
         "pitch_type": "CH",
@@ -1067,9 +1372,9 @@
         "xwoba": 0.074,
         "ba": 0.0,
         "slg": 0.0,
-        "whiff_pct": 33.3,
+        "whiff_pct": 43.8,
         "hard_hit_pct": 16.7,
-        "run_value_per_100": -10.7
+        "run_value_per_100": -9.2
       }
     ]
   },
@@ -1081,14 +1386,52 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
+        "pa": 12,
+        "woba": 0.133,
+        "xwoba": 0.225,
+        "ba": 0.091,
+        "slg": 0.091,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 37.5,
+        "run_value_per_100": -4.7
+      }
+    ]
+  },
+  {
+    "player_id": 802139,
+    "name": "JJ Wetherholt",
+    "team": "STL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
         "pa": 11,
-        "woba": 0.145,
-        "xwoba": 0.193,
-        "ba": 0.1,
-        "slg": 0.1,
-        "whiff_pct": 26.3,
-        "hard_hit_pct": 28.6,
-        "run_value_per_100": -4.5
+        "woba": 0.327,
+        "xwoba": 0.267,
+        "ba": 0.2,
+        "slg": 0.5,
+        "whiff_pct": 39.1,
+        "hard_hit_pct": 20.0,
+        "run_value_per_100": -2.2
+      }
+    ]
+  },
+  {
+    "player_id": 701538,
+    "name": "Jackson Merrill",
+    "team": "SD",
+    "vs_pitches": [
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 10,
+        "woba": 0.25,
+        "xwoba": 0.396,
+        "ba": 0.222,
+        "slg": 0.222,
+        "whiff_pct": 30.0,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -3.3
       }
     ]
   },
@@ -1119,14 +1462,52 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 12,
-        "woba": 0.342,
-        "xwoba": 0.377,
-        "ba": 0.3,
+        "pa": 13,
+        "woba": 0.315,
+        "xwoba": 0.403,
+        "ba": 0.273,
+        "slg": 0.273,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 55.6,
+        "run_value_per_100": -0.7
+      }
+    ]
+  },
+  {
+    "player_id": 663968,
+    "name": "Jake Mangum",
+    "team": "PIT",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.469,
+        "xwoba": 0.336,
+        "ba": 0.375,
+        "slg": 0.5,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 14.3,
+        "run_value_per_100": -0.4
+      }
+    ]
+  },
+  {
+    "player_id": 664983,
+    "name": "Jake McCarthy",
+    "team": "COL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.215,
+        "xwoba": 0.241,
+        "ba": 0.2,
         "slg": 0.3,
-        "whiff_pct": 26.7,
-        "hard_hit_pct": 62.5,
-        "run_value_per_100": 0.0
+        "whiff_pct": 37.5,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -5.8
       }
     ]
   },
@@ -1138,14 +1519,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 11,
-        "woba": 0.227,
-        "xwoba": 0.315,
-        "ba": 0.222,
-        "slg": 0.222,
-        "whiff_pct": 31.6,
-        "hard_hit_pct": 28.6,
-        "run_value_per_100": -3.6
+        "pa": 12,
+        "woba": 0.375,
+        "xwoba": 0.444,
+        "ba": 0.3,
+        "slg": 0.6,
+        "whiff_pct": 30.0,
+        "hard_hit_pct": 37.5,
+        "run_value_per_100": -0.2
       }
     ]
   },
@@ -1154,6 +1535,18 @@
     "name": "Jakob Marsee",
     "team": "MIA",
     "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 13,
+        "woba": 0.204,
+        "xwoba": 0.218,
+        "ba": 0.091,
+        "slg": 0.182,
+        "whiff_pct": 26.7,
+        "hard_hit_pct": 75.0,
+        "run_value_per_100": -2.3
+      },
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
@@ -1164,19 +1557,7 @@
         "slg": 0.1,
         "whiff_pct": 0.0,
         "hard_hit_pct": 14.3,
-        "run_value_per_100": -5.0
-      },
-      {
-        "pitch_type": "FF",
-        "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.195,
-        "xwoba": 0.172,
-        "ba": 0.111,
-        "slg": 0.222,
-        "whiff_pct": 30.8,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": -2.2
+        "run_value_per_100": -4.4
       }
     ]
   },
@@ -1188,14 +1569,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 16,
-        "woba": 0.325,
-        "xwoba": 0.394,
-        "ba": 0.2,
-        "slg": 0.533,
-        "whiff_pct": 23.1,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": -1.4
+        "pa": 19,
+        "woba": 0.311,
+        "xwoba": 0.397,
+        "ba": 0.176,
+        "slg": 0.471,
+        "whiff_pct": 21.4,
+        "hard_hit_pct": 63.6,
+        "run_value_per_100": -1.8
       }
     ]
   },
@@ -1205,6 +1586,18 @@
     "team": "NYY",
     "vs_pitches": [
       {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 12,
+        "woba": 0.277,
+        "xwoba": 0.175,
+        "ba": 0.25,
+        "slg": 0.333,
+        "whiff_pct": 23.5,
+        "hard_hit_pct": 10.0,
+        "run_value_per_100": -0.7
+      },
+      {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
         "pa": 10,
@@ -1212,21 +1605,9 @@
         "xwoba": 0.167,
         "ba": 0.111,
         "slg": 0.111,
-        "whiff_pct": 29.4,
+        "whiff_pct": 27.8,
         "hard_hit_pct": 40.0,
-        "run_value_per_100": -4.6
-      },
-      {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 10,
-        "woba": 0.339,
-        "xwoba": 0.198,
-        "ba": 0.3,
-        "slg": 0.4,
-        "whiff_pct": 28.6,
-        "hard_hit_pct": 12.5,
-        "run_value_per_100": 1.0
+        "run_value_per_100": -4.4
       }
     ]
   },
@@ -1238,14 +1619,26 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.082,
-        "xwoba": 0.089,
-        "ba": 0.091,
-        "slg": 0.091,
-        "whiff_pct": 26.9,
+        "pa": 12,
+        "woba": 0.075,
+        "xwoba": 0.082,
+        "ba": 0.083,
+        "slg": 0.083,
+        "whiff_pct": 27.6,
         "hard_hit_pct": 44.4,
-        "run_value_per_100": -4.9
+        "run_value_per_100": -4.5
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.227,
+        "xwoba": 0.287,
+        "ba": 0.2,
+        "slg": 0.2,
+        "whiff_pct": 11.8,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -3.4
       }
     ]
   },
@@ -1257,14 +1650,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.68,
-        "xwoba": 0.502,
-        "ba": 0.667,
-        "slg": 0.889,
+        "pa": 12,
+        "woba": 0.625,
+        "xwoba": 0.477,
+        "ba": 0.6,
+        "slg": 0.8,
         "whiff_pct": 0.0,
         "hard_hit_pct": 77.8,
-        "run_value_per_100": 15.0
+        "run_value_per_100": 11.3
+      }
+    ]
+  },
+  {
+    "player_id": 687401,
+    "name": "Joey Ortiz",
+    "team": "MIL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.455,
+        "xwoba": 0.323,
+        "ba": 0.444,
+        "slg": 0.444,
+        "whiff_pct": 15.0,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": 3.3
       }
     ]
   },
@@ -1276,14 +1688,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.133,
-        "xwoba": 0.29,
-        "ba": 0.091,
-        "slg": 0.091,
-        "whiff_pct": 14.3,
-        "hard_hit_pct": 55.6,
-        "run_value_per_100": -2.6
+        "pa": 15,
+        "woba": 0.107,
+        "xwoba": 0.306,
+        "ba": 0.071,
+        "slg": 0.071,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 58.3,
+        "run_value_per_100": -3.4
       }
     ]
   },
@@ -1295,14 +1707,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 13,
-        "woba": 0.415,
-        "xwoba": 0.34,
-        "ba": 0.333,
-        "slg": 0.583,
-        "whiff_pct": 5.3,
-        "hard_hit_pct": 45.5,
-        "run_value_per_100": 1.3
+        "pa": 15,
+        "woba": 0.407,
+        "xwoba": 0.351,
+        "ba": 0.308,
+        "slg": 0.538,
+        "whiff_pct": 4.3,
+        "hard_hit_pct": 41.7,
+        "run_value_per_100": 1.1
       }
     ]
   },
@@ -1314,14 +1726,33 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
+        "pa": 13,
+        "woba": 0.342,
+        "xwoba": 0.426,
+        "ba": 0.182,
+        "slg": 0.273,
+        "whiff_pct": 26.7,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": 0.3
+      }
+    ]
+  },
+  {
+    "player_id": 593871,
+    "name": "Jorge Polanco",
+    "team": "NYM",
+    "vs_pitches": [
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
         "pa": 11,
-        "woba": 0.323,
-        "xwoba": 0.434,
-        "ba": 0.111,
-        "slg": 0.222,
-        "whiff_pct": 23.1,
-        "hard_hit_pct": 75.0,
-        "run_value_per_100": -0.5
+        "woba": 0.227,
+        "xwoba": 0.302,
+        "ba": 0.2,
+        "slg": 0.2,
+        "whiff_pct": 5.9,
+        "hard_hit_pct": 12.5,
+        "run_value_per_100": -2.2
       }
     ]
   },
@@ -1333,14 +1764,26 @@
       {
         "pitch_type": "SL",
         "pitch_name": "Slider",
-        "pa": 11,
-        "woba": 0.359,
-        "xwoba": 0.177,
-        "ba": 0.273,
-        "slg": 0.364,
-        "whiff_pct": 20.0,
-        "hard_hit_pct": 14.3,
-        "run_value_per_100": 1.1
+        "pa": 12,
+        "woba": 0.329,
+        "xwoba": 0.163,
+        "ba": 0.25,
+        "slg": 0.333,
+        "whiff_pct": 26.3,
+        "hard_hit_pct": 12.5,
+        "run_value_per_100": 0.3
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.5,
+        "xwoba": 0.338,
+        "ba": 0.286,
+        "slg": 0.714,
+        "whiff_pct": 31.6,
+        "hard_hit_pct": 75.0,
+        "run_value_per_100": 4.0
       }
     ]
   },
@@ -1352,26 +1795,26 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 14,
-        "woba": 0.443,
-        "xwoba": 0.477,
-        "ba": 0.333,
-        "slg": 0.333,
-        "whiff_pct": 9.1,
-        "hard_hit_pct": 37.5,
-        "run_value_per_100": 2.0
+        "pa": 16,
+        "woba": 0.431,
+        "xwoba": 0.461,
+        "ba": 0.3,
+        "slg": 0.3,
+        "whiff_pct": 11.8,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 1.3
       },
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.568,
-        "xwoba": 0.448,
-        "ba": 0.375,
-        "slg": 0.875,
-        "whiff_pct": 10.0,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": 9.9
+        "pa": 13,
+        "woba": 0.604,
+        "xwoba": 0.45,
+        "ba": 0.444,
+        "slg": 0.889,
+        "whiff_pct": 7.7,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": 9.4
       }
     ]
   },
@@ -1402,14 +1845,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.167,
-        "xwoba": 0.211,
-        "ba": 0.083,
-        "slg": 0.333,
-        "whiff_pct": 36.0,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -2.1
+        "pa": 14,
+        "woba": 0.193,
+        "xwoba": 0.235,
+        "ba": 0.077,
+        "slg": 0.308,
+        "whiff_pct": 33.3,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -1.5
       }
     ]
   },
@@ -1421,14 +1864,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.114,
-        "xwoba": 0.24,
-        "ba": 0.077,
-        "slg": 0.077,
-        "whiff_pct": 16.7,
-        "hard_hit_pct": 27.3,
-        "run_value_per_100": -8.2
+        "pa": 15,
+        "woba": 0.167,
+        "xwoba": 0.231,
+        "ba": 0.143,
+        "slg": 0.143,
+        "whiff_pct": 15.8,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -7.6
+      }
+    ]
+  },
+  {
+    "player_id": 669701,
+    "name": "Josh Smith",
+    "team": "TEX",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.21,
+        "xwoba": 0.327,
+        "ba": 0.0,
+        "slg": 0.0,
+        "whiff_pct": 13.3,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": -3.1
       }
     ]
   },
@@ -1442,12 +1904,12 @@
         "pitch_name": "4-Seam Fastball",
         "pa": 13,
         "woba": 0.177,
-        "xwoba": 0.143,
+        "xwoba": 0.14,
         "ba": 0.091,
         "slg": 0.091,
-        "whiff_pct": 44.0,
+        "whiff_pct": 42.9,
         "hard_hit_pct": 33.3,
-        "run_value_per_100": -3.8
+        "run_value_per_100": -3.4
       }
     ]
   },
@@ -1459,14 +1921,26 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 15,
-        "woba": 0.323,
-        "xwoba": 0.375,
-        "ba": 0.214,
-        "slg": 0.5,
-        "whiff_pct": 11.8,
-        "hard_hit_pct": 38.5,
-        "run_value_per_100": 0.7
+        "pa": 16,
+        "woba": 0.303,
+        "xwoba": 0.353,
+        "ba": 0.2,
+        "slg": 0.467,
+        "whiff_pct": 10.3,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -0.1
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 10,
+        "woba": 0.0,
+        "xwoba": 0.188,
+        "ba": 0.0,
+        "slg": 0.0,
+        "whiff_pct": 21.4,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -8.0
       }
     ]
   },
@@ -1483,21 +1957,21 @@
         "xwoba": 0.211,
         "ba": 0.143,
         "slg": 0.143,
-        "whiff_pct": 15.0,
+        "whiff_pct": 14.3,
         "hard_hit_pct": 36.4,
-        "run_value_per_100": -4.3
+        "run_value_per_100": -3.6
       },
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.4,
+        "pa": 15,
+        "woba": 0.32,
         "xwoba": 0.338,
-        "ba": 0.333,
-        "slg": 0.333,
-        "whiff_pct": 50.0,
-        "hard_hit_pct": 75.0,
-        "run_value_per_100": 1.4
+        "ba": 0.25,
+        "slg": 0.25,
+        "whiff_pct": 45.2,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": 0.3
       }
     ]
   },
@@ -1507,6 +1981,18 @@
     "team": "SF",
     "vs_pitches": [
       {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 13,
+        "woba": 0.177,
+        "xwoba": 0.239,
+        "ba": 0.091,
+        "slg": 0.091,
+        "whiff_pct": 23.5,
+        "hard_hit_pct": 16.7,
+        "run_value_per_100": -3.4
+      },
+      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 12,
@@ -1514,21 +2000,9 @@
         "xwoba": 0.359,
         "ba": 0.111,
         "slg": 0.111,
-        "whiff_pct": 11.1,
+        "whiff_pct": 10.5,
         "hard_hit_pct": 33.3,
-        "run_value_per_100": -2.3
-      },
-      {
-        "pitch_type": "FF",
-        "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.23,
-        "xwoba": 0.311,
-        "ba": 0.125,
-        "slg": 0.125,
-        "whiff_pct": 14.3,
-        "hard_hit_pct": 16.7,
-        "run_value_per_100": -2.2
+        "run_value_per_100": -2.4
       }
     ]
   },
@@ -1540,14 +2014,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 13,
-        "woba": 0.438,
-        "xwoba": 0.421,
+        "pa": 14,
+        "woba": 0.457,
+        "xwoba": 0.441,
         "ba": 0.4,
         "slg": 0.4,
-        "whiff_pct": 20.0,
+        "whiff_pct": 18.8,
         "hard_hit_pct": 50.0,
-        "run_value_per_100": 1.0
+        "run_value_per_100": 1.3
       }
     ]
   },
@@ -1559,14 +2033,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 17,
-        "woba": 0.447,
-        "xwoba": 0.43,
-        "ba": 0.353,
-        "slg": 0.706,
-        "whiff_pct": 37.5,
+        "pa": 18,
+        "woba": 0.422,
+        "xwoba": 0.406,
+        "ba": 0.333,
+        "slg": 0.667,
+        "whiff_pct": 40.0,
         "hard_hit_pct": 66.7,
-        "run_value_per_100": 5.1
+        "run_value_per_100": 4.9
       }
     ]
   },
@@ -1578,14 +2052,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.267,
-        "xwoba": 0.301,
-        "ba": 0.1,
-        "slg": 0.1,
+        "pa": 13,
+        "woba": 0.246,
+        "xwoba": 0.279,
+        "ba": 0.091,
+        "slg": 0.091,
         "whiff_pct": 0.0,
-        "hard_hit_pct": 30.0,
-        "run_value_per_100": -1.7
+        "hard_hit_pct": 27.3,
+        "run_value_per_100": -1.3
+      }
+    ]
+  },
+  {
+    "player_id": 681481,
+    "name": "Kerry Carpenter",
+    "team": "DET",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.36,
+        "xwoba": 0.32,
+        "ba": 0.222,
+        "slg": 0.556,
+        "whiff_pct": 27.8,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": 0.0
       }
     ]
   },
@@ -1597,14 +2090,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.309,
-        "xwoba": 0.38,
-        "ba": 0.111,
-        "slg": 0.444,
-        "whiff_pct": 9.1,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": -0.2
+        "pa": 13,
+        "woba": 0.262,
+        "xwoba": 0.325,
+        "ba": 0.091,
+        "slg": 0.364,
+        "whiff_pct": 8.3,
+        "hard_hit_pct": 54.5,
+        "run_value_per_100": -0.8
       }
     ]
   },
@@ -1616,14 +2109,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 12,
-        "woba": 0.342,
-        "xwoba": 0.382,
-        "ba": 0.3,
-        "slg": 0.3,
-        "whiff_pct": 14.3,
-        "hard_hit_pct": 44.4,
-        "run_value_per_100": -2.2
+        "pa": 14,
+        "woba": 0.343,
+        "xwoba": 0.395,
+        "ba": 0.273,
+        "slg": 0.273,
+        "whiff_pct": 13.3,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -2.5
       }
     ]
   },
@@ -1659,9 +2152,9 @@
         "xwoba": 0.33,
         "ba": 0.0,
         "slg": 0.0,
-        "whiff_pct": 29.6,
+        "whiff_pct": 31.3,
         "hard_hit_pct": 25.0,
-        "run_value_per_100": -1.9
+        "run_value_per_100": -1.7
       }
     ]
   },
@@ -1673,14 +2166,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 13,
-        "woba": 0.55,
-        "xwoba": 0.348,
-        "ba": 0.455,
-        "slg": 0.545,
-        "whiff_pct": 22.6,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": 4.6
+        "pa": 14,
+        "woba": 0.511,
+        "xwoba": 0.332,
+        "ba": 0.417,
+        "slg": 0.5,
+        "whiff_pct": 21.9,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": 3.9
+      }
+    ]
+  },
+  {
+    "player_id": 671732,
+    "name": "Lawrence Butler",
+    "team": "ATH",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.485,
+        "xwoba": 0.387,
+        "ba": 0.333,
+        "slg": 0.778,
+        "whiff_pct": 23.5,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": 4.0
       }
     ]
   },
@@ -1692,14 +2204,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.179,
-        "xwoba": 0.198,
+        "pa": 16,
+        "woba": 0.244,
+        "xwoba": 0.261,
         "ba": 0.154,
         "slg": 0.154,
         "whiff_pct": 14.8,
         "hard_hit_pct": 0.0,
-        "run_value_per_100": -2.4
+        "run_value_per_100": -1.8
       }
     ]
   },
@@ -1711,14 +2223,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 17,
-        "woba": 0.2,
-        "xwoba": 0.207,
-        "ba": 0.188,
-        "slg": 0.313,
-        "whiff_pct": 5.9,
-        "hard_hit_pct": 25.0,
-        "run_value_per_100": -2.4
+        "pa": 18,
+        "woba": 0.189,
+        "xwoba": 0.215,
+        "ba": 0.176,
+        "slg": 0.294,
+        "whiff_pct": 5.0,
+        "hard_hit_pct": 23.5,
+        "run_value_per_100": -2.5
       },
       {
         "pitch_type": "SI",
@@ -1730,7 +2242,26 @@
         "slg": 0.538,
         "whiff_pct": 4.5,
         "hard_hit_pct": 8.3,
-        "run_value_per_100": 2.5
+        "run_value_per_100": 2.7
+      }
+    ]
+  },
+  {
+    "player_id": 671277,
+    "name": "Luis García Jr.",
+    "team": "WSH",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.6,
+        "xwoba": 0.477,
+        "ba": 0.4,
+        "slg": 0.9,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 44.4,
+        "run_value_per_100": 9.3
       }
     ]
   },
@@ -1740,28 +2271,59 @@
     "team": "NYM",
     "vs_pitches": [
       {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 12,
+        "woba": 0.325,
+        "xwoba": 0.297,
+        "ba": 0.222,
+        "slg": 0.222,
+        "whiff_pct": 14.3,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": -0.8
+      },
+      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
-        "pa": 10,
-        "woba": 0.52,
-        "xwoba": 0.595,
-        "ba": 0.375,
-        "slg": 0.75,
-        "whiff_pct": 33.3,
-        "hard_hit_pct": 37.5,
-        "run_value_per_100": 4.2
+        "pa": 11,
+        "woba": 0.555,
+        "xwoba": 0.566,
+        "ba": 0.444,
+        "slg": 0.778,
+        "whiff_pct": 31.6,
+        "hard_hit_pct": 44.4,
+        "run_value_per_100": 4.6
       },
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.39,
-        "xwoba": 0.446,
-        "ba": 0.286,
-        "slg": 0.286,
-        "whiff_pct": 15.4,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": 0.7
+        "pa": 11,
+        "woba": 0.436,
+        "xwoba": 0.456,
+        "ba": 0.375,
+        "slg": 0.375,
+        "whiff_pct": 14.3,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": 2.2
+      }
+    ]
+  },
+  {
+    "player_id": 670042,
+    "name": "Luke Raley",
+    "team": "SEA",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 12,
+        "woba": 0.463,
+        "xwoba": 0.685,
+        "ba": 0.3,
+        "slg": 0.7,
+        "whiff_pct": 52.0,
+        "hard_hit_pct": 62.5,
+        "run_value_per_100": 1.6
       }
     ]
   },
@@ -1773,14 +2335,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 18,
-        "woba": 0.397,
-        "xwoba": 0.397,
-        "ba": 0.375,
-        "slg": 0.438,
-        "whiff_pct": 10.3,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": 0.3
+        "pa": 21,
+        "woba": 0.436,
+        "xwoba": 0.421,
+        "ba": 0.368,
+        "slg": 0.579,
+        "whiff_pct": 12.1,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 1.3
       }
     ]
   },
@@ -1809,6 +2371,18 @@
     "team": "NYM",
     "vs_pitches": [
       {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 11,
+        "woba": 0.405,
+        "xwoba": 0.316,
+        "ba": 0.375,
+        "slg": 0.5,
+        "whiff_pct": 21.1,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": 1.0
+      },
+      {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
         "pa": 11,
@@ -1818,19 +2392,7 @@
         "slg": 0.4,
         "whiff_pct": 7.7,
         "hard_hit_pct": 62.5,
-        "run_value_per_100": -4.6
-      },
-      {
-        "pitch_type": "SI",
-        "pitch_name": "Sinker",
-        "pa": 10,
-        "woba": 0.445,
-        "xwoba": 0.336,
-        "ba": 0.429,
-        "slg": 0.571,
-        "whiff_pct": 22.2,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 1.8
+        "run_value_per_100": -4.5
       }
     ]
   },
@@ -1842,14 +2404,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.291,
-        "xwoba": 0.246,
+        "pa": 12,
+        "woba": 0.325,
+        "xwoba": 0.284,
         "ba": 0.222,
         "slg": 0.222,
-        "whiff_pct": 22.2,
+        "whiff_pct": 21.1,
         "hard_hit_pct": 33.3,
-        "run_value_per_100": -2.7
+        "run_value_per_100": -1.9
       },
       {
         "pitch_type": "SI",
@@ -1859,9 +2421,9 @@
         "xwoba": 0.283,
         "ba": 0.4,
         "slg": 0.7,
-        "whiff_pct": 21.4,
+        "whiff_pct": 20.0,
         "hard_hit_pct": 33.3,
-        "run_value_per_100": 1.8
+        "run_value_per_100": 1.6
       }
     ]
   },
@@ -1878,9 +2440,9 @@
         "xwoba": 0.32,
         "ba": 0.167,
         "slg": 0.167,
-        "whiff_pct": 30.4,
+        "whiff_pct": 34.6,
         "hard_hit_pct": 42.9,
-        "run_value_per_100": -3.2
+        "run_value_per_100": -2.9
       }
     ]
   },
@@ -1892,14 +2454,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.718,
-        "xwoba": 0.669,
-        "ba": 0.5,
-        "slg": 1.25,
-        "whiff_pct": 32.0,
+        "pa": 15,
+        "woba": 0.67,
+        "xwoba": 0.624,
+        "ba": 0.462,
+        "slg": 1.154,
+        "whiff_pct": 33.3,
         "hard_hit_pct": 62.5,
-        "run_value_per_100": 8.0
+        "run_value_per_100": 7.1
       }
     ]
   },
@@ -1916,9 +2478,9 @@
         "xwoba": 0.248,
         "ba": 0.188,
         "slg": 0.375,
-        "whiff_pct": 37.8,
+        "whiff_pct": 39.5,
         "hard_hit_pct": 30.0,
-        "run_value_per_100": -1.3
+        "run_value_per_100": -1.2
       }
     ]
   },
@@ -1935,9 +2497,9 @@
         "xwoba": 0.53,
         "ba": 0.545,
         "slg": 1.091,
-        "whiff_pct": 29.4,
+        "whiff_pct": 27.8,
         "hard_hit_pct": 85.7,
-        "run_value_per_100": 10.5
+        "run_value_per_100": 9.9
       }
     ]
   },
@@ -1968,14 +2530,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.382,
-        "xwoba": 0.278,
-        "ba": 0.25,
+        "pa": 18,
+        "woba": 0.297,
+        "xwoba": 0.217,
+        "ba": 0.188,
+        "slg": 0.25,
+        "whiff_pct": 26.9,
+        "hard_hit_pct": 41.7,
+        "run_value_per_100": 0.1
+      }
+    ]
+  },
+  {
+    "player_id": 678246,
+    "name": "Miguel Vargas",
+    "team": "CWS",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.273,
+        "xwoba": 0.26,
+        "ba": 0.111,
         "slg": 0.333,
-        "whiff_pct": 11.1,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": 1.7
+        "whiff_pct": 23.5,
+        "hard_hit_pct": 16.7,
+        "run_value_per_100": -3.0
       }
     ]
   },
@@ -1987,14 +2568,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 21,
-        "woba": 0.424,
-        "xwoba": 0.526,
-        "ba": 0.267,
-        "slg": 0.467,
-        "whiff_pct": 14.6,
+        "pa": 25,
+        "woba": 0.434,
+        "xwoba": 0.512,
+        "ba": 0.278,
+        "slg": 0.5,
+        "whiff_pct": 15.2,
         "hard_hit_pct": 50.0,
-        "run_value_per_100": 2.4
+        "run_value_per_100": 2.3
+      }
+    ]
+  },
+  {
+    "player_id": 573262,
+    "name": "Mike Yastrzemski",
+    "team": "ATL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.37,
+        "xwoba": 0.357,
+        "ba": 0.143,
+        "slg": 0.429,
+        "whiff_pct": 37.5,
+        "hard_hit_pct": 75.0,
+        "run_value_per_100": 0.4
       }
     ]
   },
@@ -2018,6 +2618,25 @@
     ]
   },
   {
+    "player_id": 808959,
+    "name": "Munetaka Murakami",
+    "team": "CWS",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 12,
+        "woba": 0.358,
+        "xwoba": 0.387,
+        "ba": 0.2,
+        "slg": 0.5,
+        "whiff_pct": 31.6,
+        "hard_hit_pct": 62.5,
+        "run_value_per_100": 1.2
+      }
+    ]
+  },
+  {
     "player_id": 701762,
     "name": "Nick Kurtz",
     "team": "ATH",
@@ -2025,14 +2644,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.273,
-        "xwoba": 0.473,
+        "pa": 12,
+        "woba": 0.308,
+        "xwoba": 0.492,
         "ba": 0.125,
         "slg": 0.125,
-        "whiff_pct": 26.3,
+        "whiff_pct": 25.0,
         "hard_hit_pct": 50.0,
-        "run_value_per_100": -0.9
+        "run_value_per_100": -0.4
       }
     ]
   },
@@ -2044,14 +2663,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.442,
-        "xwoba": 0.466,
-        "ba": 0.25,
-        "slg": 0.5,
-        "whiff_pct": 11.1,
-        "hard_hit_pct": 42.9,
-        "run_value_per_100": 0.9
+        "pa": 16,
+        "woba": 0.463,
+        "xwoba": 0.49,
+        "ba": 0.222,
+        "slg": 0.444,
+        "whiff_pct": 8.0,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 1.2
       }
     ]
   },
@@ -2063,14 +2682,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.164,
-        "xwoba": 0.275,
-        "ba": 0.182,
-        "slg": 0.182,
-        "whiff_pct": 16.7,
+        "pa": 12,
+        "woba": 0.15,
+        "xwoba": 0.252,
+        "ba": 0.167,
+        "slg": 0.167,
+        "whiff_pct": 25.0,
         "hard_hit_pct": 44.4,
-        "run_value_per_100": -4.7
+        "run_value_per_100": -4.5
       }
     ]
   },
@@ -2082,14 +2701,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.538,
-        "xwoba": 0.529,
-        "ba": 0.4,
-        "slg": 0.8,
-        "whiff_pct": 7.7,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 4.9
+        "pa": 13,
+        "woba": 0.496,
+        "xwoba": 0.49,
+        "ba": 0.364,
+        "slg": 0.727,
+        "whiff_pct": 11.8,
+        "hard_hit_pct": 44.4,
+        "run_value_per_100": 4.2
       }
     ]
   },
@@ -2101,14 +2720,52 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
+        "pa": 13,
+        "woba": 0.277,
+        "xwoba": 0.396,
+        "ba": 0.167,
+        "slg": 0.417,
+        "whiff_pct": 45.5,
+        "hard_hit_pct": 85.7,
+        "run_value_per_100": -2.9
+      }
+    ]
+  },
+  {
+    "player_id": 645277,
+    "name": "Ozzie Albies",
+    "team": "ATL",
+    "vs_pitches": [
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
         "pa": 11,
-        "woba": 0.145,
-        "xwoba": 0.294,
-        "ba": 0.1,
-        "slg": 0.1,
-        "whiff_pct": 44.4,
-        "hard_hit_pct": 80.0,
-        "run_value_per_100": -5.4
+        "woba": 0.345,
+        "xwoba": 0.215,
+        "ba": 0.273,
+        "slg": 0.545,
+        "whiff_pct": 22.2,
+        "hard_hit_pct": 30.0,
+        "run_value_per_100": 6.1
+      }
+    ]
+  },
+  {
+    "player_id": 678009,
+    "name": "Parker Meadows",
+    "team": "DET",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.3,
+        "xwoba": 0.235,
+        "ba": 0.125,
+        "slg": 0.375,
+        "whiff_pct": 23.8,
+        "hard_hit_pct": 20.0,
+        "run_value_per_100": -1.1
       }
     ]
   },
@@ -2120,14 +2777,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.309,
-        "xwoba": 0.201,
-        "ba": 0.3,
-        "slg": 0.3,
-        "whiff_pct": 21.1,
-        "hard_hit_pct": 42.9,
-        "run_value_per_100": -2.1
+        "pa": 15,
+        "woba": 0.227,
+        "xwoba": 0.269,
+        "ba": 0.214,
+        "slg": 0.214,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -4.7
       }
     ]
   },
@@ -2136,6 +2793,18 @@
     "name": "Rafael Devers",
     "team": "SF",
     "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 14,
+        "woba": 0.207,
+        "xwoba": 0.258,
+        "ba": 0.143,
+        "slg": 0.357,
+        "whiff_pct": 41.2,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -1.5
+      },
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
@@ -2147,18 +2816,6 @@
         "whiff_pct": 4.2,
         "hard_hit_pct": 45.5,
         "run_value_per_100": -2.6
-      },
-      {
-        "pitch_type": "FF",
-        "pitch_name": "4-Seam Fastball",
-        "pa": 13,
-        "woba": 0.223,
-        "xwoba": 0.241,
-        "ba": 0.154,
-        "slg": 0.385,
-        "whiff_pct": 40.0,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -1.6
       }
     ]
   },
@@ -2170,14 +2827,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 10,
-        "woba": 0.575,
-        "xwoba": 0.408,
-        "ba": 0.444,
-        "slg": 0.889,
-        "whiff_pct": 18.8,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": 3.7
+        "pa": 13,
+        "woba": 0.442,
+        "xwoba": 0.357,
+        "ba": 0.333,
+        "slg": 0.667,
+        "whiff_pct": 19.0,
+        "hard_hit_pct": 45.5,
+        "run_value_per_100": 1.3
       }
     ]
   },
@@ -2189,14 +2846,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 15,
-        "woba": 0.343,
-        "xwoba": 0.499,
-        "ba": 0.25,
-        "slg": 0.333,
-        "whiff_pct": 21.7,
-        "hard_hit_pct": 45.5,
-        "run_value_per_100": -1.7
+        "pa": 16,
+        "woba": 0.322,
+        "xwoba": 0.476,
+        "ba": 0.231,
+        "slg": 0.308,
+        "whiff_pct": 24.0,
+        "hard_hit_pct": 41.7,
+        "run_value_per_100": -2.1
       }
     ]
   },
@@ -2227,14 +2884,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 12,
-        "woba": 0.238,
-        "xwoba": 0.396,
-        "ba": 0.2,
-        "slg": 0.3,
-        "whiff_pct": 10.5,
-        "hard_hit_pct": 36.4,
-        "run_value_per_100": -2.7
+        "pa": 17,
+        "woba": 0.326,
+        "xwoba": 0.374,
+        "ba": 0.267,
+        "slg": 0.333,
+        "whiff_pct": 12.0,
+        "hard_hit_pct": 37.5,
+        "run_value_per_100": 0.0
       }
     ]
   },
@@ -2246,14 +2903,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.7,
-        "xwoba": 0.531,
-        "ba": 0.429,
-        "slg": 1.286,
-        "whiff_pct": 18.8,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": 7.5
+        "pa": 13,
+        "woba": 0.692,
+        "xwoba": 0.533,
+        "ba": 0.4,
+        "slg": 1.3,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 42.9,
+        "run_value_per_100": 9.6
       }
     ]
   },
@@ -2265,14 +2922,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.36,
-        "xwoba": 0.48,
-        "ba": 0.222,
-        "slg": 0.556,
-        "whiff_pct": 12.5,
-        "hard_hit_pct": 62.5,
-        "run_value_per_100": 1.0
+        "pa": 11,
+        "woba": 0.327,
+        "xwoba": 0.497,
+        "ba": 0.2,
+        "slg": 0.5,
+        "whiff_pct": 11.1,
+        "hard_hit_pct": 66.7,
+        "run_value_per_100": 0.6
       }
     ]
   },
@@ -2284,14 +2941,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.542,
-        "xwoba": 0.331,
-        "ba": 0.273,
-        "slg": 0.818,
-        "whiff_pct": 28.0,
-        "hard_hit_pct": 42.9,
-        "run_value_per_100": 5.6
+        "pa": 13,
+        "woba": 0.5,
+        "xwoba": 0.307,
+        "ba": 0.25,
+        "slg": 0.75,
+        "whiff_pct": 25.9,
+        "hard_hit_pct": 37.5,
+        "run_value_per_100": 5.1
       }
     ]
   },
@@ -2303,14 +2960,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 13,
-        "woba": 0.138,
-        "xwoba": 0.291,
+        "pa": 14,
+        "woba": 0.129,
+        "xwoba": 0.354,
         "ba": 0.167,
         "slg": 0.167,
-        "whiff_pct": 25.7,
-        "hard_hit_pct": 80.0,
-        "run_value_per_100": -4.3
+        "whiff_pct": 23.7,
+        "hard_hit_pct": 81.8,
+        "run_value_per_100": -4.4
       }
     ]
   },
@@ -2322,14 +2979,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.285,
-        "xwoba": 0.233,
-        "ba": 0.222,
-        "slg": 0.333,
-        "whiff_pct": 0.0,
-        "hard_hit_pct": 12.5,
-        "run_value_per_100": -1.2
+        "pa": 12,
+        "woba": 0.313,
+        "xwoba": 0.267,
+        "ba": 0.273,
+        "slg": 0.364,
+        "whiff_pct": 10.0,
+        "hard_hit_pct": 10.0,
+        "run_value_per_100": -0.8
       }
     ]
   },
@@ -2348,7 +3005,7 @@
         "slg": 0.0,
         "whiff_pct": 35.7,
         "hard_hit_pct": 16.7,
-        "run_value_per_100": -9.8
+        "run_value_per_100": -9.1
       }
     ]
   },
@@ -2360,14 +3017,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 10,
-        "woba": 0.23,
-        "xwoba": 0.285,
-        "ba": 0.125,
-        "slg": 0.125,
-        "whiff_pct": 36.8,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -3.0
+        "pa": 12,
+        "woba": 0.354,
+        "xwoba": 0.345,
+        "ba": 0.222,
+        "slg": 0.333,
+        "whiff_pct": 36.4,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -0.2
       }
     ]
   },
@@ -2379,14 +3036,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
+        "pa": 17,
         "woba": 0.229,
         "xwoba": 0.279,
-        "ba": 0.167,
-        "slg": 0.167,
-        "whiff_pct": 3.7,
-        "hard_hit_pct": 8.3,
-        "run_value_per_100": -2.8
+        "ba": 0.143,
+        "slg": 0.143,
+        "whiff_pct": 3.0,
+        "hard_hit_pct": 7.1,
+        "run_value_per_100": -2.3
       }
     ]
   },
@@ -2398,14 +3055,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.255,
-        "xwoba": 0.28,
+        "pa": 13,
+        "woba": 0.233,
+        "xwoba": 0.261,
         "ba": 0.0,
         "slg": 0.0,
-        "whiff_pct": 28.6,
+        "whiff_pct": 29.2,
         "hard_hit_pct": 0.0,
-        "run_value_per_100": -1.3
+        "run_value_per_100": -1.5
       },
       {
         "pitch_type": "SI",
@@ -2448,14 +3105,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 15,
-        "woba": 0.497,
-        "xwoba": 0.463,
-        "ba": 0.4,
-        "slg": 0.5,
-        "whiff_pct": 27.8,
-        "hard_hit_pct": 66.7,
-        "run_value_per_100": 3.3
+        "pa": 16,
+        "woba": 0.522,
+        "xwoba": 0.455,
+        "ba": 0.455,
+        "slg": 0.545,
+        "whiff_pct": 26.3,
+        "hard_hit_pct": 71.4,
+        "run_value_per_100": 3.8
       }
     ]
   },
@@ -2486,14 +3143,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 14,
-        "woba": 0.264,
-        "xwoba": 0.48,
-        "ba": 0.1,
-        "slg": 0.1,
-        "whiff_pct": 21.7,
-        "hard_hit_pct": 62.5,
-        "run_value_per_100": -0.8
+        "pa": 17,
+        "woba": 0.218,
+        "xwoba": 0.446,
+        "ba": 0.077,
+        "slg": 0.077,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 70.0,
+        "run_value_per_100": -1.8
       }
     ]
   },
@@ -2517,6 +3174,25 @@
     ]
   },
   {
+    "player_id": 641933,
+    "name": "Tyler O'Neill",
+    "team": "BAL",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.09,
+        "xwoba": 0.27,
+        "ba": 0.1,
+        "slg": 0.1,
+        "whiff_pct": 22.2,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -6.1
+      }
+    ]
+  },
+  {
     "player_id": 691016,
     "name": "Tyler Soderstrom",
     "team": "ATH",
@@ -2525,13 +3201,13 @@
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
         "pa": 14,
-        "woba": 0.343,
-        "xwoba": 0.289,
-        "ba": 0.25,
-        "slg": 0.417,
-        "whiff_pct": 30.4,
+        "woba": 0.393,
+        "xwoba": 0.339,
+        "ba": 0.273,
+        "slg": 0.455,
+        "whiff_pct": 27.3,
         "hard_hit_pct": 42.9,
-        "run_value_per_100": 0.7
+        "run_value_per_100": 2.7
       }
     ]
   },
@@ -2543,14 +3219,33 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 18,
-        "woba": 0.228,
-        "xwoba": 0.258,
-        "ba": 0.133,
-        "slg": 0.133,
+        "pa": 19,
+        "woba": 0.216,
+        "xwoba": 0.244,
+        "ba": 0.125,
+        "slg": 0.125,
         "whiff_pct": 0.0,
         "hard_hit_pct": 33.3,
         "run_value_per_100": -4.0
+      }
+    ]
+  },
+  {
+    "player_id": 665489,
+    "name": "Vladimir Guerrero Jr.",
+    "team": "TOR",
+    "vs_pitches": [
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 10,
+        "woba": 0.36,
+        "xwoba": 0.37,
+        "ba": 0.4,
+        "slg": 0.4,
+        "whiff_pct": 5.3,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -1.3
       }
     ]
   },
@@ -2562,14 +3257,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.3,
-        "xwoba": 0.509,
+        "pa": 13,
+        "woba": 0.331,
+        "xwoba": 0.524,
         "ba": 0.182,
         "slg": 0.455,
         "whiff_pct": 7.7,
         "hard_hit_pct": 44.4,
-        "run_value_per_100": 0.4
+        "run_value_per_100": 0.6
       }
     ]
   },
@@ -2579,16 +3274,28 @@
     "team": "MIL",
     "vs_pitches": [
       {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.6,
+        "xwoba": 0.557,
+        "ba": 0.375,
+        "slg": 1.0,
+        "whiff_pct": 18.5,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": 2.3
+      },
+      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 10,
-        "woba": 0.445,
-        "xwoba": 0.552,
-        "ba": 0.25,
-        "slg": 0.375,
-        "whiff_pct": 7.1,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 1.2
+        "pa": 11,
+        "woba": 0.405,
+        "xwoba": 0.522,
+        "ba": 0.222,
+        "slg": 0.333,
+        "whiff_pct": 6.7,
+        "hard_hit_pct": 44.4,
+        "run_value_per_100": 0.5
       }
     ]
   },
@@ -2600,14 +3307,14 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 12,
-        "woba": 0.567,
-        "xwoba": 0.502,
-        "ba": 0.444,
-        "slg": 0.778,
+        "pa": 13,
+        "woba": 0.523,
+        "xwoba": 0.469,
+        "ba": 0.4,
+        "slg": 0.7,
         "whiff_pct": 0.0,
-        "hard_hit_pct": 44.4,
-        "run_value_per_100": 5.7
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": 4.3
       },
       {
         "pitch_type": "FF",
@@ -2617,9 +3324,9 @@
         "xwoba": 0.342,
         "ba": 0.111,
         "slg": 0.111,
-        "whiff_pct": 25.0,
+        "whiff_pct": 30.8,
         "hard_hit_pct": 28.6,
-        "run_value_per_100": -3.0
+        "run_value_per_100": -2.9
       }
     ]
   },
@@ -2667,6 +3374,18 @@
     "team": "TEX",
     "vs_pitches": [
       {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 13,
+        "woba": 0.069,
+        "xwoba": 0.127,
+        "ba": 0.077,
+        "slg": 0.077,
+        "whiff_pct": 13.3,
+        "hard_hit_pct": 10.0,
+        "run_value_per_100": -8.8
+      },
+      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 13,
@@ -2674,21 +3393,9 @@
         "xwoba": 0.373,
         "ba": 0.308,
         "slg": 0.615,
-        "whiff_pct": 25.0,
+        "whiff_pct": 26.3,
         "hard_hit_pct": 70.0,
-        "run_value_per_100": -0.8
-      },
-      {
-        "pitch_type": "FF",
-        "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.082,
-        "xwoba": 0.105,
-        "ba": 0.091,
-        "slg": 0.091,
-        "whiff_pct": 9.1,
-        "hard_hit_pct": 0.0,
-        "run_value_per_100": -9.1
+        "run_value_per_100": -0.6
       }
     ]
   },
@@ -2700,14 +3407,45 @@
       {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
-        "pa": 12,
-        "woba": 0.225,
-        "xwoba": 0.253,
-        "ba": 0.167,
-        "slg": 0.167,
-        "whiff_pct": 18.2,
-        "hard_hit_pct": 25.0,
-        "run_value_per_100": -4.1
+        "pa": 13,
+        "woba": 0.277,
+        "xwoba": 0.237,
+        "ba": 0.231,
+        "slg": 0.231,
+        "whiff_pct": 17.4,
+        "hard_hit_pct": 23.1,
+        "run_value_per_100": -3.0
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.305,
+        "xwoba": 0.43,
+        "ba": 0.3,
+        "slg": 0.4,
+        "whiff_pct": 5.6,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": -1.9
+      }
+    ]
+  },
+  {
+    "player_id": 669364,
+    "name": "Xavier Edwards",
+    "team": "MIA",
+    "vs_pitches": [
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 10,
+        "woba": 0.79,
+        "xwoba": 0.515,
+        "ba": 0.667,
+        "slg": 1.222,
+        "whiff_pct": 10.0,
+        "hard_hit_pct": 37.5,
+        "run_value_per_100": 9.2
       }
     ]
   },
@@ -2719,14 +3457,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.491,
-        "xwoba": 0.488,
-        "ba": 0.4,
-        "slg": 0.7,
-        "whiff_pct": 30.4,
-        "hard_hit_pct": 85.7,
-        "run_value_per_100": 3.0
+        "pa": 13,
+        "woba": 0.415,
+        "xwoba": 0.413,
+        "ba": 0.333,
+        "slg": 0.583,
+        "whiff_pct": 29.2,
+        "hard_hit_pct": 75.0,
+        "run_value_per_100": 1.6
       }
     ]
   },
@@ -2738,14 +3476,26 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 12,
-        "woba": 0.338,
-        "xwoba": 0.536,
+        "pa": 14,
+        "woba": 0.389,
+        "xwoba": 0.56,
         "ba": 0.125,
         "slg": 0.25,
-        "whiff_pct": 6.7,
+        "whiff_pct": 5.6,
         "hard_hit_pct": 57.1,
-        "run_value_per_100": 0.0
+        "run_value_per_100": 0.9
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 10,
+        "woba": 0.75,
+        "xwoba": 0.7,
+        "ba": 0.667,
+        "slg": 1.167,
+        "whiff_pct": 14.3,
+        "hard_hit_pct": 80.0,
+        "run_value_per_100": 7.8
       }
     ]
   },
@@ -2776,14 +3526,14 @@
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
-        "pa": 16,
-        "woba": 0.45,
-        "xwoba": 0.363,
-        "ba": 0.286,
-        "slg": 0.714,
-        "whiff_pct": 18.2,
-        "hard_hit_pct": 45.5,
-        "run_value_per_100": 2.9
+        "pa": 18,
+        "woba": 0.4,
+        "xwoba": 0.324,
+        "ba": 0.25,
+        "slg": 0.625,
+        "whiff_pct": 23.1,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 1.6
       }
     ]
   }
