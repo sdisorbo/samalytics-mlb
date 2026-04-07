@@ -15,10 +15,32 @@
     "strikeouts": 14,
     "walks": 5,
     "home_runs_allowed": 0,
-    "era_percentile": 100,
+    "era_percentile": 50,
     "fip_percentile": 100,
     "k9_percentile": 0,
     "bb9_percentile": 100,
+    "whip_percentile": 50
+  },
+  {
+    "player_id": 667755,
+    "name": "José Soriano",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "era": 0.45,
+    "fip": 2.55,
+    "xfip": null,
+    "k_per_9": 9.45,
+    "bb_per_9": 2.7,
+    "whip": 0.65,
+    "innings_pitched": 20.0,
+    "strikeouts": 21,
+    "walks": 6,
+    "home_runs_allowed": 1,
+    "era_percentile": 100,
+    "fip_percentile": 50,
+    "k9_percentile": 50,
+    "bb9_percentile": 50,
     "whip_percentile": 100
   }
 ]
