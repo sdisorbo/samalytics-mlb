@@ -1,5 +1,27 @@
 [
   {
+    "player_id": 645261,
+    "name": "Sandy Alcantara",
+    "team": "MIA",
+    "team_name": "Miami Marlins",
+    "division": "National League East",
+    "era": 0.74,
+    "fip": 2.11,
+    "xfip": null,
+    "k_per_9": 6.66,
+    "bb_per_9": 1.48,
+    "whip": 0.58,
+    "innings_pitched": 24.3,
+    "strikeouts": 18,
+    "walks": 4,
+    "home_runs_allowed": 0,
+    "era_percentile": 75,
+    "fip_percentile": 100,
+    "k9_percentile": 25,
+    "bb9_percentile": 100,
+    "whip_percentile": 100
+  },
+  {
     "player_id": 608331,
     "name": "Max Fried",
     "team": "NYY",
@@ -16,9 +38,9 @@
     "walks": 5,
     "home_runs_allowed": 0,
     "era_percentile": 50,
-    "fip_percentile": 100,
+    "fip_percentile": 75,
     "k9_percentile": 0,
-    "bb9_percentile": 100,
+    "bb9_percentile": 75,
     "whip_percentile": 50
   },
   {
@@ -39,8 +61,30 @@
     "home_runs_allowed": 1,
     "era_percentile": 100,
     "fip_percentile": 50,
+    "k9_percentile": 75,
+    "bb9_percentile": 25,
+    "whip_percentile": 75
+  },
+  {
+    "player_id": 669923,
+    "name": "George Kirby",
+    "team": "SEA",
+    "team_name": "Seattle Mariners",
+    "division": "American League West",
+    "era": 3.6,
+    "fip": 4.2,
+    "xfip": null,
+    "k_per_9": 7.2,
+    "bb_per_9": 2.25,
+    "whip": 0.9,
+    "innings_pitched": 20.0,
+    "strikeouts": 16,
+    "walks": 5,
+    "home_runs_allowed": 3,
+    "era_percentile": 25,
+    "fip_percentile": 25,
     "k9_percentile": 50,
-    "bb9_percentile": 50,
-    "whip_percentile": 100
+    "bb9_percentile": 75,
+    "whip_percentile": 25
   }
 ]
