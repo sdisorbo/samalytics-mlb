@@ -40,7 +40,7 @@
     "era_percentile": 95,
     "fip_percentile": 99,
     "k9_percentile": 91,
-    "bb9_percentile": 37,
+    "bb9_percentile": 38,
     "whip_percentile": 38
   },
   {
@@ -194,7 +194,7 @@
     "era_percentile": 65,
     "fip_percentile": 90,
     "k9_percentile": 95,
-    "bb9_percentile": 83,
+    "bb9_percentile": 84,
     "whip_percentile": 95
   },
   {
@@ -216,7 +216,7 @@
     "era_percentile": 69,
     "fip_percentile": 89,
     "k9_percentile": 93,
-    "bb9_percentile": 84,
+    "bb9_percentile": 85,
     "whip_percentile": 85
   },
   {
@@ -260,30 +260,8 @@
     "era_percentile": 42,
     "fip_percentile": 86,
     "k9_percentile": 60,
-    "bb9_percentile": 86,
+    "bb9_percentile": 88,
     "whip_percentile": 83
-  },
-  {
-    "player_id": 667755,
-    "name": "José Soriano",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "era": 0.28,
-    "fip": 2.21,
-    "xfip": null,
-    "k_per_9": 10.74,
-    "bb_per_9": 3.31,
-    "whip": 0.7,
-    "innings_pitched": 32.7,
-    "strikeouts": 39,
-    "walks": 12,
-    "home_runs_allowed": 1,
-    "era_percentile": 100,
-    "fip_percentile": 85,
-    "k9_percentile": 83,
-    "bb9_percentile": 38,
-    "whip_percentile": 100
   },
   {
     "player_id": 669373,
@@ -301,11 +279,33 @@
     "strikeouts": 23,
     "walks": 4,
     "home_runs_allowed": 1,
-    "era_percentile": 79,
-    "fip_percentile": 84,
+    "era_percentile": 78,
+    "fip_percentile": 85,
     "k9_percentile": 49,
     "bb9_percentile": 96,
     "whip_percentile": 78
+  },
+  {
+    "player_id": 667755,
+    "name": "José Soriano",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "era": 0.28,
+    "fip": 2.3,
+    "xfip": null,
+    "k_per_9": 10.74,
+    "bb_per_9": 3.58,
+    "whip": 0.73,
+    "innings_pitched": 32.7,
+    "strikeouts": 39,
+    "walks": 13,
+    "home_runs_allowed": 1,
+    "era_percentile": 100,
+    "fip_percentile": 84,
+    "k9_percentile": 83,
+    "bb9_percentile": 26,
+    "whip_percentile": 100
   },
   {
     "player_id": 690997,
@@ -324,7 +324,7 @@
     "walks": 8,
     "home_runs_allowed": 1,
     "era_percentile": 77,
-    "fip_percentile": 83,
+    "fip_percentile": 84,
     "k9_percentile": 79,
     "bb9_percentile": 46,
     "whip_percentile": 99
@@ -348,7 +348,7 @@
     "era_percentile": 90,
     "fip_percentile": 81,
     "k9_percentile": 53,
-    "bb9_percentile": 27,
+    "bb9_percentile": 28,
     "whip_percentile": 23
   },
   {
@@ -436,7 +436,7 @@
     "era_percentile": 63,
     "fip_percentile": 77,
     "k9_percentile": 74,
-    "bb9_percentile": 37,
+    "bb9_percentile": 38,
     "whip_percentile": 30
   },
   {
@@ -458,7 +458,7 @@
     "era_percentile": 46,
     "fip_percentile": 75,
     "k9_percentile": 75,
-    "bb9_percentile": 81,
+    "bb9_percentile": 83,
     "whip_percentile": 86
   },
   {
@@ -590,7 +590,7 @@
     "era_percentile": 53,
     "fip_percentile": 68,
     "k9_percentile": 19,
-    "bb9_percentile": 81,
+    "bb9_percentile": 83,
     "whip_percentile": 90
   },
   {
@@ -612,7 +612,7 @@
     "era_percentile": 1,
     "fip_percentile": 67,
     "k9_percentile": 89,
-    "bb9_percentile": 85,
+    "bb9_percentile": 86,
     "whip_percentile": 14
   },
   {
@@ -726,28 +726,6 @@
     "whip_percentile": 72
   },
   {
-    "player_id": 663436,
-    "name": "Davis Martin",
-    "team": "CWS",
-    "team_name": "Chicago White Sox",
-    "division": "American League Central",
-    "era": 2.25,
-    "fip": 3.23,
-    "xfip": null,
-    "k_per_9": 7.12,
-    "bb_per_9": 1.88,
-    "whip": 1.0,
-    "innings_pitched": 24.0,
-    "strikeouts": 19,
-    "walks": 5,
-    "home_runs_allowed": 2,
-    "era_percentile": 78,
-    "fip_percentile": 59,
-    "k9_percentile": 28,
-    "bb9_percentile": 89,
-    "whip_percentile": 74
-  },
-  {
     "player_id": 650633,
     "name": "Michael King",
     "team": "SD",
@@ -786,7 +764,7 @@
     "walks": 8,
     "home_runs_allowed": 2,
     "era_percentile": 98,
-    "fip_percentile": 57,
+    "fip_percentile": 58,
     "k9_percentile": 40,
     "bb9_percentile": 60,
     "whip_percentile": 93
@@ -808,7 +786,7 @@
     "walks": 7,
     "home_runs_allowed": 1,
     "era_percentile": 37,
-    "fip_percentile": 56,
+    "fip_percentile": 57,
     "k9_percentile": 15,
     "bb9_percentile": 58,
     "whip_percentile": 53
@@ -830,7 +808,7 @@
     "walks": 11,
     "home_runs_allowed": 2,
     "era_percentile": 9,
-    "fip_percentile": 56,
+    "fip_percentile": 57,
     "k9_percentile": 44,
     "bb9_percentile": 40,
     "whip_percentile": 17
@@ -852,7 +830,7 @@
     "walks": 10,
     "home_runs_allowed": 2,
     "era_percentile": 26,
-    "fip_percentile": 53,
+    "fip_percentile": 54,
     "k9_percentile": 72,
     "bb9_percentile": 19,
     "whip_percentile": 65
@@ -874,10 +852,32 @@
     "walks": 3,
     "home_runs_allowed": 3,
     "era_percentile": 84,
-    "fip_percentile": 52,
+    "fip_percentile": 53,
     "k9_percentile": 33,
     "bb9_percentile": 99,
     "whip_percentile": 89
+  },
+  {
+    "player_id": 663436,
+    "name": "Davis Martin",
+    "team": "CWS",
+    "team_name": "Chicago White Sox",
+    "division": "American League Central",
+    "era": 2.16,
+    "fip": 3.34,
+    "xfip": null,
+    "k_per_9": 6.84,
+    "bb_per_9": 2.16,
+    "whip": 1.0,
+    "innings_pitched": 25.0,
+    "strikeouts": 19,
+    "walks": 6,
+    "home_runs_allowed": 2,
+    "era_percentile": 83,
+    "fip_percentile": 52,
+    "k9_percentile": 25,
+    "bb9_percentile": 83,
+    "whip_percentile": 74
   },
   {
     "player_id": 676282,
@@ -896,7 +896,7 @@
     "walks": 9,
     "home_runs_allowed": 2,
     "era_percentile": 60,
-    "fip_percentile": 51,
+    "fip_percentile": 52,
     "k9_percentile": 77,
     "bb9_percentile": 20,
     "whip_percentile": 44
@@ -964,7 +964,7 @@
     "era_percentile": 44,
     "fip_percentile": 47,
     "k9_percentile": 30,
-    "bb9_percentile": 88,
+    "bb9_percentile": 89,
     "whip_percentile": 79
   },
   {
@@ -1005,7 +1005,7 @@
     "strikeouts": 10,
     "walks": 6,
     "home_runs_allowed": 1,
-    "era_percentile": 80,
+    "era_percentile": 79,
     "fip_percentile": 44,
     "k9_percentile": 0,
     "bb9_percentile": 64,
@@ -1073,7 +1073,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 36,
     "fip_percentile": 41,
-    "k9_percentile": 27,
+    "k9_percentile": 28,
     "bb9_percentile": 64,
     "whip_percentile": 23
   },
@@ -1118,7 +1118,7 @@
     "era_percentile": 28,
     "fip_percentile": 38,
     "k9_percentile": 80,
-    "bb9_percentile": 33,
+    "bb9_percentile": 35,
     "whip_percentile": 52
   },
   {
@@ -1250,7 +1250,7 @@
     "era_percentile": 88,
     "fip_percentile": 31,
     "k9_percentile": 20,
-    "bb9_percentile": 30,
+    "bb9_percentile": 31,
     "whip_percentile": 58
   },
   {
@@ -1271,7 +1271,7 @@
     "home_runs_allowed": 1,
     "era_percentile": 38,
     "fip_percentile": 30,
-    "k9_percentile": 25,
+    "k9_percentile": 26,
     "bb9_percentile": 5,
     "whip_percentile": 40
   },
@@ -1337,7 +1337,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 41,
     "fip_percentile": 26,
-    "k9_percentile": 26,
+    "k9_percentile": 27,
     "bb9_percentile": 14,
     "whip_percentile": 56
   },
@@ -1382,7 +1382,7 @@
     "era_percentile": 88,
     "fip_percentile": 23,
     "k9_percentile": 11,
-    "bb9_percentile": 30,
+    "bb9_percentile": 31,
     "whip_percentile": 43
   },
   {
@@ -1445,10 +1445,10 @@
     "strikeouts": 19,
     "walks": 8,
     "home_runs_allowed": 3,
-    "era_percentile": 81,
+    "era_percentile": 80,
     "fip_percentile": 20,
     "k9_percentile": 46,
-    "bb9_percentile": 31,
+    "bb9_percentile": 32,
     "whip_percentile": 56
   },
   {
@@ -1536,7 +1536,7 @@
     "era_percentile": 12,
     "fip_percentile": 15,
     "k9_percentile": 49,
-    "bb9_percentile": 35,
+    "bb9_percentile": 36,
     "whip_percentile": 10
   },
   {
@@ -1646,7 +1646,7 @@
     "era_percentile": 36,
     "fip_percentile": 9,
     "k9_percentile": 48,
-    "bb9_percentile": 27,
+    "bb9_percentile": 28,
     "whip_percentile": 72
   },
   {
@@ -1778,7 +1778,7 @@
     "era_percentile": 20,
     "fip_percentile": 1,
     "k9_percentile": 7,
-    "bb9_percentile": 33,
+    "bb9_percentile": 35,
     "whip_percentile": 6
   }
 ]
