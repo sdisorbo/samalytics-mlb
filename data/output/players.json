@@ -159,7 +159,7 @@
     "slg_percentile": 99,
     "ops_percentile": 99,
     "k_pct_percentile": 37,
-    "bb_pct_percentile": 97
+    "bb_pct_percentile": 96
   },
   {
     "player_id": 691740,
@@ -429,7 +429,7 @@
     "slg_percentile": 96,
     "ops_percentile": 96,
     "k_pct_percentile": 70,
-    "bb_pct_percentile": 88
+    "bb_pct_percentile": 89
   },
   {
     "player_id": 691023,
@@ -699,7 +699,7 @@
     "slg_percentile": 91,
     "ops_percentile": 94,
     "k_pct_percentile": 14,
-    "bb_pct_percentile": 76
+    "bb_pct_percentile": 75
   },
   {
     "player_id": 664702,
@@ -752,7 +752,7 @@
     "obp_percentile": 89,
     "slg_percentile": 93,
     "ops_percentile": 94,
-    "k_pct_percentile": 13,
+    "k_pct_percentile": 12,
     "bb_pct_percentile": 24
   },
   {
@@ -776,7 +776,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 96,
-    "obp_percentile": 97,
+    "obp_percentile": 96,
     "slg_percentile": 90,
     "ops_percentile": 93,
     "k_pct_percentile": 91,
@@ -806,7 +806,7 @@
     "obp_percentile": 81,
     "slg_percentile": 94,
     "ops_percentile": 93,
-    "k_pct_percentile": 60,
+    "k_pct_percentile": 59,
     "bb_pct_percentile": 80
   },
   {
@@ -945,33 +945,6 @@
     "bb_pct_percentile": 30
   },
   {
-    "player_id": 624428,
-    "name": "Adam Frazier",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "position": "2B",
-    "avg": 0.333,
-    "obp": 0.459,
-    "slg": 0.5,
-    "ops": 0.959,
-    "k_pct": 23.7,
-    "bb_pct": 15.8,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 92,
-    "obp_percentile": 97,
-    "slg_percentile": 81,
-    "ops_percentile": 92,
-    "k_pct_percentile": 44,
-    "bb_pct_percentile": 89
-  },
-  {
     "player_id": 691783,
     "name": "Jordan Lawlar",
     "team": "AZ",
@@ -994,7 +967,7 @@
     "avg_percentile": 92,
     "obp_percentile": 89,
     "slg_percentile": 91,
-    "ops_percentile": 91,
+    "ops_percentile": 92,
     "k_pct_percentile": 24,
     "bb_pct_percentile": 24
   },
@@ -1107,6 +1080,33 @@
     "bb_pct_percentile": 49
   },
   {
+    "player_id": 624428,
+    "name": "Adam Frazier",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "position": "2B",
+    "avg": 0.323,
+    "obp": 0.447,
+    "slg": 0.484,
+    "ops": 0.931,
+    "k_pct": 23.1,
+    "bb_pct": 15.4,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 91,
+    "obp_percentile": 97,
+    "slg_percentile": 80,
+    "ops_percentile": 91,
+    "k_pct_percentile": 46,
+    "bb_pct_percentile": 87
+  },
+  {
     "player_id": 665953,
     "name": "Andrés Chaparro",
     "team": "WSH",
@@ -1131,7 +1131,7 @@
     "slg_percentile": 81,
     "ops_percentile": 90,
     "k_pct_percentile": 28,
-    "bb_pct_percentile": 83
+    "bb_pct_percentile": 82
   },
   {
     "player_id": 665742,
@@ -1207,7 +1207,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 49,
+    "avg_percentile": 50,
     "obp_percentile": 63,
     "slg_percentile": 94,
     "ops_percentile": 90,
@@ -1266,7 +1266,7 @@
     "slg_percentile": 87,
     "ops_percentile": 89,
     "k_pct_percentile": 16,
-    "bb_pct_percentile": 98
+    "bb_pct_percentile": 97
   },
   {
     "player_id": 682177,
@@ -1401,7 +1401,7 @@
     "slg_percentile": 84,
     "ops_percentile": 88,
     "k_pct_percentile": 78,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 69
   },
   {
     "player_id": 607043,
@@ -1455,7 +1455,7 @@
     "slg_percentile": 79,
     "ops_percentile": 88,
     "k_pct_percentile": 90,
-    "bb_pct_percentile": 84
+    "bb_pct_percentile": 83
   },
   {
     "player_id": 669364,
@@ -1593,33 +1593,6 @@
     "bb_pct_percentile": 98
   },
   {
-    "player_id": 657656,
-    "name": "Ramón Laureano",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "position": "LF",
-    "avg": 0.288,
-    "obp": 0.35,
-    "slg": 0.534,
-    "ops": 0.884,
-    "k_pct": 22.5,
-    "bb_pct": 7.5,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 80,
-    "obp_percentile": 70,
-    "slg_percentile": 90,
-    "ops_percentile": 86,
-    "k_pct_percentile": 49,
-    "bb_pct_percentile": 42
-  },
-  {
     "player_id": 547180,
     "name": "Bryce Harper",
     "team": "PHI",
@@ -1644,7 +1617,7 @@
     "slg_percentile": 89,
     "ops_percentile": 86,
     "k_pct_percentile": 78,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 69
   },
   {
     "player_id": 689414,
@@ -1672,6 +1645,33 @@
     "ops_percentile": 86,
     "k_pct_percentile": 97,
     "bb_pct_percentile": 18
+  },
+  {
+    "player_id": 657656,
+    "name": "Ramón Laureano",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "position": "LF",
+    "avg": 0.288,
+    "obp": 0.346,
+    "slg": 0.534,
+    "ops": 0.88,
+    "k_pct": 22.2,
+    "bb_pct": 7.4,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 80,
+    "obp_percentile": 68,
+    "slg_percentile": 90,
+    "ops_percentile": 86,
+    "k_pct_percentile": 51,
+    "bb_pct_percentile": 41
   },
   {
     "player_id": 669236,
@@ -1722,7 +1722,7 @@
     "chase_rate": null,
     "avg_percentile": 82,
     "obp_percentile": 75,
-    "slg_percentile": 86,
+    "slg_percentile": 87,
     "ops_percentile": 85,
     "k_pct_percentile": 93,
     "bb_pct_percentile": 44
@@ -1779,7 +1779,7 @@
     "slg_percentile": 69,
     "ops_percentile": 85,
     "k_pct_percentile": 7,
-    "bb_pct_percentile": 99
+    "bb_pct_percentile": 98
   },
   {
     "player_id": 682829,
@@ -1807,33 +1807,6 @@
     "ops_percentile": 84,
     "k_pct_percentile": 20,
     "bb_pct_percentile": 64
-  },
-  {
-    "player_id": 672724,
-    "name": "Oswald Peraza",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "position": "2B",
-    "avg": 0.271,
-    "obp": 0.348,
-    "slg": 0.525,
-    "ops": 0.873,
-    "k_pct": 22.4,
-    "bb_pct": 9.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 73,
-    "obp_percentile": 69,
-    "slg_percentile": 88,
-    "ops_percentile": 84,
-    "k_pct_percentile": 50,
-    "bb_pct_percentile": 53
   },
   {
     "player_id": 656941,
@@ -1939,7 +1912,7 @@
     "avg_percentile": 87,
     "obp_percentile": 74,
     "slg_percentile": 85,
-    "ops_percentile": 83,
+    "ops_percentile": 84,
     "k_pct_percentile": 47,
     "bb_pct_percentile": 33
   },
@@ -2020,7 +1993,7 @@
     "avg_percentile": 85,
     "obp_percentile": 76,
     "slg_percentile": 81,
-    "ops_percentile": 82,
+    "ops_percentile": 83,
     "k_pct_percentile": 78,
     "bb_pct_percentile": 47
   },
@@ -2047,7 +2020,7 @@
     "avg_percentile": 43,
     "obp_percentile": 57,
     "slg_percentile": 89,
-    "ops_percentile": 82,
+    "ops_percentile": 83,
     "k_pct_percentile": 17,
     "bb_pct_percentile": 78
   },
@@ -2077,6 +2050,33 @@
     "ops_percentile": 82,
     "k_pct_percentile": 66,
     "bb_pct_percentile": 19
+  },
+  {
+    "player_id": 672724,
+    "name": "Oswald Peraza",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "position": "2B",
+    "avg": 0.267,
+    "obp": 0.343,
+    "slg": 0.517,
+    "ops": 0.86,
+    "k_pct": 23.5,
+    "bb_pct": 8.8,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 71,
+    "obp_percentile": 66,
+    "slg_percentile": 86,
+    "ops_percentile": 82,
+    "k_pct_percentile": 44,
+    "bb_pct_percentile": 51
   },
   {
     "player_id": 676356,
@@ -2130,7 +2130,7 @@
     "slg_percentile": 81,
     "ops_percentile": 82,
     "k_pct_percentile": 56,
-    "bb_pct_percentile": 83
+    "bb_pct_percentile": 82
   },
   {
     "player_id": 668939,
@@ -2157,7 +2157,7 @@
     "slg_percentile": 77,
     "ops_percentile": 81,
     "k_pct_percentile": 82,
-    "bb_pct_percentile": 76
+    "bb_pct_percentile": 75
   },
   {
     "player_id": 572233,
@@ -2261,7 +2261,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 27,
-    "obp_percentile": 70,
+    "obp_percentile": 71,
     "slg_percentile": 81,
     "ops_percentile": 81,
     "k_pct_percentile": 40,
@@ -2400,7 +2400,7 @@
     "slg_percentile": 78,
     "ops_percentile": 79,
     "k_pct_percentile": 29,
-    "bb_pct_percentile": 84
+    "bb_pct_percentile": 83
   },
   {
     "player_id": 571970,
@@ -2423,7 +2423,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 53,
-    "obp_percentile": 54,
+    "obp_percentile": 53,
     "slg_percentile": 87,
     "ops_percentile": 79,
     "k_pct_percentile": 16,
@@ -2589,7 +2589,7 @@
     "slg_percentile": 66,
     "ops_percentile": 78,
     "k_pct_percentile": 92,
-    "bb_pct_percentile": 82
+    "bb_pct_percentile": 81
   },
   {
     "player_id": 663743,
@@ -2611,7 +2611,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 91,
+    "avg_percentile": 92,
     "obp_percentile": 80,
     "slg_percentile": 75,
     "ops_percentile": 78,
@@ -2665,12 +2665,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 71,
+    "avg_percentile": 72,
     "obp_percentile": 76,
     "slg_percentile": 77,
     "ops_percentile": 77,
     "k_pct_percentile": 53,
-    "bb_pct_percentile": 71
+    "bb_pct_percentile": 70
   },
   {
     "player_id": 668904,
@@ -2937,7 +2937,7 @@
     "chase_rate": null,
     "avg_percentile": 62,
     "obp_percentile": 54,
-    "slg_percentile": 80,
+    "slg_percentile": 81,
     "ops_percentile": 75,
     "k_pct_percentile": 68,
     "bb_pct_percentile": 42
@@ -3070,7 +3070,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 62,
+    "avg_percentile": 61,
     "obp_percentile": 86,
     "slg_percentile": 66,
     "ops_percentile": 74,
@@ -3205,9 +3205,9 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 49,
+    "avg_percentile": 50,
     "obp_percentile": 48,
-    "slg_percentile": 79,
+    "slg_percentile": 80,
     "ops_percentile": 72,
     "k_pct_percentile": 64,
     "bb_pct_percentile": 60
@@ -3287,11 +3287,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 58,
-    "obp_percentile": 70,
+    "obp_percentile": 71,
     "slg_percentile": 72,
     "ops_percentile": 72,
     "k_pct_percentile": 43,
-    "bb_pct_percentile": 83
+    "bb_pct_percentile": 82
   },
   {
     "player_id": 608369,
@@ -3422,7 +3422,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 87,
-    "obp_percentile": 94,
+    "obp_percentile": 93,
     "slg_percentile": 50,
     "ops_percentile": 70,
     "k_pct_percentile": 93,
@@ -3506,7 +3506,7 @@
     "obp_percentile": 69,
     "slg_percentile": 70,
     "ops_percentile": 70,
-    "k_pct_percentile": 47,
+    "k_pct_percentile": 48,
     "bb_pct_percentile": 20
   },
   {
@@ -3611,7 +3611,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 58,
-    "obp_percentile": 96,
+    "obp_percentile": 95,
     "slg_percentile": 42,
     "ops_percentile": 69,
     "k_pct_percentile": 97,
@@ -3665,7 +3665,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 81,
-    "obp_percentile": 68,
+    "obp_percentile": 69,
     "slg_percentile": 69,
     "ops_percentile": 69,
     "k_pct_percentile": 50,
@@ -3718,39 +3718,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 40,
-    "obp_percentile": 68,
+    "avg_percentile": 41,
+    "obp_percentile": 69,
     "slg_percentile": 68,
     "ops_percentile": 68,
     "k_pct_percentile": 92,
     "bb_pct_percentile": 91
-  },
-  {
-    "player_id": 657757,
-    "name": "Gavin Sheets",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "position": "1B",
-    "avg": 0.242,
-    "obp": 0.277,
-    "slg": 0.484,
-    "ops": 0.761,
-    "k_pct": 24.6,
-    "bb_pct": 4.6,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 55,
-    "obp_percentile": 32,
-    "slg_percentile": 79,
-    "ops_percentile": 68,
-    "k_pct_percentile": 41,
-    "bb_pct_percentile": 21
   },
   {
     "player_id": 663656,
@@ -3776,7 +3749,7 @@
     "obp_percentile": 74,
     "slg_percentile": 64,
     "ops_percentile": 68,
-    "k_pct_percentile": 58,
+    "k_pct_percentile": 57,
     "bb_pct_percentile": 78
   },
   {
@@ -3802,7 +3775,7 @@
     "avg_percentile": 91,
     "obp_percentile": 80,
     "slg_percentile": 60,
-    "ops_percentile": 67,
+    "ops_percentile": 68,
     "k_pct_percentile": 75,
     "bb_pct_percentile": 50
   },
@@ -3885,7 +3858,7 @@
     "slg_percentile": 73,
     "ops_percentile": 67,
     "k_pct_percentile": 67,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 69
   },
   {
     "player_id": 666176,
@@ -3910,7 +3883,7 @@
     "avg_percentile": 81,
     "obp_percentile": 63,
     "slg_percentile": 67,
-    "ops_percentile": 66,
+    "ops_percentile": 67,
     "k_pct_percentile": 68,
     "bb_pct_percentile": 12
   },
@@ -3934,7 +3907,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 71,
+    "avg_percentile": 72,
     "obp_percentile": 63,
     "slg_percentile": 67,
     "ops_percentile": 66,
@@ -3965,7 +3938,7 @@
     "obp_percentile": 80,
     "slg_percentile": 58,
     "ops_percentile": 66,
-    "k_pct_percentile": 60,
+    "k_pct_percentile": 59,
     "bb_pct_percentile": 87
   },
   {
@@ -3989,7 +3962,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 86,
-    "obp_percentile": 45,
+    "obp_percentile": 44,
     "slg_percentile": 73,
     "ops_percentile": 66,
     "k_pct_percentile": 40,
@@ -4021,6 +3994,33 @@
     "ops_percentile": 66,
     "k_pct_percentile": 97,
     "bb_pct_percentile": 15
+  },
+  {
+    "player_id": 657757,
+    "name": "Gavin Sheets",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "position": "1B",
+    "avg": 0.238,
+    "obp": 0.273,
+    "slg": 0.476,
+    "ops": 0.749,
+    "k_pct": 24.2,
+    "bb_pct": 4.5,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 52,
+    "obp_percentile": 29,
+    "slg_percentile": 78,
+    "ops_percentile": 66,
+    "k_pct_percentile": 41,
+    "bb_pct_percentile": 20
   },
   {
     "player_id": 592663,
@@ -4127,7 +4127,7 @@
     "obp_percentile": 65,
     "slg_percentile": 64,
     "ops_percentile": 65,
-    "k_pct_percentile": 45,
+    "k_pct_percentile": 46,
     "bb_pct_percentile": 87
   },
   {
@@ -4154,7 +4154,7 @@
     "obp_percentile": 57,
     "slg_percentile": 65,
     "ops_percentile": 64,
-    "k_pct_percentile": 58,
+    "k_pct_percentile": 57,
     "bb_pct_percentile": 40
   },
   {
@@ -4313,11 +4313,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 43,
-    "obp_percentile": 64,
+    "obp_percentile": 63,
     "slg_percentile": 62,
     "ops_percentile": 63,
     "k_pct_percentile": 94,
-    "bb_pct_percentile": 71
+    "bb_pct_percentile": 70
   },
   {
     "player_id": 656305,
@@ -4479,7 +4479,7 @@
     "slg_percentile": 57,
     "ops_percentile": 61,
     "k_pct_percentile": 41,
-    "bb_pct_percentile": 76
+    "bb_pct_percentile": 75
   },
   {
     "player_id": 695657,
@@ -4503,7 +4503,7 @@
     "chase_rate": null,
     "avg_percentile": 28,
     "obp_percentile": 48,
-    "slg_percentile": 67,
+    "slg_percentile": 68,
     "ops_percentile": 61,
     "k_pct_percentile": 17,
     "bb_pct_percentile": 57
@@ -4636,7 +4636,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 57,
+    "avg_percentile": 56,
     "obp_percentile": 82,
     "slg_percentile": 46,
     "ops_percentile": 60,
@@ -4667,7 +4667,7 @@
     "obp_percentile": 84,
     "slg_percentile": 42,
     "ops_percentile": 60,
-    "k_pct_percentile": 45,
+    "k_pct_percentile": 46,
     "bb_pct_percentile": 42
   },
   {
@@ -4696,6 +4696,33 @@
     "ops_percentile": 60,
     "k_pct_percentile": 4,
     "bb_pct_percentile": 31
+  },
+  {
+    "player_id": 687093,
+    "name": "Vaughn Grissom",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "position": "2B",
+    "avg": 0.267,
+    "obp": 0.45,
+    "slg": 0.267,
+    "ops": 0.717,
+    "k_pct": 4.8,
+    "bb_pct": 23.8,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 71,
+    "obp_percentile": 97,
+    "slg_percentile": 26,
+    "ops_percentile": 59,
+    "k_pct_percentile": 98,
+    "bb_pct_percentile": 98
   },
   {
     "player_id": 664034,
@@ -4745,11 +4772,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 57,
-    "obp_percentile": 68,
+    "obp_percentile": 69,
     "slg_percentile": 55,
     "ops_percentile": 59,
     "k_pct_percentile": 68,
-    "bb_pct_percentile": 75
+    "bb_pct_percentile": 74
   },
   {
     "player_id": 671056,
@@ -4801,7 +4828,7 @@
     "avg_percentile": 79,
     "obp_percentile": 36,
     "slg_percentile": 70,
-    "ops_percentile": 59,
+    "ops_percentile": 58,
     "k_pct_percentile": 4,
     "bb_pct_percentile": 0
   },
@@ -4828,7 +4855,7 @@
     "avg_percentile": 79,
     "obp_percentile": 36,
     "slg_percentile": 70,
-    "ops_percentile": 59,
+    "ops_percentile": 58,
     "k_pct_percentile": 85,
     "bb_pct_percentile": 0
   },
@@ -4879,7 +4906,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 49,
+    "avg_percentile": 50,
     "obp_percentile": 41,
     "slg_percentile": 67,
     "ops_percentile": 58,
@@ -4936,7 +4963,7 @@
     "avg_percentile": 65,
     "obp_percentile": 43,
     "slg_percentile": 65,
-    "ops_percentile": 58,
+    "ops_percentile": 57,
     "k_pct_percentile": 56,
     "bb_pct_percentile": 29
   },
@@ -4993,33 +5020,6 @@
     "ops_percentile": 57,
     "k_pct_percentile": 24,
     "bb_pct_percentile": 40
-  },
-  {
-    "player_id": 701538,
-    "name": "Jackson Merrill",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "position": "CF",
-    "avg": 0.235,
-    "obp": 0.287,
-    "slg": 0.42,
-    "ops": 0.707,
-    "k_pct": 20.5,
-    "bb_pct": 6.8,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 50,
-    "obp_percentile": 37,
-    "slg_percentile": 68,
-    "ops_percentile": 57,
-    "k_pct_percentile": 60,
-    "bb_pct_percentile": 38
   },
   {
     "player_id": 656555,
@@ -5150,11 +5150,38 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 79,
-    "obp_percentile": 54,
+    "obp_percentile": 53,
     "slg_percentile": 59,
     "ops_percentile": 56,
     "k_pct_percentile": 78,
     "bb_pct_percentile": 26
+  },
+  {
+    "player_id": 701538,
+    "name": "Jackson Merrill",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "position": "CF",
+    "avg": 0.232,
+    "obp": 0.284,
+    "slg": 0.415,
+    "ops": 0.699,
+    "k_pct": 20.2,
+    "bb_pct": 6.7,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 48,
+    "obp_percentile": 36,
+    "slg_percentile": 67,
+    "ops_percentile": 56,
+    "k_pct_percentile": 61,
+    "bb_pct_percentile": 36
   },
   {
     "player_id": 543309,
@@ -5286,9 +5313,9 @@
     "chase_rate": null,
     "avg_percentile": 67,
     "obp_percentile": 68,
-    "slg_percentile": 49,
-    "ops_percentile": 55,
-    "k_pct_percentile": 45,
+    "slg_percentile": 48,
+    "ops_percentile": 54,
+    "k_pct_percentile": 46,
     "bb_pct_percentile": 68
   },
   {
@@ -5339,9 +5366,9 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 51,
-    "obp_percentile": 67,
+    "obp_percentile": 68,
     "slg_percentile": 48,
-    "ops_percentile": 54,
+    "ops_percentile": 53,
     "k_pct_percentile": 34,
     "bb_pct_percentile": 78
   },
@@ -5368,7 +5395,7 @@
     "avg_percentile": 49,
     "obp_percentile": 39,
     "slg_percentile": 62,
-    "ops_percentile": 54,
+    "ops_percentile": 53,
     "k_pct_percentile": 76,
     "bb_pct_percentile": 31
   },
@@ -5394,8 +5421,8 @@
     "chase_rate": null,
     "avg_percentile": 46,
     "obp_percentile": 31,
-    "slg_percentile": 67,
-    "ops_percentile": 54,
+    "slg_percentile": 68,
+    "ops_percentile": 53,
     "k_pct_percentile": 14,
     "bb_pct_percentile": 16
   },
@@ -5452,33 +5479,6 @@
     "ops_percentile": 53,
     "k_pct_percentile": 97,
     "bb_pct_percentile": 10
-  },
-  {
-    "player_id": 687093,
-    "name": "Vaughn Grissom",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "position": "2B",
-    "avg": 0.267,
-    "obp": 0.421,
-    "slg": 0.267,
-    "ops": 0.688,
-    "k_pct": 5.0,
-    "bb_pct": 20.0,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 71,
-    "obp_percentile": 93,
-    "slg_percentile": 26,
-    "ops_percentile": 53,
-    "k_pct_percentile": 98,
-    "bb_pct_percentile": 96
   },
   {
     "player_id": 681198,
@@ -5581,7 +5581,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 62,
+    "avg_percentile": 61,
     "obp_percentile": 48,
     "slg_percentile": 56,
     "ops_percentile": 52,
@@ -5663,7 +5663,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 63,
-    "obp_percentile": 45,
+    "obp_percentile": 44,
     "slg_percentile": 57,
     "ops_percentile": 51,
     "k_pct_percentile": 19,
@@ -5724,6 +5724,33 @@
     "bb_pct_percentile": 54
   },
   {
+    "player_id": 660162,
+    "name": "Yoán Moncada",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "position": "3B",
+    "avg": 0.177,
+    "obp": 0.32,
+    "slg": 0.355,
+    "ops": 0.675,
+    "k_pct": 34.7,
+    "bb_pct": 14.7,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 20,
+    "obp_percentile": 53,
+    "slg_percentile": 50,
+    "ops_percentile": 51,
+    "k_pct_percentile": 13,
+    "bb_pct_percentile": 84
+  },
+  {
     "player_id": 677951,
     "name": "Bobby Witt Jr.",
     "team": "KC",
@@ -5746,7 +5773,7 @@
     "avg_percentile": 70,
     "obp_percentile": 66,
     "slg_percentile": 42,
-    "ops_percentile": 51,
+    "ops_percentile": 50,
     "k_pct_percentile": 63,
     "bb_pct_percentile": 66
   },
@@ -5797,7 +5824,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 40,
+    "avg_percentile": 41,
     "obp_percentile": 33,
     "slg_percentile": 61,
     "ops_percentile": 50,
@@ -5828,7 +5855,7 @@
     "obp_percentile": 51,
     "slg_percentile": 50,
     "ops_percentile": 50,
-    "k_pct_percentile": 46,
+    "k_pct_percentile": 47,
     "bb_pct_percentile": 57
   },
   {
@@ -5855,7 +5882,7 @@
     "obp_percentile": 57,
     "slg_percentile": 45,
     "ops_percentile": 50,
-    "k_pct_percentile": 47,
+    "k_pct_percentile": 48,
     "bb_pct_percentile": 92
   },
   {
@@ -5933,7 +5960,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 53,
-    "obp_percentile": 26,
+    "obp_percentile": 25,
     "slg_percentile": 62,
     "ops_percentile": 49,
     "k_pct_percentile": 48,
@@ -5962,8 +5989,8 @@
     "avg_percentile": 53,
     "obp_percentile": 55,
     "slg_percentile": 45,
-    "ops_percentile": 49,
-    "k_pct_percentile": 60,
+    "ops_percentile": 48,
+    "k_pct_percentile": 59,
     "bb_pct_percentile": 64
   },
   {
@@ -5987,9 +6014,9 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 30,
-    "obp_percentile": 67,
+    "obp_percentile": 68,
     "slg_percentile": 41,
-    "ops_percentile": 49,
+    "ops_percentile": 48,
     "k_pct_percentile": 61,
     "bb_pct_percentile": 95
   },
@@ -6097,7 +6124,7 @@
     "avg_percentile": 43,
     "obp_percentile": 39,
     "slg_percentile": 53,
-    "ops_percentile": 48,
+    "ops_percentile": 47,
     "k_pct_percentile": 22,
     "bb_pct_percentile": 58
   },
@@ -6152,7 +6179,7 @@
     "obp_percentile": 39,
     "slg_percentile": 52,
     "ops_percentile": 47,
-    "k_pct_percentile": 46,
+    "k_pct_percentile": 47,
     "bb_pct_percentile": 47
   },
   {
@@ -6177,37 +6204,10 @@
     "chase_rate": null,
     "avg_percentile": 51,
     "obp_percentile": 71,
-    "slg_percentile": 36,
+    "slg_percentile": 35,
     "ops_percentile": 47,
     "k_pct_percentile": 73,
     "bb_pct_percentile": 87
-  },
-  {
-    "player_id": 660162,
-    "name": "Yoán Moncada",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "position": "3B",
-    "avg": 0.164,
-    "obp": 0.311,
-    "slg": 0.344,
-    "ops": 0.655,
-    "k_pct": 35.1,
-    "bb_pct": 14.9,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 17,
-    "obp_percentile": 50,
-    "slg_percentile": 46,
-    "ops_percentile": 47,
-    "k_pct_percentile": 12,
-    "bb_pct_percentile": 86
   },
   {
     "player_id": 665161,
@@ -6230,11 +6230,38 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 63,
-    "obp_percentile": 45,
+    "obp_percentile": 44,
     "slg_percentile": 49,
     "ops_percentile": 47,
     "k_pct_percentile": 88,
     "bb_pct_percentile": 34
+  },
+  {
+    "player_id": 665487,
+    "name": "Fernando Tatis Jr.",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "position": "RF",
+    "avg": 0.253,
+    "obp": 0.344,
+    "slg": 0.307,
+    "ops": 0.651,
+    "k_pct": 22.0,
+    "bb_pct": 12.1,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 61,
+    "obp_percentile": 66,
+    "slg_percentile": 38,
+    "ops_percentile": 46,
+    "k_pct_percentile": 52,
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 694377,
@@ -6256,7 +6283,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 57,
+    "avg_percentile": 56,
     "obp_percentile": 70,
     "slg_percentile": 35,
     "ops_percentile": 46,
@@ -6337,7 +6364,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 49,
+    "avg_percentile": 50,
     "obp_percentile": 34,
     "slg_percentile": 52,
     "ops_percentile": 45,
@@ -6421,7 +6448,7 @@
     "avg_percentile": 53,
     "obp_percentile": 28,
     "slg_percentile": 56,
-    "ops_percentile": 45,
+    "ops_percentile": 44,
     "k_pct_percentile": 52,
     "bb_pct_percentile": 16
   },
@@ -6447,8 +6474,8 @@
     "chase_rate": null,
     "avg_percentile": 46,
     "obp_percentile": 38,
-    "slg_percentile": 50,
-    "ops_percentile": 45,
+    "slg_percentile": 49,
+    "ops_percentile": 44,
     "k_pct_percentile": 21,
     "bb_pct_percentile": 42
   },
@@ -6472,7 +6499,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 71,
+    "avg_percentile": 72,
     "obp_percentile": 69,
     "slg_percentile": 31,
     "ops_percentile": 44,
@@ -6556,7 +6583,7 @@
     "avg_percentile": 46,
     "obp_percentile": 55,
     "slg_percentile": 40,
-    "ops_percentile": 44,
+    "ops_percentile": 43,
     "k_pct_percentile": 94,
     "bb_pct_percentile": 76
   },
@@ -6583,9 +6610,9 @@
     "avg_percentile": 45,
     "obp_percentile": 57,
     "slg_percentile": 37,
-    "ops_percentile": 44,
+    "ops_percentile": 43,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 82
+    "bb_pct_percentile": 81
   },
   {
     "player_id": 668715,
@@ -6613,33 +6640,6 @@
     "ops_percentile": 43,
     "k_pct_percentile": 26,
     "bb_pct_percentile": 19
-  },
-  {
-    "player_id": 665487,
-    "name": "Fernando Tatis Jr.",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "position": "RF",
-    "avg": 0.243,
-    "obp": 0.337,
-    "slg": 0.297,
-    "ops": 0.634,
-    "k_pct": 22.2,
-    "bb_pct": 12.2,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 56,
-    "obp_percentile": 63,
-    "slg_percentile": 33,
-    "ops_percentile": 43,
-    "k_pct_percentile": 51,
-    "bb_pct_percentile": 72
   },
   {
     "player_id": 543510,
@@ -6717,7 +6717,7 @@
     "chase_rate": null,
     "avg_percentile": 47,
     "obp_percentile": 31,
-    "slg_percentile": 50,
+    "slg_percentile": 49,
     "ops_percentile": 42,
     "k_pct_percentile": 88,
     "bb_pct_percentile": 29
@@ -6858,33 +6858,6 @@
     "bb_pct_percentile": 62
   },
   {
-    "player_id": 681351,
-    "name": "Logan O'Hoppe",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "position": "C",
-    "avg": 0.217,
-    "obp": 0.342,
-    "slg": 0.283,
-    "ops": 0.625,
-    "k_pct": 19.2,
-    "bb_pct": 12.3,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 41,
-    "obp_percentile": 65,
-    "slg_percentile": 28,
-    "ops_percentile": 41,
-    "k_pct_percentile": 66,
-    "bb_pct_percentile": 73
-  },
-  {
     "player_id": 805779,
     "name": "Jacob Wilson",
     "team": "ATH",
@@ -6905,7 +6878,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 63,
-    "obp_percentile": 26,
+    "obp_percentile": 25,
     "slg_percentile": 52,
     "ops_percentile": 41,
     "k_pct_percentile": 89,
@@ -7016,7 +6989,7 @@
     "obp_percentile": 53,
     "slg_percentile": 34,
     "ops_percentile": 40,
-    "k_pct_percentile": 47,
+    "k_pct_percentile": 48,
     "bb_pct_percentile": 54
   },
   {
@@ -7074,6 +7047,33 @@
     "bb_pct_percentile": 27
   },
   {
+    "player_id": 681351,
+    "name": "Logan O'Hoppe",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "position": "C",
+    "avg": 0.213,
+    "obp": 0.338,
+    "slg": 0.279,
+    "ops": 0.617,
+    "k_pct": 20.3,
+    "bb_pct": 12.2,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 39,
+    "obp_percentile": 63,
+    "slg_percentile": 28,
+    "ops_percentile": 39,
+    "k_pct_percentile": 60,
+    "bb_pct_percentile": 72
+  },
+  {
     "player_id": 667472,
     "name": "Dane Myers",
     "team": "CIN",
@@ -7094,7 +7094,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 72,
-    "obp_percentile": 67,
+    "obp_percentile": 68,
     "slg_percentile": 26,
     "ops_percentile": 39,
     "k_pct_percentile": 74,
@@ -7337,7 +7337,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 63,
-    "obp_percentile": 53,
+    "obp_percentile": 52,
     "slg_percentile": 29,
     "ops_percentile": 37,
     "k_pct_percentile": 41,
@@ -7472,7 +7472,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 14,
-    "obp_percentile": 37,
+    "obp_percentile": 38,
     "slg_percentile": 37,
     "ops_percentile": 36,
     "k_pct_percentile": 74,
@@ -7635,7 +7635,7 @@
     "chase_rate": null,
     "avg_percentile": 29,
     "obp_percentile": 44,
-    "slg_percentile": 28,
+    "slg_percentile": 29,
     "ops_percentile": 34,
     "k_pct_percentile": 10,
     "bb_pct_percentile": 66
@@ -7827,7 +7827,7 @@
     "slg_percentile": 28,
     "ops_percentile": 33,
     "k_pct_percentile": 31,
-    "bb_pct_percentile": 80
+    "bb_pct_percentile": 79
   },
   {
     "player_id": 543760,
@@ -7958,7 +7958,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 27,
-    "obp_percentile": 64,
+    "obp_percentile": 63,
     "slg_percentile": 20,
     "ops_percentile": 32,
     "k_pct_percentile": 28,
@@ -8235,6 +8235,33 @@
     "bb_pct_percentile": 96
   },
   {
+    "player_id": 666023,
+    "name": "Freddy Fermin",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "position": "C",
+    "avg": 0.182,
+    "obp": 0.317,
+    "slg": 0.242,
+    "ops": 0.559,
+    "k_pct": 22.0,
+    "bb_pct": 14.6,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 22,
+    "obp_percentile": 52,
+    "slg_percentile": 20,
+    "ops_percentile": 29,
+    "k_pct_percentile": 52,
+    "bb_pct_percentile": 84
+  },
+  {
     "player_id": 680574,
     "name": "Matt McLain",
     "team": "CIN",
@@ -8311,7 +8338,7 @@
     "avg_percentile": 28,
     "obp_percentile": 55,
     "slg_percentile": 18,
-    "ops_percentile": 29,
+    "ops_percentile": 28,
     "k_pct_percentile": 11,
     "bb_pct_percentile": 89
   },
@@ -8335,7 +8362,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 20,
+    "avg_percentile": 19,
     "obp_percentile": 23,
     "slg_percentile": 32,
     "ops_percentile": 28,
@@ -8446,7 +8473,7 @@
     "avg_percentile": 45,
     "obp_percentile": 15,
     "slg_percentile": 41,
-    "ops_percentile": 28,
+    "ops_percentile": 27,
     "k_pct_percentile": 81,
     "bb_pct_percentile": 0
   },
@@ -8530,33 +8557,6 @@
     "ops_percentile": 26,
     "k_pct_percentile": 24,
     "bb_pct_percentile": 30
-  },
-  {
-    "player_id": 666023,
-    "name": "Freddy Fermin",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "position": "C",
-    "avg": 0.182,
-    "obp": 0.3,
-    "slg": 0.242,
-    "ops": 0.542,
-    "k_pct": 22.5,
-    "bb_pct": 12.5,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 22,
-    "obp_percentile": 43,
-    "slg_percentile": 20,
-    "ops_percentile": 26,
-    "k_pct_percentile": 49,
-    "bb_pct_percentile": 73
   },
   {
     "player_id": 656976,
@@ -8663,7 +8663,7 @@
     "obp_percentile": 16,
     "slg_percentile": 38,
     "ops_percentile": 26,
-    "k_pct_percentile": 45,
+    "k_pct_percentile": 46,
     "bb_pct_percentile": 0
   },
   {
@@ -8850,7 +8850,7 @@
     "chase_rate": null,
     "avg_percentile": 9,
     "obp_percentile": 16,
-    "slg_percentile": 34,
+    "slg_percentile": 33,
     "ops_percentile": 24,
     "k_pct_percentile": 33,
     "bb_pct_percentile": 65
@@ -8956,11 +8956,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 18,
+    "avg_percentile": 17,
     "obp_percentile": 19,
     "slg_percentile": 28,
     "ops_percentile": 23,
-    "k_pct_percentile": 58,
+    "k_pct_percentile": 57,
     "bb_pct_percentile": 53
   },
   {
@@ -8983,7 +8983,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 19,
+    "avg_percentile": 18,
     "obp_percentile": 22,
     "slg_percentile": 25,
     "ops_percentile": 23,
@@ -9065,10 +9065,10 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 22,
-    "obp_percentile": 29,
+    "obp_percentile": 28,
     "slg_percentile": 20,
     "ops_percentile": 22,
-    "k_pct_percentile": 58,
+    "k_pct_percentile": 57,
     "bb_pct_percentile": 62
   },
   {
@@ -9284,7 +9284,7 @@
     "obp_percentile": 9,
     "slg_percentile": 34,
     "ops_percentile": 20,
-    "k_pct_percentile": 13,
+    "k_pct_percentile": 12,
     "bb_pct_percentile": 0
   },
   {
@@ -9366,7 +9366,7 @@
     "slg_percentile": 17,
     "ops_percentile": 20,
     "k_pct_percentile": 51,
-    "bb_pct_percentile": 75
+    "bb_pct_percentile": 74
   },
   {
     "player_id": 688363,
@@ -9531,6 +9531,33 @@
     "bb_pct_percentile": 17
   },
   {
+    "player_id": 630105,
+    "name": "Jake Cronenworth",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "position": "2B",
+    "avg": 0.152,
+    "obp": 0.273,
+    "slg": 0.212,
+    "ops": 0.485,
+    "k_pct": 20.8,
+    "bb_pct": 13.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 13,
+    "obp_percentile": 29,
+    "slg_percentile": 15,
+    "ops_percentile": 18,
+    "k_pct_percentile": 58,
+    "bb_pct_percentile": 77
+  },
+  {
     "player_id": 682641,
     "name": "Luis Matos",
     "team": "MIL",
@@ -9631,7 +9658,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 20,
+    "avg_percentile": 19,
     "obp_percentile": 19,
     "slg_percentile": 19,
     "ops_percentile": 17,
@@ -9689,7 +9716,7 @@
     "obp_percentile": 28,
     "slg_percentile": 14,
     "ops_percentile": 17,
-    "k_pct_percentile": 45,
+    "k_pct_percentile": 46,
     "bb_pct_percentile": 0
   },
   {
@@ -9739,11 +9766,11 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 21,
+    "avg_percentile": 20,
     "obp_percentile": 35,
     "slg_percentile": 10,
     "ops_percentile": 16,
-    "k_pct_percentile": 60,
+    "k_pct_percentile": 59,
     "bb_pct_percentile": 65
   },
   {
@@ -9766,39 +9793,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 21,
+    "avg_percentile": 20,
     "obp_percentile": 35,
     "slg_percentile": 10,
     "ops_percentile": 16,
     "k_pct_percentile": 64,
     "bb_pct_percentile": 66
-  },
-  {
-    "player_id": 630105,
-    "name": "Jake Cronenworth",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "position": "2B",
-    "avg": 0.152,
-    "obp": 0.263,
-    "slg": 0.212,
-    "ops": 0.475,
-    "k_pct": 21.1,
-    "bb_pct": 11.8,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 13,
-    "obp_percentile": 25,
-    "slg_percentile": 15,
-    "ops_percentile": 16,
-    "k_pct_percentile": 58,
-    "bb_pct_percentile": 69
   },
   {
     "player_id": 681297,
@@ -10252,7 +10252,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 20,
+    "avg_percentile": 19,
     "obp_percentile": 17,
     "slg_percentile": 10,
     "ops_percentile": 12,
@@ -10414,7 +10414,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 20,
+    "avg_percentile": 19,
     "obp_percentile": 6,
     "slg_percentile": 19,
     "ops_percentile": 11,
@@ -10472,7 +10472,7 @@
     "obp_percentile": 7,
     "slg_percentile": 16,
     "ops_percentile": 10,
-    "k_pct_percentile": 60,
+    "k_pct_percentile": 59,
     "bb_pct_percentile": 38
   },
   {
@@ -10662,7 +10662,7 @@
     "slg_percentile": 7,
     "ops_percentile": 9,
     "k_pct_percentile": 78,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 69
   },
   {
     "player_id": 641598,
@@ -11418,7 +11418,7 @@
     "slg_percentile": 0,
     "ops_percentile": 2,
     "k_pct_percentile": 43,
-    "bb_pct_percentile": 83
+    "bb_pct_percentile": 82
   },
   {
     "player_id": 681546,
