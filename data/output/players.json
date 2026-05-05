@@ -532,7 +532,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 97,
+    "avg_percentile": 96,
     "obp_percentile": 89,
     "slg_percentile": 96,
     "ops_percentile": 96,
@@ -966,7 +966,7 @@
     "chase_rate": null,
     "avg_percentile": 90,
     "obp_percentile": 90,
-    "slg_percentile": 93,
+    "slg_percentile": 92,
     "ops_percentile": 92,
     "k_pct_percentile": 6,
     "bb_pct_percentile": 77
@@ -1047,10 +1047,37 @@
     "chase_rate": null,
     "avg_percentile": 84,
     "obp_percentile": 92,
-    "slg_percentile": 90,
+    "slg_percentile": 91,
     "ops_percentile": 92,
     "k_pct_percentile": 74,
     "bb_pct_percentile": 76
+  },
+  {
+    "player_id": 642086,
+    "name": "Dominic Smith",
+    "team": "ATL",
+    "team_name": "Atlanta Braves",
+    "division": "National League East",
+    "position": "DH",
+    "avg": 0.343,
+    "obp": 0.375,
+    "slg": 0.552,
+    "ops": 0.927,
+    "k_pct": 12.3,
+    "bb_pct": 4.1,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 97,
+    "obp_percentile": 83,
+    "slg_percentile": 92,
+    "ops_percentile": 91,
+    "k_pct_percentile": 91,
+    "bb_pct_percentile": 16
   },
   {
     "player_id": 686948,
@@ -1059,12 +1086,12 @@
     "team_name": "Atlanta Braves",
     "division": "National League East",
     "position": "C",
-    "avg": 0.315,
-    "obp": 0.394,
-    "slg": 0.534,
-    "ops": 0.928,
-    "k_pct": 19.4,
-    "bb_pct": 9.7,
+    "avg": 0.313,
+    "obp": 0.392,
+    "slg": 0.531,
+    "ops": 0.923,
+    "k_pct": 19.3,
+    "bb_pct": 9.6,
     "avg_exit_velocity": null,
     "hard_hit_pct": null,
     "xba": null,
@@ -1072,12 +1099,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 91,
-    "obp_percentile": 90,
+    "avg_percentile": 90,
+    "obp_percentile": 89,
     "slg_percentile": 90,
     "ops_percentile": 91,
     "k_pct_percentile": 64,
-    "bb_pct_percentile": 62
+    "bb_pct_percentile": 61
   },
   {
     "player_id": 673962,
@@ -1132,33 +1159,6 @@
     "ops_percentile": 91,
     "k_pct_percentile": 82,
     "bb_pct_percentile": 98
-  },
-  {
-    "player_id": 642086,
-    "name": "Dominic Smith",
-    "team": "ATL",
-    "team_name": "Atlanta Braves",
-    "division": "National League East",
-    "position": "DH",
-    "avg": 0.333,
-    "obp": 0.366,
-    "slg": 0.545,
-    "ops": 0.911,
-    "k_pct": 12.5,
-    "bb_pct": 4.2,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 94,
-    "obp_percentile": 79,
-    "slg_percentile": 92,
-    "ops_percentile": 90,
-    "k_pct_percentile": 91,
-    "bb_pct_percentile": 17
   },
   {
     "player_id": 682829,
@@ -1667,7 +1667,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 89,
-    "obp_percentile": 89,
+    "obp_percentile": 90,
     "slg_percentile": 82,
     "ops_percentile": 87,
     "k_pct_percentile": 64,
@@ -1802,7 +1802,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 75,
-    "obp_percentile": 80,
+    "obp_percentile": 79,
     "slg_percentile": 85,
     "ops_percentile": 86,
     "k_pct_percentile": 87,
@@ -2234,7 +2234,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 85,
-    "obp_percentile": 83,
+    "obp_percentile": 82,
     "slg_percentile": 80,
     "ops_percentile": 82,
     "k_pct_percentile": 62,
@@ -2288,7 +2288,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 78,
-    "obp_percentile": 89,
+    "obp_percentile": 90,
     "slg_percentile": 74,
     "ops_percentile": 82,
     "k_pct_percentile": 61,
@@ -2345,7 +2345,7 @@
     "obp_percentile": 85,
     "slg_percentile": 78,
     "ops_percentile": 81,
-    "k_pct_percentile": 66,
+    "k_pct_percentile": 67,
     "bb_pct_percentile": 75
   },
   {
@@ -2372,7 +2372,7 @@
     "obp_percentile": 95,
     "slg_percentile": 66,
     "ops_percentile": 81,
-    "k_pct_percentile": 69,
+    "k_pct_percentile": 70,
     "bb_pct_percentile": 97
   },
   {
@@ -2453,7 +2453,7 @@
     "obp_percentile": 49,
     "slg_percentile": 88,
     "ops_percentile": 80,
-    "k_pct_percentile": 64,
+    "k_pct_percentile": 63,
     "bb_pct_percentile": 43
   },
   {
@@ -2719,12 +2719,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 43,
+    "avg_percentile": 44,
     "obp_percentile": 66,
     "slg_percentile": 83,
     "ops_percentile": 78,
     "k_pct_percentile": 27,
-    "bb_pct_percentile": 62
+    "bb_pct_percentile": 63
   },
   {
     "player_id": 669016,
@@ -2993,7 +2993,7 @@
     "obp_percentile": 51,
     "slg_percentile": 84,
     "ops_percentile": 76,
-    "k_pct_percentile": 66,
+    "k_pct_percentile": 67,
     "bb_pct_percentile": 13
   },
   {
@@ -3125,7 +3125,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 73,
-    "obp_percentile": 80,
+    "obp_percentile": 79,
     "slg_percentile": 72,
     "ops_percentile": 75,
     "k_pct_percentile": 47,
@@ -3290,7 +3290,7 @@
     "obp_percentile": 52,
     "slg_percentile": 81,
     "ops_percentile": 74,
-    "k_pct_percentile": 66,
+    "k_pct_percentile": 67,
     "bb_pct_percentile": 29
   },
   {
@@ -3884,7 +3884,7 @@
     "obp_percentile": 86,
     "slg_percentile": 51,
     "ops_percentile": 69,
-    "k_pct_percentile": 69,
+    "k_pct_percentile": 70,
     "bb_pct_percentile": 32
   },
   {
@@ -4613,7 +4613,7 @@
     "obp_percentile": 75,
     "slg_percentile": 52,
     "ops_percentile": 63,
-    "k_pct_percentile": 64,
+    "k_pct_percentile": 63,
     "bb_pct_percentile": 59
   },
   {
@@ -5666,7 +5666,7 @@
     "obp_percentile": 59,
     "slg_percentile": 53,
     "ops_percentile": 55,
-    "k_pct_percentile": 66,
+    "k_pct_percentile": 67,
     "bb_pct_percentile": 59
   },
   {
@@ -5825,7 +5825,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 31,
-    "obp_percentile": 80,
+    "obp_percentile": 79,
     "slg_percentile": 38,
     "ops_percentile": 53,
     "k_pct_percentile": 85,
@@ -6503,7 +6503,7 @@
     "obp_percentile": 47,
     "slg_percentile": 51,
     "ops_percentile": 48,
-    "k_pct_percentile": 67,
+    "k_pct_percentile": 68,
     "bb_pct_percentile": 54
   },
   {
@@ -6769,7 +6769,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 43,
+    "avg_percentile": 44,
     "obp_percentile": 50,
     "slg_percentile": 44,
     "ops_percentile": 46,
@@ -7070,7 +7070,7 @@
     "obp_percentile": 68,
     "slg_percentile": 33,
     "ops_percentile": 44,
-    "k_pct_percentile": 65,
+    "k_pct_percentile": 66,
     "bb_pct_percentile": 95
   },
   {
@@ -7260,7 +7260,7 @@
     "slg_percentile": 37,
     "ops_percentile": 42,
     "k_pct_percentile": 43,
-    "bb_pct_percentile": 62
+    "bb_pct_percentile": 63
   },
   {
     "player_id": 678391,
@@ -7555,36 +7555,9 @@
     "avg_percentile": 72,
     "obp_percentile": 71,
     "slg_percentile": 27,
-    "ops_percentile": 39,
+    "ops_percentile": 40,
     "k_pct_percentile": 53,
     "bb_pct_percentile": 55
-  },
-  {
-    "player_id": 642201,
-    "name": "Eli White",
-    "team": "ATL",
-    "team_name": "Atlanta Braves",
-    "division": "National League East",
-    "position": "LF",
-    "avg": 0.226,
-    "obp": 0.25,
-    "slg": 0.396,
-    "ops": 0.646,
-    "k_pct": 17.9,
-    "bb_pct": 3.6,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 43,
-    "obp_percentile": 18,
-    "slg_percentile": 58,
-    "ops_percentile": 39,
-    "k_pct_percentile": 72,
-    "bb_pct_percentile": 14
   },
   {
     "player_id": 683737,
@@ -7609,7 +7582,7 @@
     "avg_percentile": 34,
     "obp_percentile": 51,
     "slg_percentile": 37,
-    "ops_percentile": 39,
+    "ops_percentile": 40,
     "k_pct_percentile": 50,
     "bb_pct_percentile": 77
   },
@@ -7717,7 +7690,7 @@
     "avg_percentile": 58,
     "obp_percentile": 44,
     "slg_percentile": 38,
-    "ops_percentile": 38,
+    "ops_percentile": 39,
     "k_pct_percentile": 36,
     "bb_pct_percentile": 24
   },
@@ -7745,7 +7718,7 @@
     "obp_percentile": 41,
     "slg_percentile": 40,
     "ops_percentile": 38,
-    "k_pct_percentile": 67,
+    "k_pct_percentile": 68,
     "bb_pct_percentile": 66
   },
   {
@@ -7825,7 +7798,7 @@
     "avg_percentile": 44,
     "obp_percentile": 24,
     "slg_percentile": 51,
-    "ops_percentile": 37,
+    "ops_percentile": 38,
     "k_pct_percentile": 10,
     "bb_pct_percentile": 26
   },
@@ -7850,9 +7823,9 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 37,
-    "obp_percentile": 17,
+    "obp_percentile": 18,
     "slg_percentile": 55,
-    "ops_percentile": 37,
+    "ops_percentile": 38,
     "k_pct_percentile": 19,
     "bb_pct_percentile": 13
   },
@@ -7882,6 +7855,33 @@
     "ops_percentile": 37,
     "k_pct_percentile": 88,
     "bb_pct_percentile": 75
+  },
+  {
+    "player_id": 642201,
+    "name": "Eli White",
+    "team": "ATL",
+    "team_name": "Atlanta Braves",
+    "division": "National League East",
+    "position": "LF",
+    "avg": 0.222,
+    "obp": 0.246,
+    "slg": 0.389,
+    "ops": 0.635,
+    "k_pct": 19.3,
+    "bb_pct": 3.5,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 42,
+    "obp_percentile": 17,
+    "slg_percentile": 56,
+    "ops_percentile": 37,
+    "k_pct_percentile": 64,
+    "bb_pct_percentile": 13
   },
   {
     "player_id": 650489,
@@ -8119,7 +8119,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 42,
+    "avg_percentile": 43,
     "obp_percentile": 34,
     "slg_percentile": 41,
     "ops_percentile": 35,
@@ -8285,7 +8285,7 @@
     "obp_percentile": 44,
     "slg_percentile": 31,
     "ops_percentile": 34,
-    "k_pct_percentile": 64,
+    "k_pct_percentile": 65,
     "bb_pct_percentile": 56
   },
   {
@@ -8717,7 +8717,7 @@
     "obp_percentile": 65,
     "slg_percentile": 17,
     "ops_percentile": 31,
-    "k_pct_percentile": 64,
+    "k_pct_percentile": 63,
     "bb_pct_percentile": 75
   },
   {
@@ -9037,7 +9037,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 42,
+    "avg_percentile": 43,
     "obp_percentile": 30,
     "slg_percentile": 27,
     "ops_percentile": 28,
@@ -9554,7 +9554,7 @@
     "obp_percentile": 57,
     "slg_percentile": 14,
     "ops_percentile": 24,
-    "k_pct_percentile": 67,
+    "k_pct_percentile": 68,
     "bb_pct_percentile": 82
   },
   {
@@ -9716,7 +9716,7 @@
     "obp_percentile": 58,
     "slg_percentile": 14,
     "ops_percentile": 22,
-    "k_pct_percentile": 65,
+    "k_pct_percentile": 66,
     "bb_pct_percentile": 77
   },
   {
@@ -9932,7 +9932,7 @@
     "obp_percentile": 37,
     "slg_percentile": 16,
     "ops_percentile": 21,
-    "k_pct_percentile": 67,
+    "k_pct_percentile": 68,
     "bb_pct_percentile": 42
   },
   {
@@ -10094,7 +10094,7 @@
     "obp_percentile": 21,
     "slg_percentile": 21,
     "ops_percentile": 20,
-    "k_pct_percentile": 65,
+    "k_pct_percentile": 66,
     "bb_pct_percentile": 50
   },
   {
@@ -10229,7 +10229,7 @@
     "obp_percentile": 17,
     "slg_percentile": 22,
     "ops_percentile": 18,
-    "k_pct_percentile": 71,
+    "k_pct_percentile": 72,
     "bb_pct_percentile": 49
   },
   {
