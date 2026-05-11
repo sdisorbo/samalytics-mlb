@@ -44,6 +44,33 @@ def _safe_float(val, default=None):
         return default
 
 
+# Savant's pitch-movement leaderboard reports horizontal break as an unsigned
+# magnitude. We sign it ourselves so the scatter plot shows arm-side vs
+# glove-side. Chart is in pitcher's perspective: +x = pitcher's right side
+# (3B side for a RHP). RHP arm-side break is to his right (+x); RHP glove-side
+# is to his left (−x). Mirror for LHP.
+_ARM_SIDE_PITCHES = {"FF", "SI", "FT", "CH", "FS", "FO", "SC"}
+_GLOVE_SIDE_PITCHES = {"FC", "SL", "ST", "SV", "SW", "CU", "KC", "CS"}
+
+
+def _sign_break_x(magnitude, pitch_type, pitch_hand):
+    """Apply sign to an unsigned horizontal-break magnitude."""
+    if magnitude is None:
+        return None
+    if pitch_type in _ARM_SIDE_PITCHES:
+        arm_side = True
+    elif pitch_type in _GLOVE_SIDE_PITCHES:
+        arm_side = False
+    else:
+        return magnitude  # knuckleball, eephus, unknown — leave unsigned
+    # RHP arm-side = +x; LHP arm-side = −x
+    if pitch_hand == "R":
+        return magnitude if arm_side else -magnitude
+    if pitch_hand == "L":
+        return -magnitude if arm_side else magnitude
+    return magnitude  # unknown hand — leave unsigned
+
+
 def _parse_name(row):
     """Parse 'Last, First' field into 'First Last'."""
     raw = row.get("last_name, first_name", "")
@@ -91,6 +118,7 @@ def fetch_pitcher_arsenal(season):
                 "avg_speed": _safe_float(r.get("avg_speed")),
                 "break_x": _safe_float(r.get("pitcher_break_x")),
                 "break_z": _safe_float(r.get("pitcher_break_z_induced")),
+                "pitch_hand": (r.get("pitch_hand") or "").strip().upper(),
             }
 
     # Group arsenal rows by pitcher
@@ -119,7 +147,7 @@ def fetch_pitcher_arsenal(season):
                 "hard_hit_pct": _safe_float(r.get("hard_hit_percent")),
                 "run_value_per_100": _safe_float(r.get("run_value_per_100")),
                 "avg_speed": mov.get("avg_speed"),
-                "break_x": mov.get("break_x"),
+                "break_x": _sign_break_x(mov.get("break_x"), pt, mov.get("pitch_hand")),
                 "break_z": mov.get("break_z"),
             }
         )
