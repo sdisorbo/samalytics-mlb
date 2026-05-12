@@ -144,17 +144,24 @@ function SceneContent({ pitch, target, angle, testMode, hideVelo, onPhaseChange 
   const [trail, setTrail] = useState<[number, number, number][]>([])
   const lastSampleRef = useRef<number>(0)
 
-  // Release point (in scene coords): RHP releases to scene -x, LHP to +x.
-  const releaseX = pitch.pitcher_hand === 'R' ? -1.8 : 1.8
+  // Coordinate note: the camera is at -z looking toward the mound at +z. With
+  // three.js's lookAt + default up, the camera's right-vector points to world
+  // -x. So world +x renders on SCREEN LEFT and world -x renders on SCREEN
+  // RIGHT. We anchor our convention to physical reality:
+  //   world +x = 3B side of field (pitcher's right)
+  //   world -x = 1B side of field
+  // RHP releases from his right hand (3B side, +x); LHP from his left (1B, -x).
+  const releaseX = pitch.pitcher_hand === 'R' ? 1.8 : -1.8
   const releaseY = 6.0
   const releasePos = useMemo(
     () => new THREE.Vector3(releaseX, releaseY, RELEASE_Z),
     [releaseX, releaseY],
   )
 
-  // Target point in scene coords (inches → feet, x already in catcher's-right convention)
+  // SVG zone click uses the catcher/broadcast convention: +svg_x = catcher's
+  // right = 1B side. Scene +x is 3B side, so we negate to map.
   const targetPos = useMemo(
-    () => new THREE.Vector3(target.x / 12, target.y / 12, 0),
+    () => new THREE.Vector3(-target.x / 12, target.y / 12, 0),
     [target.x, target.y],
   )
 
@@ -167,8 +174,9 @@ function SceneContent({ pitch, target, angle, testMode, hideVelo, onPhaseChange 
     return distFt / (mph * 1.467) // mph → ft/s
   }, [pitch.avg_speed, releasePos, targetPos])
 
-  // Break vector in scene coords. break_x_data is pitcher's-view (+x = pitcher's
-  // right = scene -x), so negate. break_z is induced vertical break (IVB):
+  // Break vector in scene coords. break_x_data is in pitcher's view where
+  // +x = pitcher's right = 3B side, which matches our scene +x directly — so
+  // NO sign flip is needed here. break_z is induced vertical break (IVB):
   //   IVB > 0 = ball drops LESS than a spinless pitch (4-seam ride)
   //   IVB < 0 = ball drops MORE than a spinless pitch (curveball)
   //
@@ -180,7 +188,7 @@ function SceneContent({ pitch, target, angle, testMode, hideVelo, onPhaseChange 
   const X_AMP = 2.2
   const Z_AMP_DOWN = 2.5
   const breakScene = useMemo(() => {
-    const bx_ft = -(pitch.break_x ?? 0) / 12
+    const bx_ft = (pitch.break_x ?? 0) / 12
     const bz_ft = (pitch.break_z ?? 0) / 12
     const zAmp = bz_ft < 0 ? Z_AMP_DOWN : 1.0
     return new THREE.Vector3(bx_ft * X_AMP, bz_ft * zAmp, 0)
@@ -206,9 +214,10 @@ function SceneContent({ pitch, target, angle, testMode, hideVelo, onPhaseChange 
   const camStart = useMemo(() => new THREE.Vector3(0, 4.8, -9), [])
   const camStartLook = useMemo(() => new THREE.Vector3(0, 2.2, 25), [])
   const camEnd = useMemo(() => {
+    // RHB stands on the 3B side of the plate (world +x in our scene).
     if (angle === 'center') return new THREE.Vector3(0, 5.6, -10)
-    if (angle === 'right') return new THREE.Vector3(-3.5, 5.8, -8)
-    return new THREE.Vector3(3.5, 5.8, -8)
+    if (angle === 'right') return new THREE.Vector3(3.5, 5.8, -8)
+    return new THREE.Vector3(-3.5, 5.8, -8)
   }, [angle])
   const camEndLook = useMemo(() => new THREE.Vector3(0, 2.4, 30), [])
 

@@ -178,7 +178,7 @@ const VIEW_W = VIEW_RIGHT - VIEW_LEFT
 const VIEW_H = VIEW_TOP - VIEW_BOTTOM
 
 interface PitchLocation {
-  x: number // inches from plate center, +x = catcher's right (3B side)
+  x: number // inches from plate center, +x = catcher's right (1B side)
   y: number // inches above ground
 }
 
@@ -671,7 +671,7 @@ v = (target − release + ½·g·T²·ŷ − breakScene) / T`}</Code>
         <Code>{`const X_AMP = 2.2           // all horizontal break
 const Z_AMP_DOWN = 2.5      // applied only when IVB < 0
 
-breakScene.x = -break_x / 12 * X_AMP
+breakScene.x = break_x / 12 * X_AMP
 breakScene.y = break_z / 12 * (break_z < 0 ? Z_AMP_DOWN : 1)`}</Code>
         <p>
           The amplified break feeds both <code>v</code> and the drift, so the ball still
