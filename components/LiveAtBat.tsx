@@ -14,6 +14,7 @@ import {
   type Count,
   type PitchEvent,
 } from '../lib/liveAtBat'
+import { LogicBreakdown, Code } from './LogicBreakdown'
 
 // ── Pitch colors (shared with MatchupTool) ────────────────────────────────────
 const PITCH_COLORS: Record<string, string> = {
@@ -663,6 +664,119 @@ export default function LiveAtBat({ pitchers, batters, arsenal, batterVsPitch }:
           )}
         </>
       )}
+
+      <LogicBreakdown sections={LIVE_AB_SECTIONS} />
     </div>
   )
 }
+
+const LIVE_AB_SECTIONS = [
+  {
+    title: 'Pitch likelihood by count',
+    body: (
+      <>
+        <p>
+          The pitcher&apos;s baseline usage % per pitch is multiplied by a count-conditioned
+          factor on the pitch&apos;s family (FB / Breaking / Offspeed). MLB-wide multi-year
+          averages; very stable year-to-year.
+        </p>
+        <Code>{`// Examples from the count factor table:
+'3-0': { FB: 1.60, BR: 0.30, OFF: 0.35 }  // must throw a strike
+'0-2': { FB: 0.80, BR: 1.20, OFF: 1.15 }  // putaway pitch
+'1-1': { FB: 1.00, BR: 1.00, OFF: 1.00 }  // neutral
+
+P(pitch | count, pitcher)
+  = pitcher.usage[pitch] × factor[family]
+  ÷ normalize_across_arsenal`}</Code>
+      </>
+    ),
+  },
+  {
+    title: 'Whiff% and xwOBA in this count',
+    body: (
+      <>
+        <p>
+          Each pitch&apos;s baseline whiff% gets multiplied by a count multiplier, and
+          baseline xwOBA-against gets a count delta. When a batter is selected we blend
+          60% pitcher / 40% batter splits to weight the matchup.
+        </p>
+        <Code>{`whiffMult[count]:  0-2 ×1.60   1-2 ×1.50   2-2 ×1.40
+                   0-0 ×0.85   2-0 ×0.65   3-0 ×0.40
+xwobaDelta[count]: 0-2 −0.130  3-0 +0.170  3-2 +0.060
+
+whiff = (pitcher.whiff × whiffMult) × 0.6
+      + (batter.whiff_vs_pitch × whiffMult) × 0.4
+xwoba = (pitcher.xwoba + xwobaDelta) × 0.6
+      + (batter.xwoba_vs_pitch + xwobaDelta) × 0.4`}</Code>
+      </>
+    ),
+  },
+  {
+    title: 'In-AB sequence (tunneling) adjustments',
+    body: (
+      <>
+        <p>
+          Each pitch logged in the AB feeds into the model. Repetition makes a pitch less
+          effective; switching families creates timing disruption. Magnitudes are rough
+          values from published research on pitch tunneling — not fit from our own data.
+        </p>
+        <Code>{`// Same pitch repeated N times this AB:
+whiff_mult ×= 0.90^N         // batter recognition
+xwoba_delta += 0.025 × N
+
+// Previous pitch from a different family:
+whiff_mult ×= 1.08
+xwoba_delta −= 0.020
+//   extra bonus if FB ↔ offspeed (velocity contrast):
+whiff_mult ×= 1.04
+xwoba_delta −= 0.010
+
+// 3+ same family in a row → next same-family penalty:
+whiff_mult ×= 0.92
+xwoba_delta += 0.020
+
+// Usage also shifts away from repeated pitches:
+usage_weight ×= 0.80^repeats`}</Code>
+      </>
+    ),
+  },
+  {
+    title: 'PA outcome from the current count',
+    body: (
+      <>
+        <p>
+          League count → outcome table (probability the at-bat ends in K / BB / hit / out
+          / HBP starting from this count). Then nudged by the pitcher&apos;s K/BB rates and
+          the batter&apos;s K/BB rates, with √-dampening so a hot pitcher × cold batter
+          doesn&apos;t blow past sensible bounds.
+        </p>
+        <Code>{`base = COUNT_OUTCOMES['1-1']   // { k:.248, bb:.088, hit:.235, hbp:.012, out:.417 }
+
+ratio_K  = (pitcherK / leagueK)  × (batterK / leagueK)
+ratio_BB = (pitcherBB / leagueBB) × (batterBB / leagueBB)
+
+k  = base.k  × √ratio_K
+bb = base.bb × √ratio_BB
+// then renormalize k+bb+hit+hbp+out to 1.0`}</Code>
+      </>
+    ),
+  },
+  {
+    title: 'Model honesty',
+    body: (
+      <>
+        <p>
+          The count tables (outcome probabilities, family-usage factors, whiff multipliers,
+          xwOBA deltas) are real MLB-wide constants but they&apos;re NOT per-pitcher.
+          Savant&apos;s pitch-arsenal endpoint ignores the count parameter, so per-pitcher
+          count behavior isn&apos;t available without a pitch-by-pitch scrape.
+        </p>
+        <p>
+          The tunneling multipliers (repetition, family-switch) are educated values, not
+          fit from our data. The v2 upgrade path is to replace both with values learned
+          from a pitch-level dataset.
+        </p>
+      </>
+    ),
+  },
+]

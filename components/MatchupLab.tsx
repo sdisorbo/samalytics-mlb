@@ -15,6 +15,7 @@ import {
   type SimResults,
   type GameSetup,
 } from '../lib/mlbSimulator'
+import { LogicBreakdown, Code } from './LogicBreakdown'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -1208,9 +1209,107 @@ export default function MatchupLab({
       <p className="text-2xs text-538-muted">
         <strong>Sim methodology —</strong> Each game runs {SIM_COUNT} Monte Carlo simulations using batter season K%, BB%, BABIP, and HR rate adjusted by pitcher K/9, BB/9, and HR/9 relative to league averages. Pitcher fatigue applies after ~100 pitches. Lineups are sorted by season OPS. Stats from 2025 season data; probable pitchers from MLB Stats API.
       </p>
+
+      <LogicBreakdown sections={MATCHUP_LAB_SECTIONS} />
     </div>
   )
 }
+
+const MATCHUP_LAB_SECTIONS = [
+  {
+    title: 'Plate appearance model',
+    body: (
+      <>
+        <p>
+          Every PA is one random draw from {`{K, BB, HR, in-play hit, in-play out}`}.
+          The probabilities start from the batter&apos;s rate stats, then get multiplied
+          by ratios of the pitcher&apos;s rate stats to the league average.
+        </p>
+        <Code>{`kAdj  = pitcher.kPer9  / LEAGUE_K_PER_9
+bbAdj = pitcher.bbPer9 / LEAGUE_BB_PER_9
+hrAdj = pitcher.hrPer9 / LEAGUE_HR_PER_9
+
+rawK  = batter.kPct  × kAdj × kMod        // kMod = 0.85 if fatigued
+rawBB = batter.bbPct × bbAdj
+rawHR = batter.hrPerAb × (1 − batter.bbPct) × hrAdj
+
+inPlayBase = max(0, 1 − batter.kPct − batter.bbPct − hrPerPa)
+rawHit     = inPlayBase × batter.babip × hitMod   // 1.10 if fatigued
+rawOut     = inPlayBase × (1 − batter.babip)`}</Code>
+        <p>
+          Each in-play hit gets resolved into 1B/2B/3B by the batter&apos;s extra-base
+          share. Outcome chosen by cumulative weighted sample.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Game simulation',
+    body: (
+      <>
+        <p>
+          Each game is {SIM_COUNT} Monte Carlo runs. Innings advance batter-by-batter
+          through both lineups; the starter exits when pitch count crosses ~100 and a
+          fatigue modifier kicks in before bullpen takes over. Results are aggregated
+          across all sims for win %, run distribution, and per-player projections.
+        </p>
+        <Code>{`for sim in 1..SIM_COUNT:
+  for each half-inning:
+    while outs < 3:
+      outcome = simulatePa(batter, pitcher, fatigued)
+      pitches += PITCHES_PER_PA[outcome]
+      apply outcome → bases, runs, outs
+
+awayWinPct = (away_wins / SIM_COUNT)
+avgAwayRuns = mean(sim.awayRuns for sim in sims)`}</Code>
+      </>
+    ),
+  },
+  {
+    title: 'Seeded randomness',
+    body: (
+      <>
+        <p>
+          The PRNG is Mulberry32 seeded by a hash of the matchup (pitcher IDs + lineup
+          IDs). Same matchup → same numbers every time. Change the lineup or pitcher and
+          you get a fresh seed.
+        </p>
+        <Code>{`hashSetup = (setup) => {
+  let h = 0x12345678
+  for id of [pitchers, ...lineups]:
+    h = imul(h ^ id, 0x9e3779b9)
+  return h
+}
+
+// Mulberry32 PRNG, deterministic for a given seed
+seedRng(hashSetup(setup))`}</Code>
+      </>
+    ),
+  },
+  {
+    title: 'League averages (2025 MLB)',
+    body: (
+      <>
+        <p>Used as denominators for the pitcher adjustment ratios.</p>
+        <Code>{`K%       = 0.222    BB%      = 0.085
+HR/AB    = 0.034    BABIP    = 0.295
+K/9      = 8.7      BB/9     = 3.2     HR/9 = 1.2`}</Code>
+      </>
+    ),
+  },
+  {
+    title: 'Sim outputs',
+    body: (
+      <>
+        <p>
+          Win %, expected runs, run distribution histogram, NRFI/YRFI probability, plus
+          per-batter (avg bases, avg K) and per-pitcher (avg K, BB, IP) projections all
+          come from aggregating the {SIM_COUNT} sims.
+        </p>
+      </>
+    ),
+  },
+]
 
 // Re-export helpers so the page component can use them
 export { pitcherFromLocal, batterFromLocal }

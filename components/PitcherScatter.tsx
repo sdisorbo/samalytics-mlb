@@ -242,6 +242,7 @@ export default function PitcherScatter({ pitchers }: Props) {
             onChange={e => setMinIP(Number(e.target.value))}
             className="border border-538-border rounded px-1.5 py-0.5 text-xs bg-surface"
           >
+            <option value={0}>None</option>
             {[20, 40, 60, 80, 100].map(v => <option key={v} value={v}>{v}</option>)}
           </select>
         </label>

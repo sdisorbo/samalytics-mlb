@@ -118,6 +118,24 @@ export interface PlayoffOdds {
   results: PlayoffTeam[]
 }
 
+// Flattened (pitcher, pitch) row for the Pitch Visualizer leaderboard.
+export interface RankedPitch {
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  pitch_type: string
+  pitch_name: string
+  usage_pct: number
+  whiff_pct: number | null
+  woba_against: number | null
+  xwoba_against: number | null
+  hard_hit_pct: number | null
+  run_value_per_100: number | null
+  avg_speed: number | null
+  break_x: number | null
+  break_z: number | null
+}
+
 export interface PlayoffTeam {
   team: string
   win_wildcard: number
