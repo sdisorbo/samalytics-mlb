@@ -278,7 +278,6 @@ export default function PitchTestMode({
             target={currentTest.target}
             angle="center"
             testMode={!revealed}
-            hideVelo={false}
             onPhaseChange={handlePhaseChange}
           />
           {phase === 'animating' && (

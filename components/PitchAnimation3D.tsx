@@ -61,16 +61,31 @@ function Plate() {
 
 // Duo-tone palette — neutral greys/beiges so the colored ball + trail pop.
 const COLOR_GROUND = '#928470'    // muted beige-grey grass
-const COLOR_MOUND = '#A89980'     // slightly lighter beige
-const COLOR_PITCHER = '#5B5650'   // mid-grey silhouette
+const COLOR_DIRT = '#A89980'      // lighter beige (mound/dirt)
 const COLOR_RUBBER = '#E6DDC8'
+const COLOR_LINE = '#E6DDC8'      // chalk lines, batter's box, base paths
+const COLOR_LINE_DIM = '#B8A98C'  // dimmer beige for less prominent lines
+
+// MLB team primary colors. Used for the release-point disc on the mound.
+const TEAM_COLORS: Record<string, string> = {
+  ARI: '#A71930', ATL: '#CE1141', BAL: '#DF4601', BOS: '#BD3039',
+  CHC: '#0E3386', CWS: '#27251F', CIN: '#C6011F', CLE: '#00385D',
+  COL: '#33006F', DET: '#0C2340', HOU: '#002D62', KC:  '#004687',
+  LAA: '#BA0021', LAD: '#005A9C', MIA: '#00A3E0', MIL: '#12284B',
+  MIN: '#002B5C', NYM: '#FF5910', NYY: '#003087', OAK: '#003831',
+  ATH: '#003831',
+  PHI: '#E81828', PIT: '#FDB827', SD:  '#2F241D', SF:  '#FD5A1E',
+  SEA: '#0C2C56', STL: '#C41E3A', TB:  '#092C5C', TEX: '#003278',
+  TOR: '#134A8E', WSH: '#AB0003',
+}
+const teamColor = (team: string) => TEAM_COLORS[team.toUpperCase()] ?? '#5B5650'
 
 function Mound() {
   return (
     <group position={[0, 0.01, RUBBER_Z]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[9, 32]} />
-        <meshStandardMaterial color={COLOR_MOUND} flatShading />
+        <meshStandardMaterial color={COLOR_DIRT} flatShading />
       </mesh>
       <mesh position={[0, 0.15, 0]}>
         <boxGeometry args={[2, 0.1, 0.5]} />
@@ -83,34 +98,117 @@ function Mound() {
 function Ground() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 30]}>
-      <planeGeometry args={[160, 160]} />
+      <planeGeometry args={[200, 200]} />
       <meshStandardMaterial color={COLOR_GROUND} flatShading />
     </mesh>
   )
 }
 
-function PitcherFigure({ x, hand }: { x: number; hand: 'R' | 'L' }) {
-  // Single-color silhouette — minimalistic, no detail competing with the ball.
+function Diamond() {
+  // Infield diamond outline. Bases are 90 ft apart on the diagonals from home.
+  // 1B is on the 1B side (world -x), 3B on the 3B side (world +x).
+  const D = 90 / Math.SQRT2 // ≈ 63.64 ft
+  const home: [number, number, number] = [0, 0.02, 0]
+  const first: [number, number, number] = [-D, 0.02, D]
+  const second: [number, number, number] = [0, 0.02, D * 2]
+  const third: [number, number, number] = [D, 0.02, D]
   return (
-    <group position={[x, 0, RUBBER_Z + 0.2]}>
-      {/* Body */}
-      <mesh position={[0, 2.5, 0]}>
-        <cylinderGeometry args={[0.5, 0.6, 5, 12]} />
-        <meshStandardMaterial color={COLOR_PITCHER} flatShading />
+    <group>
+      {/* Diamond perimeter */}
+      <Line points={[home, first, second, third, home]} color={COLOR_LINE} lineWidth={1.5} transparent opacity={0.7} />
+      {/* Foul lines extending past the bases */}
+      <Line points={[home, [-D * 1.8, 0.02, D * 1.8]]} color={COLOR_LINE_DIM} lineWidth={1} transparent opacity={0.45} />
+      <Line points={[home, [D * 1.8, 0.02, D * 1.8]]} color={COLOR_LINE_DIM} lineWidth={1} transparent opacity={0.45} />
+      {/* Bases */}
+      {[first, second, third].map((p, i) => (
+        <mesh key={i} position={p} rotation={[-Math.PI / 2, 0, Math.PI / 4]}>
+          <planeGeometry args={[1.25, 1.25]} />
+          <meshStandardMaterial color={COLOR_RUBBER} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function BatterBoxes() {
+  // Two 6'-long × 4'-wide rectangles on either side of the plate. Inner edge
+  // is 6" from the plate edge (plate is 17" wide centered at x=0).
+  const inner = 8.5 / 12 + 6 / 12 // ft from center to inner edge
+  const outer = inner + 4         // 4 ft wide
+  const zBack = 3                 // box extends 3 ft behind plate front
+  const zFront = -3               // and 3 ft in front of plate front (toward pitcher)
+  // Note: z=0 is the plate's front edge, mound is at +z, so "in front of plate
+  // toward pitcher" is +z. Box centered on plate-front.
+  const boxR: [number, number, number][] = [
+    [inner, 0.02, -zBack],
+    [outer, 0.02, -zBack],
+    [outer, 0.02, zBack],
+    [inner, 0.02, zBack],
+    [inner, 0.02, -zBack],
+  ]
+  const boxL: [number, number, number][] = boxR.map(([x, y, z]) => [-x, y, z])
+  return (
+    <group>
+      <Line points={boxR} color={COLOR_LINE} lineWidth={1.5} transparent opacity={0.7} />
+      <Line points={boxL} color={COLOR_LINE} lineWidth={1.5} transparent opacity={0.7} />
+    </group>
+  )
+}
+
+function PitcherCard({
+  x,
+  name,
+  team,
+  hideIdentity,
+}: {
+  x: number
+  name: string
+  team: string
+  hideIdentity?: boolean
+}) {
+  // Replaces the pitcher silhouette. A small team-colored disc on the mound
+  // marks where the pitch is released; the pitcher's name floats just above.
+  // In test mode (hideIdentity) we swap to a neutral grey disc and skip the
+  // name/team labels so they don't give away the pitch.
+  const color = hideIdentity ? '#5B5650' : teamColor(team)
+  return (
+    <group position={[x, 0, RUBBER_Z]}>
+      <mesh position={[0, 3.0, 0]}>
+        <cylinderGeometry args={[0.04, 0.04, 6.0, 8]} />
+        <meshStandardMaterial color={COLOR_LINE_DIM} transparent opacity={0.35} />
       </mesh>
-      {/* Head */}
-      <mesh position={[0, 5.5, 0]}>
-        <sphereGeometry args={[0.45, 16, 16]} />
-        <meshStandardMaterial color={COLOR_PITCHER} flatShading />
+      <mesh position={[0, 6.0, 0]}>
+        <sphereGeometry args={[0.35, 24, 24]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} />
       </mesh>
-      {/* Throwing arm raised */}
-      <mesh
-        position={[hand === 'R' ? -0.7 : 0.7, 5.2, 0]}
-        rotation={[0, 0, hand === 'R' ? -0.6 : 0.6]}
-      >
-        <cylinderGeometry args={[0.15, 0.15, 1.8, 8]} />
-        <meshStandardMaterial color={COLOR_PITCHER} flatShading />
-      </mesh>
+      {!hideIdentity && (
+        <>
+          <Text
+            position={[0, 9.5, 0]}
+            rotation={[0, Math.PI, 0]}
+            fontSize={1.4}
+            color="#1A1614"
+            outlineColor="#F4ECDA"
+            outlineWidth={0.08}
+            anchorX="center"
+            anchorY="middle"
+          >
+            {name}
+          </Text>
+          <Text
+            position={[0, 8.0, 0]}
+            rotation={[0, Math.PI, 0]}
+            fontSize={0.9}
+            color={color}
+            outlineColor="#F4ECDA"
+            outlineWidth={0.05}
+            anchorX="center"
+            anchorY="middle"
+          >
+            {team.toUpperCase()}
+          </Text>
+        </>
+      )}
     </group>
   )
 }
@@ -125,8 +223,6 @@ interface SceneProps {
   /** When true, neutralize all color cues (target dot, trail) so the pitch
    *  type can't be deduced from anything but the trajectory itself. */
   testMode?: boolean
-  /** Hide the velo label (used during reveal sequencing in test mode). */
-  hideVelo?: boolean
   onPhaseChange?: (phase: Phase) => void
 }
 
@@ -136,7 +232,7 @@ function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
 }
 
-function SceneContent({ pitch, target, angle, testMode, hideVelo, onPhaseChange }: SceneProps) {
+function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: SceneProps) {
   const { camera } = useThree()
   const ballRef = useRef<THREE.Mesh>(null)
   const phaseRef = useRef<Phase>('rotate')
@@ -286,10 +382,17 @@ function SceneContent({ pitch, target, angle, testMode, hideVelo, onPhaseChange 
       <hemisphereLight args={['#ffffff', '#3a4a3a', 0.4]} />
 
       <Ground />
+      <Diamond />
+      <BatterBoxes />
       <Plate />
       <StrikeZone />
       <Mound />
-      <PitcherFigure x={releaseX} hand={pitch.pitcher_hand} />
+      <PitcherCard
+        x={releaseX}
+        name={pitch.pitcher_name}
+        team={pitch.team}
+        hideIdentity={testMode}
+      />
 
       {/* Target dot on the strike-zone plane */}
       <mesh position={[targetPos.x, targetPos.y, 0]}>
@@ -308,20 +411,6 @@ function SceneContent({ pitch, target, angle, testMode, hideVelo, onPhaseChange 
         <Line points={trail} color={trailColor} lineWidth={3} transparent opacity={0.95} />
       )}
 
-      {/* Floating velo label near release once we're in batter view */}
-      {pitch.avg_speed && !hideVelo && (
-        <Text
-          position={[releaseX, releaseY + 1.2, RELEASE_Z]}
-          fontSize={0.45}
-          color="#FFFFFF"
-          outlineColor="#000"
-          outlineWidth={0.02}
-          anchorX="center"
-          anchorY="middle"
-        >
-          {`${pitch.avg_speed.toFixed(0)} mph`}
-        </Text>
-      )}
     </>
   )
 }
@@ -331,14 +420,12 @@ export default function PitchAnimation3D({
   target,
   angle,
   testMode,
-  hideVelo,
   onPhaseChange,
 }: {
   pitch: SelectedPitch
   target: { x: number; y: number }
   angle: ViewAngle
   testMode?: boolean
-  hideVelo?: boolean
   onPhaseChange?: (phase: Phase) => void
 }) {
   return (
@@ -352,7 +439,6 @@ export default function PitchAnimation3D({
         target={target}
         angle={angle}
         testMode={testMode}
-        hideVelo={hideVelo}
         onPhaseChange={onPhaseChange}
       />
     </Canvas>
