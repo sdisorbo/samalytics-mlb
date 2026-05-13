@@ -213,29 +213,48 @@ function resolveContact(distPx: number, sweetPx: number, weakPx: number): Contac
   const laRad = (la * Math.PI) / 180
   const distFt = clamp((ev * ev * Math.sin(2 * laRad)) / 25, 0, 480)
 
-  // Outcome classification (synthetic, league-ish probabilities)
+  // Outcome classification — distance-first so a 350 ft ball can't be a
+  // single. Thresholds calibrated to the distFt formula above:
+  //   ev=106, la=26 ≈ 354 ft  (elite contact → deep gap)
+  //   ev=112, la=30 ≈ 426 ft  (exceptional → HR)
   let outcome: InPlayOutcome = 'OUT'
   let description = ''
 
   if (quality === 'miss') {
     outcome = 'OUT'
     description = 'Swing & miss'
-  } else if (la < 0 || la > 65) {
-    // grounder or pop
-    outcome = Math.random() < 0.15 ? '1B' : 'OUT'
-    description = la < 0 ? 'Ground ball' : 'Pop up'
-  } else if (ev >= 100 && la >= 22 && la <= 38 && distFt > 380) {
+  } else if (la < -5) {
+    // Hard grounder — some sneak through for singles
+    outcome = Math.random() < 0.20 ? '1B' : 'OUT'
+    description = 'Ground ball'
+  } else if (la > 55) {
+    // Pop-up — almost always caught
+    outcome = 'OUT'
+    description = 'Pop up'
+  } else if (distFt > 380 && la >= 18 && la <= 45) {
+    // Deep fly in the air at a good angle — home run
     outcome = 'HR'
     description = 'Home run!'
-  } else if (ev >= 95 && la >= 15 && la <= 32) {
-    outcome = Math.random() < 0.35 ? '2B' : Math.random() < 0.5 ? '1B' : Math.random() < 0.15 ? '3B' : 'OUT'
-    description = outcome === '2B' ? 'Double' : outcome === '3B' ? 'Triple!' : outcome === '1B' ? 'Single' : 'Hard out'
-  } else if (ev >= 80 && la >= 5 && la <= 25) {
-    outcome = Math.random() < 0.35 ? '1B' : Math.random() < 0.15 ? '2B' : 'OUT'
-    description = outcome === '1B' ? 'Single' : outcome === '2B' ? 'Double' : 'Lineout'
+  } else if (distFt > 310 && la >= 10 && la <= 45) {
+    // Deep gap / warning track — doubles and triples
+    const r = Math.random()
+    if (r < 0.52)      { outcome = '2B'; description = 'Double' }
+    else if (r < 0.74) { outcome = '3B'; description = 'Triple!' }
+    else               { outcome = 'OUT'; description = 'Warning track out' }
+  } else if (distFt > 200 && la >= 5 && la <= 40) {
+    // Medium fly or solid line drive — singles, occasional double
+    const r = Math.random()
+    if (r < 0.38)      { outcome = '1B'; description = 'Single' }
+    else if (r < 0.50) { outcome = '2B'; description = 'Double' }
+    else               { outcome = 'OUT'; description = 'Flyout' }
+  } else if (distFt > 80 && la >= -5 && la <= 22) {
+    // Short line drive or hard grounder through the infield
+    outcome = Math.random() < 0.30 ? '1B' : 'OUT'
+    description = outcome === '1B' ? 'Single' : 'Lineout'
   } else {
+    // Weak / off-speed rollover or short popup — rare bloop
     outcome = Math.random() < 0.10 ? '1B' : 'OUT'
-    description = outcome === '1B' ? 'Bloop single' : 'Out'
+    description = outcome === '1B' ? 'Bloop single' : 'Flyout'
   }
 
   return { quality, rating, ev, la, distFt, outcome, description }
@@ -685,11 +704,7 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
             ✕ Exit
           </button>
         </div>
-        <p className="text-xs text-538-muted">
-          Stand in against a real pitcher. Pitches come from their arsenal at their actual
-          usage rates with edge-biased locations. Click on the screen during the pitch to
-          swing — you have to time AND aim it.
-        </p>
+        <HowToPlay />
 
         <div>
           <div className="text-[11px] uppercase tracking-wider text-538-muted mb-1">Batter handedness</div>
@@ -772,7 +787,7 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
       )}
 
       {/* Main layout: 3D scene on the left, sticky stats panel on the right. */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-2 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-2 items-start">
         <div
           ref={canvasRef}
           onMouseDown={handleCanvasMouseDown}
@@ -919,6 +934,117 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
           </div>
         </aside>
       </div>
+    </div>
+  )
+}
+
+// ── How-to-Play accordion (shown on setup screen) ────────────────────────────
+function HowToPlay() {
+  const [open, setOpen] = useState(true)
+  const [physicsOpen, setPhysicsOpen] = useState(false)
+  const [scoringOpen, setScoringOpen] = useState(false)
+
+  return (
+    <div className="border border-538-border rounded text-xs overflow-hidden">
+      {/* Header */}
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-3 py-2 bg-surface hover:bg-538-border/20 text-538-text font-semibold"
+      >
+        <span>How to Play</span>
+        <span className="text-538-muted">{open ? '▴' : '▾'}</span>
+      </button>
+
+      {open && (
+        <div className="px-3 pb-3 pt-1 space-y-2 text-538-muted leading-relaxed">
+          <p>
+            Stand in against a real MLB pitcher. Each pitch comes from their actual arsenal,
+            weighted by real usage rates, with edge-biased locations that mirror how pitchers
+            attack hitters. You have to <strong className="text-538-text">time AND aim</strong> —
+            click the ball while it's in flight to swing. Early or late clicks count as misses.
+          </p>
+
+          <ul className="list-disc list-inside space-y-0.5 text-[11px]">
+            <li>Balls and strikes accumulate normally — 3 strikes = K, 4 balls = BB.</li>
+            <li>Click the ball as it approaches the plate to make contact.</li>
+            <li>Your cursor shows a bat silhouette — aim your barrel at the ball.</li>
+            <li>After 5+ ABs you can submit your slash line to the daily leaderboard.</li>
+          </ul>
+
+          {/* Physics sub-section */}
+          <div className="border border-538-border rounded overflow-hidden mt-1">
+            <button
+              onClick={() => setPhysicsOpen((o) => !o)}
+              className="w-full flex items-center justify-between px-3 py-1.5 bg-surface hover:bg-538-border/20 text-538-text font-semibold text-[11px]"
+            >
+              <span>⚙ Game Physics</span>
+              <span className="text-538-muted">{physicsOpen ? '▴' : '▾'}</span>
+            </button>
+            {physicsOpen && (
+              <div className="px-3 py-2 space-y-1.5 text-[11px] leading-relaxed">
+                <p>
+                  <strong className="text-538-text">Contact quality</strong> is determined by how
+                  close you click to the ball's center. A perfect click (barrel on ball) produces
+                  elite exit velocity; a glancing blow gives weak contact.
+                </p>
+                <p>
+                  <strong className="text-538-text">Exit Velocity (EV)</strong> ranges from ≈70 mph
+                  on weak contact up to ≈115 mph on a perfect hit. Higher EV = more distance.
+                </p>
+                <p>
+                  <strong className="text-538-text">Launch Angle (LA)</strong> is randomized within
+                  a band for each contact tier. Solid contact tends toward 18–28°, weak contact
+                  toward popups (55°+) or grounders (negative).
+                </p>
+                <p>
+                  <strong className="text-538-text">Distance</strong> is estimated as
+                  EV² × sin(2 × LA) / 25. Outcomes are distance-first:
+                </p>
+                <ul className="list-disc list-inside space-y-0.5 pl-1">
+                  <li>&gt; 380 ft at 18–45°  → <span className="font-bold text-538-text">Home Run</span></li>
+                  <li>310–380 ft at 10–45° → <span className="text-538-text">Double / Triple</span></li>
+                  <li>200–310 ft at 5–40°  → <span className="text-538-text">Single / Double / Out</span></li>
+                  <li>&lt; 200 ft           → <span className="text-538-text">Grounder / Lineout / Bloop</span></li>
+                  <li>LA &lt; −5°          → <span className="text-538-text">Ground ball</span></li>
+                  <li>LA &gt; 55°          → <span className="text-538-text">Pop up</span></li>
+                </ul>
+                <p className="text-[10px] opacity-70">
+                  Contact grade (A+ → F) reflects how precisely you timed and aimed the swing.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Scoring sub-section */}
+          <div className="border border-538-border rounded overflow-hidden">
+            <button
+              onClick={() => setScoringOpen((o) => !o)}
+              className="w-full flex items-center justify-between px-3 py-1.5 bg-surface hover:bg-538-border/20 text-538-text font-semibold text-[11px]"
+            >
+              <span>🏆 Leaderboard Scoring</span>
+              <span className="text-538-muted">{scoringOpen ? '▴' : '▾'}</span>
+            </button>
+            {scoringOpen && (
+              <div className="px-3 py-2 space-y-1.5 text-[11px] leading-relaxed">
+                <p>
+                  The daily leaderboard ranks the top 10 sessions by{' '}
+                  <strong className="text-538-text">SLG (Slugging %)</strong>. The more extra-base
+                  hits you rack up, the higher you climb.
+                </p>
+                <p>
+                  <strong className="text-538-text">Tiebreaker:</strong> if two players' SLGs are
+                  within 20% of each other, the one with <em>more ABs</em> ranks higher — reward
+                  for persistence. Earliest submission breaks any remaining ties.
+                </p>
+                <p>
+                  Minimum <strong className="text-538-text">5 ABs</strong> required to qualify.
+                  Leaderboard resets daily at midnight UTC.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
