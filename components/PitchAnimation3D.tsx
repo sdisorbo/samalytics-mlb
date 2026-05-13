@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Line, Text } from '@react-three/drei'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import type { SelectedPitch } from './PitchVisualizer'
 
@@ -97,10 +97,57 @@ function Mound() {
 
 function Ground() {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 30]}>
-      <planeGeometry args={[200, 200]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 200]}>
+      <planeGeometry args={[700, 700]} />
       <meshStandardMaterial color={COLOR_GROUND} flatShading />
     </mesh>
+  )
+}
+
+function OutfieldWall() {
+  // Approximate MLB park: 330 ft down the lines, 400 ft to dead center,
+  // with smooth alleys. Wall ~8 ft tall.
+  // The fence is an arc of 21 segments from foul pole to foul pole,
+  // bridging from world (−D, 0, D) (1B line at 90 ft) outward to (+D, 0, D).
+  // For each angle θ, distance varies sinusoidally between 330 and 400.
+  const segments = 24
+  const points: [number, number, number][] = []
+  const topPoints: [number, number, number][] = []
+  // Foul lines go from home plate at 45° from straight-toward-mound. So we
+  // sweep angles from 45° (1B foul line) to 135° (3B foul line) — i.e., the
+  // half-plane in front of home plate.
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments
+    const angle = (Math.PI / 4) + t * (Math.PI / 2) // 45° → 135°
+    // Distance: 330 at the foul lines (t=0 or 1), 400 at center (t=0.5)
+    const norm = Math.sin(t * Math.PI) // 0→1→0
+    const dist = 330 + 70 * norm
+    // World coords: angle measured from +z (toward mound). +x = right (3B).
+    // Actually we want angles centered on +z. Let me reparameterize.
+    // Let phi = angle - PI/2 = sweep angle around +z, from -45° (1B line)
+    // to +45° (3B line).
+    const phi = angle - Math.PI / 2
+    const x = dist * Math.sin(phi)
+    const z = dist * Math.cos(phi)
+    points.push([x, 0.02, z])
+    topPoints.push([x, 8, z])
+  }
+  // Build vertical segments connecting bottom to top for a fence look.
+  const fenceVerticals: [number, number, number][][] = []
+  for (let i = 0; i <= segments; i++) {
+    fenceVerticals.push([points[i], topPoints[i]])
+  }
+  return (
+    <group>
+      {/* Top rail */}
+      <Line points={topPoints} color="#E6DDC8" lineWidth={2} transparent opacity={0.85} />
+      {/* Base rail */}
+      <Line points={points} color="#B8A98C" lineWidth={1} transparent opacity={0.5} />
+      {/* Vertical posts every ~4 segments for a subtle fence feel */}
+      {fenceVerticals.filter((_, i) => i % 3 === 0).map((seg, i) => (
+        <Line key={i} points={seg} color="#B8A98C" lineWidth={1} transparent opacity={0.35} />
+      ))}
+    </group>
   )
 }
 
@@ -155,29 +202,50 @@ function BatterBoxes() {
   )
 }
 
+// windupProgress: 0 = at rest, ramps to 1 during the last second of the pre-fly
+// wait. The disc pulls back and up for ~40%, then thrusts forward over the
+// remaining 60% — communicating the "throwing motion" without a full figure.
+function getWindupOffset(progress: number): { x: number; y: number; z: number } {
+  if (progress <= 0) return { x: 0, y: 0, z: 0 }
+  const PULL_Y = 0.6
+  const PULL_Z = 2.0  // toward mound = +z
+  if (progress < 0.4) {
+    const t = progress / 0.4
+    const e = t * t // ease-in
+    return { x: 0, y: e * PULL_Y, z: e * PULL_Z }
+  }
+  const t = (progress - 0.4) / 0.6
+  const e = 1 - Math.pow(1 - t, 3) // ease-out
+  return { x: 0, y: (1 - e) * PULL_Y, z: (1 - e) * PULL_Z }
+}
+
 function PitcherCard({
   x,
   name,
   team,
   hideIdentity,
+  windupProgress = 0,
 }: {
   x: number
   name: string
   team: string
   hideIdentity?: boolean
+  windupProgress?: number
 }) {
   // Replaces the pitcher silhouette. A small team-colored disc on the mound
   // marks where the pitch is released; the pitcher's name floats just above.
   // In test mode (hideIdentity) we swap to a neutral grey disc and skip the
   // name/team labels so they don't give away the pitch.
   const color = hideIdentity ? '#5B5650' : teamColor(team)
+  const off = getWindupOffset(windupProgress)
   return (
     <group position={[x, 0, RUBBER_Z]}>
       <mesh position={[0, 3.0, 0]}>
         <cylinderGeometry args={[0.04, 0.04, 6.0, 8]} />
         <meshStandardMaterial color={COLOR_LINE_DIM} transparent opacity={0.35} />
       </mesh>
-      <mesh position={[0, 6.0, 0]}>
+      {/* Release sphere — animates during the wind-up so the batter can time it. */}
+      <mesh position={[off.x, 6.0 + off.y, off.z]}>
         <sphereGeometry args={[0.35, 24, 24]} />
         <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} />
       </mesh>
@@ -214,7 +282,22 @@ function PitcherCard({
 }
 
 // ── Animated camera + ball ───────────────────────────────────────────────────
-export type ViewAngle = 'center' | 'right' | 'left'
+export type ViewAngle =
+  | 'center'
+  | 'right'    // RHB batter (further-back analytical view)
+  | 'left'     // LHB batter (further-back analytical view)
+  | 'batterR'  // RHB eye-POV, close to plate (game mode)
+  | 'batterL'  // LHB eye-POV, close to plate (game mode)
+
+/** Optional callback invoked every frame during the 'fly' phase with the
+ *  ball's current screen-pixel position and world-space position. Used by
+ *  game mode to detect swing clicks. */
+export type BallUpdateCb = (info: {
+  screenX: number
+  screenY: number
+  worldPos: THREE.Vector3
+  tt: number
+}) => void
 
 interface SceneProps {
   pitch: SelectedPitch
@@ -223,22 +306,65 @@ interface SceneProps {
   /** When true, neutralize all color cues (target dot, trail) so the pitch
    *  type can't be deduced from anything but the trajectory itself. */
   testMode?: boolean
+  /** When true, freeze the ball at its current position (used after a swing
+   *  in game mode so the user can see where their click landed vs. the ball). */
+  freeze?: boolean
+  /** When true, hide the trail line and the target ring, and hide the strike
+   *  zone wireframe until the ball is paused/landed. */
+  gameMode?: boolean
+  /** When true, start the camera at the end position and skip the catcher→
+   *  batter rotation (useful in game mode where every pitch is from batter view). */
+  skipRotation?: boolean
+  /** Seconds to hold the scene before the ball starts flying. Useful for a
+   *  "get ready" pause in game mode. */
+  preFlyDelay?: number
+  /** Multiplier on flight time. 1 = real time (default). >1 = slow motion,
+   *  used by game mode so the ball is humanly trackable on a 2D screen. */
+  flightTimeScale?: number
+  /** If set during the fly phase, the ball stops following the pitch
+   *  trajectory and launches outward along (ev, la, sprayAngle) — used to
+   *  show where the hit ball goes after contact in game mode. */
+  contactLaunch?: {
+    ev: number      // mph
+    la: number      // degrees
+    sprayAngle: number  // degrees; +=3B (pull for RHB), 0 = up the middle
+  } | null
   onPhaseChange?: (phase: Phase) => void
+  onBallUpdate?: BallUpdateCb
 }
 
-type Phase = 'rotate' | 'fly' | 'frozen'
+type Phase = 'rotate' | 'wait' | 'fly' | 'post_contact' | 'frozen'
 
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
 }
 
-function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: SceneProps) {
+function SceneContent({
+  pitch, target, angle, testMode, freeze, gameMode,
+  skipRotation, preFlyDelay = 0, flightTimeScale = 1.0,
+  contactLaunch,
+  onPhaseChange, onBallUpdate,
+}: SceneProps) {
   const { camera } = useThree()
   const ballRef = useRef<THREE.Mesh>(null)
-  const phaseRef = useRef<Phase>('rotate')
+  const phaseRef = useRef<Phase>(skipRotation ? (preFlyDelay > 0 ? 'wait' : 'fly') : 'rotate')
   const startRef = useRef<number>(performance.now())
+  const waitStartRef = useRef<number>(performance.now())
   const [trail, setTrail] = useState<[number, number, number][]>([])
+  const [hitTrail, setHitTrail] = useState<[number, number, number][]>([])
   const lastSampleRef = useRef<number>(0)
+  const [hasLanded, setHasLanded] = useState(false)
+  // 0 = at rest, 1 = release. Active only during the last second of the
+  // pre-fly wait phase (controlled by useFrame below).
+  const [windupProgress, setWindupProgress] = useState(0)
+  // Post-contact launch state, set when contactLaunch transitions from
+  // null → not-null during the fly or frozen phase.
+  const contactStartRef = useRef<number>(0)
+  const contactStartPosRef = useRef<THREE.Vector3>(new THREE.Vector3())
+  const contactVelRef = useRef<THREE.Vector3>(new THREE.Vector3())
+  // One-shot guard: ensures the post_contact transition happens exactly once
+  // per pitch, even if contactLaunch is read from both useFrame and useEffect.
+  const postContactStartedRef = useRef<boolean>(false)
 
   // Coordinate note: the camera is at -z looking toward the mound at +z. With
   // three.js's lookAt + default up, the camera's right-vector points to world
@@ -289,12 +415,13 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
 
   const ROT_DURATION = 1.5
   // Flight time: use effective_speed (perceived velocity) when available;
-  // otherwise avg_speed. distance is release → target.
+  // otherwise avg_speed. distance is release → target. flightTimeScale is
+  // a slow-motion multiplier used by game mode.
   const flightTime = useMemo(() => {
     const mph = pitch.effective_speed ?? pitch.avg_speed ?? 90
     const distFt = releasePos.distanceTo(targetPos)
-    return distFt / (mph * 1.467)
-  }, [pitch.effective_speed, pitch.avg_speed, releasePos, targetPos])
+    return (distFt / (mph * 1.467)) * flightTimeScale
+  }, [pitch.effective_speed, pitch.avg_speed, releasePos, targetPos, flightTimeScale])
 
   // ── Trajectory model ─────────────────────────────────────────────────────
   // When kinematics present, use the REAL per-pitch-type average acceleration
@@ -345,19 +472,88 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
   const camStartLook = useMemo(() => new THREE.Vector3(0, 2.2, 25), [])
   const camEnd = useMemo(() => {
     // RHB stands on the 3B side of the plate (world +x in our scene).
+    // batterR / batterL are tighter eye-POV positions used by game mode —
+    // closer to the plate, eye level, narrower frame.
+    if (angle === 'batterR') return new THREE.Vector3(3.5, 6.5, -8)
+    if (angle === 'batterL') return new THREE.Vector3(-3.5, 6.5, -8)
     if (angle === 'center') return new THREE.Vector3(0, 5.6, -10)
     if (angle === 'right') return new THREE.Vector3(3.5, 5.8, -8)
     return new THREE.Vector3(-3.5, 5.8, -8)
   }, [angle])
-  const camEndLook = useMemo(() => new THREE.Vector3(0, 2.4, 30), [])
+  const camEndLook = useMemo(() => {
+    if (angle === 'batterR' || angle === 'batterL') {
+      // Look low + close so the entire strike zone AND the plate sit
+      // comfortably in the lower half of the frame.
+      return new THREE.Vector3(0, 1.0, 17)
+    }
+    return new THREE.Vector3(0, 2.4, 30)
+  }, [angle])
 
-  // Set initial camera pose
+  // Set initial camera pose. When skipping rotation we start at the end
+  // position so there's no visible jump. Also reset the wait-phase clock
+  // so the pre-fly delay is counted from mount.
   useMemo(() => {
-    camera.position.copy(camStart)
-    camera.lookAt(camStartLook)
-  }, [camera, camStart, camStartLook])
+    if (skipRotation) {
+      camera.position.copy(camEnd)
+      camera.lookAt(camEndLook)
+      waitStartRef.current = performance.now()
+    } else {
+      camera.position.copy(camStart)
+      camera.lookAt(camStartLook)
+    }
+  }, [camera, camStart, camStartLook, camEnd, camEndLook, skipRotation])
 
-  useFrame(() => {
+  // Shared post-contact transition. Called from both useFrame and useEffect
+  // to make sure the animation starts no matter when React commits the
+  // contactLaunch prop relative to the fly→frozen frame.
+  function beginPostContact() {
+    if (postContactStartedRef.current) return
+    if (!contactLaunch || !ballRef.current) return
+    postContactStartedRef.current = true
+    const startPos = ballRef.current.position.clone()
+    const evFtS = contactLaunch.ev * 1.467
+    const laRad = (contactLaunch.la * Math.PI) / 180
+    const sprayRad = (contactLaunch.sprayAngle * Math.PI) / 180
+    const horizontal = evFtS * Math.cos(laRad)
+    contactVelRef.current.set(
+      horizontal * Math.sin(sprayRad),
+      evFtS * Math.sin(laRad),
+      horizontal * Math.cos(sprayRad),
+    )
+    contactStartPosRef.current.copy(startPos)
+    contactStartRef.current = performance.now()
+    phaseRef.current = 'post_contact'
+    setHasLanded(false)
+    setHitTrail([[startPos.x, startPos.y, startPos.z]])
+    onPhaseChange?.('post_contact')
+  }
+
+  // If the prop arrives while we're already frozen, kick off post_contact
+  // from here (the useFrame path covers the still-flying case).
+  useEffect(() => {
+    if (!contactLaunch) return
+    if (phaseRef.current === 'frozen') {
+      beginPostContact()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contactLaunch])
+
+  // Freeze pause: when `freeze` is set we record the elapsed time at the moment
+  // of freeze and rewind the start clock by that much each frame, holding the
+  // animation in place without resetting state.
+  const freezeOffsetRef = useRef<number>(0)
+  const wasFrozenRef = useRef<boolean>(false)
+
+  useFrame(({ size, gl }) => {
+    if (freeze && !wasFrozenRef.current) {
+      freezeOffsetRef.current = (performance.now() - startRef.current) / 1000
+      wasFrozenRef.current = true
+    }
+    if (!freeze && wasFrozenRef.current) {
+      startRef.current = performance.now() - freezeOffsetRef.current * 1000
+      wasFrozenRef.current = false
+    }
+    if (freeze) return
     const elapsed = (performance.now() - startRef.current) / 1000
 
     if (phaseRef.current === 'rotate') {
@@ -367,19 +563,41 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
       const look = new THREE.Vector3().lerpVectors(camStartLook, camEndLook, e)
       camera.lookAt(look)
       if (t >= 1) {
+        if (preFlyDelay > 0) {
+          phaseRef.current = 'wait'
+          waitStartRef.current = performance.now()
+        } else {
+          phaseRef.current = 'fly'
+          startRef.current = performance.now()
+          setTrail([])
+          onPhaseChange?.('fly')
+        }
+      }
+    } else if (phaseRef.current === 'wait') {
+      const waited = (performance.now() - waitStartRef.current) / 1000
+      // Wind-up animates during the last 1 second of the wait phase.
+      const windupStart = Math.max(0, preFlyDelay - 1)
+      if (waited > windupStart) {
+        const progress = Math.min(1, (waited - windupStart) / 1)
+        setWindupProgress(progress)
+      } else if (windupProgress !== 0) {
+        setWindupProgress(0)
+      }
+      if (waited >= preFlyDelay) {
         phaseRef.current = 'fly'
         startRef.current = performance.now()
         setTrail([])
+        setWindupProgress(0)
         onPhaseChange?.('fly')
       }
     } else if (phaseRef.current === 'fly') {
+      // Mid-flight contact: take over immediately.
+      if (contactLaunch && !postContactStartedRef.current) {
+        beginPostContact()
+        return
+      }
       const tt = Math.min(elapsed / flightTime, 1)
       const t = tt * flightTime // real seconds elapsed in flight
-      // pos(t) = release + v·t + ½·a·t² + breakDrift(t)
-      //   • a is the REAL acceleration vector (gravity + Magnus combined) when
-      //     kinematic data is available; otherwise just gravity.
-      //   • breakDrift is zero when kinematics are present; otherwise it's the
-      //     cubic late-loaded spin drift derived from break_x/break_z.
       const driftFactor = tt * tt * tt
       const pos = new THREE.Vector3(
         releasePos.x + initialVel.x * t + 0.5 * aScene.x * t * t + breakScene.x * driftFactor,
@@ -390,25 +608,68 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
         ballRef.current.position.copy(pos)
         ballRef.current.visible = true
       }
-      // Sample trail every frame — pitches are fast (real mph), so the trail
-      // needs dense samples to render as a smooth line.
-      setTrail((prev) => [...prev, [pos.x, pos.y, pos.z]])
+      if (onBallUpdate) {
+        const proj = pos.clone().project(camera)
+        const screenX = (proj.x * 0.5 + 0.5) * size.width
+        const screenY = (1 - (proj.y * 0.5 + 0.5)) * size.height
+        onBallUpdate({ screenX, screenY, worldPos: pos.clone(), tt })
+      }
+      // Pitch trail: skipped in game mode (cleaner visual). Test mode and
+      // the analytical pitch-vis still get it.
+      if (!gameMode) {
+        setTrail((prev) => [...prev, [pos.x, pos.y, pos.z]])
+      }
       lastSampleRef.current = performance.now()
       if (tt >= 1) {
+        // If a contact has been queued (contactLaunch prop set this frame
+        // via React state update) but post_contact hasn't started yet, hold
+        // here for one more frame — the next useFrame run will pick up
+        // contactLaunch via beginPostContact() and transition out cleanly.
+        if (contactLaunch && !postContactStartedRef.current) {
+          return
+        }
         phaseRef.current = 'frozen'
-        // Snap ball to exact target so any floating-point drift is invisible.
         if (ballRef.current) ballRef.current.position.copy(targetPos)
-        setTrail((prev) => [...prev, [targetPos.x, targetPos.y, targetPos.z]])
+        if (!gameMode) {
+          setTrail((prev) => [...prev, [targetPos.x, targetPos.y, targetPos.z]])
+        }
+        setHasLanded(true)
+        onPhaseChange?.('frozen')
+      }
+    } else if (phaseRef.current === 'post_contact') {
+      // Ballistic flight from the contact point: gravity-only motion.
+      const t = (performance.now() - contactStartRef.current) / 1000
+      const sp = contactStartPosRef.current
+      const v = contactVelRef.current
+      const pos = new THREE.Vector3(
+        sp.x + v.x * t,
+        sp.y + v.y * t - 0.5 * GRAVITY * t * t,
+        sp.z + v.z * t,
+      )
+      // For grounders + popups, clamp y at ground level and let the ball
+      // continue along the surface for visibility (so every hit gets an arc).
+      const clampedY = Math.max(pos.y, 0.05)
+      const renderPos = new THREE.Vector3(pos.x, clampedY, pos.z)
+      if (ballRef.current) {
+        ballRef.current.position.copy(renderPos)
+      }
+      setHitTrail((prev) => [...prev, [renderPos.x, renderPos.y, renderPos.z]])
+      // Minimum 1.5 s so even grounders/popups get visible flight; cap at 2.5 s.
+      if (t >= 2.5 || (t >= 1.5 && pos.y <= 0)) {
+        phaseRef.current = 'frozen'
+        setHasLanded(true)
         onPhaseChange?.('frozen')
       }
     }
-    // frozen: do nothing, scene stays.
+    void gl // silence unused-arg warning
   })
 
   // Click-target dot on the strike-zone plane (so the user remembers where they aimed).
   // In test mode we use a neutral color so it doesn't give away the pitch type.
   const dotColor = testMode ? '#E6DDC8' : pitchColor(pitch.pitch_type)
-  const trailColor = testMode ? '#FFFFFF' : pitchColor(pitch.pitch_type)
+  // Trail color: neutral white in test + game mode (no pitch-type tell);
+  // pitch-type color in the analytical pitch-vis.
+  const trailColor = (testMode || gameMode) ? '#FFFFFF' : pitchColor(pitch.pitch_type)
 
   return (
     <>
@@ -418,22 +679,28 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
 
       <Ground />
       <Diamond />
+      <OutfieldWall />
       <BatterBoxes />
       <Plate />
-      <StrikeZone />
+      {/* In game mode, hide the strike zone until the ball lands so the
+          player doesn't get an aim cue. */}
+      {(!gameMode || hasLanded) && <StrikeZone />}
       <Mound />
       <PitcherCard
         x={releaseX}
         name={pitch.pitcher_name}
         team={pitch.team}
         hideIdentity={testMode}
+        windupProgress={windupProgress}
       />
 
-      {/* Target dot on the strike-zone plane */}
-      <mesh position={[targetPos.x, targetPos.y, 0]}>
-        <ringGeometry args={[0.08, 0.13, 32]} />
-        <meshBasicMaterial color={dotColor} side={THREE.DoubleSide} />
-      </mesh>
+      {/* Target dot on the strike-zone plane — hidden in game mode */}
+      {!gameMode && (
+        <mesh position={[targetPos.x, targetPos.y, 0]}>
+          <ringGeometry args={[0.08, 0.13, 32]} />
+          <meshBasicMaterial color={dotColor} side={THREE.DoubleSide} />
+        </mesh>
+      )}
 
       {/* Ball (hidden until fly phase) */}
       <mesh ref={ballRef} visible={false}>
@@ -441,9 +708,13 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
         <meshStandardMaterial color="#FFFFFF" emissive="#FFE38A" emissiveIntensity={0.25} />
       </mesh>
 
-      {/* Persistent trail */}
+      {/* Persistent pitch trail (suppressed in game mode) */}
       {trail.length > 1 && (
         <Line points={trail} color={trailColor} lineWidth={3} transparent opacity={0.95} />
+      )}
+      {/* Post-contact "hit ball" trail — orange, always shown when present */}
+      {hitTrail.length > 1 && (
+        <Line points={hitTrail} color="#F57C00" lineWidth={3} transparent opacity={0.95} />
       )}
 
     </>
@@ -455,26 +726,48 @@ export default function PitchAnimation3D({
   target,
   angle,
   testMode,
+  freeze,
+  gameMode,
+  skipRotation,
+  preFlyDelay,
+  flightTimeScale,
+  contactLaunch,
   onPhaseChange,
+  onBallUpdate,
 }: {
   pitch: SelectedPitch
   target: { x: number; y: number }
   angle: ViewAngle
   testMode?: boolean
+  freeze?: boolean
+  gameMode?: boolean
+  skipRotation?: boolean
+  preFlyDelay?: number
+  flightTimeScale?: number
+  contactLaunch?: { ev: number; la: number; sprayAngle: number } | null
   onPhaseChange?: (phase: Phase) => void
+  onBallUpdate?: BallUpdateCb
 }) {
   return (
     <Canvas
       camera={{ fov: 58, near: 0.1, far: 500 }}
-      // Duo-tone sky: pale beige fading to ground beige.
-      style={{ background: 'linear-gradient(to bottom, #DCD0BC 0%, #C2B49C 60%, #A89980 100%)' }}
+      // Dark slate sky at the top (so the white ball stands out against it)
+      // fading through neutral grey to the ground-beige at the horizon.
+      style={{ background: 'linear-gradient(to bottom, #1F2A35 0%, #3B4651 35%, #6E665A 70%, #928470 100%)' }}
     >
       <SceneContent
         pitch={pitch}
         target={target}
         angle={angle}
         testMode={testMode}
+        freeze={freeze}
+        gameMode={gameMode}
+        skipRotation={skipRotation}
+        preFlyDelay={preFlyDelay}
+        flightTimeScale={flightTimeScale}
+        contactLaunch={contactLaunch}
         onPhaseChange={onPhaseChange}
+        onBallUpdate={onBallUpdate}
       />
     </Canvas>
   )

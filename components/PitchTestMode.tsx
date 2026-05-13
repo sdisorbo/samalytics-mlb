@@ -120,7 +120,7 @@ export default function PitchTestMode({
 
   const score = useMemo(() => history.filter((h) => h.correct).length, [history])
 
-  const handlePhaseChange = useCallback((p: 'rotate' | 'fly' | 'frozen') => {
+  const handlePhaseChange = useCallback((p: 'rotate' | 'wait' | 'fly' | 'post_contact' | 'frozen') => {
     if (p === 'frozen') {
       setPhase((prev) => (prev === 'animating' ? 'guessing' : prev))
     }

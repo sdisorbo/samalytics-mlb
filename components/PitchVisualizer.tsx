@@ -13,6 +13,7 @@ import { LogicBreakdown, Code } from './LogicBreakdown'
 // Lazy-load the 3D scene so three.js doesn't ship on other routes.
 const PitchAnimation3D = dynamic(() => import('./PitchAnimation3D'), { ssr: false })
 const PitchTestMode = dynamic(() => import('./PitchTestMode'), { ssr: false })
+const PitchGameMode = dynamic(() => import('./PitchGameMode'), { ssr: false })
 
 type ViewAngle = 'center' | 'right' | 'left'
 
@@ -331,6 +332,7 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
   const [animating, setAnimating] = useState(false)
   const [angle, setAngle] = useState<ViewAngle>('center')
   const [testMode, setTestMode] = useState(false)
+  const [gameMode, setGameMode] = useState(false)
 
   // Build a SelectedPitch from a sidebar leaderboard row.
   function pickFromRanked(r: RankedPitch) {
@@ -422,11 +424,26 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
   if (testMode) {
     return <PitchTestMode arsenal={arsenal} onExit={() => setTestMode(false)} />
   }
+  if (gameMode) {
+    return (
+      <PitchGameMode
+        initialPitcher={selectedPitcher}
+        arsenal={arsenal}
+        onExit={() => setGameMode(false)}
+      />
+    )
+  }
 
   return (
     <div className="space-y-3">
-      {/* Top bar: Test Mode entry */}
-      <div className="flex justify-end">
+      {/* Top bar: Test Mode + Game Mode entry */}
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={() => setGameMode(true)}
+          className="px-3 py-1.5 text-xs font-bold rounded border-2 border-538-orange text-538-orange hover:bg-538-orange hover:text-white transition-colors"
+        >
+          🎮 Game Mode · Try to Hit
+        </button>
         <button
           onClick={() => setTestMode(true)}
           className="px-3 py-1.5 text-xs font-bold rounded border-2 border-538-orange text-538-orange hover:bg-538-orange hover:text-white transition-colors"
