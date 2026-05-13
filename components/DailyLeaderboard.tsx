@@ -39,9 +39,9 @@ export default function DailyLeaderboard({
   data: DailyData
   compact?: boolean
 }) {
-  // Default sort: SLG (which is also the ranking metric).
-  const [sortKey, setSortKey] = useState<SortKey>('slg')
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
+  // Default sort: rank ascending (1 → 10).
+  const [sortKey, setSortKey] = useState<SortKey>('rank')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
 
   // The leaderboard order (rank) is fixed — by compareEntries (SLG with
   // tiebreaker). The user can re-sort the displayed table by any column, but
@@ -54,7 +54,7 @@ export default function DailyLeaderboard({
     const rows = [...ranked]
     rows.sort((a, b) => {
       const dir = sortDir === 'desc' ? -1 : 1
-      if (sortKey === 'rank') return dir * (b.rank - a.rank)
+      if (sortKey === 'rank') return dir * (a.rank - b.rank)
       if (sortKey === 'name') return dir * b.entry.name.localeCompare(a.entry.name)
       if (sortKey === 'pitcher') return dir * b.entry.pitcher.localeCompare(a.entry.pitcher)
       const av = (a.entry as unknown as Record<string, number>)[sortKey] ?? 0
