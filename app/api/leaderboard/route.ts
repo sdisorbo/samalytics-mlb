@@ -49,13 +49,17 @@ async function loadToday(): Promise<DailyData> {
   }
 }
 
-async function saveToday(next: DailyData) {
+async function saveToday(next: DailyData): Promise<{ ok: boolean; error?: string }> {
   const redis = getRedis()
-  if (!redis) return
+  if (!redis) {
+    return { ok: false, error: 'Leaderboard storage is not configured.' }
+  }
   try {
     await redis.set(storageKey(next.date), next, { ex: TTL_SECONDS })
+    return { ok: true }
   } catch (err) {
     console.warn('[leaderboard] redis.set failed:', err)
+    return { ok: false, error: `Could not persist: ${String(err)}` }
   }
 }
 
@@ -93,7 +97,13 @@ export async function POST(req: Request) {
     if (body.action === 'recordPlay') {
       const current = await loadToday()
       const next: DailyData = { ...current, plays: current.plays + 1 }
-      await saveToday(next)
+      const saved = await saveToday(next)
+      if (!saved.ok) {
+        return NextResponse.json(
+          { ...current, error: saved.error },
+          { status: 500, headers: { 'Cache-Control': 'no-store' } },
+        )
+      }
       return NextResponse.json(next, { headers: { 'Cache-Control': 'no-store' } })
     }
 
@@ -124,7 +134,20 @@ export async function POST(req: Request) {
         .slice(0, MAX_ENTRIES)
       const rank = all.findIndex((x) => x.ts === ts && x.name === candidate.name) + 1
       const next: DailyData = { ...current, entries: all }
-      await saveToday(next)
+      const saved = await saveToday(next)
+      if (!saved.ok) {
+        // Don't claim victory if we couldn't persist — the user would see
+        // their rank, then refresh and find no record of it.
+        return NextResponse.json(
+          {
+            admitted: false,
+            rank: null,
+            error: saved.error || 'Could not save to leaderboard.',
+            data: current,
+          },
+          { status: 500, headers: { 'Cache-Control': 'no-store' } },
+        )
+      }
       return NextResponse.json(
         { admitted: rank > 0, rank: rank > 0 ? rank : null, data: next },
         { headers: { 'Cache-Control': 'no-store' } },
