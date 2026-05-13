@@ -39,6 +39,20 @@ export default function PitchVisPage({
         avg_speed: pitch.avg_speed,
         break_x: pitch.break_x,
         break_z: pitch.break_z,
+        release_pos_x: pitch.release_pos_x,
+        release_pos_y: pitch.release_pos_y,
+        release_pos_z: pitch.release_pos_z,
+        release_extension: pitch.release_extension,
+        release_spin_rate: pitch.release_spin_rate,
+        spin_axis: pitch.spin_axis,
+        effective_speed: pitch.effective_speed,
+        vx0: pitch.vx0,
+        vy0: pitch.vy0,
+        vz0: pitch.vz0,
+        ax: pitch.ax,
+        ay: pitch.ay,
+        az: pitch.az,
+        arm_angle: pitch.arm_angle,
       })
     }
   }

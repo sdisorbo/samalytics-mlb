@@ -246,13 +246,39 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
   // RIGHT. We anchor our convention to physical reality:
   //   world +x = 3B side of field (pitcher's right)
   //   world -x = 1B side of field
-  // RHP releases from his right hand (3B side, +x); LHP from his left (1B, -x).
-  const releaseX = pitch.pitcher_hand === 'R' ? 1.8 : -1.8
-  const releaseY = 6.0
-  const releasePos = useMemo(
-    () => new THREE.Vector3(releaseX, releaseY, RELEASE_Z),
-    [releaseX, releaseY],
-  )
+  //
+  // Statcast (catcher-view) → scene conversion:
+  //   scene.x = −statcast.x   (Statcast +x = 1B side, our +x = 3B side)
+  //   scene.y =  statcast.z   (both +up)
+  //   scene.z =  statcast.y   (Statcast +y = toward mound, same as ours)
+  // Velocity and acceleration vectors flip with the same rule.
+
+  // Real release point when kinematic data is present; fall back to a
+  // hardcoded location for old/sparse data.
+  const useKinematics =
+    pitch.release_pos_x != null &&
+    pitch.release_pos_y != null &&
+    pitch.release_pos_z != null &&
+    pitch.ax != null &&
+    pitch.ay != null &&
+    pitch.az != null
+
+  const releasePos = useMemo(() => {
+    if (useKinematics) {
+      return new THREE.Vector3(
+        -(pitch.release_pos_x as number),
+        pitch.release_pos_z as number,
+        pitch.release_pos_y as number,
+      )
+    }
+    return new THREE.Vector3(
+      pitch.pitcher_hand === 'R' ? 1.8 : -1.8,
+      6.0,
+      RELEASE_Z,
+    )
+  }, [useKinematics, pitch.release_pos_x, pitch.release_pos_y, pitch.release_pos_z, pitch.pitcher_hand])
+
+  const releaseX = releasePos.x // for PitcherCard placement
 
   // SVG zone click uses the catcher/broadcast convention: +svg_x = catcher's
   // right = 1B side. Scene +x is 3B side, so we negate to map.
@@ -262,49 +288,57 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
   )
 
   const ROT_DURATION = 1.5
-  // Real-time flight: ball traverses scene at TRUE mph (in scene feet/sec).
-  // Distance = release → target straight line ≈ 55 ft.
+  // Flight time: use effective_speed (perceived velocity) when available;
+  // otherwise avg_speed. distance is release → target.
   const flightTime = useMemo(() => {
-    const mph = pitch.avg_speed ?? 90
+    const mph = pitch.effective_speed ?? pitch.avg_speed ?? 90
     const distFt = releasePos.distanceTo(targetPos)
-    return distFt / (mph * 1.467) // mph → ft/s
-  }, [pitch.avg_speed, releasePos, targetPos])
+    return distFt / (mph * 1.467)
+  }, [pitch.effective_speed, pitch.avg_speed, releasePos, targetPos])
 
-  // Break vector in scene coords. break_x_data is in pitcher's view where
-  // +x = pitcher's right = 3B side, which matches our scene +x directly — so
-  // NO sign flip is needed here. break_z is induced vertical break (IVB):
-  //   IVB > 0 = ball drops LESS than a spinless pitch (4-seam ride)
-  //   IVB < 0 = ball drops MORE than a spinless pitch (curveball)
+  // ── Trajectory model ─────────────────────────────────────────────────────
+  // When kinematics present, use the REAL per-pitch-type average acceleration
+  // vector (gravity + Magnus baked together) and solve initial velocity so
+  // the ball lands at the user's target. No amplification, no break heuristic.
   //
-  // Selective visual amplification: real IVB values are only a few inches on a
-  // ~3-ft gravity drop, so breaking pitches read as subtle from the camera.
-  // We amplify horizontal break and *downward* IVB so curveballs and sweepers
-  // pop. Upward IVB (fastball ride) stays at 1× — over-amplifying it makes a
-  // fastball look unnatural.
+  // When kinematics absent, fall back to: explicit gravity + amplified
+  // late-loaded spin drift derived from break_x/break_z.
+
+  // Acceleration vector (scene coords). For kinematics path, this is real.
+  // For fallback path, it's just gravity (Magnus comes in via the drift term).
+  const aScene = useMemo(() => {
+    if (useKinematics) {
+      return new THREE.Vector3(
+        -(pitch.ax as number),
+        pitch.az as number,
+        pitch.ay as number,
+      )
+    }
+    return new THREE.Vector3(0, -GRAVITY, 0)
+  }, [useKinematics, pitch.ax, pitch.ay, pitch.az])
+
+  // Visual break drift (fallback path only). When kinematics are present,
+  // breakScene = (0,0,0) because the acceleration vector already contains Magnus.
   const X_AMP = 2.2
   const Z_AMP_DOWN = 2.5
   const breakScene = useMemo(() => {
+    if (useKinematics) return new THREE.Vector3(0, 0, 0)
     const bx_ft = (pitch.break_x ?? 0) / 12
     const bz_ft = (pitch.break_z ?? 0) / 12
     const zAmp = bz_ft < 0 ? Z_AMP_DOWN : 1.0
     return new THREE.Vector3(bx_ft * X_AMP, bz_ft * zAmp, 0)
-  }, [pitch.break_x, pitch.break_z])
+  }, [useKinematics, pitch.break_x, pitch.break_z])
 
-  // Initial velocity such that the actual ball (gravity + break drift) lands
-  // exactly at the user's target. Pitcher aims to compensate for both:
-  //   release + v·T − 0.5·g·T²·ŷ + breakScene = target
-  //   → v = (target − release + 0.5·g·T²·ŷ − breakScene) / T
+  // Initial velocity such that release + v·T + ½·a·T² + breakScene = target.
   const initialVel = useMemo(() => {
     const T = flightTime
-    const dx = targetPos.x - releasePos.x
-    const dy = targetPos.y - releasePos.y
-    const dz = targetPos.z - releasePos.z
-    return new THREE.Vector3(
-      (dx - breakScene.x) / T,
-      (dy + 0.5 * GRAVITY * T * T - breakScene.y) / T,
-      (dz - breakScene.z) / T,
-    )
-  }, [releasePos, targetPos, flightTime, breakScene])
+    const halfATsq = aScene.clone().multiplyScalar(0.5 * T * T)
+    return new THREE.Vector3()
+      .subVectors(targetPos, releasePos)
+      .sub(halfATsq)
+      .sub(breakScene)
+      .divideScalar(T)
+  }, [releasePos, targetPos, flightTime, aScene, breakScene])
 
   // Camera positions
   const camStart = useMemo(() => new THREE.Vector3(0, 4.8, -9), [])
@@ -341,15 +375,16 @@ function SceneContent({ pitch, target, angle, testMode, onPhaseChange }: ScenePr
     } else if (phaseRef.current === 'fly') {
       const tt = Math.min(elapsed / flightTime, 1)
       const t = tt * flightTime // real seconds elapsed in flight
-      // Physics trajectory: kinematic motion under gravity plus a break drift
-      // that accumulates cubically over flight (most of the break happens in
-      // the last third — that's the "snap" of a curveball, sweeper, etc.).
-      // Returns exactly to `targetPos` at t = flightTime.
+      // pos(t) = release + v·t + ½·a·t² + breakDrift(t)
+      //   • a is the REAL acceleration vector (gravity + Magnus combined) when
+      //     kinematic data is available; otherwise just gravity.
+      //   • breakDrift is zero when kinematics are present; otherwise it's the
+      //     cubic late-loaded spin drift derived from break_x/break_z.
       const driftFactor = tt * tt * tt
       const pos = new THREE.Vector3(
-        releasePos.x + initialVel.x * t + breakScene.x * driftFactor,
-        releasePos.y + initialVel.y * t - 0.5 * GRAVITY * t * t + breakScene.y * driftFactor,
-        releasePos.z + initialVel.z * t + breakScene.z * driftFactor,
+        releasePos.x + initialVel.x * t + 0.5 * aScene.x * t * t + breakScene.x * driftFactor,
+        releasePos.y + initialVel.y * t + 0.5 * aScene.y * t * t + breakScene.y * driftFactor,
+        releasePos.z + initialVel.z * t + 0.5 * aScene.z * t * t + breakScene.z * driftFactor,
       )
       if (ballRef.current) {
         ballRef.current.position.copy(pos)

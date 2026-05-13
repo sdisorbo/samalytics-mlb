@@ -294,6 +294,22 @@ export interface SelectedPitch {
   break_x: number | null
   break_z: number | null
   pitcher_hand: 'R' | 'L' // approximated from break direction
+  // Kinematic averages — when present, the animation uses these instead of
+  // hardcoded release point + heuristic break.
+  release_pos_x?: number | null
+  release_pos_y?: number | null
+  release_pos_z?: number | null
+  release_extension?: number | null
+  release_spin_rate?: number | null
+  spin_axis?: number | null
+  effective_speed?: number | null
+  vx0?: number | null
+  vy0?: number | null
+  vz0?: number | null
+  ax?: number | null
+  ay?: number | null
+  az?: number | null
+  arm_angle?: number | null
 }
 
 // Infer pitcher hand from break_x sign for arm-side pitches in the arsenal.
@@ -335,6 +351,20 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
       break_x: r.break_x,
       break_z: r.break_z,
       pitcher_hand: hand,
+      release_pos_x: r.release_pos_x,
+      release_pos_y: r.release_pos_y,
+      release_pos_z: r.release_pos_z,
+      release_extension: r.release_extension,
+      release_spin_rate: r.release_spin_rate,
+      spin_axis: r.spin_axis,
+      effective_speed: r.effective_speed,
+      vx0: r.vx0,
+      vy0: r.vy0,
+      vz0: r.vz0,
+      ax: r.ax,
+      ay: r.ay,
+      az: r.az,
+      arm_angle: r.arm_angle,
     })
     setLocation(null)
     setAnimating(false)
@@ -358,6 +388,20 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
       break_x: p.break_x,
       break_z: p.break_z,
       pitcher_hand: hand,
+      release_pos_x: p.release_pos_x,
+      release_pos_y: p.release_pos_y,
+      release_pos_z: p.release_pos_z,
+      release_extension: p.release_extension,
+      release_spin_rate: p.release_spin_rate,
+      spin_axis: p.spin_axis,
+      effective_speed: p.effective_speed,
+      vx0: p.vx0,
+      vy0: p.vy0,
+      vz0: p.vz0,
+      ax: p.ax,
+      ay: p.ay,
+      az: p.az,
+      arm_angle: p.arm_angle,
     })
     setLocation(null)
     setAnimating(false)
@@ -613,84 +657,213 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
 
 const PITCH_VIS_SECTIONS = [
   {
-    title: 'Leaderboard ranking',
+    title: 'Data sources',
     body: (
       <>
         <p>
-          Source: <code>data/output/pitcher_arsenal.json</code> (Baseball Savant&apos;s
-          pitch-arsenal &amp; pitch-movement leaderboards joined on pitcher_id × pitch_type).
+          Three Baseball Savant endpoints are joined per (pitcher_id × pitch_type) into
+          one row per pitch type in <code>pitcher_arsenal.json</code>.
         </p>
+        <Code>{`/leaderboard/pitch-arsenal-stats
+  → usage_pct, whiff_pct, woba/xwoba_against,
+    hard_hit_pct, run_value_per_100
+
+/leaderboard/pitch-movement
+  → avg_speed, break_x, break_z (induced vertical break),
+    pitch_hand
+
+/statcast_search/csv  (per-pitch, aggregated locally by month)
+  → release_pos_x/y/z, release_extension, release_spin_rate,
+    spin_axis, effective_speed, arm_angle,
+    vx0/vy0/vz0, ax/ay/az          ← used for the 3D trajectory`}</Code>
         <p>
-          Run value per 100 (<code>RV/100</code>) is the per-pitch expected runs prevented
-          relative to league average. Lower is better for the pitcher, so we sort ascending.
+          The Statcast Search pull is the expensive one (~200K pitches/season). It runs
+          in monthly chunks and averages per pitch-type. Only the per-pitch-type aggregates
+          are persisted, not the individual pitches.
         </p>
-        <Code>{`ranked.sort((a, b) => a.run_value_per_100 - b.run_value_per_100)
-  .filter(p => pitcher.innings_pitched >= 20
-            && p.usage_pct >= 5
-            && p.run_value_per_100 !== null)
-  .slice(0, 30)`}</Code>
       </>
     ),
   },
   {
-    title: 'Trajectory physics',
+    title: 'Leaderboard ranking (best pitches)',
     body: (
       <>
         <p>
-          The ball follows projectile motion under gravity (g = 32.2 ft/s²) plus a spin
-          drift that accumulates over flight. Release point is ~5 ft in front of the rubber
-          (z = 55) at 6 ft height; the user&apos;s clicked target is the endpoint.
+          The sidebar ranks pitches by <strong>run value per 100 thrown</strong>. RV/100
+          is computed by Savant: each pitch state-change (e.g. 1-1 → 1-2 via called
+          strike) has a known impact on run expectancy. Sum across every throw, divide
+          by total throws, multiply by 100. Lower is better for the pitcher.
+        </p>
+        <Code>{`ranked = arsenal
+  .flatMap(p => p.pitches.map(pitch => ({ ...pitch, pitcher: p })))
+  .filter(r => r.pitcher.innings_pitched >= 20
+            && r.usage_pct >= 5
+            && r.run_value_per_100 !== null)
+  .sort((a, b) => a.run_value_per_100 - b.run_value_per_100)
+  .slice(0, 30)`}</Code>
+        <p>
+          Min 20 IP filters out fringe pitchers; min 5% usage filters out fluke pitch
+          types (e.g. a pitcher who threw 3 sliders all season).
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Trajectory: real kinematics (when available)',
+    body: (
+      <>
+        <p>
+          When per-pitch-type Statcast kinematics are loaded, the animation skips
+          heuristics and integrates the actual physical motion of the average pitch.
         </p>
         <p>
-          Initial velocity is solved so that gravity + drift land the ball exactly at the
-          target — effectively the pitcher &quot;aims&quot; to compensate for both forces.
+          <strong>Inputs from Statcast</strong> (per pitch type, season averages):
+        </p>
+        <ul className="list-disc pl-5 space-y-0.5 my-1">
+          <li><code>release_pos_x, y, z</code> — actual 3D release point in feet</li>
+          <li><code>ax, ay, az</code> — acceleration vector that already combines gravity AND the Magnus force of the pitch&apos;s spin</li>
+          <li><code>effective_speed</code> — perceived velocity at the plate (uses extension)</li>
+        </ul>
+        <p>
+          The acceleration is the key — Statcast doesn&apos;t need us to separately model
+          spin direction or Magnus force, because the radar-measured <code>a</code> vector
+          encodes both gravity and the spin-induced lift/drift in one number per axis.
+          A 4-seam fastball has <code>az ≈ −18</code> (gravity offset by backspin lift); a
+          curveball has <code>az ≈ −45</code> (gravity enhanced by topspin push).
+        </p>
+        <Code>{`// Statcast (catcher-view) → our scene frame:
+//   scene.x = −statcast.x   (flip to put 3B-side = +x)
+//   scene.y =  statcast.z   (height, +up)
+//   scene.z =  statcast.y   (depth toward mound, +z)
+
+T = distance(release, target) / (effective_speed × 1.467)
+
+// Solve initial velocity to land at user's clicked target:
+v = (target − release − ½·a·T²) / T
+
+// Replay the real physical trajectory:
+pos(t) = release + v·t + ½·a·t²`}</Code>
+        <p>
+          The user still controls the endpoint (where the ball crosses the plate); the
+          model just figures out the initial velocity that, given the real Magnus
+          acceleration, lands there. The trajectory shape (late break, ride, sweep) emerges
+          from the real <code>a</code>, not from an amplified curve.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Trajectory: fallback when kinematics missing',
+    body: (
+      <>
+        <p>
+          For pitch types without Statcast kinematic data (very rare types, sparse pitchers,
+          older seasons), we fall back to the older model: explicit gravity plus a cubic
+          late-loaded spin drift derived from <code>break_x</code> and <code>break_z</code>.
         </p>
         <Code>{`pos(t) = release
        + v · t
-       − ½ · g · t² · ŷ          // gravity
-       + breakScene · (t/T)³     // late-loaded spin drift
+       + ½ · (0, −g, 0) · t²
+       + breakScene · (t/T)³
 
-v = (target − release + ½·g·T²·ŷ − breakScene) / T`}</Code>
+breakScene.x = break_x  / 12 × 2.2          // horizontal amplification
+breakScene.y = break_z  / 12 × (break_z < 0 ? 2.5 : 1.0)
+//             ↑ negative IVB (curveballs) amplified;
+//               positive IVB (fastballs) untouched
+
+v = (target − release − ½·(0,−g,0)·T² − breakScene) / T`}</Code>
         <p>
-          Cubic drift <code>(t/T)³</code> means most of the deviation happens in the last
-          third of flight — that&apos;s the &quot;snap&quot; of a curveball or sweeper.
+          The cubic <code>(t/T)³</code> drift concentrates 75% of the break in the last
+          third of flight — the &quot;snap&quot;. Amplification is needed because real IVB
+          values are only ~10 inches against ~3 ft of gravity drop; without it everything
+          looks straight at the camera distances we use.
+        </p>
+        <p className="text-538-orange">
+          Kinematic path is preferred whenever available — the heuristic fallback is here
+          only for completeness.
         </p>
       </>
     ),
   },
   {
-    title: 'Visual amplification',
+    title: 'Coordinate frames',
     body: (
       <>
         <p>
-          Statcast&apos;s induced vertical break is measured in inches. On a ~3-ft gravity
-          drop at typical camera distances, raw values read as a near-straight line. We
-          amplify the lateral break and downward IVB so the eye can read them — positive
-          IVB (fastball ride) stays at 1× so 4-seamers still look realistic.
+          three.js&apos;s default camera looks down its local −z axis. When we point the
+          camera at a +z target (the mound), the camera&apos;s right-vector ends up in
+          world −x. We pick world +x = 3B side specifically so that the on-screen mapping
+          comes out correct:
         </p>
-        <Code>{`const X_AMP = 2.2           // all horizontal break
-const Z_AMP_DOWN = 2.5      // applied only when IVB < 0
+        <Code>{`world +x = 3B side  → renders on SCREEN LEFT
+world −x = 1B side  → renders on SCREEN RIGHT
+world +y = up       → SCREEN UP
+world +z = toward mound
 
-breakScene.x = break_x / 12 * X_AMP
-breakScene.y = break_z / 12 * (break_z < 0 ? Z_AMP_DOWN : 1)`}</Code>
+// SVG zone click uses broadcast convention (+svg_x = catcher's
+// right = 1B side), so we negate to map into scene coords:
+target.scene.x = −svg.x / 12
+target.scene.y =  svg.y / 12`}</Code>
         <p>
-          The amplified break feeds both <code>v</code> and the drift, so the ball still
-          lands exactly at the clicked spot — just with a more dramatic path getting there.
+          Pitcher release sides follow the same convention: RHP at <code>+x</code> (3B),
+          LHP at <code>−x</code> (1B). When kinematics are loaded this is no longer
+          inferred — it&apos;s read directly from <code>release_pos_x</code>.
         </p>
       </>
     ),
   },
   {
-    title: 'Camera + flight time',
+    title: 'Camera, lighting, timing',
     body: (
       <>
         <p>
-          Camera rotates over <code>1.5 s</code> from a catcher-style position to the
-          chosen view (Left / Center / Right batter angle), eased with cubic in-out. Ball
-          flight is real-time: a 95 mph pitch covers the scene in ~0.4 s.
+          Camera does a 1.5-second cubic-eased pan from a catcher-style starting position
+          to the chosen end view (Left / Center / Right batter angle). Then the ball
+          flies in real time — distance / speed at MLB scale.
         </p>
-        <Code>{`flightTime = distance(release, target) / (mph × 1.467)
-// 1.467 = ft/s per mph`}</Code>
+        <Code>{`startPos: (0, 4.8, −9)         // behind plate, slight elevation
+endPos:
+  center: (0,    5.6, −10)
+  right:  (+3.5, 5.8, −8)     // RHB box (3B side = world +x)
+  left:   (−3.5, 5.8, −8)     // LHB box (1B side)
+
+camera rotation duration  = 1.5 s, easeInOutCubic
+ball flight time          = distance / (effective_speed × 1.467)
+trail                     = polyline updated each frame, persists at freeze`}</Code>
+        <p>
+          A 95-mph pitch covers the ~55 ft from release to plate in ~0.4 s; an 80-mph
+          curveball takes ~0.5 s. That speed delta is the deceptive part of the matchup
+          and we preserve it as real-time difference.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'What&apos;s assumed vs. measured',
+    body: (
+      <>
+        <p>
+          Honesty check on what comes from data and what is stylized:
+        </p>
+        <Code>{`MEASURED FROM DATA  (Statcast averages, per pitcher × pitch_type):
+  ✓ release point (x, y, z)
+  ✓ acceleration vector (gravity + Magnus combined)
+  ✓ effective speed
+  ✓ flight time (derived from release distance + speed)
+  ✓ spin rate, spin axis (collected but not currently rendered)
+  ✓ arm angle (collected but not currently rendered)
+
+ASSUMED / STYLIZED:
+  • Target endpoint = user's click (not the pitcher's actual avg location)
+  • Initial velocity = solved to hit user's target with real a
+  • Camera positions and FOV are chosen for readability, not realism
+  • Ball size is real (~1.45" radius); spin rotation not modeled
+  • Pitcher silhouette is replaced with a colored release sphere`}</Code>
+        <p>
+          So the on-screen <em>shape</em> of every pitch (the curve, the ride, the late
+          drop) is physically accurate to the average Skenes splitter / Cole slider /
+          whoever&apos;s pitch you picked. The <em>landing spot</em> is your call.
+        </p>
       </>
     ),
   },

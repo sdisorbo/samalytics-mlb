@@ -71,6 +71,97 @@ def _sign_break_x(magnitude, pitch_type, pitch_hand):
     return magnitude  # unknown hand — leave unsigned
 
 
+def fetch_pitch_kinematics(season, start_month=3, end_month=11):
+    """
+    Pulls per-pitch kinematic data from Statcast Search (one row per pitch),
+    aggregates per (pitcher_id, pitch_type) to season averages, and returns:
+        { (pitcher_id, pitch_type): {
+              release_pos_x, release_pos_y, release_pos_z,
+              release_extension, release_spin_rate, spin_axis,
+              effective_speed, vx0, vy0, vz0, ax, ay, az,
+              arm_angle, n
+          } }
+
+    All values in Statcast's native frame (catcher-view: +x right, +y toward
+    mound, +z up). Sign conversion into our scene happens in the TS animation.
+
+    Pulled month-by-month to keep response sizes manageable. The Statcast
+    Search /csv endpoint refuses ranges that span > ~30 days at full volume.
+    """
+    import calendar
+
+    KINE_COLS = [
+        "release_pos_x", "release_pos_y", "release_pos_z",
+        "release_extension", "release_spin_rate", "spin_axis",
+        "effective_speed", "vx0", "vy0", "vz0", "ax", "ay", "az",
+        "arm_angle",
+    ]
+
+    sums: dict = {}
+    counts: dict = {}
+
+    def _accum(pid: str, pt: str, row: dict):
+        key = (pid, pt)
+        if key not in sums:
+            sums[key] = {c: 0.0 for c in KINE_COLS}
+            counts[key] = {c: 0 for c in KINE_COLS}
+        for c in KINE_COLS:
+            v = _safe_float(row.get(c))
+            if v is None:
+                continue
+            sums[key][c] += v
+            counts[key][c] += 1
+
+    for month in range(start_month, end_month + 1):
+        last_day = calendar.monthrange(season, month)[1]
+        start = f"{season}-{month:02d}-01"
+        end = f"{season}-{month:02d}-{last_day:02d}"
+        print(f"    Statcast kinematics: {start} - {end}")
+        try:
+            url = f"{SAVANT_BASE}/statcast_search/csv"
+            params = {
+                "all": "true",
+                "hfSea": f"{season}|",
+                "game_date_gt": start,
+                "game_date_lt": end,
+                "player_type": "pitcher",
+                "type": "details",
+                "min_pitches": "0",
+                "min_results": "0",
+                "min_pas": "0",
+            }
+            resp = requests.get(url, params=params, headers=_HEADERS, timeout=180)
+            resp.raise_for_status()
+            content = resp.content.decode("utf-8-sig", errors="replace")
+            if len(content.strip()) < 200:
+                continue
+            reader = csv.DictReader(io.StringIO(content))
+            n = 0
+            for row in reader:
+                pid = (row.get("pitcher") or "").strip()
+                pt = (row.get("pitch_type") or "").strip()
+                if not pid or not pt:
+                    continue
+                _accum(pid, pt, row)
+                n += 1
+            print(f"      ingested {n:,} pitches")
+            time.sleep(0.5)
+        except requests.RequestException as e:
+            print(f"      warning: month {month} failed ({e})")
+            continue
+
+    # Average
+    out: dict = {}
+    for key, s in sums.items():
+        c = counts[key]
+        avg = {}
+        for col in KINE_COLS:
+            avg[col] = (s[col] / c[col]) if c[col] > 0 else None
+        avg["n"] = max(c.values()) if c else 0
+        out[key] = avg
+    return out
+
+
 def _parse_name(row):
     """Parse 'Last, First' field into 'First Last'."""
     raw = row.get("last_name, first_name", "")
@@ -95,6 +186,10 @@ def fetch_pitcher_arsenal(season):
         {"type": "pitcher", "min": 10, "year": season, "csv": "true"},
     )
     time.sleep(0.5)
+
+    print("    Fetching pitch kinematics (Statcast Search, monthly)...")
+    kinematics = fetch_pitch_kinematics(season)
+    print(f"      {len(kinematics)} (pitcher, pitch_type) kinematic averages.")
 
     print("    Fetching pitch movement data (all pitch types)...")
     _PITCH_TYPES = ["FF", "SI", "FC", "SL", "ST", "SV", "CU", "KC", "CH", "FS", "KN"]
@@ -136,6 +231,7 @@ def fetch_pitcher_arsenal(season):
             }
         pt = r.get("pitch_type", "").strip()
         mov = movement.get((pid, pt), {})
+        kine = kinematics.get((pid, pt), {})
         players[pid]["pitches"].append(
             {
                 "pitch_type": pt,
@@ -149,6 +245,23 @@ def fetch_pitcher_arsenal(season):
                 "avg_speed": mov.get("avg_speed"),
                 "break_x": _sign_break_x(mov.get("break_x"), pt, mov.get("pitch_hand")),
                 "break_z": mov.get("break_z"),
+                # Per-pitch-type kinematic averages from Statcast Search.
+                # All values in Statcast's catcher-view frame; converted to
+                # the scene frame in the TS animation code.
+                "release_pos_x": kine.get("release_pos_x"),
+                "release_pos_y": kine.get("release_pos_y"),
+                "release_pos_z": kine.get("release_pos_z"),
+                "release_extension": kine.get("release_extension"),
+                "release_spin_rate": kine.get("release_spin_rate"),
+                "spin_axis": kine.get("spin_axis"),
+                "effective_speed": kine.get("effective_speed"),
+                "vx0": kine.get("vx0"),
+                "vy0": kine.get("vy0"),
+                "vz0": kine.get("vz0"),
+                "ax": kine.get("ax"),
+                "ay": kine.get("ay"),
+                "az": kine.get("az"),
+                "arm_angle": kine.get("arm_angle"),
             }
         )
 

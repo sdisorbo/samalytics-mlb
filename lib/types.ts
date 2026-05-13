@@ -83,6 +83,24 @@ export interface PitchArsenal {
   avg_speed: number | null
   break_x: number | null
   break_z: number | null
+  // Per-pitch-type kinematic averages from Statcast Search.
+  // All values in Statcast's native catcher-view frame: +x = catcher's
+  // right (1B side), +y = toward mound, +z = up. Velocities in ft/s,
+  // accelerations in ft/s² (include gravity and Magnus combined).
+  release_pos_x?: number | null
+  release_pos_y?: number | null
+  release_pos_z?: number | null
+  release_extension?: number | null
+  release_spin_rate?: number | null
+  spin_axis?: number | null         // degrees, 0-360 (12 o'clock = 0)
+  effective_speed?: number | null   // perceived mph at the plate
+  vx0?: number | null
+  vy0?: number | null
+  vz0?: number | null
+  ax?: number | null
+  ay?: number | null
+  az?: number | null
+  arm_angle?: number | null         // degrees above horizontal
 }
 
 export interface PitcherArsenal {
@@ -134,6 +152,20 @@ export interface RankedPitch {
   avg_speed: number | null
   break_x: number | null
   break_z: number | null
+  release_pos_x?: number | null
+  release_pos_y?: number | null
+  release_pos_z?: number | null
+  release_extension?: number | null
+  release_spin_rate?: number | null
+  spin_axis?: number | null
+  effective_speed?: number | null
+  vx0?: number | null
+  vy0?: number | null
+  vz0?: number | null
+  ax?: number | null
+  ay?: number | null
+  az?: number | null
+  arm_angle?: number | null
 }
 
 export interface PlayoffTeam {
