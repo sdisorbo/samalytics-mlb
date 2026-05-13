@@ -757,7 +757,7 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
           onClick={() => setShowExitModal(true)}
           className="ml-auto px-2 py-1 text-[11px] font-semibold rounded border border-538-border text-538-muted hover:text-538-text"
         >
-          ✕ Exit
+          ✕ Exit / Submit to Leaderboard
         </button>
       </div>
 
