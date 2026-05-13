@@ -614,13 +614,13 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
                 />
                 <button
                   onClick={() => setAnimationKey((k) => k + 1)}
-                  className="px-3 py-1.5 text-xs font-semibold rounded border border-538-border bg-surface/90 text-538-text hover:bg-538-bg"
+                  className="px-3 py-1.5 text-xs font-semibold rounded border border-white/30 bg-black/40 text-white hover:bg-black/60"
                 >
                   ↺ Replay
                 </button>
                 <button
                   onClick={closeAnimation}
-                  className="px-3 py-1.5 text-xs font-semibold rounded border border-538-border bg-surface/90 text-538-text hover:bg-538-bg"
+                  className="px-3 py-1.5 text-xs font-semibold rounded border border-white/30 bg-black/40 text-white hover:bg-black/60"
                 >
                   ✕ Close
                 </button>
