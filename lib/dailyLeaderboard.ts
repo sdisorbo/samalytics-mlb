@@ -120,15 +120,30 @@ export function useDailyLeaderboard(): {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'submit', entry }),
         })
-        const json = (await res.json()) as {
+        // Try to parse JSON. If the route blew up at server level, we may
+        // get HTML back (Next.js error page) — handle that.
+        let json: {
           admitted?: boolean
           rank?: number | null
           error?: string
           data?: DailyData
+        } = {}
+        try {
+          json = await res.json()
+        } catch (parseErr) {
+          console.error('[leaderboard] response not JSON', parseErr, 'status:', res.status)
+          return {
+            admitted: false,
+            rank: null,
+            error: `Leaderboard API returned ${res.status} (non-JSON).`,
+          }
         }
         if (json.data && mountedRef.current) {
           setData(json.data)
           saveCache(json.data)
+        }
+        if (!res.ok && !json.admitted) {
+          console.warn('[leaderboard] submit returned', res.status, json)
         }
         return {
           admitted: !!json.admitted,
@@ -136,10 +151,11 @@ export function useDailyLeaderboard(): {
           error: json.error,
         }
       } catch (err) {
+        console.error('[leaderboard] fetch threw', err)
         return {
           admitted: false,
           rank: null,
-          error: 'Could not reach leaderboard service.',
+          error: `Could not reach leaderboard service: ${String(err)}`,
         }
       }
     },
