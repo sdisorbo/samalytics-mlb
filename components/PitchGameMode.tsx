@@ -342,6 +342,8 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
   // Refs for swing detection
   const ballPosRef = useRef<{ screenX: number; screenY: number } | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
+  // Live mouse position over the canvas — used to draw the bat silhouette.
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null)
 
   // Build a SelectedPitch (with hand) from an arsenal entry.
   const buildSelectedPitch = useCallback(
@@ -752,6 +754,12 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
         <div
           ref={canvasRef}
           onMouseDown={handleCanvasMouseDown}
+          onMouseMove={(e) => {
+            const rect = canvasRef.current?.getBoundingClientRect()
+            if (!rect) return
+            setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+          }}
+          onMouseLeave={() => setMousePos(null)}
           className="border border-538-border rounded bg-surface overflow-hidden cursor-crosshair select-none relative"
         >
           <div className="aspect-[4/3] relative bg-black">
@@ -805,6 +813,11 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
                   </div>
                 )}
               </div>
+            )}
+            {/* Bat silhouette follows the cursor — barrel at cursor position.
+                Shown during prep + flight so the player can pre-aim. */}
+            {mousePos && (phase === 'preparing' || phase === 'pitch_in_flight' || phase === 'between_pitches') && (
+              <BatSilhouette x={mousePos.x} y={mousePos.y} hand={hand} />
             )}
             {phase === 'pitch_in_flight' && (
               <>
@@ -1039,6 +1052,56 @@ function PitchResultOverlay({
         </button>
       </div>
     </div>
+  )
+}
+
+// Translucent baseball bat silhouette that follows the cursor. Barrel sits at
+// the cursor; the handle extends in from the batter's body side of the
+// screen at ~60° from horizontal — entering frame from the lower-left for
+// RHB, lower-right for LHB.
+function BatSilhouette({ x, y, hand }: { x: number; y: number; hand: 'R' | 'L' }) {
+  // SVG rotation is clockwise in +y-down coords. Bat is defined in local
+  // space with barrel at origin and handle extending toward +y (down).
+  // rotate(+60) for RHB → handle lower-RIGHT; rotate(-60) for LHB → lower-LEFT.
+  const rotation = hand === 'R' ? 60 : -60
+  return (
+    <svg
+      className="absolute pointer-events-none"
+      style={{
+        left: x,
+        top: y,
+        transform: 'translate(-50%, -50%)',
+        width: 280,
+        height: 280,
+      }}
+      viewBox="-100 -100 200 200"
+    >
+      <g transform={`rotate(${rotation})`}>
+        {/* Single-path bat: cap → barrel → taper → handle → knob.
+            Wood-tan fill, dark outline for definition over any background. */}
+        <path
+          d="
+            M -6 -34
+            C -6 -40 6 -40 6 -34
+            L 6 12
+            C 6 24 3 38 2.2 56
+            L 2.2 80
+            C 2.2 86 3.4 90 3.6 92
+            A 3.8 3.8 0 0 1 -3.6 92
+            C -3.4 90 -2.2 86 -2.2 80
+            L -2.2 56
+            C -3 38 -6 24 -6 12
+            Z
+          "
+          fill="#C49A6B"
+          fillOpacity={0.5}
+          stroke="#1A0F08"
+          strokeOpacity={0.75}
+          strokeWidth={1.0}
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
   )
 }
 
