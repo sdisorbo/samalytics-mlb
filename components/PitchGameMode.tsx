@@ -1114,22 +1114,24 @@ function ExitLeaderboardModal({
     obp: number
     slg: number
     ops: number
-  }) => { admitted: boolean; rank: number | null }
+  }) => Promise<{ admitted: boolean; rank: number | null; error?: string }>
 }) {
   const slash = computeSlashLine(stats)
   const eligible = stats.ab >= MIN_AB
   const [name, setName] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<{ admitted: boolean; rank: number | null } | null>(null)
 
-  function handleSubmit() {
+  async function handleSubmit() {
     setError(null)
     const check = isCleanName(name)
     if (!check.ok) {
       setError(check.reason || 'Invalid name.')
       return
     }
-    const r = submitEntry({
+    setSubmitting(true)
+    const r = await submitEntry({
       name: name.trim(),
       pitcher: pitcherLabel,
       pa: stats.pa,
@@ -1146,7 +1148,12 @@ function ExitLeaderboardModal({
       slg: slash.slg,
       ops: slash.ops,
     })
-    setResult(r)
+    setSubmitting(false)
+    if (r.error && !r.admitted) {
+      setError(r.error)
+      return
+    }
+    setResult({ admitted: r.admitted, rank: r.rank })
   }
 
   return (
@@ -1284,10 +1291,10 @@ function ExitLeaderboardModal({
               </button>
               <button
                 onClick={handleSubmit}
-                disabled={name.trim().length === 0}
+                disabled={name.trim().length === 0 || submitting}
                 className="flex-1 px-3 py-1.5 text-xs font-bold rounded bg-538-orange text-white hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                Submit
+                {submitting ? 'Submitting…' : 'Submit'}
               </button>
             </div>
           </div>

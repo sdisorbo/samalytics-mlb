@@ -1,209 +1,150 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  emptyDaily,
+  utcDateString,
+  type DailyData,
+  type LeaderboardEntry,
+} from './leaderboardCore'
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// Re-export everything from the core so existing call sites keep working
+// without changing their imports.
+export {
+  compareEntries,
+  computeSlashLine,
+  isCleanName,
+  utcDateString,
+  emptyDaily,
+  MAX_ENTRIES,
+  MIN_AB,
+  SLG_CLOSENESS,
+  type LeaderboardEntry,
+  type DailyData,
+} from './leaderboardCore'
 
-export interface LeaderboardEntry {
-  name: string
-  /** Pitcher faced. Literal "Random" when random-pitcher mode was used. */
-  pitcher: string
-  pa: number
-  ab: number
-  h: number
-  k: number
-  bb: number
-  hr: number
-  h1: number
-  h2: number
-  h3: number
-  /** Cached slash-line numbers (computed when the entry is created). */
-  avg: number
-  obp: number
-  slg: number
-  ops: number
-  /** Submission timestamp (ms since epoch). Used for stable tie-tie-breaks. */
-  ts: number
-}
+// ── Local cache so the UI doesn't flash empty while fetch is in flight ──────
+const LOCAL_CACHE_KEY = 'samalytics:gameLeaderboard:cache'
 
-export interface DailyData {
-  date: string // YYYY-MM-DD in local time
-  plays: number // total attempts logged today (regardless of leaderboard fit)
-  entries: LeaderboardEntry[]
-}
-
-// ── Constants ────────────────────────────────────────────────────────────────
-
-export const MAX_ENTRIES = 10
-export const MIN_AB = 5
-export const SLG_CLOSENESS = 0.20 // 20% — within this, more ABs ranks higher
-const STORAGE_KEY_PREFIX = 'samalytics:gameLeaderboard:'
-
-// ── Date helpers ─────────────────────────────────────────────────────────────
-
-export function localDateString(d = new Date()): string {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}
-
-// ── Slash-line math ──────────────────────────────────────────────────────────
-
-export function computeSlashLine(
-  s: Pick<LeaderboardEntry, 'ab' | 'h' | 'pa' | 'bb' | 'h1' | 'h2' | 'h3' | 'hr'>,
-) {
-  const tb = s.h1 + 2 * s.h2 + 3 * s.h3 + 4 * s.hr
-  const avg = s.ab > 0 ? s.h / s.ab : 0
-  const obp = s.pa > 0 ? (s.h + s.bb) / s.pa : 0
-  const slg = s.ab > 0 ? tb / s.ab : 0
-  return { avg, obp, slg, ops: obp + slg, tb }
-}
-
-// ── Ranking comparator ──────────────────────────────────────────────────────
-//
-// Primary: higher SLG ranks first.
-// Tiebreaker: if two entries' SLGs are within SLG_CLOSENESS (20%) of each
-// other (computed as |a.slg − b.slg| / max(a.slg, b.slg)), the entry with
-// MORE ABs ranks first. Last resort: earlier submission wins.
-
-export function compareEntries(a: LeaderboardEntry, b: LeaderboardEntry): number {
-  const maxSlg = Math.max(a.slg, b.slg)
-  if (maxSlg > 0 && Math.abs(a.slg - b.slg) / maxSlg < SLG_CLOSENESS) {
-    if (b.ab !== a.ab) return b.ab - a.ab
-  } else if (b.slg !== a.slg) {
-    return b.slg - a.slg
-  }
-  return a.ts - b.ts
-}
-
-// ── Slur / profanity filter ─────────────────────────────────────────────────
-//
-// Quick blocklist of common offensive terms. Word-boundary matching with a few
-// common letter→digit substitutions. Not exhaustive — real-world apps need a
-// dedicated moderation service.
-
-const BANNED_PATTERNS: RegExp[] = [
-  /\bf+u+c+k+/i,
-  /\bs+h+i+t+/i,
-  /\bb+i+t+c+h+/i,
-  /\ba+s+s+h+o+l+e+/i,
-  /\bc+u+n+t+/i,
-  /\bp+u+s+s+y+/i,
-  /\bd+i+c+k+h+e+a+d+/i,
-  /\bn+[i!1]+g+(?:e+r|a+)/i,
-  /\bf+[a@4]+g+(?:g+)?[o0]+t+/i,
-  /\br+e+t+[a@4]+r+d+/i,
-  /\bk+[i!1]+k+e+/i,
-  /\bc+h+[i!1]+n+k+/i,
-  /\bs+p+[i!1]+c+/i,
-  /\bw+e+t+b+a+c+k+/i,
-  /\bt+r+[a@4]+n+n+y+/i,
-  /\bs+l+u+t+/i,
-  /\bw+h+o+r+e+/i,
-  /\bn+a+z+i+/i,
-  /\bh+[i!1]+t+l+e+r+/i,
-]
-
-export function isCleanName(raw: string): { ok: boolean; reason?: string } {
-  const name = raw.trim()
-  if (name.length === 0) return { ok: false, reason: 'Name is empty.' }
-  if (name.length > 24) return { ok: false, reason: 'Name is too long (24 max).' }
-  if (!/^[a-zA-Z0-9 _.\-!?]+$/.test(name))
-    return { ok: false, reason: 'Letters, numbers, spaces, _ . - ! ? only.' }
-  for (const p of BANNED_PATTERNS) {
-    if (p.test(name)) return { ok: false, reason: 'That name was flagged. Try another.' }
-  }
-  return { ok: true }
-}
-
-// ── Storage ──────────────────────────────────────────────────────────────────
-
-function emptyData(date: string): DailyData {
-  return { date, plays: 0, entries: [] }
-}
-
-function load(date: string): DailyData {
-  if (typeof window === 'undefined') return emptyData(date)
+function loadCache(): DailyData | null {
+  if (typeof window === 'undefined') return null
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY_PREFIX + date)
-    if (!raw) return emptyData(date)
+    const raw = window.localStorage.getItem(LOCAL_CACHE_KEY)
+    if (!raw) return null
     const parsed = JSON.parse(raw) as DailyData
-    if (parsed.date !== date) return emptyData(date)
+    if (parsed.date !== utcDateString()) return null
     return parsed
   } catch {
-    return emptyData(date)
+    return null
   }
 }
 
-function save(data: DailyData) {
+function saveCache(data: DailyData) {
   if (typeof window === 'undefined') return
   try {
-    window.localStorage.setItem(STORAGE_KEY_PREFIX + data.date, JSON.stringify(data))
-    // Notify other tabs / components on the same page.
-    window.dispatchEvent(new CustomEvent('samalytics:leaderboard:updated', { detail: data.date }))
+    window.localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(data))
   } catch {
-    /* quota exceeded — ignore */
+    /* ignore */
   }
 }
 
-// ── Hook ─────────────────────────────────────────────────────────────────────
+// ── Hook ────────────────────────────────────────────────────────────────────
 
 export function useDailyLeaderboard(): {
   data: DailyData
-  /** Increment the "people who played today" counter (regardless of fit). */
-  recordPlay: () => void
-  /**
-   * Try to add an entry to today's top-10. Returns { admitted, rank, total }
-   * where `rank` is the 1-indexed position (if admitted) and `total` is the
-   * size of the leaderboard after the attempt. Pure read of result, write
-   * happens to localStorage + dispatched event.
-   */
-  submitEntry: (entry: Omit<LeaderboardEntry, 'ts'>) => {
+  loading: boolean
+  recordPlay: () => Promise<void>
+  submitEntry: (entry: Omit<LeaderboardEntry, 'ts'>) => Promise<{
     admitted: boolean
     rank: number | null
-  }
+    error?: string
+  }>
 } {
-  const today = localDateString()
-  const [data, setData] = useState<DailyData>(() => load(today))
+  const [data, setData] = useState<DailyData>(() => loadCache() ?? emptyDaily(utcDateString()))
+  const [loading, setLoading] = useState(true)
+  const mountedRef = useRef(true)
 
-  // Refresh on date roll-over and on storage events from other components.
+  // Initial fetch + light periodic refresh so the board updates when other
+  // viewers submit while this tab is open.
   useEffect(() => {
-    function refresh() {
-      setData(load(localDateString()))
+    mountedRef.current = true
+    let cancelled = false
+
+    async function refresh() {
+      try {
+        const res = await fetch('/api/leaderboard', { cache: 'no-store' })
+        if (!res.ok) return
+        const fresh = (await res.json()) as DailyData
+        if (cancelled) return
+        setData(fresh)
+        saveCache(fresh)
+      } catch {
+        /* offline / API not configured — fall back to local cache */
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
     }
-    refresh() // catch SSR/CSR mismatch on first mount
-    window.addEventListener('samalytics:leaderboard:updated', refresh)
-    window.addEventListener('storage', refresh)
+
+    refresh()
+    const id = window.setInterval(refresh, 60_000) // refresh once a minute
     return () => {
-      window.removeEventListener('samalytics:leaderboard:updated', refresh)
-      window.removeEventListener('storage', refresh)
+      cancelled = true
+      mountedRef.current = false
+      window.clearInterval(id)
     }
   }, [])
 
-  const recordPlay = useCallback(() => {
-    const date = localDateString()
-    const current = load(date)
-    const next: DailyData = { ...current, plays: current.plays + 1 }
-    save(next)
-    setData(next)
+  const recordPlay = useCallback(async () => {
+    try {
+      const res = await fetch('/api/leaderboard', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'recordPlay' }),
+      })
+      if (!res.ok) return
+      const next = (await res.json()) as DailyData
+      if (mountedRef.current) {
+        setData(next)
+        saveCache(next)
+      }
+    } catch {
+      /* ignore — best-effort */
+    }
   }, [])
 
   const submitEntry = useCallback(
-    (entry: Omit<LeaderboardEntry, 'ts'>) => {
-      const date = localDateString()
-      const current = load(date)
-      const ts = Date.now()
-      const candidate: LeaderboardEntry = { ...entry, ts }
-      const all = [...current.entries, candidate].sort(compareEntries).slice(0, MAX_ENTRIES)
-      const rank = all.findIndex((e) => e.ts === ts && e.name === entry.name) + 1
-      const next: DailyData = { ...current, entries: all }
-      save(next)
-      setData(next)
-      return { admitted: rank > 0, rank: rank > 0 ? rank : null }
+    async (entry: Omit<LeaderboardEntry, 'ts'>) => {
+      try {
+        const res = await fetch('/api/leaderboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'submit', entry }),
+        })
+        const json = (await res.json()) as {
+          admitted?: boolean
+          rank?: number | null
+          error?: string
+          data?: DailyData
+        }
+        if (json.data && mountedRef.current) {
+          setData(json.data)
+          saveCache(json.data)
+        }
+        return {
+          admitted: !!json.admitted,
+          rank: json.rank ?? null,
+          error: json.error,
+        }
+      } catch (err) {
+        return {
+          admitted: false,
+          rank: null,
+          error: 'Could not reach leaderboard service.',
+        }
+      }
     },
     [],
   )
 
-  return { data, recordPlay, submitEntry }
+  return { data, loading, recordPlay, submitEntry }
 }
