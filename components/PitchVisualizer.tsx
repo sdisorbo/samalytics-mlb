@@ -839,7 +839,7 @@ trail                     = polyline updated each frame, persists at freeze`}</C
     ),
   },
   {
-    title: 'What&apos;s assumed vs. measured',
+    title: "What's assumed vs. measured",
     body: (
       <>
         <p>
