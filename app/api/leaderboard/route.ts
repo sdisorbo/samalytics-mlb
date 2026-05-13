@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { kv } from '@vercel/kv'
+import { Redis } from '@upstash/redis'
 import {
   compareEntries,
   emptyDaily,
@@ -22,26 +22,37 @@ function storageKey(date: string) {
   return STORAGE_KEY_PREFIX + date
 }
 
+// Lazily build the Redis client so a missing env-var at build/SSR time
+// doesn't crash the route — it just returns empty data instead.
+function getRedis(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) return null
+  return new Redis({ url, token })
+}
+
 async function loadToday(): Promise<DailyData> {
   const date = utcDateString()
   const key = storageKey(date)
+  const redis = getRedis()
+  if (!redis) return emptyDaily(date)
   try {
-    const data = (await kv.get<DailyData>(key)) ?? null
+    const data = (await redis.get<DailyData>(key)) ?? null
     if (!data || data.date !== date) return emptyDaily(date)
     return data
   } catch (err) {
-    // KV not provisioned yet — fall through to empty board so the UI still
-    // renders. Server logs will show the real error in Vercel.
-    console.warn('[leaderboard] kv.get failed:', err)
+    console.warn('[leaderboard] redis.get failed:', err)
     return emptyDaily(date)
   }
 }
 
 async function saveToday(next: DailyData) {
+  const redis = getRedis()
+  if (!redis) return
   try {
-    await kv.set(storageKey(next.date), next, { ex: TTL_SECONDS })
+    await redis.set(storageKey(next.date), next, { ex: TTL_SECONDS })
   } catch (err) {
-    console.warn('[leaderboard] kv.set failed:', err)
+    console.warn('[leaderboard] redis.set failed:', err)
   }
 }
 
