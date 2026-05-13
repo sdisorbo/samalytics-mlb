@@ -9,9 +9,9 @@
     "losses": 13,
     "run_diff": 90,
     "playoff_probability": 1.0,
-    "win_ds": 0.75,
-    "win_cs": 0.5,
-    "win_ws": 0.3
+    "win_ds": 0.69,
+    "win_cs": 0.47,
+    "win_ws": 0.26
   },
   {
     "team": "Rays",
@@ -23,9 +23,9 @@
     "losses": 13,
     "run_diff": 24,
     "playoff_probability": 1.0,
-    "win_ds": 0.76,
-    "win_cs": 0.62,
-    "win_ws": 0.33
+    "win_ds": 0.68,
+    "win_cs": 0.5,
+    "win_ws": 0.29
   },
   {
     "team": "Cubs",
@@ -36,10 +36,10 @@
     "wins": 27,
     "losses": 15,
     "run_diff": 44,
-    "playoff_probability": 0.941,
-    "win_ds": 0.5,
-    "win_cs": 0.2,
-    "win_ws": 0.1
+    "playoff_probability": 0.949,
+    "win_ds": 0.54,
+    "win_cs": 0.28,
+    "win_ws": 0.17
   },
   {
     "team": "Yankees",
@@ -51,9 +51,9 @@
     "losses": 16,
     "run_diff": 76,
     "playoff_probability": 1.0,
-    "win_ds": 0.36,
-    "win_cs": 0.17,
-    "win_ws": 0.08
+    "win_ds": 0.34,
+    "win_cs": 0.21,
+    "win_ws": 0.09
   },
   {
     "team": "Brewers",
@@ -64,10 +64,10 @@
     "wins": 23,
     "losses": 16,
     "run_diff": 56,
-    "playoff_probability": 0.557,
-    "win_ds": 0.25,
-    "win_cs": 0.12,
-    "win_ws": 0.05
+    "playoff_probability": 0.565,
+    "win_ds": 0.16,
+    "win_cs": 0.07,
+    "win_ws": 0.03
   },
   {
     "team": "Cardinals",
@@ -78,10 +78,10 @@
     "wins": 24,
     "losses": 17,
     "run_diff": 5,
-    "playoff_probability": 0.557,
-    "win_ds": 0.17,
-    "win_cs": 0.07,
-    "win_ws": 0.05
+    "playoff_probability": 0.565,
+    "win_ds": 0.15,
+    "win_cs": 0.05,
+    "win_ws": 0.01
   },
   {
     "team": "Padres",
@@ -92,24 +92,24 @@
     "wins": 24,
     "losses": 17,
     "run_diff": 1,
-    "playoff_probability": 0.627,
-    "win_ds": 0.14,
-    "win_cs": 0.06,
-    "win_ws": 0.01
+    "playoff_probability": 0.653,
+    "win_ds": 0.25,
+    "win_cs": 0.07,
+    "win_ws": 0.03
   },
   {
     "team": "Dodgers",
     "team_abbr": "LAD",
     "division": "National League West",
-    "elo_rating": 1523.3,
-    "elo_change_7d": -23.7,
+    "elo_rating": 1510.8,
+    "elo_change_7d": -36.2,
     "wins": 24,
-    "losses": 17,
-    "run_diff": 63,
-    "playoff_probability": 0.627,
-    "win_ds": 0.13,
-    "win_cs": 0.04,
-    "win_ws": 0.03
+    "losses": 18,
+    "run_diff": 59,
+    "playoff_probability": 0.564,
+    "win_ds": 0.08,
+    "win_cs": 0.02,
+    "win_ws": 0.01
   },
   {
     "team": "Pirates",
@@ -120,10 +120,10 @@
     "wins": 23,
     "losses": 19,
     "run_diff": 33,
-    "playoff_probability": 0.303,
-    "win_ds": 0.02,
-    "win_cs": 0.0,
-    "win_ws": 0.0
+    "playoff_probability": 0.307,
+    "win_ds": 0.09,
+    "win_cs": 0.03,
+    "win_ws": 0.02
   },
   {
     "team": "Guardians",
@@ -136,8 +136,8 @@
     "run_diff": 2,
     "playoff_probability": 0.517,
     "win_ds": 0.29,
-    "win_cs": 0.07,
-    "win_ws": 0.03
+    "win_cs": 0.08,
+    "win_ws": 0.02
   },
   {
     "team": "Reds",
@@ -148,9 +148,9 @@
     "wins": 22,
     "losses": 20,
     "run_diff": -39,
-    "playoff_probability": 0.193,
-    "win_ds": 0.02,
-    "win_cs": 0.0,
+    "playoff_probability": 0.196,
+    "win_ds": 0.03,
+    "win_cs": 0.01,
     "win_ws": 0.0
   },
   {
@@ -163,9 +163,9 @@
     "losses": 20,
     "run_diff": -8,
     "playoff_probability": 0.518,
-    "win_ds": 0.18,
-    "win_cs": 0.02,
-    "win_ws": 0.0
+    "win_ds": 0.21,
+    "win_cs": 0.08,
+    "win_ws": 0.03
   },
   {
     "team": "White Sox",
@@ -177,8 +177,8 @@
     "losses": 21,
     "run_diff": -13,
     "playoff_probability": 0.272,
-    "win_ds": 0.14,
-    "win_cs": 0.03,
+    "win_ds": 0.06,
+    "win_cs": 0.02,
     "win_ws": 0.01
   },
   {
@@ -191,8 +191,8 @@
     "losses": 22,
     "run_diff": 12,
     "playoff_probability": 0.334,
-    "win_ds": 0.12,
-    "win_cs": 0.05,
+    "win_ds": 0.2,
+    "win_cs": 0.04,
     "win_ws": 0.01
   },
   {
@@ -204,8 +204,8 @@
     "wins": 20,
     "losses": 21,
     "run_diff": -24,
-    "playoff_probability": 0.13,
-    "win_ds": 0.01,
+    "playoff_probability": 0.138,
+    "win_ds": 0.0,
     "win_cs": 0.0,
     "win_ws": 0.0
   },
@@ -219,8 +219,8 @@
     "losses": 22,
     "run_diff": -1,
     "playoff_probability": 0.266,
-    "win_ds": 0.1,
-    "win_cs": 0.02,
+    "win_ds": 0.08,
+    "win_cs": 0.03,
     "win_ws": 0.0
   },
   {
@@ -232,9 +232,9 @@
     "wins": 20,
     "losses": 22,
     "run_diff": -31,
-    "playoff_probability": 0.059,
+    "playoff_probability": 0.06,
     "win_ds": 0.01,
-    "win_cs": 0.01,
+    "win_cs": 0.0,
     "win_ws": 0.0
   },
   {
@@ -246,7 +246,7 @@
     "wins": 20,
     "losses": 22,
     "run_diff": -7,
-    "playoff_probability": 0.059,
+    "playoff_probability": 0.06,
     "win_ds": 0.0,
     "win_cs": 0.0,
     "win_ws": 0.0
@@ -261,7 +261,7 @@
     "losses": 23,
     "run_diff": -9,
     "playoff_probability": 0.136,
-    "win_ds": 0.0,
+    "win_ds": 0.02,
     "win_cs": 0.0,
     "win_ws": 0.0
   },
@@ -275,9 +275,9 @@
     "losses": 23,
     "run_diff": -15,
     "playoff_probability": 0.136,
-    "win_ds": 0.02,
-    "win_cs": 0.01,
-    "win_ws": 0.0
+    "win_ds": 0.08,
+    "win_cs": 0.03,
+    "win_ws": 0.02
   },
   {
     "team": "Tigers",
@@ -289,8 +289,8 @@
     "losses": 23,
     "run_diff": -4,
     "playoff_probability": 0.136,
-    "win_ds": 0.02,
-    "win_cs": 0.01,
+    "win_ds": 0.01,
+    "win_cs": 0.0,
     "win_ws": 0.0
   },
   {
@@ -302,7 +302,7 @@
     "wins": 19,
     "losses": 23,
     "run_diff": -6,
-    "playoff_probability": 0.0,
+    "playoff_probability": 0.012,
     "win_ds": 0.0,
     "win_cs": 0.0,
     "win_ws": 0.0
@@ -318,7 +318,7 @@
     "run_diff": -44,
     "playoff_probability": 0.031,
     "win_ds": 0.01,
-    "win_cs": 0.0,
+    "win_cs": 0.01,
     "win_ws": 0.0
   },
   {
@@ -331,6 +331,20 @@
     "losses": 24,
     "run_diff": -16,
     "playoff_probability": 0.024,
+    "win_ds": 0.01,
+    "win_cs": 0.0,
+    "win_ws": 0.0
+  },
+  {
+    "team": "Giants",
+    "team_abbr": "SF",
+    "division": "National League West",
+    "elo_rating": 1481.0,
+    "elo_change_7d": 39.2,
+    "wins": 18,
+    "losses": 24,
+    "run_diff": -38,
+    "playoff_probability": 0.0,
     "win_ds": 0.0,
     "win_cs": 0.0,
     "win_ws": 0.0
@@ -345,20 +359,6 @@
     "losses": 24,
     "run_diff": -13,
     "playoff_probability": 0.019,
-    "win_ds": 0.0,
-    "win_cs": 0.0,
-    "win_ws": 0.0
-  },
-  {
-    "team": "Giants",
-    "team_abbr": "SF",
-    "division": "National League West",
-    "elo_rating": 1468.5,
-    "elo_change_7d": 26.7,
-    "wins": 17,
-    "losses": 24,
-    "run_diff": -42,
-    "playoff_probability": 0.0,
     "win_ds": 0.0,
     "win_cs": 0.0,
     "win_ws": 0.0
@@ -415,7 +415,7 @@
     "losses": 27,
     "run_diff": -44,
     "playoff_probability": 0.005,
-    "win_ds": 0.0,
+    "win_ds": 0.01,
     "win_cs": 0.0,
     "win_ws": 0.0
   }

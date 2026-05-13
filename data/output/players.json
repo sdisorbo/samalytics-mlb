@@ -398,7 +398,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 90,
-    "obp_percentile": 84,
+    "obp_percentile": 85,
     "slg_percentile": 98,
     "ops_percentile": 97,
     "k_pct_percentile": 35,
@@ -2130,7 +2130,7 @@
     "slg_percentile": 86,
     "ops_percentile": 84,
     "k_pct_percentile": 75,
-    "bb_pct_percentile": 55
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 672012,
@@ -2805,7 +2805,7 @@
     "slg_percentile": 85,
     "ops_percentile": 78,
     "k_pct_percentile": 70,
-    "bb_pct_percentile": 55
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 607043,
@@ -2860,33 +2860,6 @@
     "ops_percentile": 78,
     "k_pct_percentile": 73,
     "bb_pct_percentile": 97
-  },
-  {
-    "player_id": 660271,
-    "name": "Shohei Ohtani",
-    "team": "LAD",
-    "team_name": "Los Angeles Dodgers",
-    "division": "National League West",
-    "position": "DH",
-    "avg": 0.242,
-    "obp": 0.372,
-    "slg": 0.43,
-    "ops": 0.802,
-    "k_pct": 23.9,
-    "bb_pct": 15.2,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 56,
-    "obp_percentile": 85,
-    "slg_percentile": 72,
-    "ops_percentile": 78,
-    "k_pct_percentile": 41,
-    "bb_pct_percentile": 89
   },
   {
     "player_id": 640902,
@@ -3022,6 +2995,33 @@
     "ops_percentile": 77,
     "k_pct_percentile": 42,
     "bb_pct_percentile": 49
+  },
+  {
+    "player_id": 660271,
+    "name": "Shohei Ohtani",
+    "team": "LAD",
+    "team_name": "Los Angeles Dodgers",
+    "division": "National League West",
+    "position": "DH",
+    "avg": 0.24,
+    "obp": 0.37,
+    "slg": 0.427,
+    "ops": 0.797,
+    "k_pct": 23.8,
+    "bb_pct": 15.1,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 54,
+    "obp_percentile": 84,
+    "slg_percentile": 71,
+    "ops_percentile": 77,
+    "k_pct_percentile": 42,
+    "bb_pct_percentile": 89
   },
   {
     "player_id": 803011,
@@ -3318,7 +3318,7 @@
     "slg_percentile": 72,
     "ops_percentile": 74,
     "k_pct_percentile": 55,
-    "bb_pct_percentile": 55
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 656537,
@@ -3530,7 +3530,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 81,
-    "obp_percentile": 68,
+    "obp_percentile": 69,
     "slg_percentile": 75,
     "ops_percentile": 73,
     "k_pct_percentile": 67,
@@ -3881,7 +3881,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 54,
-    "obp_percentile": 55,
+    "obp_percentile": 56,
     "slg_percentile": 75,
     "ops_percentile": 70,
     "k_pct_percentile": 39,
@@ -4101,7 +4101,7 @@
     "slg_percentile": 70,
     "ops_percentile": 69,
     "k_pct_percentile": 73,
-    "bb_pct_percentile": 55
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 665489,
@@ -4209,7 +4209,7 @@
     "slg_percentile": 76,
     "ops_percentile": 67,
     "k_pct_percentile": 76,
-    "bb_pct_percentile": 24
+    "bb_pct_percentile": 25
   },
   {
     "player_id": 681198,
@@ -4317,7 +4317,7 @@
     "slg_percentile": 65,
     "ops_percentile": 67,
     "k_pct_percentile": 47,
-    "bb_pct_percentile": 24
+    "bb_pct_percentile": 25
   },
   {
     "player_id": 686797,
@@ -4425,7 +4425,7 @@
     "slg_percentile": 57,
     "ops_percentile": 66,
     "k_pct_percentile": 98,
-    "bb_pct_percentile": 55
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 642215,
@@ -4907,7 +4907,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 47,
-    "obp_percentile": 84,
+    "obp_percentile": 85,
     "slg_percentile": 45,
     "ops_percentile": 62,
     "k_pct_percentile": 48,
@@ -4934,7 +4934,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 65,
-    "obp_percentile": 68,
+    "obp_percentile": 69,
     "slg_percentile": 57,
     "ops_percentile": 62,
     "k_pct_percentile": 70,
@@ -4965,7 +4965,7 @@
     "slg_percentile": 63,
     "ops_percentile": 62,
     "k_pct_percentile": 63,
-    "bb_pct_percentile": 24
+    "bb_pct_percentile": 25
   },
   {
     "player_id": 679529,
@@ -5049,33 +5049,6 @@
     "bb_pct_percentile": 93
   },
   {
-    "player_id": 650333,
-    "name": "Luis Arraez",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "position": "2B",
-    "avg": 0.305,
-    "obp": 0.339,
-    "slg": 0.377,
-    "ops": 0.716,
-    "k_pct": 4.2,
-    "bb_pct": 5.4,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 91,
-    "obp_percentile": 68,
-    "slg_percentile": 55,
-    "ops_percentile": 61,
-    "k_pct_percentile": 99,
-    "bb_pct_percentile": 24
-  },
-  {
     "player_id": 643446,
     "name": "Jeff McNeil",
     "team": "ATH",
@@ -5125,7 +5098,7 @@
     "avg_percentile": 83,
     "obp_percentile": 35,
     "slg_percentile": 71,
-    "ops_percentile": 60,
+    "ops_percentile": 61,
     "k_pct_percentile": 2,
     "bb_pct_percentile": 0
   },
@@ -5152,7 +5125,7 @@
     "avg_percentile": 83,
     "obp_percentile": 35,
     "slg_percentile": 71,
-    "ops_percentile": 60,
+    "ops_percentile": 61,
     "k_pct_percentile": 26,
     "bb_pct_percentile": 0
   },
@@ -5236,6 +5209,33 @@
     "ops_percentile": 60,
     "k_pct_percentile": 55,
     "bb_pct_percentile": 88
+  },
+  {
+    "player_id": 650333,
+    "name": "Luis Arraez",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "position": "2B",
+    "avg": 0.303,
+    "obp": 0.337,
+    "slg": 0.374,
+    "ops": 0.711,
+    "k_pct": 4.1,
+    "bb_pct": 5.3,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 90,
+    "obp_percentile": 67,
+    "slg_percentile": 55,
+    "ops_percentile": 60,
+    "k_pct_percentile": 99,
+    "bb_pct_percentile": 24
   },
   {
     "player_id": 694388,
@@ -5589,18 +5589,18 @@
     "bb_pct_percentile": 60
   },
   {
-    "player_id": 808975,
-    "name": "Hyeseong Kim",
-    "team": "LAD",
-    "team_name": "Los Angeles Dodgers",
+    "player_id": 808982,
+    "name": "Jung Hoo Lee",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
     "division": "National League West",
-    "position": "SS",
+    "position": "RF",
     "avg": 0.272,
-    "obp": 0.333,
-    "slg": 0.37,
-    "ops": 0.703,
-    "k_pct": 22.0,
-    "bb_pct": 8.8,
+    "obp": 0.316,
+    "slg": 0.386,
+    "ops": 0.702,
+    "k_pct": 12.9,
+    "bb_pct": 5.8,
     "avg_exit_velocity": null,
     "hard_hit_pct": null,
     "xba": null,
@@ -5609,11 +5609,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 76,
-    "obp_percentile": 63,
-    "slg_percentile": 53,
+    "obp_percentile": 52,
+    "slg_percentile": 59,
     "ops_percentile": 57,
-    "k_pct_percentile": 52,
-    "bb_pct_percentile": 55
+    "k_pct_percentile": 90,
+    "bb_pct_percentile": 27
   },
   {
     "player_id": 657136,
@@ -5825,7 +5825,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 93,
-    "obp_percentile": 68,
+    "obp_percentile": 69,
     "slg_percentile": 47,
     "ops_percentile": 55,
     "k_pct_percentile": 97,
@@ -5913,18 +5913,18 @@
     "bb_pct_percentile": 88
   },
   {
-    "player_id": 808982,
-    "name": "Jung Hoo Lee",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
+    "player_id": 808975,
+    "name": "Hyeseong Kim",
+    "team": "LAD",
+    "team_name": "Los Angeles Dodgers",
     "division": "National League West",
-    "position": "RF",
+    "position": "SS",
     "avg": 0.268,
-    "obp": 0.312,
-    "slg": 0.382,
-    "ops": 0.694,
-    "k_pct": 12.9,
-    "bb_pct": 5.9,
+    "obp": 0.33,
+    "slg": 0.366,
+    "ops": 0.696,
+    "k_pct": 21.7,
+    "bb_pct": 8.7,
     "avg_exit_velocity": null,
     "hard_hit_pct": null,
     "xba": null,
@@ -5933,11 +5933,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 73,
-    "obp_percentile": 50,
-    "slg_percentile": 57,
+    "obp_percentile": 61,
+    "slg_percentile": 51,
     "ops_percentile": 54,
-    "k_pct_percentile": 90,
-    "bb_pct_percentile": 28
+    "k_pct_percentile": 53,
+    "bb_pct_percentile": 55
   },
   {
     "player_id": 701675,
@@ -5965,33 +5965,6 @@
     "ops_percentile": 54,
     "k_pct_percentile": 53,
     "bb_pct_percentile": 17
-  },
-  {
-    "player_id": 606192,
-    "name": "Teoscar Hernández",
-    "team": "LAD",
-    "team_name": "Los Angeles Dodgers",
-    "division": "National League West",
-    "position": "LF",
-    "avg": 0.242,
-    "obp": 0.322,
-    "slg": 0.371,
-    "ops": 0.693,
-    "k_pct": 28.9,
-    "bb_pct": 10.1,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 56,
-    "obp_percentile": 56,
-    "slg_percentile": 54,
-    "ops_percentile": 54,
-    "k_pct_percentile": 24,
-    "bb_pct_percentile": 65
   },
   {
     "player_id": 691781,
@@ -6070,7 +6043,7 @@
     "avg_percentile": 68,
     "obp_percentile": 48,
     "slg_percentile": 57,
-    "ops_percentile": 53,
+    "ops_percentile": 54,
     "k_pct_percentile": 80,
     "bb_pct_percentile": 33
   },
@@ -6100,6 +6073,33 @@
     "ops_percentile": 53,
     "k_pct_percentile": 89,
     "bb_pct_percentile": 35
+  },
+  {
+    "player_id": 606192,
+    "name": "Teoscar Hernández",
+    "team": "LAD",
+    "team_name": "Los Angeles Dodgers",
+    "division": "National League West",
+    "position": "LF",
+    "avg": 0.241,
+    "obp": 0.32,
+    "slg": 0.368,
+    "ops": 0.688,
+    "k_pct": 29.3,
+    "bb_pct": 10.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 55,
+    "obp_percentile": 55,
+    "slg_percentile": 52,
+    "ops_percentile": 53,
+    "k_pct_percentile": 23,
+    "bb_pct_percentile": 65
   },
   {
     "player_id": 608324,
@@ -6959,7 +6959,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 51,
-    "obp_percentile": 84,
+    "obp_percentile": 85,
     "slg_percentile": 27,
     "ops_percentile": 47,
     "k_pct_percentile": 41,
@@ -8367,7 +8367,7 @@
     "slg_percentile": 38,
     "ops_percentile": 36,
     "k_pct_percentile": 64,
-    "bb_pct_percentile": 55
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 691176,
@@ -8610,7 +8610,7 @@
     "slg_percentile": 35,
     "ops_percentile": 34,
     "k_pct_percentile": 85,
-    "bb_pct_percentile": 24
+    "bb_pct_percentile": 25
   },
   {
     "player_id": 664954,
@@ -8961,7 +8961,7 @@
     "slg_percentile": 34,
     "ops_percentile": 31,
     "k_pct_percentile": 75,
-    "bb_pct_percentile": 55
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 665966,
@@ -9578,7 +9578,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 48,
-    "obp_percentile": 55,
+    "obp_percentile": 56,
     "slg_percentile": 16,
     "ops_percentile": 26,
     "k_pct_percentile": 60,
