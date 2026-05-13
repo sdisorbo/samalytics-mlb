@@ -9,6 +9,8 @@ import type {
   RankedPitch,
 } from '../lib/types'
 import { LogicBreakdown, Code } from './LogicBreakdown'
+import DailyLeaderboard from './DailyLeaderboard'
+import { useDailyLeaderboard } from '../lib/dailyLeaderboard'
 
 // Lazy-load the 3D scene so three.js doesn't ship on other routes.
 const PitchAnimation3D = dynamic(() => import('./PitchAnimation3D'), { ssr: false })
@@ -333,6 +335,8 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
   const [angle, setAngle] = useState<ViewAngle>('center')
   const [testMode, setTestMode] = useState(false)
   const [gameMode, setGameMode] = useState(false)
+  const [leaderboardOpen, setLeaderboardOpen] = useState(false)
+  const { data: leaderboardData } = useDailyLeaderboard()
 
   // Build a SelectedPitch from a sidebar leaderboard row.
   function pickFromRanked(r: RankedPitch) {
@@ -436,8 +440,14 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
 
   return (
     <div className="space-y-3">
-      {/* Top bar: Test Mode + Game Mode entry */}
-      <div className="flex justify-end gap-2">
+      {/* Top bar: Test Mode + Game Mode + collapsible Daily Leaderboard */}
+      <div className="flex justify-end gap-2 flex-wrap">
+        <button
+          onClick={() => setLeaderboardOpen((v) => !v)}
+          className="px-3 py-1.5 text-xs font-bold rounded border-2 border-538-orange text-538-orange hover:bg-538-orange hover:text-white transition-colors"
+        >
+          🏆 Daily Leaderboard {leaderboardOpen ? '▴' : '▾'}
+        </button>
         <button
           onClick={() => setGameMode(true)}
           className="px-3 py-1.5 text-xs font-bold rounded border-2 border-538-orange text-538-orange hover:bg-538-orange hover:text-white transition-colors"
@@ -451,6 +461,10 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
           ▶ Test Mode · Guess 10 Pitches
         </button>
       </div>
+
+      {leaderboardOpen && (
+        <DailyLeaderboard data={leaderboardData} />
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4">
       {/* ── Sidebar ──────────────────────────────────────────────────────── */}

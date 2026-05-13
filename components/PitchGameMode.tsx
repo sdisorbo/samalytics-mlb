@@ -5,6 +5,13 @@ import dynamic from 'next/dynamic'
 import type { PitcherArsenal, PitchArsenal } from '../lib/types'
 import type { SelectedPitch } from './PitchVisualizer'
 import type { BallUpdateCb } from './PitchAnimation3D'
+import DailyLeaderboard from './DailyLeaderboard'
+import {
+  computeSlashLine,
+  isCleanName,
+  useDailyLeaderboard,
+  MIN_AB,
+} from '../lib/dailyLeaderboard'
 
 const PitchAnimation3D = dynamic(() => import('./PitchAnimation3D'), { ssr: false })
 
@@ -345,6 +352,10 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
   // Live mouse position over the canvas — used to draw the bat silhouette.
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null)
 
+  // Daily leaderboard hook + exit/submit modal state.
+  const { data: leaderboardData, recordPlay, submitEntry } = useDailyLeaderboard()
+  const [showExitModal, setShowExitModal] = useState(false)
+
   // Build a SelectedPitch (with hand) from an arsenal entry.
   const buildSelectedPitch = useCallback(
     (a: PitcherArsenal, p: PitchArsenal): SelectedPitch => ({
@@ -402,7 +413,8 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
     setCurrent(null)
     setLastResult(null)
     setPhase('between_pitches')
-  }, [pitcher, randomPitcher])
+    recordPlay()
+  }, [pitcher, randomPitcher, recordPlay])
 
   // Trigger a new pitch. preFlyDelay = 4 s: first 3 s show the 3-2-1
   // countdown, last 1 s the disc winds up so the batter can time the pitch.
@@ -742,12 +754,22 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
           </span>
         )}
         <button
-          onClick={onExit}
+          onClick={() => setShowExitModal(true)}
           className="ml-auto px-2 py-1 text-[11px] font-semibold rounded border border-538-border text-538-muted hover:text-538-text"
         >
           ✕ Exit
         </button>
       </div>
+
+      {showExitModal && (
+        <ExitLeaderboardModal
+          stats={stats}
+          pitcherLabel={randomPitcher ? 'Random' : pitcher?.name ?? 'Unknown'}
+          onClose={onExit}
+          onCancel={() => setShowExitModal(false)}
+          submitEntry={submitEntry}
+        />
+      )}
 
       {/* Main layout: 3D scene on the left, sticky stats panel on the right. */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-2 items-start">
@@ -888,6 +910,12 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
               <SidebarKV label="1B" value={stats.h1} />
               <SidebarKV label="TB" value={tb} />
             </div>
+          </div>
+
+          {/* Daily leaderboard — always visible in game mode so the player
+              can see who they're chasing in real time. */}
+          <div className="border-t border-538-border pt-2.5">
+            <DailyLeaderboard data={leaderboardData} compact />
           </div>
         </aside>
       </div>
@@ -1050,6 +1078,220 @@ function PitchResultOverlay({
         >
           {abEnded ? 'Next AB →' : 'Next pitch →'}
         </button>
+      </div>
+    </div>
+  )
+}
+
+// Exit-time leaderboard submission modal. Shows the player's outing stats,
+// validates the entered name, attempts a top-10 submission, then reveals
+// the rank if achieved.
+function ExitLeaderboardModal({
+  stats,
+  pitcherLabel,
+  onClose,
+  onCancel,
+  submitEntry,
+}: {
+  stats: GameStats
+  /** Display string for the pitcher faced — single pitcher's name, or "Random". */
+  pitcherLabel: string
+  onClose: () => void
+  onCancel: () => void
+  submitEntry: (entry: {
+    name: string
+    pitcher: string
+    pa: number
+    ab: number
+    h: number
+    k: number
+    bb: number
+    hr: number
+    h1: number
+    h2: number
+    h3: number
+    avg: number
+    obp: number
+    slg: number
+    ops: number
+  }) => { admitted: boolean; rank: number | null }
+}) {
+  const slash = computeSlashLine(stats)
+  const eligible = stats.ab >= MIN_AB
+  const [name, setName] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [result, setResult] = useState<{ admitted: boolean; rank: number | null } | null>(null)
+
+  function handleSubmit() {
+    setError(null)
+    const check = isCleanName(name)
+    if (!check.ok) {
+      setError(check.reason || 'Invalid name.')
+      return
+    }
+    const r = submitEntry({
+      name: name.trim(),
+      pitcher: pitcherLabel,
+      pa: stats.pa,
+      ab: stats.ab,
+      h: stats.h,
+      k: stats.k,
+      bb: stats.bb,
+      hr: stats.hr,
+      h1: stats.h1,
+      h2: stats.h2,
+      h3: stats.h3,
+      avg: slash.avg,
+      obp: slash.obp,
+      slg: slash.slg,
+      ops: slash.ops,
+    })
+    setResult(r)
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.65)' }}
+    >
+      <div className="bg-surface border border-538-border rounded p-5 max-w-md w-full space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-base font-black text-538-text">Outing Complete</h2>
+          <button
+            onClick={onCancel}
+            className="text-538-muted hover:text-538-text text-sm"
+          >
+            ← Back
+          </button>
+        </div>
+
+        {/* Pitcher faced */}
+        <div className="text-xs flex items-center gap-2 text-538-muted">
+          <span className="text-[10px] uppercase tracking-wider">Faced</span>
+          <span className="font-bold text-538-text">{pitcherLabel}</span>
+          {pitcherLabel === 'Random' && (
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-538-orange/20 text-538-orange font-bold uppercase tracking-wide">
+              Random mode
+            </span>
+          )}
+        </div>
+
+        {/* Stats summary */}
+        <div className="text-xs space-y-1">
+          <div className="grid grid-cols-4 gap-1 text-center">
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">PA</div>
+              <div className="font-bold tabular-nums">{stats.pa}</div>
+            </div>
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">AB</div>
+              <div className="font-bold tabular-nums">{stats.ab}</div>
+            </div>
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">H</div>
+              <div className="font-bold tabular-nums">{stats.h}</div>
+            </div>
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">HR</div>
+              <div className="font-bold tabular-nums">{stats.hr}</div>
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-1 text-center pt-1 border-t border-538-border/40">
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">AVG</div>
+              <div className="font-bold tabular-nums">{slash.avg.toFixed(3).replace(/^0/, '')}</div>
+            </div>
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">OBP</div>
+              <div className="font-bold tabular-nums">{slash.obp.toFixed(3).replace(/^0/, '')}</div>
+            </div>
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">SLG</div>
+              <div className="font-bold tabular-nums text-538-orange">{slash.slg.toFixed(3).replace(/^0/, '')}</div>
+            </div>
+            <div>
+              <div className="text-[9px] uppercase text-538-muted">OPS</div>
+              <div className="font-bold tabular-nums">{slash.ops.toFixed(3).replace(/^0/, '')}</div>
+            </div>
+          </div>
+        </div>
+
+        {result ? (
+          // ── Post-submit result ──
+          <div className="border-t border-538-border pt-3 text-center space-y-2">
+            {result.admitted && result.rank !== null ? (
+              <>
+                <div className="text-3xl font-black" style={{ color: '#2E7D32' }}>
+                  #{result.rank}
+                </div>
+                <div className="text-xs text-538-text">
+                  You made today's leaderboard!
+                </div>
+              </>
+            ) : (
+              <div className="text-sm text-538-text">
+                Nice outing — didn't make the top {10} today.
+              </div>
+            )}
+            <button
+              onClick={onClose}
+              className="w-full px-3 py-1.5 text-xs font-bold rounded bg-538-orange text-white hover:opacity-90"
+            >
+              Close
+            </button>
+          </div>
+        ) : !eligible ? (
+          // ── Not enough ABs ──
+          <div className="border-t border-538-border pt-3 space-y-2">
+            <p className="text-xs text-538-muted text-center">
+              Need at least <span className="font-bold text-538-text">{MIN_AB} ABs</span> to qualify for the leaderboard.
+              You had {stats.ab}.
+            </p>
+            <button
+              onClick={onClose}
+              className="w-full px-3 py-1.5 text-xs font-bold rounded bg-538-orange text-white hover:opacity-90"
+            >
+              Exit
+            </button>
+          </div>
+        ) : (
+          // ── Name input ──
+          <div className="border-t border-538-border pt-3 space-y-2">
+            <div>
+              <label className="text-[10px] uppercase tracking-wider text-538-muted block mb-1">
+                Name for leaderboard
+              </label>
+              <input
+                type="text"
+                maxLength={24}
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                  setError(null)
+                }}
+                placeholder="Anonymous"
+                autoFocus
+                className="w-full px-2 py-1.5 text-sm bg-538-bg border border-538-border rounded text-538-text outline-none focus:border-538-orange"
+              />
+              {error && <div className="text-[11px] text-red-500 mt-1">{error}</div>}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={onClose}
+                className="flex-1 px-3 py-1.5 text-xs font-semibold rounded border border-538-border text-538-muted hover:text-538-text"
+              >
+                Skip
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={name.trim().length === 0}
+                className="flex-1 px-3 py-1.5 text-xs font-bold rounded bg-538-orange text-white hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
