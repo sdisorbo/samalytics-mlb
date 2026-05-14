@@ -284,10 +284,12 @@ function PitcherCard({
 // ── Animated camera + ball ───────────────────────────────────────────────────
 export type ViewAngle =
   | 'center'
-  | 'right'    // RHB batter (further-back analytical view)
-  | 'left'     // LHB batter (further-back analytical view)
-  | 'batterR'  // RHB eye-POV, close to plate (game mode)
-  | 'batterL'  // LHB eye-POV, close to plate (game mode)
+  | 'right'       // RHB batter (further-back analytical view)
+  | 'left'        // LHB batter (further-back analytical view)
+  | 'batterR'     // RHB eye-POV, close to plate (game mode)
+  | 'batterL'     // LHB eye-POV, close to plate (game mode)
+  | 'centerGameR' // Straight-on, slight RHB offset, zoomed out a touch (game mode)
+  | 'centerGameL' // Straight-on, slight LHB offset, zoomed out a touch (game mode)
 
 /** Optional callback invoked every frame during the 'fly' phase with the
  *  ball's current screen-pixel position and world-space position. Used by
@@ -478,6 +480,8 @@ function SceneContent({
     if (angle === 'batterL') return new THREE.Vector3(-3.5, 6.5, -8)
     if (angle === 'center') return new THREE.Vector3(0, 5.6, -10)
     if (angle === 'right') return new THREE.Vector3(3.5, 5.8, -8)
+    if (angle === 'centerGameR') return new THREE.Vector3(0.45, 5.5, -5)
+    if (angle === 'centerGameL') return new THREE.Vector3(-0.45, 5.5, -5)
     return new THREE.Vector3(-3.5, 5.8, -8)
   }, [angle])
   const camEndLook = useMemo(() => {
@@ -485,6 +489,11 @@ function SceneContent({
       // Look low + close so the entire strike zone AND the plate sit
       // comfortably in the lower half of the frame.
       return new THREE.Vector3(0, 1.0, 17)
+    }
+    if (angle === 'centerGameR' || angle === 'centerGameL') {
+      // Zoomed straight-on view — aim low enough that the plate sits in the
+      // bottom of the frame while the full strike zone is visible above it.
+      return new THREE.Vector3(0, 1.0, 16)
     }
     return new THREE.Vector3(0, 2.4, 30)
   }, [angle])
