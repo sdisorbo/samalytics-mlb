@@ -157,6 +157,76 @@ function gradeFromRating(r: number): { letter: string; color: string } {
 
 type InPlayOutcome = 'HR' | '3B' | '2B' | '1B' | 'OUT' | 'FOUL'
 
+// ── Statcast outcome table ────────────────────────────────────────────────────
+// Derived from 1,404 balls in play across 12 game days in 2024.
+// Each cell: [P(out), P(1B), P(2B), P(3B), P(HR)].
+// Source: baseballsavant.mlb.com/statcast_hit_probability
+const STATCAST_BIP: Record<string, [number, number, number, number, number]> = {
+  // EV < 70 mph
+  'lt70|-10to10': [1.000, 0.000, 0.000, 0.000, 0.000],
+  'lt70|10to25':  [0.950, 0.050, 0.000, 0.000, 0.000],
+  'lt70|25to50':  [1.000, 0.000, 0.000, 0.000, 0.000],
+  // EV 70-79
+  '70-79|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
+  '70-79|-10to10': [0.933, 0.067, 0.000, 0.000, 0.000],
+  '70-79|10to25':  [0.867, 0.133, 0.000, 0.000, 0.000],
+  '70-79|25to50':  [0.865, 0.135, 0.000, 0.000, 0.000],
+  '70-79|gt50':    [1.000, 0.000, 0.000, 0.000, 0.000],
+  // EV 80-89
+  '80-89|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
+  '80-89|-10to10': [0.849, 0.151, 0.000, 0.000, 0.000],
+  '80-89|10to25':  [0.759, 0.190, 0.044, 0.000, 0.007],
+  '80-89|25to50':  [0.770, 0.150, 0.080, 0.000, 0.000],
+  '80-89|gt50':    [1.000, 0.000, 0.000, 0.000, 0.000],
+  // EV 90-99
+  '90-99|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
+  '90-99|-10to10': [0.781, 0.164, 0.008, 0.000, 0.047],
+  '90-99|10to25':  [0.646, 0.254, 0.062, 0.000, 0.038],
+  '90-99|25to50':  [0.566, 0.217, 0.114, 0.006, 0.096],
+  '90-99|gt50':    [0.792, 0.125, 0.000, 0.000, 0.083],
+  // EV 100-109
+  '100-109|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
+  '100-109|-10to10': [0.692, 0.256, 0.000, 0.000, 0.051],
+  '100-109|10to25':  [0.475, 0.287, 0.125, 0.000, 0.113],
+  '100-109|25to50':  [0.356, 0.278, 0.122, 0.011, 0.233],
+  '100-109|gt50':    [0.357, 0.286, 0.000, 0.071, 0.286],
+  // EV 110+
+  '110+|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
+  '110+|-10to10': [0.333, 0.167, 0.000, 0.000, 0.500],
+  '110+|10to25':  [0.278, 0.222, 0.167, 0.056, 0.278],
+  '110+|25to50':  [0.111, 0.148, 0.185, 0.037, 0.519],
+  '110+|gt50':    [0.000, 0.000, 0.000, 0.000, 1.000],
+}
+
+function evBin(ev: number): string {
+  if (ev < 70)  return 'lt70'
+  if (ev < 80)  return '70-79'
+  if (ev < 90)  return '80-89'
+  if (ev < 100) return '90-99'
+  if (ev < 110) return '100-109'
+  return '110+'
+}
+
+function laBin(la: number): string {
+  if (la < -10) return 'lt-10'
+  if (la <  10) return '-10to10'
+  if (la <  25) return '10to25'
+  if (la <  50) return '25to50'
+  return 'gt50'
+}
+
+function statcastOutcome(ev: number, la: number): InPlayOutcome {
+  const key = `${evBin(ev)}|${laBin(la)}`
+  const row = STATCAST_BIP[key] ?? [1, 0, 0, 0, 0]
+  const [pOut, p1B, p2B, p3B] = row
+  const r = Math.random()
+  if (r < pOut)                    return 'OUT'
+  if (r < pOut + p1B)              return '1B'
+  if (r < pOut + p1B + p2B)        return '2B'
+  if (r < pOut + p1B + p2B + p3B)  return '3B'
+  return 'HR'
+}
+
 interface ContactResult {
   quality: ContactQuality
   rating: number      // 0..1
@@ -202,48 +272,26 @@ function resolveContact(distPx: number, sweetPx: number, weakPx: number): Contac
   const laRad = (la * Math.PI) / 180
   const distFt = clamp((ev * ev * Math.sin(2 * laRad)) / 25, 0, 480)
 
-  // Outcome classification — distance-first so a 350 ft ball can't be a
-  // single. Thresholds calibrated to the distFt formula above:
-  //   ev=106, la=26 ≈ 354 ft  (elite contact → deep gap)
-  //   ev=112, la=30 ≈ 426 ft  (exceptional → HR)
-  let outcome: InPlayOutcome = 'OUT'
-  let description = ''
+  // Outcome from Statcast EV × LA probability table (2024 MLB data).
+  const outcome: InPlayOutcome = quality === 'miss' ? 'OUT' : statcastOutcome(ev, la)
 
-  if (quality === 'miss') {
-    outcome = 'OUT'
-    description = 'Swing & miss'
-  } else if (la < -5) {
-    // Hard grounder — some sneak through for singles
-    outcome = Math.random() < 0.20 ? '1B' : 'OUT'
-    description = 'Ground ball'
-  } else if (la > 55) {
-    // Pop-up — almost always caught
-    outcome = 'OUT'
-    description = 'Pop up'
-  } else if (distFt > 380 && la >= 18 && la <= 45) {
-    // Deep fly in the air at a good angle — home run
-    outcome = 'HR'
-    description = 'Home run!'
-  } else if (distFt > 310 && la >= 10 && la <= 45) {
-    // Deep gap / warning track — doubles and triples
-    const r = Math.random()
-    if (r < 0.52)      { outcome = '2B'; description = 'Double' }
-    else if (r < 0.74) { outcome = '3B'; description = 'Triple!' }
-    else               { outcome = 'OUT'; description = 'Warning track out' }
-  } else if (distFt > 200 && la >= 5 && la <= 40) {
-    // Medium fly or solid line drive — singles, occasional double
-    const r = Math.random()
-    if (r < 0.38)      { outcome = '1B'; description = 'Single' }
-    else if (r < 0.50) { outcome = '2B'; description = 'Double' }
-    else               { outcome = 'OUT'; description = 'Flyout' }
-  } else if (distFt > 80 && la >= -5 && la <= 22) {
-    // Short line drive or hard grounder through the infield
-    outcome = Math.random() < 0.30 ? '1B' : 'OUT'
-    description = outcome === '1B' ? 'Single' : 'Lineout'
-  } else {
-    // Weak / off-speed rollover or short popup — rare bloop
-    outcome = Math.random() < 0.10 ? '1B' : 'OUT'
-    description = outcome === '1B' ? 'Bloop single' : 'Flyout'
+  // Human-readable description based on outcome + contact shape.
+  let description: string
+  switch (outcome) {
+    case 'HR':  description = 'Home run!'; break
+    case '3B':  description = 'Triple!'; break
+    case '2B':  description = 'Double'; break
+    case '1B':
+      if (la < -5)           description = 'Ground ball single'
+      else if (la < 10)      description = 'Line drive single'
+      else if (quality === 'weak') description = 'Bloop single'
+      else                   description = 'Single'
+      break
+    default: // OUT
+      if (la < -10)          description = 'Ground ball'
+      else if (la > 50)      description = 'Pop up'
+      else if (ev >= 95)     description = 'Hard out'
+      else                   description = 'Flyout'
   }
 
   return { quality, rating, ev, la, distFt, outcome, description }
