@@ -157,73 +157,89 @@ function gradeFromRating(r: number): { letter: string; color: string } {
 
 type InPlayOutcome = 'HR' | '3B' | '2B' | '1B' | 'OUT' | 'FOUL'
 
-// ── Statcast outcome table ────────────────────────────────────────────────────
-// Derived from 1,404 balls in play across 12 game days in 2024.
-// Each cell: [P(out), P(1B), P(2B), P(3B), P(HR)].
-// Source: baseballsavant.mlb.com/statcast_hit_probability
-const STATCAST_BIP: Record<string, [number, number, number, number, number]> = {
-  // EV < 70 mph
-  'lt70|-10to10': [1.000, 0.000, 0.000, 0.000, 0.000],
-  'lt70|10to25':  [0.950, 0.050, 0.000, 0.000, 0.000],
-  'lt70|25to50':  [1.000, 0.000, 0.000, 0.000, 0.000],
-  // EV 70-79
-  '70-79|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
-  '70-79|-10to10': [0.933, 0.067, 0.000, 0.000, 0.000],
-  '70-79|10to25':  [0.867, 0.133, 0.000, 0.000, 0.000],
-  '70-79|25to50':  [0.865, 0.135, 0.000, 0.000, 0.000],
-  '70-79|gt50':    [1.000, 0.000, 0.000, 0.000, 0.000],
-  // EV 80-89
-  '80-89|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
-  '80-89|-10to10': [0.849, 0.151, 0.000, 0.000, 0.000],
-  '80-89|10to25':  [0.759, 0.190, 0.044, 0.000, 0.007],
-  '80-89|25to50':  [0.770, 0.150, 0.080, 0.000, 0.000],
-  '80-89|gt50':    [1.000, 0.000, 0.000, 0.000, 0.000],
-  // EV 90-99
-  '90-99|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
-  '90-99|-10to10': [0.781, 0.164, 0.008, 0.000, 0.047],
-  '90-99|10to25':  [0.646, 0.254, 0.062, 0.000, 0.038],
-  '90-99|25to50':  [0.566, 0.217, 0.114, 0.006, 0.096],
-  '90-99|gt50':    [0.792, 0.125, 0.000, 0.000, 0.083],
-  // EV 100-109
-  '100-109|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
-  '100-109|-10to10': [0.692, 0.256, 0.000, 0.000, 0.051],
-  '100-109|10to25':  [0.475, 0.287, 0.125, 0.000, 0.113],
-  '100-109|25to50':  [0.356, 0.278, 0.122, 0.011, 0.233],
-  '100-109|gt50':    [0.357, 0.286, 0.000, 0.071, 0.286],
-  // EV 110+
-  '110+|lt-10':   [1.000, 0.000, 0.000, 0.000, 0.000],
-  '110+|-10to10': [0.333, 0.167, 0.000, 0.000, 0.500],
-  '110+|10to25':  [0.278, 0.222, 0.167, 0.056, 0.278],
-  '110+|25to50':  [0.111, 0.148, 0.185, 0.037, 0.519],
-  '110+|gt50':    [0.000, 0.000, 0.000, 0.000, 1.000],
-}
+// ── Statcast outcome model ────────────────────────────────────────────────────
+//
+// Two-factor model built from the full per-degree LA table and per-mph EV
+// table provided by Baseball Savant.
+//
+// LA BINS (5° wide, sorted descending so first-match wins in find()).
+// Values are absolute P(outcome) at league-average EV (~87 mph), aggregated
+// by averaging the per-degree rows from the Statcast LA table.
+// P(out) = 1 − (p1B + p2B + p3B + pHR).
+const LA_BINS: { min: number; p1B: number; p2B: number; p3B: number; pHR: number }[] = [
+  // ── Popup / near-vertical ────────────────────────────────────────────────
+  { min:  65, p1B: 0.001, p2B: 0.001, p3B: 0.000, pHR: 0.000 }, // popup, ~0% hit
+  { min:  60, p1B: 0.004, p2B: 0.006, p3B: 0.000, pHR: 0.000 }, // ~1%
+  { min:  55, p1B: 0.008, p2B: 0.014, p3B: 0.000, pHR: 0.000 }, // ~2%
+  { min:  50, p1B: 0.020, p2B: 0.015, p3B: 0.000, pHR: 0.000 }, // ~3.5%
+  // ── High fly balls ───────────────────────────────────────────────────────
+  { min:  45, p1B: 0.031, p2B: 0.011, p3B: 0.001, pHR: 0.004 }, // ~4.7%
+  { min:  40, p1B: 0.038, p2B: 0.013, p3B: 0.001, pHR: 0.021 }, // ~7.3%
+  // ── Deep fly / HR zone ───────────────────────────────────────────────────
+  { min:  35, p1B: 0.049, p2B: 0.017, p3B: 0.003, pHR: 0.092 }, // ~16%
+  { min:  30, p1B: 0.066, p2B: 0.033, p3B: 0.007, pHR: 0.193 }, // ~30%
+  // ── Barrel / power zone ──────────────────────────────────────────────────
+  { min:  25, p1B: 0.091, p2B: 0.092, p3B: 0.014, pHR: 0.235 }, // ~43%  peak HR
+  { min:  20, p1B: 0.172, p2B: 0.190, p3B: 0.015, pHR: 0.127 }, // ~50%  lots of 2B
+  // ── Line drive zone ──────────────────────────────────────────────────────
+  { min:  15, p1B: 0.377, p2B: 0.214, p3B: 0.012, pHR: 0.014 }, // ~62%
+  { min:  10, p1B: 0.613, p2B: 0.148, p3B: 0.010, pHR: 0.000 }, // ~77%  peak AVG
+  { min:   5, p1B: 0.480, p2B: 0.071, p3B: 0.003, pHR: 0.000 }, // ~55%
+  // ── Flat / ground-ball zone ──────────────────────────────────────────────
+  { min:   0, p1B: 0.365, p2B: 0.044, p3B: 0.002, pHR: 0.001 }, // ~41%
+  { min:  -5, p1B: 0.262, p2B: 0.024, p3B: 0.000, pHR: 0.000 }, // ~29%
+  { min: -10, p1B: 0.196, p2B: 0.014, p3B: 0.001, pHR: 0.001 }, // ~21%
+  { min: -15, p1B: 0.126, p2B: 0.010, p3B: 0.001, pHR: 0.000 }, // ~14%
+  { min: -20, p1B: 0.100, p2B: 0.006, p3B: 0.002, pHR: 0.000 }, // ~11%
+  { min: -25, p1B: 0.061, p2B: 0.008, p3B: 0.000, pHR: 0.000 }, // ~7%
+  { min: -30, p1B: 0.052, p2B: 0.004, p3B: 0.002, pHR: 0.000 }, // ~6%
+  // ── Extreme downswing (chopper) — high-bounce, hard to field ─────────────
+  { min: -90, p1B: 0.090, p2B: 0.003, p3B: 0.001, pHR: 0.000 }, // ~9%
+]
 
-function evBin(ev: number): string {
-  if (ev < 70)  return 'lt70'
-  if (ev < 80)  return '70-79'
-  if (ev < 90)  return '80-89'
-  if (ev < 100) return '90-99'
-  if (ev < 110) return '100-109'
-  return '110+'
-}
-
-function laBin(la: number): string {
-  if (la < -10) return 'lt-10'
-  if (la <  10) return '-10to10'
-  if (la <  25) return '10to25'
-  if (la <  50) return '25to50'
-  return 'gt50'
+// EV multiplier: scales P(hit) up or down relative to the ~87 mph baseline
+// baked into the LA table. Derived from the Statcast per-mph EV table, but
+// dampened (~60%) to correct for the LA/EV correlation in raw MLB data —
+// in real at-bats, hard-hit balls also tend to have better launch angles,
+// inflating the raw EV effect. In our model EV and LA are independent, so
+// applying the raw effect would overstate it.
+function evHitMult(ev: number): number {
+  if (ev >= 110) return 1.65
+  if (ev >= 105) return 1.45
+  if (ev >= 100) return 1.25
+  if (ev >=  95) return 1.12
+  if (ev >=  90) return 1.04
+  if (ev >=  85) return 1.00 // baseline
+  if (ev >=  80) return 0.93
+  if (ev >=  75) return 0.84
+  if (ev >=  70) return 0.74
+  if (ev >=  65) return 0.63
+  if (ev >=  60) return 0.52
+  return 0.40
 }
 
 function statcastOutcome(ev: number, la: number): InPlayOutcome {
-  const key = `${evBin(ev)}|${laBin(la)}`
-  const row = STATCAST_BIP[key] ?? [1, 0, 0, 0, 0]
-  const [pOut, p1B, p2B, p3B] = row
+  // Find the matching LA bin (sorted descending, first match wins)
+  const row = LA_BINS.find(b => la >= b.min) ?? LA_BINS[LA_BINS.length - 1]
+
+  const pHitBase = row.p1B + row.p2B + row.p3B + row.pHR
+  if (pHitBase <= 0) return 'OUT'
+
+  // Scale overall P(hit) by EV factor; preserve hit-type ratios from LA
+  const pHit  = Math.min(0.98, pHitBase * evHitMult(ev))
+  const scale = pHit / pHitBase
+
+  const p1B  = row.p1B * scale
+  const p2B  = row.p2B * scale
+  const p3B  = row.p3B * scale
+  const pHR  = row.pHR * scale
+  const pOut = 1 - pHit
+
   const r = Math.random()
-  if (r < pOut)                    return 'OUT'
-  if (r < pOut + p1B)              return '1B'
-  if (r < pOut + p1B + p2B)        return '2B'
-  if (r < pOut + p1B + p2B + p3B)  return '3B'
+  if (r < pOut)              return 'OUT'
+  if (r < pOut + p1B)        return '1B'
+  if (r < pOut + p1B + p2B)  return '2B'
+  if (r < pOut + p1B + p2B + p3B) return '3B'
   return 'HR'
 }
 
@@ -411,6 +427,10 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
   // Daily leaderboard hook + exit/submit modal state.
   const { data: leaderboardData, recordPlay, submitEntry } = useDailyLeaderboard()
   const [showExitModal, setShowExitModal] = useState(false)
+
+  // Camera angle toggle — 'batter' = side-on eye-POV (default),
+  // 'center' = straight-on centred view, slightly zoomed.
+  const [camView, setCamView] = useState<'batter' | 'center'>('batter')
 
   // Build a SelectedPitch (with hand) from an arsenal entry.
   const buildSelectedPitch = useCallback(
@@ -820,12 +840,41 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
             Pitcher: <span className="font-bold text-538-text">{current.pitch.pitcher_name}</span> ({current.pitch.team})
           </span>
         )}
-        <button
-          onClick={() => setShowExitModal(true)}
-          className="ml-auto px-2 py-1 text-[11px] font-semibold rounded border border-538-border text-538-muted hover:text-538-text"
-        >
-          ✕ Exit / Submit to Leaderboard
-        </button>
+        <div className="ml-auto flex items-center gap-2">
+          {/* Camera angle toggle */}
+          <div className="flex rounded border border-538-border overflow-hidden text-[10px] font-semibold">
+            <button
+              onClick={() => setCamView('batter')}
+              className={
+                'px-2 py-1 transition-colors ' +
+                (camView === 'batter'
+                  ? 'bg-538-orange text-white'
+                  : 'text-538-muted hover:text-538-text')
+              }
+              title="Batter's eye view"
+            >
+              👤 Batter
+            </button>
+            <button
+              onClick={() => setCamView('center')}
+              className={
+                'px-2 py-1 border-l border-538-border transition-colors ' +
+                (camView === 'center'
+                  ? 'bg-538-orange text-white'
+                  : 'text-538-muted hover:text-538-text')
+              }
+              title="Straight-on centre view"
+            >
+              🎥 Center
+            </button>
+          </div>
+          <button
+            onClick={() => setShowExitModal(true)}
+            className="px-2 py-1 text-[11px] font-semibold rounded border border-538-border text-538-muted hover:text-538-text"
+          >
+            ✕ Exit / Submit to Leaderboard
+          </button>
+        </div>
       </div>
 
       {showExitModal && (
@@ -857,7 +906,11 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
                 key={animKey}
                 pitch={current.pitch}
                 target={current.target}
-                angle={hand === 'R' ? 'batterR' : 'batterL'}
+                angle={
+                  camView === 'center'
+                    ? hand === 'R' ? 'centerGameR' : 'centerGameL'
+                    : hand === 'R' ? 'batterR' : 'batterL'
+                }
                 gameMode
                 skipRotation
                 preFlyDelay={PREP_SECONDS}
