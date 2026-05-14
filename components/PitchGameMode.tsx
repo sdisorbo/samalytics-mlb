@@ -66,68 +66,57 @@ function pickArsenalPitch(arsenal: PitchArsenal[]): PitchArsenal | null {
   return eligible[eligible.length - 1]
 }
 
-// Edge-biased synthetic location distribution. Returns target in inches
-// (x = catcher's right = 1B side; y = height above ground).
-function generateLocation(): { x: number; y: number; inZone: boolean; wild: boolean } {
-  const roll = Math.random()
-  if (roll < 0.40) {
-    // Edge of zone (within zone, near border).
-    const edge = Math.floor(Math.random() * 4) // 0=top, 1=bottom, 2=left, 3=right
+// Location distribution driven by the pitcher's real zone_pct (derived from
+// BB/9). A control artist hits the zone ~54 % of the time; a wild pitcher
+// only ~36 %. Within each zone/ball split the shape of where the pitch lands
+// stays the same — it's only the overall in/out ratio that changes.
+function generateLocation(
+  zonePct = 0.48, // fallback = league-average control
+): { x: number; y: number; inZone: boolean; wild: boolean } {
+  if (Math.random() < zonePct) {
+    // ── In zone ──────────────────────────────────────────────────────────────
+    if (Math.random() < 0.25) {
+      // Heart of the plate (~25 % of in-zone pitches)
+      return { x: rand(-4, 4), y: rand(24, 36), inZone: true, wild: false }
+    }
+    // Edge of zone (~75 % of in-zone pitches) — pick one of four borders
+    const edge = Math.floor(Math.random() * 4) // 0=top 1=bot 2=glove 3=arm
     let x: number, y: number
     if (edge === 0) {
-      x = rand(-ZONE_X_HALF, ZONE_X_HALF)
-      y = rand(ZONE_TOP - 4, ZONE_TOP)
+      x = rand(-ZONE_X_HALF, ZONE_X_HALF); y = rand(ZONE_TOP - 4, ZONE_TOP)
     } else if (edge === 1) {
-      x = rand(-ZONE_X_HALF, ZONE_X_HALF)
-      y = rand(ZONE_BOT, ZONE_BOT + 4)
+      x = rand(-ZONE_X_HALF, ZONE_X_HALF); y = rand(ZONE_BOT, ZONE_BOT + 4)
     } else if (edge === 2) {
-      x = rand(-ZONE_X_HALF, -ZONE_X_HALF + 3)
-      y = rand(ZONE_BOT, ZONE_TOP)
+      x = rand(-ZONE_X_HALF, -ZONE_X_HALF + 3); y = rand(ZONE_BOT, ZONE_TOP)
     } else {
-      x = rand(ZONE_X_HALF - 3, ZONE_X_HALF)
-      y = rand(ZONE_BOT, ZONE_TOP)
+      x = rand(ZONE_X_HALF - 3, ZONE_X_HALF); y = rand(ZONE_BOT, ZONE_TOP)
     }
     return { x, y, inZone: true, wild: false }
   }
-  if (roll < 0.55) {
-    // Middle of zone (heart).
-    return { x: rand(-4, 4), y: rand(24, 36), inZone: true, wild: false }
-  }
-  if (roll < 0.85) {
-    // Chase: just outside zone.
+
+  // ── Out of zone ───────────────────────────────────────────────────────────
+  const r = Math.random()
+  if (r < 0.72) {
+    // Chase: just off the corner — the most common ball location
     const side = Math.floor(Math.random() * 4)
     let x: number, y: number
     if (side === 0) {
-      x = rand(-ZONE_X_HALF - 5, ZONE_X_HALF + 5)
-      y = rand(ZONE_TOP, ZONE_TOP + 5)
+      x = rand(-ZONE_X_HALF - 5, ZONE_X_HALF + 5); y = rand(ZONE_TOP, ZONE_TOP + 5)
     } else if (side === 1) {
-      x = rand(-ZONE_X_HALF - 5, ZONE_X_HALF + 5)
-      y = rand(ZONE_BOT - 5, ZONE_BOT)
+      x = rand(-ZONE_X_HALF - 5, ZONE_X_HALF + 5); y = rand(ZONE_BOT - 5, ZONE_BOT)
     } else if (side === 2) {
-      x = rand(-ZONE_X_HALF - 5, -ZONE_X_HALF)
-      y = rand(ZONE_BOT, ZONE_TOP)
+      x = rand(-ZONE_X_HALF - 5, -ZONE_X_HALF); y = rand(ZONE_BOT, ZONE_TOP)
     } else {
-      x = rand(ZONE_X_HALF, ZONE_X_HALF + 5)
-      y = rand(ZONE_BOT, ZONE_TOP)
+      x = rand(ZONE_X_HALF, ZONE_X_HALF + 5); y = rand(ZONE_BOT, ZONE_TOP)
     }
     return { x, y, inZone: false, wild: false }
   }
-  if (roll < 0.95) {
-    // Way off — chase pitch.
-    return {
-      x: rand(-18, 18),
-      y: rand(10, 50),
-      inZone: false,
-      wild: false,
-    }
+  if (r < 0.95) {
+    // Way off — clearly a ball
+    return { x: rand(-18, 18), y: rand(10, 50), inZone: false, wild: false }
   }
-  // Wild.
-  return {
-    x: rand(-22, 22),
-    y: rand(0, 56),
-    inZone: false,
-    wild: true,
-  }
+  // Wild pitch
+  return { x: rand(-22, 22), y: rand(0, 56), inZone: false, wild: true }
 }
 
 function isInZone(loc: { x: number; y: number }): boolean {
@@ -416,7 +405,7 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
     if (!activePitcher) return null
     const ap = pickArsenalPitch(activePitcher.pitches)
     if (!ap) return null
-    const loc = generateLocation()
+    const loc = generateLocation(activePitcher.zone_pct)
     return {
       pitch: buildSelectedPitch(activePitcher, ap),
       target: { x: loc.x, y: loc.y },
@@ -735,10 +724,25 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
             Random pitcher each AB
           </label>
           {!randomPitcher && (
-            <div className="mt-1 text-xs text-538-muted">
-              {pitcher
-                ? <>Facing: <span className="font-bold text-538-text">{pitcher.name}</span> ({pitcher.team})</>
-                : <>No pitcher selected — pick one from the sidebar before starting, or enable random mode.</>}
+            <div className="mt-1 text-xs text-538-muted space-y-0.5">
+              {pitcher ? (
+                <>
+                  <div>
+                    Facing: <span className="font-bold text-538-text">{pitcher.name}</span> ({pitcher.team})
+                  </div>
+                  {pitcher.zone_pct != null && (
+                    <div className="flex items-center gap-1.5">
+                      <span>Control:</span>
+                      <ZonePctBar zonePct={pitcher.zone_pct} />
+                      <span className="tabular-nums text-538-text font-semibold">
+                        {Math.round(pitcher.zone_pct * 100)}% in zone
+                      </span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>No pitcher selected — pick one from the sidebar before starting, or enable random mode.</>
+              )}
             </div>
           )}
         </div>
@@ -1054,6 +1058,22 @@ function SidebarStat({ label, value }: { label: string; value: string }) {
     <div>
       <div className="text-[9px] text-538-muted uppercase tracking-wider">{label}</div>
       <div className="text-sm font-bold text-538-text tabular-nums">{value}</div>
+    </div>
+  )
+}
+
+// Small horizontal bar showing zone% relative to the 36–58 % range.
+function ZonePctBar({ zonePct }: { zonePct: number }) {
+  const MIN = 0.36, MAX = 0.58
+  const pct = Math.min(1, Math.max(0, (zonePct - MIN) / (MAX - MIN)))
+  // Color: green = great control, orange = average, red = wild
+  const color = pct >= 0.6 ? '#2E7D32' : pct >= 0.35 ? '#F57C00' : '#C62828'
+  return (
+    <div className="flex-1 max-w-[60px] h-1.5 rounded-full bg-538-border overflow-hidden">
+      <div
+        className="h-full rounded-full transition-all"
+        style={{ width: `${pct * 100}%`, backgroundColor: color }}
+      />
     </div>
   )
 }

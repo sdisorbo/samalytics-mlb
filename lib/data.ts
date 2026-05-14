@@ -62,7 +62,28 @@ export function getPlayoffOdds(): PlayoffOdds {
 }
 
 export function getPitcherArsenal(year?: string): PitcherArsenal[] {
-  return readJson<PitcherArsenal[]>('pitcher_arsenal.json', year)
+  const arsenals = readJson<PitcherArsenal[]>('pitcher_arsenal.json', year)
+
+  // Enrich each entry with zone_pct derived from bb_per_9 in pitchers.json.
+  // Formula calibrated to the 2025 dataset (median BB/9 = 3.21):
+  //   zone_pct = clamp(0.48 − (bb_per_9 − 3.21) × 0.025, 0.36, 0.58)
+  // → elite control (0.9 BB/9) ≈ 54 % in zone
+  // → league avg   (3.2 BB/9) ≈ 48 % in zone
+  // → poor control (9.1 BB/9) ≈ 36 % in zone
+  try {
+    const pitchers = readJson<Pitcher[]>('pitchers.json', year)
+    const byId = new Map(pitchers.map((p) => [p.player_id, p]))
+    for (const a of arsenals) {
+      const p = byId.get(a.player_id)
+      if (p && p.bb_per_9 != null) {
+        a.zone_pct = Math.min(0.58, Math.max(0.36, 0.48 - (p.bb_per_9 - 3.21) * 0.025))
+      }
+    }
+  } catch {
+    // pitchers.json unavailable — fall back to default zone_pct in the game
+  }
+
+  return arsenals
 }
 
 export function getBatterVsPitch(year?: string): BatterVsPitch[] {

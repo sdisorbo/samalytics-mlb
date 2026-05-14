@@ -107,6 +107,12 @@ export interface PitcherArsenal {
   player_id: number
   name: string
   team: string
+  /**
+   * Estimated fraction of pitches thrown in the strike zone, derived from
+   * the pitcher's BB/9. Ranges ≈ 0.36–0.58. Missing when pitchers.json
+   * doesn't contain a matching entry (e.g. very short stints).
+   */
+  zone_pct?: number
   pitches: PitchArsenal[]
 }
 
