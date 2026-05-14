@@ -179,8 +179,8 @@ const LA_BINS: { min: number; p1B: number; p2B: number; p3B: number; pHR: number
   { min:  35, p1B: 0.049, p2B: 0.017, p3B: 0.003, pHR: 0.092 }, // ~16%
   { min:  30, p1B: 0.066, p2B: 0.033, p3B: 0.007, pHR: 0.193 }, // ~30%
   // ── Barrel / power zone ──────────────────────────────────────────────────
-  { min:  25, p1B: 0.091, p2B: 0.092, p3B: 0.014, pHR: 0.235 }, // ~43%  peak HR
-  { min:  20, p1B: 0.172, p2B: 0.190, p3B: 0.015, pHR: 0.127 }, // ~50%  lots of 2B
+  { min:  25, p1B: 0.09, p2B: 0.2, p3B: 0.09, pHR: 0.235 }, // ~43%  peak HR
+  { min:  20, p1B: 0.08, p2B: 0.22, p3B: 0.13, pHR: 0.17 }, // ~50%  lots of 2B
   // ── Line drive zone ──────────────────────────────────────────────────────
   { min:  15, p1B: 0.377, p2B: 0.214, p3B: 0.012, pHR: 0.014 }, // ~62%
   { min:  10, p1B: 0.613, p2B: 0.148, p3B: 0.010, pHR: 0.000 }, // ~77%  peak AVG
@@ -204,9 +204,9 @@ const LA_BINS: { min: number; p1B: number; p2B: number; p3B: number; pHR: number
 // inflating the raw EV effect. In our model EV and LA are independent, so
 // applying the raw effect would overstate it.
 function evHitMult(ev: number): number {
-  if (ev >= 110) return 1.65
-  if (ev >= 105) return 1.45
-  if (ev >= 100) return 1.25
+  if (ev >= 110) return 1.85
+  if (ev >= 105) return 1.65
+  if (ev >= 100) return 1.35
   if (ev >=  95) return 1.12
   if (ev >=  90) return 1.04
   if (ev >=  85) return 1.00 // baseline
