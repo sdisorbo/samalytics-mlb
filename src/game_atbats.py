@@ -31,6 +31,7 @@ import io
 import csv
 import time
 import calendar
+import datetime
 import requests
 
 SAVANT_BASE = "https://baseballsavant.mlb.com"
@@ -58,10 +59,29 @@ def _parse_name(raw):
     return raw
 
 
+def _week_ranges(season, start_month=3, end_month=11):
+    """Yield (start_str, end_str) tuples in 6-day windows covering the season.
+
+    Six-day chunks keep each request well under Statcast's ~40k-row CSV cap
+    (a typical week is ~15 games × ~300 pitches × 6 days ≈ 27k rows).
+    """
+    start = datetime.date(season, start_month, 1)
+    # Season ends no later than Nov 30
+    season_end = datetime.date(season, end_month, calendar.monthrange(season, end_month)[1])
+    today = datetime.date.today()
+    end_bound = min(season_end, today)
+
+    while start <= end_bound:
+        chunk_end = min(start + datetime.timedelta(days=5), end_bound)
+        yield start.strftime("%Y-%m-%d"), chunk_end.strftime("%Y-%m-%d")
+        start = chunk_end + datetime.timedelta(days=1)
+
+
 def fetch_game_atbats(season, start_month=3, end_month=11):
     """
-    Pull Statcast pitch-by-pitch data for the season, filter to PA-ending
-    events (events != ''), and aggregate delta_run_exp by team × game × batter.
+    Pull Statcast pitch-by-pitch data for the season in 6-day chunks (to stay
+    under the ~40k-row CSV cap), filter to PA-ending events (events != ''),
+    and aggregate delta_run_exp by team × game × batter.
 
     Returns a list of team dicts (see module docstring for schema).
     actual_runs will be None until enrich_with_schedule() is called.
@@ -71,10 +91,7 @@ def fetch_game_atbats(season, start_month=3, end_month=11):
     # game_pk_str → { date, home_team, away_team }
     game_meta: dict = {}
 
-    for month in range(start_month, end_month + 1):
-        last_day = calendar.monthrange(season, month)[1]
-        start = f"{season}-{month:02d}-01"
-        end   = f"{season}-{month:02d}-{last_day:02d}"
+    for start, end in _week_ranges(season, start_month, end_month):
         print(f"    Game atbats: {start} → {end}")
 
         try:
