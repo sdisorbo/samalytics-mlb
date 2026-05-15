@@ -26,6 +26,7 @@ from bubble_weights import calculate_playoff_probabilities
 from pitchers import process_pitchers
 from players import process_players
 from savant import fetch_pitcher_arsenal, fetch_batter_vs_pitch
+from game_atbats import fetch_game_atbats, enrich_with_schedule
 import export
 
 # Months with no MLB regular-season games
@@ -163,11 +164,18 @@ def main():
     print(f"      {len(players)} qualified batters processed.")
 
     # ── 8. Savant pitch data ───────────────────────────────────────────────────
-    print(f"\n[8/8] Fetching Baseball Savant pitch arsenal + batter splits...")
+    print(f"\n[8/9] Fetching Baseball Savant pitch arsenal + batter splits...")
     pitcher_arsenal = fetch_pitcher_arsenal(SEASON)
     print(f"      {len(pitcher_arsenal)} pitchers with arsenal data.")
     batter_vs_pitch = fetch_batter_vs_pitch(SEASON)
     print(f"      {len(batter_vs_pitch)} batters with vs-pitch data.")
+
+    # ── 9. Per-batter per-game run value ──────────────────────────────────────
+    print(f"\n[9/9] Fetching per-batter per-game run value (Statcast, monthly)...")
+    team_game_logs = fetch_game_atbats(SEASON)
+    enrich_with_schedule(team_game_logs, games_abbr)
+    total_games = sum(len(t["games"]) for t in team_game_logs)
+    print(f"      {len(team_game_logs)} teams, {total_games} team-game records.")
 
     # ── Export ────────────────────────────────────────────────────────────────
     print(f"\n[Export] Writing output JSON files to {export.OUTPUT_DIR} ...")
@@ -181,6 +189,7 @@ def main():
     export.export_playoff_odds(sim_results, N_PLAYOFF_SIMS)
     export.export_pitcher_arsenal(pitcher_arsenal)
     export.export_batter_vs_pitch(batter_vs_pitch)
+    export.export_team_game_logs(team_game_logs)
 
     print(f"\n=== Pipeline complete! ===")
     print(f"    Output -> {os.path.abspath(export.OUTPUT_DIR)}")

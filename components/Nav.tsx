@@ -12,8 +12,9 @@ const LINKS = [
   { href: '/players',   label: 'Players' },
   { href: '/matchup',     label: 'Pitch Lab' },
   { href: '/matchup-lab', label: 'Matchup Lab' },
-  { href: '/live-ab',     label: 'Live At Bat' },
-  { href: '/pitch-vis',   label: 'Pitch Vis' },
+  { href: '/live-ab',          label: 'Live At Bat' },
+  { href: '/pitch-vis',        label: 'Pitch Vis' },
+  { href: '/team-performance', label: 'Team Performance' },
 ]
 
 function ThemeToggle() {

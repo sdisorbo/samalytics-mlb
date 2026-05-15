@@ -181,3 +181,24 @@ export interface PlayoffTeam {
   win_cs: number
   win_ws: number
 }
+
+export interface BatterGameLog {
+  name: string
+  pa: number
+  rv: number   // sum of delta_run_exp across all PAs in this game
+}
+
+export interface TeamGame {
+  date: string
+  game_pk: number
+  opponent: string
+  home: boolean
+  actual_runs: number | null
+  team_rv: number            // sum of all batter RVs = team batting RV for game
+  batters: BatterGameLog[]   // sorted descending by rv
+}
+
+export interface TeamGameLog {
+  team: string
+  games: TeamGame[]
+}

@@ -84,6 +84,17 @@ def export_batter_vs_pitch(batter_list):
     _write("batter_vs_pitch.json", batter_list)
 
 
+def export_team_game_logs(team_game_logs):
+    """
+    Export team_game_logs.json — per-batter, per-game run value.
+
+    Schema per item:
+    { team, games: [{ date, game_pk, opponent, home, actual_runs,
+                       team_rv, batters: [{name, pa, rv}] }] }
+    """
+    _write("team_game_logs.json", team_game_logs)
+
+
 def export_playoff_odds(sim_results, n_sims):
     """
     Export playoff_odds.json
