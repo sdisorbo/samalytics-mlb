@@ -628,6 +628,21 @@ export default function PitchGameMode({ initialPitcher, arsenal, onExit }: Props
       }
       const pullSign = hand === 'R' ? 1 : -1
       const sprayAngle = pullSign * randNorm(15, 18)
+
+      // Distance-based HR override: if the ball carries past the outfield wall
+      // it's a home run regardless of the probability table outcome.
+      // LF/RF walls ≈ 330 ft (|sprayAngle| > 20°), CF wall ≈ 400 ft.
+      // Require LA ≥ 10° so choppers/line drives that compute high distFt
+      // values don't accidentally become HRs.
+      if (contact.outcome !== 'FOUL' && contact.la >= 10) {
+        const absAngle = Math.abs(sprayAngle)
+        const wallDist = absAngle > 20 ? 330 : 400
+        if (contact.distFt >= wallDist) {
+          contact.outcome = 'HR'
+          contact.description = 'Home run!'
+        }
+      }
+
       // For ALL contact (hit, out, foul) we run the launch animation and
       // defer the result until it finishes. Fouls get a shorter, weaker
       // trajectory (mostly backward), but they still get visible flight.
