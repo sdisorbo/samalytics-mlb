@@ -1647,7 +1647,7 @@
     "fip_percentile": 74,
     "k9_percentile": 94,
     "bb9_percentile": 34,
-    "whip_percentile": 10
+    "whip_percentile": 9
   },
   {
     "player_id": 701542,
@@ -2457,7 +2457,7 @@
     "strikeouts": 52,
     "walks": 16,
     "home_runs_allowed": 6,
-    "era_percentile": 57,
+    "era_percentile": 56,
     "fip_percentile": 60,
     "k9_percentile": 29,
     "bb9_percentile": 83,
@@ -3256,6 +3256,28 @@
     "whip_percentile": 81
   },
   {
+    "player_id": 664141,
+    "name": "JT Brubaker",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "era": 3.33,
+    "fip": 3.88,
+    "xfip": null,
+    "k_per_9": 6.66,
+    "bb_per_9": 5.18,
+    "whip": 1.52,
+    "innings_pitched": 24.3,
+    "strikeouts": 18,
+    "walks": 14,
+    "home_runs_allowed": 1,
+    "era_percentile": 58,
+    "fip_percentile": 46,
+    "k9_percentile": 17,
+    "bb9_percentile": 10,
+    "whip_percentile": 15
+  },
+  {
     "player_id": 656271,
     "name": "Brock Burke",
     "team": "CIN",
@@ -3360,7 +3382,7 @@
     "walks": 16,
     "home_runs_allowed": 2,
     "era_percentile": 49,
-    "fip_percentile": 45,
+    "fip_percentile": 44,
     "k9_percentile": 77,
     "bb9_percentile": 5,
     "whip_percentile": 41
@@ -3382,7 +3404,7 @@
     "walks": 24,
     "home_runs_allowed": 6,
     "era_percentile": 29,
-    "fip_percentile": 45,
+    "fip_percentile": 44,
     "k9_percentile": 80,
     "bb9_percentile": 19,
     "whip_percentile": 40
@@ -3536,7 +3558,7 @@
     "walks": 19,
     "home_runs_allowed": 4,
     "era_percentile": 16,
-    "fip_percentile": 42,
+    "fip_percentile": 41,
     "k9_percentile": 14,
     "bb9_percentile": 36,
     "whip_percentile": 7
@@ -3602,32 +3624,10 @@
     "walks": 11,
     "home_runs_allowed": 2,
     "era_percentile": 67,
-    "fip_percentile": 41,
+    "fip_percentile": 40,
     "k9_percentile": 51,
     "bb9_percentile": 16,
     "whip_percentile": 59
-  },
-  {
-    "player_id": 664141,
-    "name": "JT Brubaker",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "era": 3.47,
-    "fip": 4.0,
-    "xfip": null,
-    "k_per_9": 6.56,
-    "bb_per_9": 5.4,
-    "whip": 1.59,
-    "innings_pitched": 23.3,
-    "strikeouts": 17,
-    "walks": 14,
-    "home_runs_allowed": 1,
-    "era_percentile": 56,
-    "fip_percentile": 41,
-    "k9_percentile": 16,
-    "bb9_percentile": 9,
-    "whip_percentile": 10
   },
   {
     "player_id": 641835,
@@ -4593,7 +4593,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 82,
     "fip_percentile": 24,
-    "k9_percentile": 17,
+    "k9_percentile": 16,
     "bb9_percentile": 40,
     "whip_percentile": 39
   },
@@ -4880,7 +4880,7 @@
     "era_percentile": 19,
     "fip_percentile": 20,
     "k9_percentile": 5,
-    "bb9_percentile": 10,
+    "bb9_percentile": 9,
     "whip_percentile": 21
   },
   {
@@ -5145,7 +5145,7 @@
     "fip_percentile": 15,
     "k9_percentile": 72,
     "bb9_percentile": 13,
-    "whip_percentile": 15
+    "whip_percentile": 14
   },
   {
     "player_id": 669947,
@@ -5275,7 +5275,7 @@
     "home_runs_allowed": 9,
     "era_percentile": 4,
     "fip_percentile": 13,
-    "k9_percentile": 18,
+    "k9_percentile": 17,
     "bb9_percentile": 53,
     "whip_percentile": 2
   },
@@ -5343,7 +5343,7 @@
     "fip_percentile": 12,
     "k9_percentile": 5,
     "bb9_percentile": 2,
-    "whip_percentile": 14
+    "whip_percentile": 13
   },
   {
     "player_id": 696149,
@@ -5409,7 +5409,7 @@
     "fip_percentile": 11,
     "k9_percentile": 35,
     "bb9_percentile": 51,
-    "whip_percentile": 15
+    "whip_percentile": 14
   },
   {
     "player_id": 808963,
@@ -5539,7 +5539,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 59,
     "fip_percentile": 9,
-    "k9_percentile": 17,
+    "k9_percentile": 16,
     "bb9_percentile": 6,
     "whip_percentile": 21
   },
@@ -5891,7 +5891,7 @@
     "home_runs_allowed": 14,
     "era_percentile": 7,
     "fip_percentile": 3,
-    "k9_percentile": 17,
+    "k9_percentile": 16,
     "bb9_percentile": 81,
     "whip_percentile": 5
   },

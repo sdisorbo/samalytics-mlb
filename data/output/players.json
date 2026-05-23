@@ -938,7 +938,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 73,
-    "obp_percentile": 59,
+    "obp_percentile": 60,
     "slg_percentile": 97,
     "ops_percentile": 93,
     "k_pct_percentile": 37,
@@ -968,7 +968,7 @@
     "obp_percentile": 91,
     "slg_percentile": 92,
     "ops_percentile": 93,
-    "k_pct_percentile": 20,
+    "k_pct_percentile": 21,
     "bb_pct_percentile": 93
   },
   {
@@ -1050,7 +1050,7 @@
     "slg_percentile": 95,
     "ops_percentile": 92,
     "k_pct_percentile": 42,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 668930,
@@ -1293,7 +1293,7 @@
     "slg_percentile": 93,
     "ops_percentile": 91,
     "k_pct_percentile": 25,
-    "bb_pct_percentile": 57
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 571970,
@@ -1860,7 +1860,7 @@
     "slg_percentile": 79,
     "ops_percentile": 86,
     "k_pct_percentile": 90,
-    "bb_pct_percentile": 54
+    "bb_pct_percentile": 53
   },
   {
     "player_id": 663993,
@@ -1941,7 +1941,7 @@
     "slg_percentile": 80,
     "ops_percentile": 86,
     "k_pct_percentile": 87,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 677951,
@@ -2619,33 +2619,6 @@
     "bb_pct_percentile": 52
   },
   {
-    "player_id": 695657,
-    "name": "Colson Montgomery",
-    "team": "CWS",
-    "team_name": "Chicago White Sox",
-    "division": "American League Central",
-    "position": "SS",
-    "avg": 0.223,
-    "obp": 0.322,
-    "slg": 0.486,
-    "ops": 0.808,
-    "k_pct": 30.2,
-    "bb_pct": 9.3,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 42,
-    "obp_percentile": 59,
-    "slg_percentile": 87,
-    "ops_percentile": 81,
-    "k_pct_percentile": 20,
-    "bb_pct_percentile": 59
-  },
-  {
     "player_id": 622761,
     "name": "Jorge Mateo",
     "team": "ATL",
@@ -2668,7 +2641,7 @@
     "avg_percentile": 92,
     "obp_percentile": 75,
     "slg_percentile": 81,
-    "ops_percentile": 80,
+    "ops_percentile": 81,
     "k_pct_percentile": 12,
     "bb_pct_percentile": 32
   },
@@ -2752,6 +2725,33 @@
     "ops_percentile": 80,
     "k_pct_percentile": 84,
     "bb_pct_percentile": 87
+  },
+  {
+    "player_id": 695657,
+    "name": "Colson Montgomery",
+    "team": "CWS",
+    "team_name": "Chicago White Sox",
+    "division": "American League Central",
+    "position": "SS",
+    "avg": 0.222,
+    "obp": 0.32,
+    "slg": 0.483,
+    "ops": 0.803,
+    "k_pct": 30.1,
+    "bb_pct": 9.2,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 41,
+    "obp_percentile": 58,
+    "slg_percentile": 86,
+    "ops_percentile": 80,
+    "k_pct_percentile": 21,
+    "bb_pct_percentile": 58
   },
   {
     "player_id": 677800,
@@ -2913,7 +2913,7 @@
     "slg_percentile": 77,
     "ops_percentile": 79,
     "k_pct_percentile": 68,
-    "bb_pct_percentile": 57
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 677587,
@@ -2939,7 +2939,7 @@
     "obp_percentile": 88,
     "slg_percentile": 71,
     "ops_percentile": 78,
-    "k_pct_percentile": 96,
+    "k_pct_percentile": 95,
     "bb_pct_percentile": 63
   },
   {
@@ -3186,33 +3186,6 @@
     "bb_pct_percentile": 73
   },
   {
-    "player_id": 650333,
-    "name": "Luis Arraez",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "position": "2B",
-    "avg": 0.323,
-    "obp": 0.361,
-    "slg": 0.423,
-    "ops": 0.784,
-    "k_pct": 3.8,
-    "bb_pct": 6.2,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 94,
-    "obp_percentile": 82,
-    "slg_percentile": 72,
-    "ops_percentile": 77,
-    "k_pct_percentile": 99,
-    "bb_pct_percentile": 30
-  },
-  {
     "player_id": 621493,
     "name": "Taylor Ward",
     "team": "BAL",
@@ -3235,9 +3208,36 @@
     "avg_percentile": 67,
     "obp_percentile": 96,
     "slg_percentile": 54,
-    "ops_percentile": 76,
+    "ops_percentile": 77,
     "k_pct_percentile": 60,
     "bb_pct_percentile": 98
+  },
+  {
+    "player_id": 650333,
+    "name": "Luis Arraez",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "position": "2B",
+    "avg": 0.321,
+    "obp": 0.359,
+    "slg": 0.421,
+    "ops": 0.78,
+    "k_pct": 3.8,
+    "bb_pct": 6.2,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 94,
+    "obp_percentile": 80,
+    "slg_percentile": 72,
+    "ops_percentile": 76,
+    "k_pct_percentile": 99,
+    "bb_pct_percentile": 30
   },
   {
     "player_id": 669699,
@@ -3399,7 +3399,7 @@
     "slg_percentile": 80,
     "ops_percentile": 75,
     "k_pct_percentile": 30,
-    "bb_pct_percentile": 50
+    "bb_pct_percentile": 51
   },
   {
     "player_id": 696100,
@@ -3588,7 +3588,7 @@
     "slg_percentile": 61,
     "ops_percentile": 74,
     "k_pct_percentile": 74,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 686527,
@@ -3773,7 +3773,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 74,
-    "obp_percentile": 59,
+    "obp_percentile": 60,
     "slg_percentile": 76,
     "ops_percentile": 72,
     "k_pct_percentile": 77,
@@ -3966,7 +3966,7 @@
     "slg_percentile": 74,
     "ops_percentile": 71,
     "k_pct_percentile": 82,
-    "bb_pct_percentile": 54
+    "bb_pct_percentile": 53
   },
   {
     "player_id": 693304,
@@ -4043,7 +4043,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 36,
-    "obp_percentile": 42,
+    "obp_percentile": 43,
     "slg_percentile": 80,
     "ops_percentile": 70,
     "k_pct_percentile": 10,
@@ -4397,7 +4397,7 @@
     "obp_percentile": 44,
     "slg_percentile": 75,
     "ops_percentile": 68,
-    "k_pct_percentile": 20,
+    "k_pct_percentile": 21,
     "bb_pct_percentile": 36
   },
   {
@@ -4478,7 +4478,7 @@
     "obp_percentile": 51,
     "slg_percentile": 71,
     "ops_percentile": 67,
-    "k_pct_percentile": 21,
+    "k_pct_percentile": 22,
     "bb_pct_percentile": 41
   },
   {
@@ -4748,7 +4748,7 @@
     "obp_percentile": 62,
     "slg_percentile": 67,
     "ops_percentile": 65,
-    "k_pct_percentile": 26,
+    "k_pct_percentile": 27,
     "bb_pct_percentile": 25
   },
   {
@@ -4772,11 +4772,11 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 47,
-    "obp_percentile": 59,
+    "obp_percentile": 60,
     "slg_percentile": 69,
     "ops_percentile": 65,
     "k_pct_percentile": 42,
-    "bb_pct_percentile": 50
+    "bb_pct_percentile": 51
   },
   {
     "player_id": 664728,
@@ -4879,7 +4879,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 34,
+    "avg_percentile": 35,
     "obp_percentile": 45,
     "slg_percentile": 71,
     "ops_percentile": 64,
@@ -5047,33 +5047,6 @@
     "ops_percentile": 63,
     "k_pct_percentile": 86,
     "bb_pct_percentile": 42
-  },
-  {
-    "player_id": 805367,
-    "name": "Chase Meidroth",
-    "team": "CWS",
-    "team_name": "Chicago White Sox",
-    "division": "American League Central",
-    "position": "2B",
-    "avg": 0.264,
-    "obp": 0.343,
-    "slg": 0.368,
-    "ops": 0.711,
-    "k_pct": 23.8,
-    "bb_pct": 10.9,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 73,
-    "obp_percentile": 72,
-    "slg_percentile": 52,
-    "ops_percentile": 63,
-    "k_pct_percentile": 43,
-    "bb_pct_percentile": 70
   },
   {
     "player_id": 694388,
@@ -5260,7 +5233,7 @@
     "avg_percentile": 88,
     "obp_percentile": 84,
     "slg_percentile": 40,
-    "ops_percentile": 61,
+    "ops_percentile": 62,
     "k_pct_percentile": 35,
     "bb_pct_percentile": 67
   },
@@ -5287,9 +5260,36 @@
     "avg_percentile": 88,
     "obp_percentile": 51,
     "slg_percentile": 64,
-    "ops_percentile": 61,
+    "ops_percentile": 62,
     "k_pct_percentile": 93,
     "bb_pct_percentile": 12
+  },
+  {
+    "player_id": 805367,
+    "name": "Chase Meidroth",
+    "team": "CWS",
+    "team_name": "Chicago White Sox",
+    "division": "American League Central",
+    "position": "2B",
+    "avg": 0.263,
+    "obp": 0.342,
+    "slg": 0.366,
+    "ops": 0.708,
+    "k_pct": 23.6,
+    "bb_pct": 10.8,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 72,
+    "obp_percentile": 72,
+    "slg_percentile": 52,
+    "ops_percentile": 61,
+    "k_pct_percentile": 44,
+    "bb_pct_percentile": 70
   },
   {
     "player_id": 672580,
@@ -5424,7 +5424,7 @@
     "slg_percentile": 80,
     "ops_percentile": 60,
     "k_pct_percentile": 12,
-    "bb_pct_percentile": 50
+    "bb_pct_percentile": 51
   },
   {
     "player_id": 516782,
@@ -5448,9 +5448,9 @@
     "chase_rate": null,
     "avg_percentile": 88,
     "obp_percentile": 76,
-    "slg_percentile": 45,
+    "slg_percentile": 46,
     "ops_percentile": 60,
-    "k_pct_percentile": 26,
+    "k_pct_percentile": 27,
     "bb_pct_percentile": 37
   },
   {
@@ -5581,7 +5581,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 34,
+    "avg_percentile": 35,
     "obp_percentile": 40,
     "slg_percentile": 68,
     "ops_percentile": 59,
@@ -5609,7 +5609,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 48,
-    "obp_percentile": 46,
+    "obp_percentile": 47,
     "slg_percentile": 62,
     "ops_percentile": 59,
     "k_pct_percentile": 25,
@@ -5936,8 +5936,8 @@
     "obp_percentile": 65,
     "slg_percentile": 49,
     "ops_percentile": 57,
-    "k_pct_percentile": 26,
-    "bb_pct_percentile": 70
+    "k_pct_percentile": 27,
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 702222,
@@ -5961,7 +5961,7 @@
     "chase_rate": null,
     "avg_percentile": 61,
     "obp_percentile": 59,
-    "slg_percentile": 52,
+    "slg_percentile": 53,
     "ops_percentile": 56,
     "k_pct_percentile": 66,
     "bb_pct_percentile": 49
@@ -5988,7 +5988,7 @@
     "chase_rate": null,
     "avg_percentile": 44,
     "obp_percentile": 47,
-    "slg_percentile": 58,
+    "slg_percentile": 59,
     "ops_percentile": 56,
     "k_pct_percentile": 15,
     "bb_pct_percentile": 58
@@ -6230,7 +6230,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 61,
-    "obp_percentile": 59,
+    "obp_percentile": 60,
     "slg_percentile": 50,
     "ops_percentile": 54,
     "k_pct_percentile": 86,
@@ -6449,7 +6449,7 @@
     "obp_percentile": 33,
     "slg_percentile": 65,
     "ops_percentile": 53,
-    "k_pct_percentile": 26,
+    "k_pct_percentile": 27,
     "bb_pct_percentile": 41
   },
   {
@@ -6774,7 +6774,7 @@
     "slg_percentile": 48,
     "ops_percentile": 50,
     "k_pct_percentile": 34,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 656484,
@@ -6855,7 +6855,7 @@
     "slg_percentile": 48,
     "ops_percentile": 50,
     "k_pct_percentile": 86,
-    "bb_pct_percentile": 54
+    "bb_pct_percentile": 53
   },
   {
     "player_id": 701675,
@@ -6885,33 +6885,6 @@
     "bb_pct_percentile": 16
   },
   {
-    "player_id": 643217,
-    "name": "Andrew Benintendi",
-    "team": "CWS",
-    "team_name": "Chicago White Sox",
-    "division": "American League Central",
-    "position": "DH",
-    "avg": 0.24,
-    "obp": 0.288,
-    "slg": 0.384,
-    "ops": 0.672,
-    "k_pct": 28.0,
-    "bb_pct": 6.8,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 53,
-    "obp_percentile": 36,
-    "slg_percentile": 59,
-    "ops_percentile": 50,
-    "k_pct_percentile": 27,
-    "bb_pct_percentile": 36
-  },
-  {
     "player_id": 808975,
     "name": "Hyeseong Kim",
     "team": "LAD",
@@ -6934,7 +6907,7 @@
     "avg_percentile": 73,
     "obp_percentile": 67,
     "slg_percentile": 40,
-    "ops_percentile": 49,
+    "ops_percentile": 50,
     "k_pct_percentile": 49,
     "bb_pct_percentile": 58
   },
@@ -6988,7 +6961,7 @@
     "avg_percentile": 80,
     "obp_percentile": 48,
     "slg_percentile": 49,
-    "ops_percentile": 48,
+    "ops_percentile": 49,
     "k_pct_percentile": 96,
     "bb_pct_percentile": 22
   },
@@ -7015,7 +6988,7 @@
     "avg_percentile": 69,
     "obp_percentile": 37,
     "slg_percentile": 57,
-    "ops_percentile": 48,
+    "ops_percentile": 49,
     "k_pct_percentile": 10,
     "bb_pct_percentile": 14
   },
@@ -7042,7 +7015,7 @@
     "avg_percentile": 59,
     "obp_percentile": 56,
     "slg_percentile": 45,
-    "ops_percentile": 48,
+    "ops_percentile": 49,
     "k_pct_percentile": 77,
     "bb_pct_percentile": 59
   },
@@ -7069,7 +7042,7 @@
     "avg_percentile": 43,
     "obp_percentile": 54,
     "slg_percentile": 47,
-    "ops_percentile": 48,
+    "ops_percentile": 49,
     "k_pct_percentile": 74,
     "bb_pct_percentile": 68
   },
@@ -7095,7 +7068,7 @@
     "chase_rate": null,
     "avg_percentile": 68,
     "obp_percentile": 55,
-    "slg_percentile": 45,
+    "slg_percentile": 46,
     "ops_percentile": 48,
     "k_pct_percentile": 68,
     "bb_pct_percentile": 40
@@ -7125,7 +7098,7 @@
     "slg_percentile": 40,
     "ops_percentile": 48,
     "k_pct_percentile": 65,
-    "bb_pct_percentile": 54
+    "bb_pct_percentile": 53
   },
   {
     "player_id": 802415,
@@ -7180,6 +7153,33 @@
     "ops_percentile": 48,
     "k_pct_percentile": 91,
     "bb_pct_percentile": 11
+  },
+  {
+    "player_id": 643217,
+    "name": "Andrew Benintendi",
+    "team": "CWS",
+    "team_name": "Chicago White Sox",
+    "division": "American League Central",
+    "position": "DH",
+    "avg": 0.238,
+    "obp": 0.286,
+    "slg": 0.381,
+    "ops": 0.667,
+    "k_pct": 28.4,
+    "bb_pct": 6.8,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 52,
+    "obp_percentile": 35,
+    "slg_percentile": 58,
+    "ops_percentile": 48,
+    "k_pct_percentile": 25,
+    "bb_pct_percentile": 36
   },
   {
     "player_id": 605244,
@@ -7341,7 +7341,7 @@
     "slg_percentile": 65,
     "ops_percentile": 46,
     "k_pct_percentile": 95,
-    "bb_pct_percentile": 50
+    "bb_pct_percentile": 51
   },
   {
     "player_id": 553993,
@@ -7368,7 +7368,7 @@
     "slg_percentile": 50,
     "ops_percentile": 46,
     "k_pct_percentile": 21,
-    "bb_pct_percentile": 57
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 682663,
@@ -7448,8 +7448,8 @@
     "obp_percentile": 54,
     "slg_percentile": 43,
     "ops_percentile": 46,
-    "k_pct_percentile": 20,
-    "bb_pct_percentile": 50
+    "k_pct_percentile": 21,
+    "bb_pct_percentile": 51
   },
   {
     "player_id": 683146,
@@ -7472,7 +7472,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 51,
-    "obp_percentile": 46,
+    "obp_percentile": 47,
     "slg_percentile": 47,
     "ops_percentile": 45,
     "k_pct_percentile": 34,
@@ -7668,33 +7668,6 @@
     "bb_pct_percentile": 76
   },
   {
-    "player_id": 642715,
-    "name": "Willy Adames",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "position": "SS",
-    "avg": 0.235,
-    "obp": 0.271,
-    "slg": 0.38,
-    "ops": 0.651,
-    "k_pct": 28.6,
-    "bb_pct": 4.3,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 50,
-    "obp_percentile": 27,
-    "slg_percentile": 58,
-    "ops_percentile": 43,
-    "k_pct_percentile": 25,
-    "bb_pct_percentile": 19
-  },
-  {
     "player_id": 691016,
     "name": "Tyler Soderstrom",
     "team": "ATH",
@@ -7716,8 +7689,8 @@
     "chase_rate": null,
     "avg_percentile": 26,
     "obp_percentile": 34,
-    "slg_percentile": 52,
-    "ops_percentile": 43,
+    "slg_percentile": 53,
+    "ops_percentile": 44,
     "k_pct_percentile": 60,
     "bb_pct_percentile": 65
   },
@@ -7744,7 +7717,7 @@
     "avg_percentile": 8,
     "obp_percentile": 39,
     "slg_percentile": 48,
-    "ops_percentile": 43,
+    "ops_percentile": 44,
     "k_pct_percentile": 22,
     "bb_pct_percentile": 77
   },
@@ -7828,6 +7801,33 @@
     "ops_percentile": 43,
     "k_pct_percentile": 79,
     "bb_pct_percentile": 72
+  },
+  {
+    "player_id": 642715,
+    "name": "Willy Adames",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "position": "SS",
+    "avg": 0.234,
+    "obp": 0.27,
+    "slg": 0.378,
+    "ops": 0.648,
+    "k_pct": 28.9,
+    "bb_pct": 4.3,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 49,
+    "obp_percentile": 26,
+    "slg_percentile": 57,
+    "ops_percentile": 43,
+    "k_pct_percentile": 24,
+    "bb_pct_percentile": 19
   },
   {
     "player_id": 690976,
@@ -7932,7 +7932,7 @@
     "chase_rate": null,
     "avg_percentile": 27,
     "obp_percentile": 29,
-    "slg_percentile": 52,
+    "slg_percentile": 53,
     "ops_percentile": 42,
     "k_pct_percentile": 77,
     "bb_pct_percentile": 63
@@ -8015,7 +8015,7 @@
     "obp_percentile": 48,
     "slg_percentile": 37,
     "ops_percentile": 41,
-    "k_pct_percentile": 26,
+    "k_pct_percentile": 27,
     "bb_pct_percentile": 90
   },
   {
@@ -8042,7 +8042,7 @@
     "obp_percentile": 45,
     "slg_percentile": 39,
     "ops_percentile": 41,
-    "k_pct_percentile": 26,
+    "k_pct_percentile": 27,
     "bb_pct_percentile": 49
   },
   {
@@ -8121,7 +8121,7 @@
     "chase_rate": null,
     "avg_percentile": 18,
     "obp_percentile": 35,
-    "slg_percentile": 45,
+    "slg_percentile": 46,
     "ops_percentile": 41,
     "k_pct_percentile": 29,
     "bb_pct_percentile": 78
@@ -8229,7 +8229,7 @@
     "chase_rate": null,
     "avg_percentile": 34,
     "obp_percentile": 61,
-    "slg_percentile": 31,
+    "slg_percentile": 32,
     "ops_percentile": 40,
     "k_pct_percentile": 30,
     "bb_pct_percentile": 79
@@ -8336,7 +8336,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 27,
-    "obp_percentile": 59,
+    "obp_percentile": 60,
     "slg_percentile": 31,
     "ops_percentile": 39,
     "k_pct_percentile": 41,
@@ -8389,12 +8389,12 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 38,
+    "avg_percentile": 39,
     "obp_percentile": 44,
     "slg_percentile": 36,
     "ops_percentile": 39,
     "k_pct_percentile": 70,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 666152,
@@ -8667,6 +8667,33 @@
     "bb_pct_percentile": 86
   },
   {
+    "player_id": 656305,
+    "name": "Matt Chapman",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "position": "3B",
+    "avg": 0.228,
+    "obp": 0.305,
+    "slg": 0.317,
+    "ops": 0.622,
+    "k_pct": 24.3,
+    "bb_pct": 9.0,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 44,
+    "obp_percentile": 46,
+    "slg_percentile": 33,
+    "ops_percentile": 36,
+    "k_pct_percentile": 41,
+    "bb_pct_percentile": 56
+  },
+  {
     "player_id": 664761,
     "name": "Alec Bohm",
     "team": "PHI",
@@ -8721,33 +8748,6 @@
     "bb_pct_percentile": 20
   },
   {
-    "player_id": 683679,
-    "name": "Jesus Rodriguez",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "position": "C",
-    "avg": 0.219,
-    "obp": 0.306,
-    "slg": 0.313,
-    "ops": 0.619,
-    "k_pct": 11.1,
-    "bb_pct": 8.3,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 39,
-    "obp_percentile": 46,
-    "slg_percentile": 32,
-    "ops_percentile": 36,
-    "k_pct_percentile": 95,
-    "bb_pct_percentile": 50
-  },
-  {
     "player_id": 657041,
     "name": "Lane Thomas",
     "team": "KC",
@@ -8775,33 +8775,6 @@
     "bb_pct_percentile": 95
   },
   {
-    "player_id": 656305,
-    "name": "Matt Chapman",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "position": "3B",
-    "avg": 0.228,
-    "obp": 0.301,
-    "slg": 0.317,
-    "ops": 0.618,
-    "k_pct": 24.4,
-    "bb_pct": 8.6,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 44,
-    "obp_percentile": 44,
-    "slg_percentile": 33,
-    "ops_percentile": 35,
-    "k_pct_percentile": 40,
-    "bb_pct_percentile": 53
-  },
-  {
     "player_id": 701678,
     "name": "Hao-Yu  Lee",
     "team": "DET",
@@ -8825,7 +8798,7 @@
     "obp_percentile": 26,
     "slg_percentile": 43,
     "ops_percentile": 35,
-    "k_pct_percentile": 21,
+    "k_pct_percentile": 22,
     "bb_pct_percentile": 28
   },
   {
@@ -8906,7 +8879,7 @@
     "obp_percentile": 55,
     "slg_percentile": 28,
     "ops_percentile": 35,
-    "k_pct_percentile": 20,
+    "k_pct_percentile": 21,
     "bb_pct_percentile": 92
   },
   {
@@ -8958,8 +8931,8 @@
     "chase_rate": null,
     "avg_percentile": 93,
     "obp_percentile": 48,
-    "slg_percentile": 30,
-    "ops_percentile": 34,
+    "slg_percentile": 31,
+    "ops_percentile": 35,
     "k_pct_percentile": 18,
     "bb_pct_percentile": 0
   },
@@ -8986,7 +8959,7 @@
     "avg_percentile": 34,
     "obp_percentile": 57,
     "slg_percentile": 27,
-    "ops_percentile": 34,
+    "ops_percentile": 35,
     "k_pct_percentile": 45,
     "bb_pct_percentile": 80
   },
@@ -9015,7 +8988,7 @@
     "slg_percentile": 30,
     "ops_percentile": 34,
     "k_pct_percentile": 13,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 701358,
@@ -9095,7 +9068,7 @@
     "obp_percentile": 50,
     "slg_percentile": 29,
     "ops_percentile": 33,
-    "k_pct_percentile": 26,
+    "k_pct_percentile": 27,
     "bb_pct_percentile": 74
   },
   {
@@ -9256,7 +9229,7 @@
     "avg_percentile": 26,
     "obp_percentile": 34,
     "slg_percentile": 35,
-    "ops_percentile": 32,
+    "ops_percentile": 33,
     "k_pct_percentile": 64,
     "bb_pct_percentile": 69
   },
@@ -9362,7 +9335,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 55,
-    "obp_percentile": 42,
+    "obp_percentile": 43,
     "slg_percentile": 28,
     "ops_percentile": 31,
     "k_pct_percentile": 23,
@@ -9450,6 +9423,33 @@
     "bb_pct_percentile": 43
   },
   {
+    "player_id": 683679,
+    "name": "Jesus Rodriguez",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "position": "C",
+    "avg": 0.212,
+    "obp": 0.297,
+    "slg": 0.303,
+    "ops": 0.6,
+    "k_pct": 10.8,
+    "bb_pct": 8.1,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 34,
+    "obp_percentile": 40,
+    "slg_percentile": 28,
+    "ops_percentile": 31,
+    "k_pct_percentile": 96,
+    "bb_pct_percentile": 48
+  },
+  {
     "player_id": 664731,
     "name": "P.J. Higgins",
     "team": "CIN",
@@ -9497,7 +9497,7 @@
     "whiff_pct": null,
     "chase_rate": null,
     "avg_percentile": 69,
-    "obp_percentile": 46,
+    "obp_percentile": 47,
     "slg_percentile": 25,
     "ops_percentile": 30,
     "k_pct_percentile": 60,
@@ -10011,7 +10011,7 @@
     "chase_rate": null,
     "avg_percentile": 41,
     "obp_percentile": 27,
-    "slg_percentile": 30,
+    "slg_percentile": 31,
     "ops_percentile": 27,
     "k_pct_percentile": 59,
     "bb_pct_percentile": 33
@@ -10333,7 +10333,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 34,
+    "avg_percentile": 35,
     "obp_percentile": 25,
     "slg_percentile": 26,
     "ops_percentile": 24,
@@ -10557,33 +10557,6 @@
     "bb_pct_percentile": 48
   },
   {
-    "player_id": 664056,
-    "name": "Harrison Bader",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "position": "CF",
-    "avg": 0.165,
-    "obp": 0.2,
-    "slg": 0.353,
-    "ops": 0.553,
-    "k_pct": 27.8,
-    "bb_pct": 4.4,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 13,
-    "obp_percentile": 7,
-    "slg_percentile": 45,
-    "ops_percentile": 23,
-    "k_pct_percentile": 28,
-    "bb_pct_percentile": 19
-  },
-  {
     "player_id": 670242,
     "name": "Matt Wallner",
     "team": "MIN",
@@ -10606,7 +10579,7 @@
     "avg_percentile": 13,
     "obp_percentile": 22,
     "slg_percentile": 24,
-    "ops_percentile": 22,
+    "ops_percentile": 23,
     "k_pct_percentile": 5,
     "bb_pct_percentile": 42
   },
@@ -10635,7 +10608,7 @@
     "slg_percentile": 21,
     "ops_percentile": 22,
     "k_pct_percentile": 13,
-    "bb_pct_percentile": 57
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 596115,
@@ -10663,6 +10636,33 @@
     "ops_percentile": 22,
     "k_pct_percentile": 14,
     "bb_pct_percentile": 20
+  },
+  {
+    "player_id": 664056,
+    "name": "Harrison Bader",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "position": "CF",
+    "avg": 0.163,
+    "obp": 0.198,
+    "slg": 0.349,
+    "ops": 0.547,
+    "k_pct": 28.6,
+    "bb_pct": 4.4,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 13,
+    "obp_percentile": 7,
+    "slg_percentile": 43,
+    "ops_percentile": 22,
+    "k_pct_percentile": 25,
+    "bb_pct_percentile": 19
   },
   {
     "player_id": 666139,
@@ -11121,7 +11121,7 @@
     "slg_percentile": 15,
     "ops_percentile": 19,
     "k_pct_percentile": 11,
-    "bb_pct_percentile": 70
+    "bb_pct_percentile": 71
   },
   {
     "player_id": 691788,
@@ -11440,7 +11440,7 @@
     "barrel_pct": null,
     "whiff_pct": null,
     "chase_rate": null,
-    "avg_percentile": 34,
+    "avg_percentile": 35,
     "obp_percentile": 22,
     "slg_percentile": 17,
     "ops_percentile": 16,
@@ -11526,7 +11526,7 @@
     "slg_percentile": 15,
     "ops_percentile": 16,
     "k_pct_percentile": 7,
-    "bb_pct_percentile": 50
+    "bb_pct_percentile": 51
   },
   {
     "player_id": 683083,
@@ -11880,33 +11880,6 @@
     "bb_pct_percentile": 79
   },
   {
-    "player_id": 805811,
-    "name": "Bryce Eldridge",
-    "team": "SF",
-    "team_name": "San Francisco Giants",
-    "division": "National League West",
-    "position": "DH",
-    "avg": 0.143,
-    "obp": 0.211,
-    "slg": 0.257,
-    "ops": 0.468,
-    "k_pct": 28.9,
-    "bb_pct": 7.9,
-    "avg_exit_velocity": null,
-    "hard_hit_pct": null,
-    "xba": null,
-    "xslg": null,
-    "barrel_pct": null,
-    "whiff_pct": null,
-    "chase_rate": null,
-    "avg_percentile": 8,
-    "obp_percentile": 10,
-    "slg_percentile": 18,
-    "ops_percentile": 13,
-    "k_pct_percentile": 23,
-    "bb_pct_percentile": 46
-  },
-  {
     "player_id": 645302,
     "name": "Victor Robles",
     "team": "SEA",
@@ -11983,9 +11956,36 @@
     "avg_percentile": 13,
     "obp_percentile": 10,
     "slg_percentile": 15,
-    "ops_percentile": 12,
+    "ops_percentile": 13,
     "k_pct_percentile": 82,
     "bb_pct_percentile": 28
+  },
+  {
+    "player_id": 805811,
+    "name": "Bryce Eldridge",
+    "team": "SF",
+    "team_name": "San Francisco Giants",
+    "division": "National League West",
+    "position": "DH",
+    "avg": 0.139,
+    "obp": 0.205,
+    "slg": 0.25,
+    "ops": 0.455,
+    "k_pct": 30.8,
+    "bb_pct": 7.7,
+    "avg_exit_velocity": null,
+    "hard_hit_pct": null,
+    "xba": null,
+    "xslg": null,
+    "barrel_pct": null,
+    "whiff_pct": null,
+    "chase_rate": null,
+    "avg_percentile": 8,
+    "obp_percentile": 10,
+    "slg_percentile": 15,
+    "ops_percentile": 12,
+    "k_pct_percentile": 18,
+    "bb_pct_percentile": 45
   },
   {
     "player_id": 700337,
@@ -12147,7 +12147,7 @@
     "slg_percentile": 10,
     "ops_percentile": 11,
     "k_pct_percentile": 52,
-    "bb_pct_percentile": 57
+    "bb_pct_percentile": 56
   },
   {
     "player_id": 660844,
