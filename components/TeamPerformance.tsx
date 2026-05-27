@@ -73,7 +73,7 @@ function BoxShape(props: Record<string, unknown>) {
       width={s}
       height={s}
       fill={isPos ? TURQ : PINK}
-      fillOpacity={0.5}
+      fillOpacity={0.72}
       stroke={isPos ? TURQ : PINK}
       strokeWidth={0.8}
       rx={1}
@@ -192,9 +192,20 @@ function TopBattersTable({ games }: { games: TeamGame[] }) {
   )
 }
 
+// ── MLB team abbreviations allowlist (30 franchises, covers API variants) ─────
+const MLB_TEAMS = new Set([
+  'ARI','ATL','BAL','BOS','CHC','CWS','CHW','CIN','CLE','COL',
+  'DET','HOU','KC','KCR','LAA','LAD','MIA','MIL','MIN','NYM',
+  'NYY','OAK','ATH','PHI','PIT','SD','SDP','SEA','SF','SFG',
+  'STL','TB','TBR','TEX','TOR','WSH','WSN','WAS',
+])
+
 // ── Main component ────────────────────────────────────────────────────────────
 export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
-  const teams = useMemo(() => logs.map((l) => l.team).sort(), [logs])
+  const teams = useMemo(
+    () => logs.map((l) => l.team).filter((t) => MLB_TEAMS.has(t)).sort(),
+    [logs],
+  )
   const [selectedTeam, setSelectedTeam] = useState<string>(teams[0] ?? '')
 
   // Floating tooltip state for individual box hover
