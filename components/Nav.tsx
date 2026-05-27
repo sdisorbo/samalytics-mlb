@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
+import GameTicker from './GameTicker'
 
 const LINKS = [
   { href: '/standings', label: 'Standings' },
@@ -112,6 +113,9 @@ export default function Nav() {
           })}
         </nav>
       </div>
+
+      {/* Today's games ticker */}
+      <GameTicker />
     </header>
   )
 }
