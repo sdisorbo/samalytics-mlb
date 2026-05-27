@@ -242,7 +242,7 @@ function RunDistChart({
             formatter={(v, name) => [`${v} sims`, name]}
           />
           <Legend wrapperStyle={{ fontSize: 10, paddingTop: 4 }} />
-          <Bar dataKey="awayFreq" name={awayAbbr} fill="#B20D30" radius={[2, 2, 0, 0]} />
+          <Bar dataKey="awayFreq" name={awayAbbr} fill="#3D405B" radius={[2, 2, 0, 0]} />
           <Bar dataKey="homeFreq" name={homeAbbr} fill="#DDD0C0" radius={[2, 2, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
@@ -329,7 +329,7 @@ function SwapSearch({
               <span className="font-semibold text-538-text text-xs">{item.name}</span>
               <span
                 className="px-1 py-0.5 rounded text-white font-bold text-2xs"
-                style={{ background: '#B20D30' }}
+                style={{ background: '#3D405B' }}
               >
                 {item.team}
               </span>

@@ -51,17 +51,17 @@ function interpolateScale(colors: string[], t: number): string {
   return lerpColor(colors[segment], colors[segment + 1], localT)
 }
 
-const TURQ_SCALE = ['#C8CADB', '#9499BB', '#616690', '#3D405B']
-const PINK_SCALE = ['#F5C5CC', '#E07A8A', '#CC3A50', '#B20D30']
+const TURQ_SCALE = ['#CFE8E8', '#8EC6C8', '#5BAEB3', '#3C999E']
+const PINK_SCALE = ['#F3D6DB', '#E5A8B5', '#C96E85', '#9B405A']
 
-// ── Playoff bar color (smooth crimson→navy) ─────────────────────────────────
+// ── Playoff bar color (smooth pink→turquoise) ───────────────────────────────
 
 function probBarColor(p: number): string {
   if (p <= 0.5) {
-    // 0→0.5: dark crimson → light crimson
-    return interpolateScale(['#B20D30', '#CC3A50', '#E07A8A', '#F5C5CC'], p / 0.5)
+    // 0→0.5: dark pink → light pink
+    return interpolateScale(['#9B405A', '#C96E85', '#E5A8B5', '#F3D6DB'], p / 0.5)
   }
-  // 0.5→1.0: light navy → dark navy
+  // 0.5→1.0: light turquoise → dark turquoise
   return interpolateScale(TURQ_SCALE, (p - 0.5) / 0.5)
 }
 
