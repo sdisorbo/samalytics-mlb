@@ -78,8 +78,8 @@ export default function Nav() {
         {/* Divider */}
         <div className="h-5 w-px bg-538-border" />
 
-        {/* Logo */}
-        <Link href="/standings" className="flex items-center shrink-0">
+        {/* Logo + wordmark */}
+        <Link href="/standings" className="flex items-center gap-2 shrink-0">
           <Image
             src="/logo.png"
             alt="Samalytics MLB Engine"
@@ -88,6 +88,14 @@ export default function Nav() {
             className="nav-logo object-contain"
             priority
           />
+          <div className="flex flex-col leading-none">
+            <span className="font-orbitron font-black text-538-orange tracking-wider" style={{ fontSize: '0.85rem' }}>
+              SAMALYTICS
+            </span>
+            <span className="font-bold text-538-muted tracking-widest uppercase" style={{ fontSize: '0.6rem' }}>
+              MLB ENGINE
+            </span>
+          </div>
         </Link>
 
         {/* Divider */}
