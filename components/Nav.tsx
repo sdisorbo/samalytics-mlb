@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import GameTicker from './GameTicker'
@@ -77,15 +78,17 @@ export default function Nav() {
         {/* Divider */}
         <div className="h-5 w-px bg-538-border" />
 
-        {/* Wordmark */}
-        <Link href="/standings" className="flex items-center gap-2 shrink-0">
-          <span className="font-orbitron font-black text-538-orange tracking-wider leading-none" style={{ fontSize: '0.95rem' }}>
-            SAMALYTICS
-          </span>
-          <span className="text-538-border font-light" style={{ fontSize: '1rem' }}>|</span>
-          <span className="font-bold text-538-text tracking-tight leading-none text-sm">
-            MLB ENGINE
-          </span>
+        {/* Logo */}
+        <Link href="/standings" className="flex items-center shrink-0">
+          <Image
+            src="/logo.png"
+            alt="Samalytics MLB Engine"
+            width={120}
+            height={32}
+            className="object-contain"
+            style={{ maxHeight: 32 }}
+            priority
+          />
         </Link>
 
         {/* Divider */}

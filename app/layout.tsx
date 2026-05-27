@@ -20,7 +20,7 @@ const orbitron = Orbitron({
 export const metadata: Metadata = {
   title: 'Samalytics | MLB Engine',
   description: 'ELO ratings, playoff odds, and predictions for every MLB team.',
-  icons: { icon: '/favicon.png' },
+  icons: { icon: '/logo.png' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
