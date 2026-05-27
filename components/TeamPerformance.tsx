@@ -219,14 +219,14 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
     return arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null
   }, [teamLog])
 
-  // Per-player scatter points — y position = avgRuns + rv so boxes float
-  // around the expected-runs line rather than clustering near zero.
+  // Per-player scatter points — ALL batters shown, y = avgRuns + rv so boxes
+  // float around the expected-runs line. Top-9 restriction is only for the line.
   const scatterData = useMemo<PlayerPoint[]>(() => {
     if (!teamLog || avgRuns == null) return []
     return teamLog.games.flatMap((g) =>
       g.batters.map((b) => ({
         x:        dateToTs(g.date),
-        rv:       avgRuns + b.rv,   // absolute position on runs axis
+        rv:       avgRuns + b.rv,
         name:     b.name,
         pa:       b.pa,
         date:     g.date,
@@ -238,23 +238,45 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
 
   // Per-game aggregate line data.
   // top9rv = RV sum of the 9 batters with the most PAs (excludes late subs).
-  // expected_runs = avg_runs + top9rv — absolute run prediction from at-bat quality.
-  // actual_runs — how many runs actually scored.
+  // expected_runs and actual_runs are smoothed with a 5-game centred rolling
+  // average so the lines are less volatile game-to-game.
   const lineData = useMemo(() => {
     if (!teamLog || avgRuns == null) return [] as GameLine[]
-    return teamLog.games.map((g) => {
+
+    // Build raw per-game values first
+    const raw = teamLog.games.map((g) => {
       const top9rv = [...g.batters]
         .sort((a, b) => b.pa - a.pa)
         .slice(0, 9)
         .reduce((s, b) => s + b.rv, 0)
       return {
-        x:             dateToTs(g.date),
-        date:          g.date,
+        x:            dateToTs(g.date),
+        date:         g.date,
         top9rv,
         expected_runs: avgRuns + top9rv,
-        actual_runs:   g.actual_runs,
+        actual_runs:  g.actual_runs,
       }
     })
+
+    // 5-game centred rolling average helper
+    const WINDOW = 5
+    const half = Math.floor(WINDOW / 2)
+    const smooth = (arr: (number | null)[], i: number): number | null => {
+      const slice: number[] = []
+      for (let j = Math.max(0, i - half); j <= Math.min(arr.length - 1, i + half); j++) {
+        if (arr[j] != null) slice.push(arr[j] as number)
+      }
+      return slice.length ? slice.reduce((s, v) => s + v, 0) / slice.length : null
+    }
+
+    const expArr = raw.map((d) => d.expected_runs)
+    const actArr = raw.map((d) => d.actual_runs)
+
+    return raw.map((d, i) => ({
+      ...d,
+      expected_runs: smooth(expArr, i) ?? d.expected_runs,
+      actual_runs:   smooth(actArr, i),
+    }))
   }, [teamLog, avgRuns])
 
   // Summary stats
