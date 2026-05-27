@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface TeamSlot {
   abbr: string
@@ -21,6 +21,8 @@ interface Game {
 // ESPN logo CDN — works for all 30 MLB teams using their lowercase abbreviation.
 // A tiny lookup handles the handful that differ from the MLB Stats API abbreviation.
 const ESPN_ABBR: Record<string, string> = {
+  ARI: 'ari',
+  AZ:  'ari',   // MLB Stats API sometimes returns 'AZ' for Arizona
   WSH: 'wsh',
   CWS: 'cws',
   TBR: 'tb',
@@ -74,8 +76,12 @@ export default function GameTicker() {
 
   return (
     <div
-      className="border-t border-538-border overflow-x-auto scrollbar-hide"
-      style={{ backgroundColor: 'var(--color-surface)' }}
+      className="border-t border-538-border overflow-x-auto"
+      style={{
+        backgroundColor: 'var(--color-surface)',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      } as React.CSSProperties}
     >
       <div className="flex items-stretch min-w-max">
         {games.map((g) => {
@@ -85,7 +91,8 @@ export default function GameTicker() {
           return (
             <div
               key={g.gamePk}
-              className="flex items-center gap-2.5 px-4 py-1 border-r border-538-border/40 last:border-r-0"
+              className="flex items-center gap-2.5 px-4 py-1 last:border-r-0"
+              style={{ borderRight: '1px solid var(--color-border)' }}
             >
               {/* Away */}
               <TeamChip slot={g.away} isLive={isLive} isFinal={isFinal} />
@@ -152,8 +159,18 @@ function TeamChip({
         </span>
       )}
 
-      {/* Win % */}
-      <span className="text-538-muted" style={{ fontSize: '0.6rem' }}>
+      {/* Win % — green if favourite, red if underdog, muted if even */}
+      <span
+        style={{
+          fontSize: '0.6rem',
+          color: slot.winProb > 50
+            ? 'var(--color-green)'
+            : slot.winProb < 50
+            ? 'var(--color-red)'
+            : 'var(--color-muted)',
+          fontWeight: slot.winProb !== 50 ? 600 : 400,
+        }}
+      >
         {slot.winProb}%
       </span>
     </div>
