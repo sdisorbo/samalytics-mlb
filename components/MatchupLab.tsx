@@ -20,7 +20,7 @@ import { LogicBreakdown, Code } from './LogicBreakdown'
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const MLB_STATS_API = 'https://statsapi.mlb.com/api/v1'
-const SIM_COUNT = 100
+const SIM_COUNT = 500
 
 const MLB_TEAMS = [
   { id: 110, name: 'Baltimore Orioles',    abbr: 'BAL' },
