@@ -125,17 +125,26 @@ export async function GET() {
         const isLive  = state === 'Live'
         const isFinal = state === 'Final'
 
-        // Resolve probable pitchers — fall back to team staff average
-        const awayPitcherLocal = pitcherById.get(away?.probablePitcher?.id)
-        const homePitcherLocal = pitcherById.get(home?.probablePitcher?.id)
+        // Resolve probable pitchers — exact same three-way logic as MatchupLab:
+        //   1. Found in pitchers.json → pitcherFromLocal
+        //   2. Named in schedule but not in our data → LEAGUE_AVG_PITCHER (named)
+        //   3. No pitcher announced → teamAvgPitcher (staff composite)
+        const awayProbable = away?.probablePitcher
+        const homeProbable = home?.probablePitcher
+        const awayPitcherLocal = awayProbable?.id ? pitcherById.get(awayProbable.id) : null
+        const homePitcherLocal = homeProbable?.id ? pitcherById.get(homeProbable.id) : null
 
         const awayPitcher: SimPitcher = awayPitcherLocal
           ? pitcherFromLocal(awayPitcherLocal)
-          : teamAvgPitcher(awayAbbr, awayTeamName, pitchers)
+          : awayProbable?.fullName
+            ? { ...LEAGUE_AVG_PITCHER, playerId: awayProbable.id ?? -1, name: awayProbable.fullName, isTbd: false }
+            : teamAvgPitcher(awayAbbr, awayTeamName, pitchers)
 
         const homePitcher: SimPitcher = homePitcherLocal
           ? pitcherFromLocal(homePitcherLocal)
-          : teamAvgPitcher(homeAbbr, homeTeamName, pitchers)
+          : homeProbable?.fullName
+            ? { ...LEAGUE_AVG_PITCHER, playerId: homeProbable.id ?? -1, name: homeProbable.fullName, isTbd: false }
+            : teamAvgPitcher(homeAbbr, homeTeamName, pitchers)
 
         const awayLineup = buildLineup(awayAbbr, players)
         const homeLineup = buildLineup(homeAbbr, players)
