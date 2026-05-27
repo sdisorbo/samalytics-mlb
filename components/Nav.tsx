@@ -83,8 +83,8 @@ export default function Nav() {
           <Image
             src="/logo.png"
             alt="Samalytics MLB Engine"
-            width={96}
-            height={32}
+            width={48}
+            height={36}
             className="nav-logo object-contain"
             priority
           />
