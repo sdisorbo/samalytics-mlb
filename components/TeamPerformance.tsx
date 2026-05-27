@@ -36,7 +36,8 @@ function fmtTick(ts: number): string {
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface PlayerPoint {
   x:        number   // timestamp — recharts numeric x
-  rv:       number
+  rv:       number   // absolute y position (avgRuns + rawRv) for chart placement
+  rawRv:    number   // original per-batter RV, used for color and tooltip
   name:     string
   pa:       number
   date:     string
@@ -63,7 +64,7 @@ const _hover = {
 // ── Square box shape ──────────────────────────────────────────────────────────
 function BoxShape(props: Record<string, unknown>) {
   const { cx, cy, payload } = props as { cx: number; cy: number; payload: PlayerPoint }
-  const isPos = payload.rv >= 0
+  const isPos = payload.rawRv >= 0   // colour based on original RV, not absolute position
   const s = 9
   return (
     <rect
@@ -219,21 +220,25 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
     return arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null
   }, [teamLog])
 
-  // Per-player scatter points — ALL batters shown, y = avgRuns + rv so boxes
-  // float around the expected-runs line. Top-9 restriction is only for the line.
+  // Per-player scatter points — ALL batters shown, y = avgRuns + rawRv so boxes
+  // float around the expected-runs line. rawRv drives colour and tooltip.
+  // Top-9 restriction is only for the smooth line calculation.
   const scatterData = useMemo<PlayerPoint[]>(() => {
     if (!teamLog || avgRuns == null) return []
-    return teamLog.games.flatMap((g) =>
-      g.batters.map((b) => ({
-        x:        dateToTs(g.date),
-        rv:       avgRuns + b.rv,
-        name:     b.name,
-        pa:       b.pa,
-        date:     g.date,
-        opponent: g.opponent,
-        home:     g.home,
-      })),
-    )
+    return teamLog.games
+      .filter((g) => g.date >= `${g.date.slice(0, 4)}-03-25`) // exclude preseason
+      .flatMap((g) =>
+        g.batters.map((b) => ({
+          x:        dateToTs(g.date),
+          rv:       avgRuns + b.rv,   // absolute y for chart placement
+          rawRv:    b.rv,             // original value for colour + tooltip
+          name:     b.name,
+          pa:       b.pa,
+          date:     g.date,
+          opponent: g.opponent,
+          home:     g.home,
+        })),
+      )
   }, [teamLog, avgRuns])
 
   // Per-game aggregate line data.
@@ -243,8 +248,10 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
   const lineData = useMemo(() => {
     if (!teamLog || avgRuns == null) return [] as GameLine[]
 
-    // Build raw per-game values first
-    const raw = teamLog.games.map((g) => {
+    // Build raw per-game values first (exclude preseason — before Mar 25)
+    const raw = teamLog.games
+      .filter((g) => g.date >= `${g.date.slice(0, 4)}-03-25`)
+      .map((g) => {
       const top9rv = [...g.batters]
         .sort((a, b) => b.pa - a.pa)
         .slice(0, 9)
@@ -472,9 +479,9 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
             <span className="text-538-muted">RV</span>
             <span
               className="font-bold tabular-nums"
-              style={{ color: (hoveredPlayer.rv - (avgRuns ?? 0)) >= 0 ? TURQ : PINK }}
+              style={{ color: hoveredPlayer.rawRv >= 0 ? TURQ : PINK }}
             >
-              {(hoveredPlayer.rv - (avgRuns ?? 0)) >= 0 ? '+' : ''}{(hoveredPlayer.rv - (avgRuns ?? 0)).toFixed(3)}
+              {hoveredPlayer.rawRv >= 0 ? '+' : ''}{hoveredPlayer.rawRv.toFixed(3)}
             </span>
             <span className="text-538-muted">· {hoveredPlayer.pa} PA</span>
           </div>
