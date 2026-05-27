@@ -73,7 +73,7 @@ function BoxShape(props: Record<string, unknown>) {
       width={s}
       height={s}
       fill={isPos ? TURQ : PINK}
-      fillOpacity={0.72}
+      fillOpacity={0.35}
       stroke={isPos ? TURQ : PINK}
       strokeWidth={0.8}
       rx={1}
