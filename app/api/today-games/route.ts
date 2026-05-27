@@ -1,66 +1,173 @@
 import { NextResponse } from 'next/server'
-import { getStandings } from '../../../lib/data'
+import {
+  runSimulations,
+  LEAGUE_AVG_BATTER,
+  LEAGUE_AVG_PITCHER,
+  type SimBatter,
+  type SimPitcher,
+  type GameSetup,
+} from '../../../lib/mlbSimulator'
+import { getPitchers, getPlayers } from '../../../lib/data'
+import type { Pitcher, Player } from '../../../lib/types'
 
 const MLB_API = 'https://statsapi.mlb.com/api/v1'
+const SIM_COUNT = 500  // more sims than the UI for stable ticker %s
 
-/** ELO win probability for team A vs team B, with home field advantage for A */
-function eloWinProb(eloA: number, eloB: number, homeAdv = 35): number {
-  return 1 / (1 + Math.pow(10, (eloB - eloA - homeAdv) / 400))
+// ── Mirrors the same helpers used in MatchupLab ───────────────────────────────
+
+function estimateHrPerAb(slg: number | null, avg: number | null): number {
+  if (slg == null || avg == null) return 0.034
+  return Math.max(0, Math.min((slg - avg) * 0.28, 0.09))
 }
+
+function pitcherFromLocal(p: Pitcher): SimPitcher {
+  const ip = p.innings_pitched > 0 ? p.innings_pitched : 1
+  return {
+    playerId: p.player_id,
+    name: p.name,
+    teamName: p.team_name,
+    handedness: '?',
+    era: p.era ?? 4.20,
+    whip: p.whip ?? 1.30,
+    kPer9: p.k_per_9,
+    bbPer9: p.bb_per_9,
+    hrPer9: (p.home_runs_allowed / ip) * 9,
+  }
+}
+
+function batterFromLocal(p: Player): SimBatter {
+  const kPct  = p.k_pct  != null ? p.k_pct  / 100 : 0.222
+  const bbPct = p.bb_pct != null ? p.bb_pct / 100 : 0.085
+  return {
+    playerId: p.player_id,
+    name: p.name,
+    team: p.team,
+    kPct:  Math.min(kPct,  0.50),
+    bbPct: Math.min(bbPct, 0.25),
+    hrPerAb: estimateHrPerAb(p.slg, p.avg),
+    babip: 0.295,
+    singleShare: 0.65,
+    doubleShare: 0.29,
+    tripleShare: 0.06,
+    avg: p.avg ?? 0.243,
+    obp: p.obp ?? 0.314,
+    slg: p.slg ?? 0.412,
+  }
+}
+
+function buildLineup(abbr: string, players: Player[]): SimBatter[] {
+  const lineup: SimBatter[] = players
+    .filter((p) => p.team === abbr && !['SP', 'RP', 'P'].includes(p.position) && p.avg != null)
+    .sort((a, b) => (b.ops ?? 0) - (a.ops ?? 0))
+    .slice(0, 9)
+    .map(batterFromLocal)
+
+  while (lineup.length < 9) {
+    lineup.push({ ...LEAGUE_AVG_BATTER, playerId: -100 - lineup.length, name: 'League Avg Batter', isLeagueAvg: true })
+  }
+  return lineup
+}
+
+function teamAvgPitcher(abbr: string, teamName: string, pitchers: Pitcher[]): SimPitcher {
+  const staff = pitchers.filter((p) => p.team === abbr && p.innings_pitched > 5)
+  if (staff.length === 0) {
+    return { ...LEAGUE_AVG_PITCHER, playerId: -1, name: `${teamName} Staff Avg`, teamName, isTeamAvg: true }
+  }
+  const avg = (arr: number[]) => arr.reduce((s, v) => s + v, 0) / arr.length
+  return {
+    playerId: -1,
+    name: `${teamName} Staff Avg`,
+    teamName,
+    handedness: '?',
+    era:   avg(staff.map((p) => p.era  ?? 4.20)),
+    whip:  avg(staff.map((p) => p.whip ?? 1.30)),
+    kPer9: avg(staff.map((p) => p.k_per_9)),
+    bbPer9: avg(staff.map((p) => p.bb_per_9)),
+    hrPer9: avg(staff.map((p) => (p.home_runs_allowed / Math.max(p.innings_pitched, 1)) * 9)),
+    isTeamAvg: true,
+    isTbd: true,
+  }
+}
+
+// ── Route handler ─────────────────────────────────────────────────────────────
 
 export async function GET() {
   try {
-    const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD in local time
+    const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD
 
     const schedRes = await fetch(
-      `${MLB_API}/schedule?sportId=1&date=${today}&hydrate=team,linescore`,
-      { next: { revalidate: 60 } } // cache 60s
+      `${MLB_API}/schedule?sportId=1&date=${today}&hydrate=probablePitcher,team,linescore`,
+      { next: { revalidate: 60 } }
     )
     if (!schedRes.ok) throw new Error(`MLB API ${schedRes.status}`)
     const schedData = await schedRes.json()
 
-    // Build ELO lookup from our standings data
-    const eloMap: Record<string, number> = {}
-    try {
-      const standings = getStandings()
-      for (const s of standings) {
-        eloMap[s.team_abbr] = s.elo_rating
-      }
-    } catch {
-      // standings unavailable — fall back to neutral 1500
-    }
+    // Load local stats data
+    let pitchers: Pitcher[] = []
+    let players:  Player[]  = []
+    try { pitchers = getPitchers() } catch { /* unavailable */ }
+    try { players  = getPlayers()  } catch { /* unavailable */ }
+
+    const pitcherById = new Map(pitchers.map((p) => [p.player_id, p]))
 
     const games: object[] = []
+
     for (const dateBlock of schedData.dates ?? []) {
       for (const game of dateBlock.games ?? []) {
         const away = game.teams?.away
         const home = game.teams?.home
         const awayAbbr: string = (away?.team?.abbreviation ?? '').toUpperCase()
         const homeAbbr: string = (home?.team?.abbreviation ?? '').toUpperCase()
-
-        const awayElo = eloMap[awayAbbr] ?? 1500
-        const homeElo = eloMap[homeAbbr] ?? 1500
-        const homeWin = eloWinProb(homeElo, awayElo)
+        const awayTeamName: string = away?.team?.teamName ?? awayAbbr
+        const homeTeamName: string = home?.team?.teamName ?? homeAbbr
 
         const state: string = game.status?.abstractGameState ?? ''
         const isLive  = state === 'Live'
         const isFinal = state === 'Final'
 
+        // Resolve probable pitchers — fall back to team staff average
+        const awayPitcherLocal = pitcherById.get(away?.probablePitcher?.id)
+        const homePitcherLocal = pitcherById.get(home?.probablePitcher?.id)
+
+        const awayPitcher: SimPitcher = awayPitcherLocal
+          ? pitcherFromLocal(awayPitcherLocal)
+          : teamAvgPitcher(awayAbbr, awayTeamName, pitchers)
+
+        const homePitcher: SimPitcher = homePitcherLocal
+          ? pitcherFromLocal(homePitcherLocal)
+          : teamAvgPitcher(homeAbbr, homeTeamName, pitchers)
+
+        const awayLineup = buildLineup(awayAbbr, players)
+        const homeLineup = buildLineup(homeAbbr, players)
+
+        const setup: GameSetup = {
+          awayTeamName,
+          awayTeamAbbr: awayAbbr,
+          homeTeamName,
+          homeTeamAbbr: homeAbbr,
+          awayLineup,
+          homeLineup,
+          awayPitcher,
+          homePitcher,
+        }
+
+        const sim = runSimulations(setup, SIM_COUNT)
+
         games.push({
-          gamePk:      game.gamePk,
-          gameTime:    game.gameDate,        // ISO string
-          state,                             // 'Preview' | 'Live' | 'Final'
-          inning:      game.linescore?.currentInning    ?? null,
-          inningHalf:  game.linescore?.inningHalf        ?? null, // 'Top' | 'Bottom'
+          gamePk:     game.gamePk,
+          gameTime:   game.gameDate,
+          state,
+          inning:     game.linescore?.currentInning    ?? null,
+          inningHalf: game.linescore?.inningHalf        ?? null,
           away: {
             abbr:    awayAbbr,
             score:   isLive || isFinal ? (away?.score ?? null) : null,
-            winProb: Math.round((1 - homeWin) * 100),
+            winProb: Math.round(sim.awayWinPct * 100),
           },
           home: {
             abbr:    homeAbbr,
             score:   isLive || isFinal ? (home?.score ?? null) : null,
-            winProb: Math.round(homeWin * 100),
+            winProb: Math.round(sim.homeWinPct * 100),
           },
         })
       }
