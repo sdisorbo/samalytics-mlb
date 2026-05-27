@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Nav logo ────────────────────────────────────────────── */
+/* Remove white background via blend mode; boost contrast for bolder lines */
+.nav-logo {
+  mix-blend-mode: multiply;
+  filter: contrast(2);
+}
+[data-theme="dark"] .nav-logo {
+  mix-blend-mode: screen;
+  filter: invert(1) contrast(2);
+}
+
 /* ── base styles ─────────────────────────────────────────── */
 :root {
   --font-inter: 'Inter', system-ui, sans-serif;
