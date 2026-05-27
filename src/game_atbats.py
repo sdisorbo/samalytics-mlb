@@ -98,6 +98,7 @@ def fetch_game_atbats(season, start_month=3, end_month=11):
             params = {
                 "all":          "true",
                 "hfSea":        f"{season}|",
+                "hfGT":         "R|",    # Regular season only — exclude spring training
                 "game_date_gt": start,
                 "game_date_lt": end,
                 "player_type":  "batter",

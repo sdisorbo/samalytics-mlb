@@ -18,10 +18,10 @@ import type { TeamGameLog, TeamGame } from '../lib/types'
 // ── Palette ───────────────────────────────────────────────────────────────────
 const TURQ      = '#3C999E'   // turquoise — positive RV boxes
 const PINK      = '#9B405A'   // pink — negative RV boxes
-const GOLD      = '#C9A22A'   // actual runs (centered) dashed line
-const BROWN     = '#7B5230'   // per-game team_rv solid line
-const SHADE_POS = 'rgba(46, 125, 50, 0.22)'    // green  — runs > rv
-const SHADE_NEG = 'rgba(198, 40, 40, 0.22)'    // red    — runs < rv
+const GOLD      = '#C9A22A'   // actual runs line
+const BROWN     = '#7B5230'   // expected runs line
+const SHADE_POS = 'rgba(46, 125, 50, 0.22)'    // green — actual > expected
+const SHADE_NEG = 'rgba(198, 40, 40, 0.22)'    // red   — actual < expected
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
 function dateToTs(dateStr: string): number {
@@ -45,10 +45,11 @@ interface PlayerPoint {
 }
 
 interface GameLine {
-  x:           number   // timestamp
-  date:        string
-  team_rv:     number
-  runs_delta:  number | null   // actual_runs − season_avg, same scale as rv
+  x:             number   // timestamp
+  date:          string
+  top9rv:        number   // sum of RV for the 9 batters with the most PAs
+  expected_runs: number   // avg_runs + top9rv  (absolute scale)
+  actual_runs:   number | null
 }
 
 // ── Module-level hover callbacks (lets BoxShape reach component state) ─────────
@@ -85,8 +86,8 @@ function BoxShape(props: Record<string, unknown>) {
 }
 
 // ── Fill-between customized layer ─────────────────────────────────────────────
-// Draws trapezoids between the team_rv line and the runs_delta line,
-// coloured green where actual runs exceeded RV, red where they fell short.
+// Draws trapezoids between expected_runs and actual_runs on the runs axis,
+// green where team scored more than expected, red where they fell short.
 function FillBetween({
   xAxisMap,
   yAxisMap,
@@ -97,10 +98,11 @@ function FillBetween({
   lineData: GameLine[]
 }) {
   const xScale = xAxisMap ? Object.values(xAxisMap)[0]?.scale : null
+  // Use the "runs" axis (first entry in yAxisMap)
   const yScale = yAxisMap ? Object.values(yAxisMap)[0]?.scale : null
   if (!xScale || !yScale) return null
 
-  const pts = lineData.filter((d) => d.runs_delta != null)
+  const pts = lineData.filter((d) => d.actual_runs != null)
   if (pts.length < 2) return null
 
   return (
@@ -108,14 +110,14 @@ function FillBetween({
       {pts.slice(0, -1).map((d, i) => {
         const n = pts[i + 1]
         const avgGap =
-          (d.runs_delta! - d.team_rv + (n.runs_delta! - n.team_rv)) / 2
+          ((d.actual_runs! - d.expected_runs) + (n.actual_runs! - n.expected_runs)) / 2
         const x1 = xScale(d.x),  x2 = xScale(n.x)
-        const yRv1 = yScale(d.team_rv), yRv2 = yScale(n.team_rv)
-        const yRd1 = yScale(d.runs_delta!), yRd2 = yScale(n.runs_delta!)
+        const yExp1 = yScale(d.expected_runs), yExp2 = yScale(n.expected_runs)
+        const yAct1 = yScale(d.actual_runs!),  yAct2 = yScale(n.actual_runs!)
         return (
           <polygon
             key={i}
-            points={`${x1},${yRv1} ${x2},${yRv2} ${x2},${yRd2} ${x1},${yRd1}`}
+            points={`${x1},${yExp1} ${x2},${yExp2} ${x2},${yAct2} ${x1},${yAct1}`}
             fill={avgGap >= 0 ? SHADE_POS : SHADE_NEG}
           />
         )
@@ -210,13 +212,21 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
     [logs, selectedTeam],
   )
 
-  // Per-player scatter points
+  // Season average runs (computed first so scatterData can use it)
+  const avgRuns = useMemo(() => {
+    if (!teamLog) return null
+    const arr = teamLog.games.filter((g) => g.actual_runs != null).map((g) => g.actual_runs!)
+    return arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null
+  }, [teamLog])
+
+  // Per-player scatter points — y position = avgRuns + rv so boxes float
+  // around the expected-runs line rather than clustering near zero.
   const scatterData = useMemo<PlayerPoint[]>(() => {
-    if (!teamLog) return []
+    if (!teamLog || avgRuns == null) return []
     return teamLog.games.flatMap((g) =>
       g.batters.map((b) => ({
         x:        dateToTs(g.date),
-        rv:       b.rv,
+        rv:       avgRuns + b.rv,   // absolute position on runs axis
         name:     b.name,
         pa:       b.pa,
         date:     g.date,
@@ -224,43 +234,38 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
         home:     g.home,
       })),
     )
-  }, [teamLog])
+  }, [teamLog, avgRuns])
 
-  // Per-game aggregate line data
-  // actual_runs is centered on the team's season average so it lives on the
-  // same scale as team_rv (typically −2 to +2). This makes the gap between
-  // the two lines a direct measure of over/underperforming run expectation.
-  const { lineData, avgRuns } = useMemo(() => {
-    if (!teamLog) return { lineData: [] as GameLine[], avgRuns: null }
-
-    const runsArr = teamLog.games
-      .filter((g) => g.actual_runs != null)
-      .map((g) => g.actual_runs!)
-    const avg = runsArr.length
-      ? runsArr.reduce((s, v) => s + v, 0) / runsArr.length
-      : null
-
-    const data: GameLine[] = teamLog.games.map((g) => ({
-      x:          dateToTs(g.date),
-      date:       g.date,
-      team_rv:    g.team_rv,
-      runs_delta: g.actual_runs != null && avg != null
-        ? g.actual_runs - avg
-        : null,
-    }))
-
-    return { lineData: data, avgRuns: avg }
-  }, [teamLog])
+  // Per-game aggregate line data.
+  // top9rv = RV sum of the 9 batters with the most PAs (excludes late subs).
+  // expected_runs = avg_runs + top9rv — absolute run prediction from at-bat quality.
+  // actual_runs — how many runs actually scored.
+  const lineData = useMemo(() => {
+    if (!teamLog || avgRuns == null) return [] as GameLine[]
+    return teamLog.games.map((g) => {
+      const top9rv = [...g.batters]
+        .sort((a, b) => b.pa - a.pa)
+        .slice(0, 9)
+        .reduce((s, b) => s + b.rv, 0)
+      return {
+        x:             dateToTs(g.date),
+        date:          g.date,
+        top9rv,
+        expected_runs: avgRuns + top9rv,
+        actual_runs:   g.actual_runs,
+      }
+    })
+  }, [teamLog, avgRuns])
 
   // Summary stats
   const summary = useMemo(() => {
     if (!lineData.length) return null
-    const rvSum    = lineData.reduce((s, d) => s + d.team_rv, 0)
-    const posGames = lineData.filter((d) => d.team_rv > 0).length
+    const rvSum    = lineData.reduce((s, d) => s + d.top9rv, 0)
+    const posGames = lineData.filter((d) => d.top9rv > 0).length
     const overperf = lineData.filter(
-      (d) => d.runs_delta != null && d.runs_delta > d.team_rv,
+      (d) => d.actual_runs != null && d.actual_runs > d.expected_runs,
     ).length
-    const best = [...lineData].sort((a, b) => b.team_rv - a.team_rv)[0]
+    const best = [...lineData].sort((a, b) => b.expected_runs - a.expected_runs)[0]
     return { rvSum, posGames, overperf, best, n: lineData.length }
   }, [lineData])
 
@@ -309,8 +314,8 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
             sub="scored > RV predicted"
           />
           <SummaryCard
-            label="Best Game RV"
-            value={summary.best ? '+' + summary.best.team_rv.toFixed(3) : '—'}
+            label="Best Expected Game"
+            value={summary.best ? summary.best.expected_runs.toFixed(1) + ' R' : '—'}
             sub={summary.best ? fmtTick(summary.best.x) : undefined}
           />
         </div>
@@ -331,15 +336,15 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
           </div>
           <div className="flex items-center gap-1.5">
             <svg width="18" height="9"><line x1="0" y1="4.5" x2="18" y2="4.5" stroke={BROWN} strokeWidth="2" /></svg>
-            <span>Team RV per game</span>
+            <span>Expected runs (avg + top-9 RV)</span>
           </div>
           <div className="flex items-center gap-1.5">
             <svg width="18" height="9"><line x1="0" y1="4.5" x2="18" y2="4.5" stroke={GOLD} strokeWidth="2" strokeDasharray="5 3" /></svg>
-            <span>Runs above avg {avgRuns ? `(÷${avgRuns.toFixed(1)})` : ''}</span>
+            <span>Actual runs scored</span>
           </div>
         </div>
         <div className="text-[10px] text-538-muted mb-3 opacity-70">
-          Green fill = scored more runs than RV expected (timely hitting). Red fill = underperformed RV (left runners on base).
+          Green fill = scored more than expected (timely hitting / luck). Red fill = underperformed at-bat quality (left runners on base).
         </div>
 
         <ResponsiveContainer width="100%" height={400}>
@@ -374,10 +379,15 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
               tick={{ fontSize: 10, fill: '#888' }}
               tickLine={false}
               axisLine={false}
-              label={{ value: 'Run Value', angle: -90, position: 'insideLeft', offset: 14, fontSize: 10, fill: '#888' }}
+              label={{ value: 'Runs', angle: -90, position: 'insideLeft', offset: 14, fontSize: 10, fill: '#888' }}
+              domain={([min, max]: [number, number]) => [Math.max(0, Math.floor(min) - 1), Math.ceil(max) + 1]}
             />
 
-            <ReferenceLine y={0} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+            {avgRuns != null && (
+              <ReferenceLine y={avgRuns} stroke="rgba(150,150,150,0.35)" strokeWidth={1} strokeDasharray="4 4"
+                label={{ value: `Avg ${avgRuns.toFixed(1)}`, position: 'right', fontSize: 9, fill: '#888' }}
+              />
+            )}
 
             {/* Shaded area between team_rv and runs_delta */}
             <Customized
@@ -398,10 +408,10 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
               isAnimationActive={false}
             />
 
-            {/* Per-game team RV — brown solid */}
+            {/* Expected runs (avg + top-9 RV) — brown solid */}
             <Line
               data={lineData}
-              dataKey="team_rv"
+              dataKey="expected_runs"
               type="monotone"
               stroke={BROWN}
               strokeWidth={2}
@@ -410,10 +420,10 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
               isAnimationActive={false}
             />
 
-            {/* Centered actual runs — gold dashed */}
+            {/* Actual runs scored — gold dashed */}
             <Line
               data={lineData}
-              dataKey="runs_delta"
+              dataKey="actual_runs"
               type="monotone"
               stroke={GOLD}
               strokeWidth={1.5}
@@ -440,9 +450,9 @@ export default function TeamPerformance({ logs }: { logs: TeamGameLog[] }) {
             <span className="text-538-muted">RV</span>
             <span
               className="font-bold tabular-nums"
-              style={{ color: hoveredPlayer.rv >= 0 ? TURQ : PINK }}
+              style={{ color: (hoveredPlayer.rv - (avgRuns ?? 0)) >= 0 ? TURQ : PINK }}
             >
-              {hoveredPlayer.rv >= 0 ? '+' : ''}{hoveredPlayer.rv.toFixed(3)}
+              {(hoveredPlayer.rv - (avgRuns ?? 0)) >= 0 ? '+' : ''}{(hoveredPlayer.rv - (avgRuns ?? 0)).toFixed(3)}
             </span>
             <span className="text-538-muted">· {hoveredPlayer.pa} PA</span>
           </div>
