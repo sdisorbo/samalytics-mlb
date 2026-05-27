@@ -16,12 +16,12 @@ import {
 import type { TeamGameLog, TeamGame } from '../lib/types'
 
 // ── Palette ───────────────────────────────────────────────────────────────────
-const TURQ      = '#3C999E'
-const PINK      = '#9B405A'
+const TURQ      = '#3D405B'   // navy — positive RV boxes
+const PINK      = '#B20D30'   // crimson — negative RV boxes
 const GOLD      = '#C9A22A'   // actual runs (centered) dashed line
 const BROWN     = '#7B5230'   // per-game team_rv solid line
-const SHADE_POS = 'rgba(46, 125, 50, 0.22)'    // green  — runs > rv
-const SHADE_NEG = 'rgba(198, 40, 40, 0.22)'    // red    — runs < rv
+const SHADE_POS = 'rgba(61, 64, 91, 0.20)'     // navy   — runs > rv
+const SHADE_NEG = 'rgba(178, 13, 48, 0.20)'    // crimson — runs < rv
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
 function dateToTs(dateStr: string): number {

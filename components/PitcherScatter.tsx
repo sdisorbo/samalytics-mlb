@@ -157,7 +157,7 @@ function TeamStrip({ abbr, pitchers, isLast }: StripProps) {
 // ── Percentile pip ─────────────────────────────────────────────────────────────
 
 function PercentilePip({ value }: { value: number }) {
-  const color = value >= 70 ? '#3A7A3A' : value >= 40 ? '#9B5A3A' : '#C04030'
+  const color = value >= 70 ? '#3A7A3A' : value >= 40 ? '#3D405B' : '#B20D30'
   return (
     <div className="flex items-center gap-1.5 justify-end">
       <div className="w-14 pct-bar">

@@ -92,7 +92,7 @@ function SearchDropdown<T extends { player_id: number; name: string; team: strin
             <span className="font-semibold text-538-text text-sm">{selected.name}</span>
             <span
               className="text-xs font-bold px-1.5 py-0.5 rounded"
-              style={{ color: '#fff', backgroundColor: '#7C2B1A' }}
+              style={{ color: '#fff', backgroundColor: '#B20D30' }}
             >
               {selected.team}
             </span>
@@ -432,7 +432,7 @@ function MatchupEdge({
                         <div className="flex-1 h-3 rounded overflow-hidden bg-538-border/30">
                           <div
                             className="h-full rounded"
-                            style={{ width: `${pctWidth}%`, background: '#7C2B1A' }}
+                            style={{ width: `${pctWidth}%`, background: '#B20D30' }}
                           />
                         </div>
                       </>
@@ -519,7 +519,7 @@ export default function MatchupTool({
                   <span className="font-bold text-538-text">{selectedPitcher.name}</span>
                   <span
                     className="text-xs font-bold px-1.5 py-0.5 rounded text-white"
-                    style={{ background: '#7C2B1A' }}
+                    style={{ background: '#B20D30' }}
                   >
                     {selectedPitcher.team}
                   </span>

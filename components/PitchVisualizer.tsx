@@ -116,7 +116,7 @@ function SearchDropdown({
             <span className="font-semibold text-538-text text-sm">{selected.name}</span>
             <span
               className="text-xs font-bold px-1.5 py-0.5 rounded"
-              style={{ color: '#fff', backgroundColor: '#7C2B1A' }}
+              style={{ color: '#fff', backgroundColor: '#B20D30' }}
             >
               {selected.team}
             </span>

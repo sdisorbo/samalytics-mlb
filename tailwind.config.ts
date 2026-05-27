@@ -9,9 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        '538-orange':  '#7C2B1A',   // mahogany — primary accent
-        '538-blue':    '#9B5A3A',   // warm terracotta — secondary accent
-        '538-red':     '#C04030',
+        '538-orange':  '#B20D30',   // crimson — primary accent
+        '538-blue':    '#3D405B',   // navy slate — secondary accent
+        '538-red':     '#B20D30',
         '538-green':   '#3A7A3A',
         '538-bg':      'var(--color-bg)',
         '538-border':  'var(--color-border)',
