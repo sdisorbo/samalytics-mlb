@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import GameTicker from './GameTicker'
 
 const LINKS = [
+  { href: '/',         label: 'Home' },
   { href: '/standings', label: 'Standings' },
   { href: '/ratings',   label: 'ELO Ratings' },
   { href: '/pitchers',  label: 'Pitchers' },
@@ -79,7 +80,7 @@ export default function Nav() {
         <div className="h-5 w-px bg-538-border" />
 
         {/* Logo + wordmark */}
-        <Link href="/standings" className="flex items-center gap-2 shrink-0">
+        <Link href="/" className="flex items-center gap-2 shrink-0">
           <Image
             src="/logo.png"
             alt="Samalytics MLB Engine"
@@ -104,7 +105,7 @@ export default function Nav() {
         {/* Nav links */}
         <nav className="flex items-center gap-0.5 overflow-x-auto">
           {LINKS.map(({ href, label }) => {
-            const active = pathname.startsWith(href)
+            const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
             return (
               <Link
                 key={href}
