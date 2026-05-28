@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        '538-orange':  '#3D405B',   // navy slate — primary accent
-        '538-blue':    '#3D405B',   // navy slate — secondary accent
+        '538-orange':  'var(--color-accent)',  // navy in light, crimson in dark
+        '538-blue':    'var(--color-accent)',  // same
         '538-red':     '#B20D30',
         '538-green':   '#3A7A3A',
         '538-bg':      'var(--color-bg)',
