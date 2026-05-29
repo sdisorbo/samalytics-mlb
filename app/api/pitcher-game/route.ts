@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { fetchGameBreakdown, fetchGameStarters } from '../../../lib/pitcherGame'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/pitcher-game?gamePk=716123&pitcherId=663436
 export async function GET(req: Request) {
   try {

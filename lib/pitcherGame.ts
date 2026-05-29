@@ -249,7 +249,7 @@ export async function fetchGameBreakdown(
 
 // Fetch boxscore and return all pitchers (SP + RP) for a game, optionally filtered by team.
 export async function fetchGameStarters(gamePk: number, filterTeamAbbr?: string) {
-  const bsRes = await fetch(`${MLB_API}/game/${gamePk}/boxscore`, { next: { revalidate: 3600 } })
+  const bsRes = await fetch(`${MLB_API}/game/${gamePk}/boxscore`, { cache: 'no-store' })
   if (!bsRes.ok) return []
   const bs = await bsRes.json()
 

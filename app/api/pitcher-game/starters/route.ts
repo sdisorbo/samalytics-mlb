@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 const MLB_API = 'https://statsapi.mlb.com/api/v1'
 
 // GET /api/pitcher-game/starters?team=LAD&date=2025-05-28
@@ -13,7 +15,7 @@ export async function GET(req: Request) {
 
     const schedRes = await fetch(
       `${MLB_API}/schedule?sportId=1&date=${date}&hydrate=team,linescore`,
-      { next: { revalidate: 3600 } },
+      { cache: 'no-store' },
     )
     if (!schedRes.ok) return NextResponse.json({ games: [] })
     const schedData = await schedRes.json()
@@ -46,7 +48,7 @@ export async function GET(req: Request) {
       }
 
       try {
-        const bsRes = await fetch(`${MLB_API}/game/${gamePk}/boxscore`, { next: { revalidate: 3600 } })
+        const bsRes = await fetch(`${MLB_API}/game/${gamePk}/boxscore`, { cache: 'no-store' })
         if (!bsRes.ok) { results.push({ gamePk, awayTeam: awayAbbr, homeTeam: homeAbbr, state, starters: [] }); continue }
         const bs = await bsRes.json()
 
