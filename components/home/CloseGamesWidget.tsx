@@ -124,8 +124,8 @@ export default function CloseGamesWidget() {
         return r.json() as Promise<Game[]>
       })
       .then((all) => {
-        const preview = all.filter((g) => g.state === 'Preview')
-        const sorted  = preview.sort(
+        const active = all.filter((g) => g.state === 'Preview' || g.state === 'Live')
+        const sorted = active.sort(
           (a, b) =>
             Math.abs(a.away.winProb - 50) - Math.abs(b.away.winProb - 50)
         )

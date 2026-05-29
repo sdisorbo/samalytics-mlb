@@ -10,6 +10,7 @@ import {
 } from '@/lib/articleUtils'
 import type { TeamStanding } from '@/lib/types'
 import CloseGamesWidget from '@/components/home/CloseGamesWidget'
+import PitcherSpotlight from '@/components/PitcherSpotlight'
 
 // All 30 MLB team abbreviations in a stable order
 const MLB_ABBRS = [
@@ -269,7 +270,18 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Section 3 — Close Games */}
+      {/* Section 3 — Pitcher Spotlight */}
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-538-muted">
+            Last Night&apos;s Best Start
+          </h2>
+          <div className="flex-1 h-px bg-538-border" />
+        </div>
+        <PitcherSpotlight />
+      </div>
+
+      {/* Section 4 — Close Games */}
       <div>
         <div className="flex items-center gap-3 mb-4">
           <h2 className="text-sm font-bold uppercase tracking-widest text-538-muted">
