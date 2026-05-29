@@ -19,8 +19,12 @@ const MLB_ABBRS = [
   'PHI', 'PIT', 'SD',  'SEA', 'SF',  'STL', 'TB',  'TEX', 'TOR', 'WSH',
 ]
 
+const ESPN_ABBR: Record<string, string> = { AZ: 'ari', ARI: 'ari' }
+
 function logoUrl(abbr: string): string {
-  return `https://a.espncdn.com/i/teamlogos/mlb/500/${abbr.toLowerCase()}.png`
+  const key = abbr.toUpperCase()
+  const slug = ESPN_ABBR[key] ?? abbr.toLowerCase()
+  return `https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`
 }
 
 function formatDate(): string {
