@@ -18,30 +18,8 @@
     "era_percentile": 100,
     "fip_percentile": 100,
     "k9_percentile": 100,
-    "bb9_percentile": 46,
+    "bb9_percentile": 45,
     "whip_percentile": 97
-  },
-  {
-    "player_id": 686973,
-    "name": "Louis Varland",
-    "team": "TOR",
-    "team_name": "Toronto Blue Jays",
-    "division": "American League East",
-    "era": 0.31,
-    "fip": 1.18,
-    "xfip": null,
-    "k_per_9": 12.87,
-    "bb_per_9": 2.83,
-    "whip": 1.08,
-    "innings_pitched": 28.7,
-    "strikeouts": 41,
-    "walks": 9,
-    "home_runs_allowed": 0,
-    "era_percentile": 100,
-    "fip_percentile": 100,
-    "k9_percentile": 97,
-    "bb9_percentile": 64,
-    "whip_percentile": 75
   },
   {
     "player_id": 671922,
@@ -60,10 +38,32 @@
     "walks": 5,
     "home_runs_allowed": 1,
     "era_percentile": 75,
-    "fip_percentile": 99,
-    "k9_percentile": 97,
+    "fip_percentile": 100,
+    "k9_percentile": 98,
     "bb9_percentile": 96,
     "whip_percentile": 73
+  },
+  {
+    "player_id": 686973,
+    "name": "Louis Varland",
+    "team": "TOR",
+    "team_name": "Toronto Blue Jays",
+    "division": "American League East",
+    "era": 0.3,
+    "fip": 1.27,
+    "xfip": null,
+    "k_per_9": 12.3,
+    "bb_per_9": 2.7,
+    "whip": 1.07,
+    "innings_pitched": 30.0,
+    "strikeouts": 41,
+    "walks": 9,
+    "home_runs_allowed": 0,
+    "era_percentile": 100,
+    "fip_percentile": 99,
+    "k9_percentile": 97,
+    "bb9_percentile": 70,
+    "whip_percentile": 77
   },
   {
     "player_id": 669276,
@@ -88,6 +88,28 @@
     "whip_percentile": 100
   },
   {
+    "player_id": 691799,
+    "name": "Grant Taylor",
+    "team": "CWS",
+    "team_name": "Chicago White Sox",
+    "division": "American League Central",
+    "era": 2.28,
+    "fip": 1.65,
+    "xfip": null,
+    "k_per_9": 13.01,
+    "bb_per_9": 2.93,
+    "whip": 1.19,
+    "innings_pitched": 27.7,
+    "strikeouts": 40,
+    "walks": 9,
+    "home_runs_allowed": 1,
+    "era_percentile": 83,
+    "fip_percentile": 99,
+    "k9_percentile": 97,
+    "bb9_percentile": 61,
+    "whip_percentile": 59
+  },
+  {
     "player_id": 694819,
     "name": "Jacob Misiorowski",
     "team": "MIL",
@@ -104,32 +126,10 @@
     "walks": 19,
     "home_runs_allowed": 4,
     "era_percentile": 92,
-    "fip_percentile": 99,
+    "fip_percentile": 98,
     "k9_percentile": 98,
     "bb9_percentile": 71,
-    "whip_percentile": 95
-  },
-  {
-    "player_id": 691799,
-    "name": "Grant Taylor",
-    "team": "CWS",
-    "team_name": "Chicago White Sox",
-    "division": "American League Central",
-    "era": 2.36,
-    "fip": 1.68,
-    "xfip": null,
-    "k_per_9": 13.16,
-    "bb_per_9": 3.04,
-    "whip": 1.2,
-    "innings_pitched": 26.7,
-    "strikeouts": 39,
-    "walks": 9,
-    "home_runs_allowed": 1,
-    "era_percentile": 83,
-    "fip_percentile": 99,
-    "k9_percentile": 97,
-    "bb9_percentile": 57,
-    "whip_percentile": 57
+    "whip_percentile": 96
   },
   {
     "player_id": 694361,
@@ -169,7 +169,7 @@
     "strikeouts": 31,
     "walks": 5,
     "home_runs_allowed": 1,
-    "era_percentile": 22,
+    "era_percentile": 23,
     "fip_percentile": 98,
     "k9_percentile": 94,
     "bb9_percentile": 95,
@@ -194,7 +194,7 @@
     "era_percentile": 96,
     "fip_percentile": 97,
     "k9_percentile": 91,
-    "bb9_percentile": 93,
+    "bb9_percentile": 94,
     "whip_percentile": 68
   },
   {
@@ -215,7 +215,7 @@
     "home_runs_allowed": 0,
     "era_percentile": 84,
     "fip_percentile": 97,
-    "k9_percentile": 73,
+    "k9_percentile": 72,
     "bb9_percentile": 66,
     "whip_percentile": 77
   },
@@ -257,9 +257,9 @@
     "strikeouts": 27,
     "walks": 4,
     "home_runs_allowed": 1,
-    "era_percentile": 68,
+    "era_percentile": 67,
     "fip_percentile": 96,
-    "k9_percentile": 76,
+    "k9_percentile": 75,
     "bb9_percentile": 98,
     "whip_percentile": 88
   },
@@ -281,9 +281,9 @@
     "home_runs_allowed": 3,
     "era_percentile": 96,
     "fip_percentile": 96,
-    "k9_percentile": 78,
-    "bb9_percentile": 96,
-    "whip_percentile": 94
+    "k9_percentile": 77,
+    "bb9_percentile": 97,
+    "whip_percentile": 95
   },
   {
     "player_id": 669373,
@@ -327,7 +327,29 @@
     "fip_percentile": 95,
     "k9_percentile": 42,
     "bb9_percentile": 82,
-    "whip_percentile": 87
+    "whip_percentile": 86
+  },
+  {
+    "player_id": 656546,
+    "name": "Jeff Hoffman",
+    "team": "TOR",
+    "team_name": "Toronto Blue Jays",
+    "division": "American League East",
+    "era": 4.62,
+    "fip": 2.11,
+    "xfip": null,
+    "k_per_9": 15.63,
+    "bb_per_9": 2.84,
+    "whip": 1.58,
+    "innings_pitched": 25.3,
+    "strikeouts": 44,
+    "walks": 8,
+    "home_runs_allowed": 3,
+    "era_percentile": 30,
+    "fip_percentile": 95,
+    "k9_percentile": 99,
+    "bb9_percentile": 64,
+    "whip_percentile": 11
   },
   {
     "player_id": 554430,
@@ -347,7 +369,7 @@
     "home_runs_allowed": 1,
     "era_percentile": 94,
     "fip_percentile": 95,
-    "k9_percentile": 51,
+    "k9_percentile": 52,
     "bb9_percentile": 92,
     "whip_percentile": 96
   },
@@ -357,21 +379,21 @@
     "team": "CWS",
     "team_name": "Chicago White Sox",
     "division": "American League Central",
-    "era": 2.04,
-    "fip": 2.18,
+    "era": 2.0,
+    "fip": 2.2,
     "xfip": null,
-    "k_per_9": 9.63,
-    "bb_per_9": 1.75,
-    "whip": 1.02,
-    "innings_pitched": 61.7,
-    "strikeouts": 66,
-    "walks": 12,
+    "k_per_9": 9.44,
+    "bb_per_9": 1.86,
+    "whip": 0.99,
+    "innings_pitched": 67.7,
+    "strikeouts": 71,
+    "walks": 14,
     "home_runs_allowed": 3,
-    "era_percentile": 88,
+    "era_percentile": 89,
     "fip_percentile": 95,
-    "k9_percentile": 70,
-    "bb9_percentile": 95,
-    "whip_percentile": 85
+    "k9_percentile": 66,
+    "bb9_percentile": 93,
+    "whip_percentile": 88
   },
   {
     "player_id": 676879,
@@ -390,10 +412,10 @@
     "walks": 18,
     "home_runs_allowed": 1,
     "era_percentile": 88,
-    "fip_percentile": 95,
+    "fip_percentile": 94,
     "k9_percentile": 97,
     "bb9_percentile": 17,
-    "whip_percentile": 45
+    "whip_percentile": 44
   },
   {
     "player_id": 669622,
@@ -412,9 +434,9 @@
     "walks": 9,
     "home_runs_allowed": 0,
     "era_percentile": 57,
-    "fip_percentile": 95,
+    "fip_percentile": 94,
     "k9_percentile": 71,
-    "bb9_percentile": 34,
+    "bb9_percentile": 33,
     "whip_percentile": 89
   },
   {
@@ -435,9 +457,9 @@
     "home_runs_allowed": 1,
     "era_percentile": 94,
     "fip_percentile": 94,
-    "k9_percentile": 90,
+    "k9_percentile": 89,
     "bb9_percentile": 68,
-    "whip_percentile": 92
+    "whip_percentile": 93
   },
   {
     "player_id": 678606,
@@ -457,7 +479,7 @@
     "home_runs_allowed": 1,
     "era_percentile": 92,
     "fip_percentile": 94,
-    "k9_percentile": 38,
+    "k9_percentile": 39,
     "bb9_percentile": 100,
     "whip_percentile": 51
   },
@@ -479,31 +501,9 @@
     "home_runs_allowed": 1,
     "era_percentile": 89,
     "fip_percentile": 93,
-    "k9_percentile": 66,
+    "k9_percentile": 67,
     "bb9_percentile": 65,
     "whip_percentile": 88
-  },
-  {
-    "player_id": 656546,
-    "name": "Jeff Hoffman",
-    "team": "TOR",
-    "team_name": "Toronto Blue Jays",
-    "division": "American League East",
-    "era": 4.81,
-    "fip": 2.24,
-    "xfip": null,
-    "k_per_9": 15.53,
-    "bb_per_9": 2.96,
-    "whip": 1.6,
-    "innings_pitched": 24.3,
-    "strikeouts": 42,
-    "walks": 8,
-    "home_runs_allowed": 3,
-    "era_percentile": 26,
-    "fip_percentile": 93,
-    "k9_percentile": 99,
-    "bb9_percentile": 60,
-    "whip_percentile": 10
   },
   {
     "player_id": 656945,
@@ -523,7 +523,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 98,
     "fip_percentile": 93,
-    "k9_percentile": 90,
+    "k9_percentile": 89,
     "bb9_percentile": 99,
     "whip_percentile": 100
   },
@@ -545,8 +545,8 @@
     "home_runs_allowed": 0,
     "era_percentile": 97,
     "fip_percentile": 93,
-    "k9_percentile": 55,
-    "bb9_percentile": 46,
+    "k9_percentile": 56,
+    "bb9_percentile": 45,
     "whip_percentile": 54
   },
   {
@@ -567,7 +567,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 99,
     "fip_percentile": 92,
-    "k9_percentile": 76,
+    "k9_percentile": 75,
     "bb9_percentile": 68,
     "whip_percentile": 96
   },
@@ -591,7 +591,7 @@
     "fip_percentile": 92,
     "k9_percentile": 44,
     "bb9_percentile": 60,
-    "whip_percentile": 93
+    "whip_percentile": 94
   },
   {
     "player_id": 690986,
@@ -611,7 +611,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 95,
     "fip_percentile": 91,
-    "k9_percentile": 88,
+    "k9_percentile": 87,
     "bb9_percentile": 79,
     "whip_percentile": 84
   },
@@ -633,7 +633,7 @@
     "home_runs_allowed": 0,
     "era_percentile": 42,
     "fip_percentile": 91,
-    "k9_percentile": 80,
+    "k9_percentile": 79,
     "bb9_percentile": 20,
     "whip_percentile": 12
   },
@@ -656,8 +656,8 @@
     "era_percentile": 38,
     "fip_percentile": 91,
     "k9_percentile": 87,
-    "bb9_percentile": 91,
-    "whip_percentile": 69
+    "bb9_percentile": 92,
+    "whip_percentile": 70
   },
   {
     "player_id": 676263,
@@ -677,8 +677,8 @@
     "home_runs_allowed": 1,
     "era_percentile": 87,
     "fip_percentile": 90,
-    "k9_percentile": 75,
-    "bb9_percentile": 76,
+    "k9_percentile": 74,
+    "bb9_percentile": 77,
     "whip_percentile": 90
   },
   {
@@ -700,7 +700,7 @@
     "era_percentile": 84,
     "fip_percentile": 90,
     "k9_percentile": 63,
-    "bb9_percentile": 83,
+    "bb9_percentile": 84,
     "whip_percentile": 90
   },
   {
@@ -722,30 +722,8 @@
     "era_percentile": 87,
     "fip_percentile": 90,
     "k9_percentile": 92,
-    "bb9_percentile": 42,
+    "bb9_percentile": 41,
     "whip_percentile": 97
-  },
-  {
-    "player_id": 660853,
-    "name": "Enyel De Los Santos",
-    "team": "HOU",
-    "team_name": "Houston Astros",
-    "division": "American League West",
-    "era": 3.57,
-    "fip": 2.35,
-    "xfip": null,
-    "k_per_9": 8.34,
-    "bb_per_9": 1.59,
-    "whip": 1.01,
-    "innings_pitched": 22.7,
-    "strikeouts": 21,
-    "walks": 4,
-    "home_runs_allowed": 1,
-    "era_percentile": 54,
-    "fip_percentile": 90,
-    "k9_percentile": 47,
-    "bb9_percentile": 97,
-    "whip_percentile": 87
   },
   {
     "player_id": 571510,
@@ -766,8 +744,8 @@
     "era_percentile": 7,
     "fip_percentile": 90,
     "k9_percentile": 95,
-    "bb9_percentile": 84,
-    "whip_percentile": 45
+    "bb9_percentile": 85,
+    "whip_percentile": 44
   },
   {
     "player_id": 681895,
@@ -787,8 +765,8 @@
     "home_runs_allowed": 1,
     "era_percentile": 95,
     "fip_percentile": 89,
-    "k9_percentile": 87,
-    "bb9_percentile": 53,
+    "k9_percentile": 86,
+    "bb9_percentile": 54,
     "whip_percentile": 73
   },
   {
@@ -807,11 +785,11 @@
     "strikeouts": 70,
     "walks": 14,
     "home_runs_allowed": 4,
-    "era_percentile": 69,
-    "fip_percentile": 88,
-    "k9_percentile": 72,
+    "era_percentile": 68,
+    "fip_percentile": 89,
+    "k9_percentile": 71,
     "bb9_percentile": 90,
-    "whip_percentile": 91
+    "whip_percentile": 92
   },
   {
     "player_id": 675660,
@@ -829,10 +807,10 @@
     "strikeouts": 28,
     "walks": 8,
     "home_runs_allowed": 1,
-    "era_percentile": 78,
+    "era_percentile": 77,
     "fip_percentile": 88,
     "k9_percentile": 62,
-    "bb9_percentile": 73,
+    "bb9_percentile": 72,
     "whip_percentile": 71
   },
   {
@@ -854,30 +832,30 @@
     "era_percentile": 74,
     "fip_percentile": 88,
     "k9_percentile": 95,
-    "bb9_percentile": 82,
+    "bb9_percentile": 83,
     "whip_percentile": 81
   },
   {
-    "player_id": 573124,
-    "name": "Taylor Rogers",
-    "team": "MIN",
-    "team_name": "Minnesota Twins",
-    "division": "American League Central",
-    "era": 3.54,
+    "player_id": 660853,
+    "name": "Enyel De Los Santos",
+    "team": "HOU",
+    "team_name": "Houston Astros",
+    "division": "American League West",
+    "era": 3.47,
     "fip": 2.41,
     "xfip": null,
-    "k_per_9": 7.08,
-    "bb_per_9": 2.66,
-    "whip": 1.57,
-    "innings_pitched": 20.3,
-    "strikeouts": 16,
-    "walks": 6,
-    "home_runs_allowed": 0,
+    "k_per_9": 8.49,
+    "bb_per_9": 1.93,
+    "whip": 1.03,
+    "innings_pitched": 23.3,
+    "strikeouts": 22,
+    "walks": 5,
+    "home_runs_allowed": 1,
     "era_percentile": 55,
-    "fip_percentile": 87,
-    "k9_percentile": 23,
-    "bb9_percentile": 72,
-    "whip_percentile": 12
+    "fip_percentile": 88,
+    "k9_percentile": 50,
+    "bb9_percentile": 92,
+    "whip_percentile": 84
   },
   {
     "player_id": 656302,
@@ -898,8 +876,30 @@
     "era_percentile": 65,
     "fip_percentile": 87,
     "k9_percentile": 98,
-    "bb9_percentile": 35,
+    "bb9_percentile": 34,
     "whip_percentile": 56
+  },
+  {
+    "player_id": 573124,
+    "name": "Taylor Rogers",
+    "team": "MIN",
+    "team_name": "Minnesota Twins",
+    "division": "American League Central",
+    "era": 3.38,
+    "fip": 2.44,
+    "xfip": null,
+    "k_per_9": 6.75,
+    "bb_per_9": 2.53,
+    "whip": 1.5,
+    "innings_pitched": 21.3,
+    "strikeouts": 16,
+    "walks": 6,
+    "home_runs_allowed": 0,
+    "era_percentile": 57,
+    "fip_percentile": 87,
+    "k9_percentile": 19,
+    "bb9_percentile": 74,
+    "whip_percentile": 17
   },
   {
     "player_id": 667297,
@@ -919,8 +919,8 @@
     "home_runs_allowed": 1,
     "era_percentile": 45,
     "fip_percentile": 87,
-    "k9_percentile": 89,
-    "bb9_percentile": 45,
+    "k9_percentile": 88,
+    "bb9_percentile": 43,
     "whip_percentile": 66
   },
   {
@@ -942,7 +942,7 @@
     "era_percentile": 99,
     "fip_percentile": 86,
     "k9_percentile": 85,
-    "bb9_percentile": 44,
+    "bb9_percentile": 43,
     "whip_percentile": 99
   },
   {
@@ -964,8 +964,8 @@
     "era_percentile": 99,
     "fip_percentile": 86,
     "k9_percentile": 42,
-    "bb9_percentile": 91,
-    "whip_percentile": 93
+    "bb9_percentile": 92,
+    "whip_percentile": 94
   },
   {
     "player_id": 656794,
@@ -983,10 +983,10 @@
     "strikeouts": 28,
     "walks": 8,
     "home_runs_allowed": 1,
-    "era_percentile": 71,
+    "era_percentile": 70,
     "fip_percentile": 86,
-    "k9_percentile": 39,
-    "bb9_percentile": 83,
+    "k9_percentile": 40,
+    "bb9_percentile": 84,
     "whip_percentile": 66
   },
   {
@@ -1005,11 +1005,33 @@
     "strikeouts": 68,
     "walks": 21,
     "home_runs_allowed": 3,
-    "era_percentile": 53,
-    "fip_percentile": 85,
+    "era_percentile": 52,
+    "fip_percentile": 86,
     "k9_percentile": 81,
-    "bb9_percentile": 52,
+    "bb9_percentile": 53,
     "whip_percentile": 29
+  },
+  {
+    "player_id": 694973,
+    "name": "Paul Skenes",
+    "team": "PIT",
+    "team_name": "Pittsburgh Pirates",
+    "division": "National League Central",
+    "era": 2.89,
+    "fip": 2.55,
+    "xfip": null,
+    "k_per_9": 10.33,
+    "bb_per_9": 1.65,
+    "whip": 0.86,
+    "innings_pitched": 65.3,
+    "strikeouts": 75,
+    "walks": 12,
+    "home_runs_allowed": 6,
+    "era_percentile": 69,
+    "fip_percentile": 85,
+    "k9_percentile": 83,
+    "bb9_percentile": 96,
+    "whip_percentile": 94
   },
   {
     "player_id": 668984,
@@ -1030,7 +1052,7 @@
     "era_percentile": 58,
     "fip_percentile": 85,
     "k9_percentile": 10,
-    "bb9_percentile": 76,
+    "bb9_percentile": 77,
     "whip_percentile": 25
   },
   {
@@ -1073,8 +1095,8 @@
     "home_runs_allowed": 1,
     "era_percentile": 77,
     "fip_percentile": 85,
-    "k9_percentile": 88,
-    "bb9_percentile": 43,
+    "k9_percentile": 87,
+    "bb9_percentile": 42,
     "whip_percentile": 75
   },
   {
@@ -1096,7 +1118,7 @@
     "era_percentile": 59,
     "fip_percentile": 84,
     "k9_percentile": 80,
-    "bb9_percentile": 48,
+    "bb9_percentile": 49,
     "whip_percentile": 60
   },
   {
@@ -1117,7 +1139,7 @@
     "home_runs_allowed": 1,
     "era_percentile": 69,
     "fip_percentile": 84,
-    "k9_percentile": 75,
+    "k9_percentile": 74,
     "bb9_percentile": 48,
     "whip_percentile": 85
   },
@@ -1138,10 +1160,32 @@
     "walks": 19,
     "home_runs_allowed": 1,
     "era_percentile": 62,
-    "fip_percentile": 84,
+    "fip_percentile": 83,
     "k9_percentile": 27,
     "bb9_percentile": 68,
-    "whip_percentile": 87
+    "whip_percentile": 86
+  },
+  {
+    "player_id": 801139,
+    "name": "Payton Tolle",
+    "team": "BOS",
+    "team_name": "Boston Red Sox",
+    "division": "American League East",
+    "era": 2.61,
+    "fip": 2.62,
+    "xfip": null,
+    "k_per_9": 10.02,
+    "bb_per_9": 2.4,
+    "whip": 0.9,
+    "innings_pitched": 41.3,
+    "strikeouts": 46,
+    "walks": 11,
+    "home_runs_allowed": 3,
+    "era_percentile": 77,
+    "fip_percentile": 83,
+    "k9_percentile": 76,
+    "bb9_percentile": 81,
+    "whip_percentile": 93
   },
   {
     "player_id": 596001,
@@ -1166,6 +1210,28 @@
     "whip_percentile": 98
   },
   {
+    "player_id": 519242,
+    "name": "Chris Sale",
+    "team": "ATL",
+    "team_name": "Atlanta Braves",
+    "division": "National League East",
+    "era": 2.01,
+    "fip": 2.64,
+    "xfip": null,
+    "k_per_9": 10.75,
+    "bb_per_9": 2.28,
+    "whip": 0.94,
+    "innings_pitched": 67.0,
+    "strikeouts": 80,
+    "walks": 17,
+    "home_runs_allowed": 6,
+    "era_percentile": 89,
+    "fip_percentile": 83,
+    "k9_percentile": 90,
+    "bb9_percentile": 83,
+    "whip_percentile": 91
+  },
+  {
     "player_id": 666200,
     "name": "Jesús Luzardo",
     "team": "PHI",
@@ -1182,10 +1248,10 @@
     "walks": 17,
     "home_runs_allowed": 5,
     "era_percentile": 35,
-    "fip_percentile": 83,
+    "fip_percentile": 82,
     "k9_percentile": 86,
     "bb9_percentile": 77,
-    "whip_percentile": 45
+    "whip_percentile": 46
   },
   {
     "player_id": 672282,
@@ -1204,8 +1270,8 @@
     "walks": 19,
     "home_runs_allowed": 5,
     "era_percentile": 32,
-    "fip_percentile": 83,
-    "k9_percentile": 89,
+    "fip_percentile": 82,
+    "k9_percentile": 88,
     "bb9_percentile": 70,
     "whip_percentile": 66
   },
@@ -1226,54 +1292,10 @@
     "walks": 14,
     "home_runs_allowed": 4,
     "era_percentile": 61,
-    "fip_percentile": 82,
+    "fip_percentile": 81,
     "k9_percentile": 54,
-    "bb9_percentile": 88,
-    "whip_percentile": 57
-  },
-  {
-    "player_id": 694973,
-    "name": "Paul Skenes",
-    "team": "PIT",
-    "team_name": "Pittsburgh Pirates",
-    "division": "National League Central",
-    "era": 3.0,
-    "fip": 2.68,
-    "xfip": null,
-    "k_per_9": 9.75,
-    "bb_per_9": 1.35,
-    "whip": 0.82,
-    "innings_pitched": 60.0,
-    "strikeouts": 65,
-    "walks": 9,
-    "home_runs_allowed": 6,
-    "era_percentile": 67,
-    "fip_percentile": 82,
-    "k9_percentile": 71,
-    "bb9_percentile": 98,
-    "whip_percentile": 96
-  },
-  {
-    "player_id": 519242,
-    "name": "Chris Sale",
-    "team": "ATL",
-    "team_name": "Atlanta Braves",
-    "division": "National League East",
-    "era": 1.89,
-    "fip": 2.71,
-    "xfip": null,
-    "k_per_9": 10.45,
-    "bb_per_9": 2.03,
-    "whip": 0.87,
-    "innings_pitched": 62.0,
-    "strikeouts": 72,
-    "walks": 14,
-    "home_runs_allowed": 6,
-    "era_percentile": 91,
-    "fip_percentile": 82,
-    "k9_percentile": 85,
     "bb9_percentile": 89,
-    "whip_percentile": 93
+    "whip_percentile": 57
   },
   {
     "player_id": 656464,
@@ -1316,7 +1338,7 @@
     "era_percentile": 81,
     "fip_percentile": 81,
     "k9_percentile": 57,
-    "bb9_percentile": 46,
+    "bb9_percentile": 45,
     "whip_percentile": 81
   },
   {
@@ -1338,7 +1360,7 @@
     "era_percentile": 36,
     "fip_percentile": 81,
     "k9_percentile": 48,
-    "bb9_percentile": 92,
+    "bb9_percentile": 93,
     "whip_percentile": 77
   },
   {
@@ -1359,31 +1381,9 @@
     "home_runs_allowed": 2,
     "era_percentile": 86,
     "fip_percentile": 80,
-    "k9_percentile": 52,
+    "k9_percentile": 53,
     "bb9_percentile": 80,
     "whip_percentile": 85
-  },
-  {
-    "player_id": 801139,
-    "name": "Payton Tolle",
-    "team": "BOS",
-    "team_name": "Boston Red Sox",
-    "division": "American League East",
-    "era": 2.45,
-    "fip": 2.77,
-    "xfip": null,
-    "k_per_9": 9.57,
-    "bb_per_9": 2.21,
-    "whip": 0.82,
-    "innings_pitched": 36.7,
-    "strikeouts": 39,
-    "walks": 9,
-    "home_runs_allowed": 3,
-    "era_percentile": 82,
-    "fip_percentile": 80,
-    "k9_percentile": 68,
-    "bb9_percentile": 86,
-    "whip_percentile": 96
   },
   {
     "player_id": 676974,
@@ -1447,7 +1447,7 @@
     "home_runs_allowed": 1,
     "era_percentile": 98,
     "fip_percentile": 79,
-    "k9_percentile": 78,
+    "k9_percentile": 77,
     "bb9_percentile": 23,
     "whip_percentile": 54
   },
@@ -1470,7 +1470,7 @@
     "era_percentile": 13,
     "fip_percentile": 79,
     "k9_percentile": 57,
-    "bb9_percentile": 30,
+    "bb9_percentile": 31,
     "whip_percentile": 7
   },
   {
@@ -1491,7 +1491,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 86,
     "fip_percentile": 78,
-    "k9_percentile": 45,
+    "k9_percentile": 46,
     "bb9_percentile": 95,
     "whip_percentile": 100
   },
@@ -1511,11 +1511,11 @@
     "strikeouts": 30,
     "walks": 14,
     "home_runs_allowed": 1,
-    "era_percentile": 63,
+    "era_percentile": 62,
     "fip_percentile": 78,
     "k9_percentile": 88,
     "bb9_percentile": 13,
-    "whip_percentile": 36
+    "whip_percentile": 35
   },
   {
     "player_id": 687396,
@@ -1535,9 +1535,31 @@
     "home_runs_allowed": 2,
     "era_percentile": 88,
     "fip_percentile": 78,
-    "k9_percentile": 72,
+    "k9_percentile": 71,
     "bb9_percentile": 57,
-    "whip_percentile": 45
+    "whip_percentile": 46
+  },
+  {
+    "player_id": 643511,
+    "name": "Tyler Rogers",
+    "team": "TOR",
+    "team_name": "Toronto Blue Jays",
+    "division": "American League East",
+    "era": 2.45,
+    "fip": 2.91,
+    "xfip": null,
+    "k_per_9": 5.61,
+    "bb_per_9": 3.16,
+    "whip": 1.17,
+    "innings_pitched": 25.7,
+    "strikeouts": 16,
+    "walks": 9,
+    "home_runs_allowed": 0,
+    "era_percentile": 82,
+    "fip_percentile": 78,
+    "k9_percentile": 6,
+    "bb9_percentile": 53,
+    "whip_percentile": 61
   },
   {
     "player_id": 681402,
@@ -1555,9 +1577,9 @@
     "strikeouts": 19,
     "walks": 7,
     "home_runs_allowed": 1,
-    "era_percentile": 48,
+    "era_percentile": 47,
     "fip_percentile": 78,
-    "k9_percentile": 40,
+    "k9_percentile": 41,
     "bb9_percentile": 61,
     "whip_percentile": 29
   },
@@ -1599,7 +1621,7 @@
     "strikeouts": 16,
     "walks": 5,
     "home_runs_allowed": 1,
-    "era_percentile": 40,
+    "era_percentile": 41,
     "fip_percentile": 77,
     "k9_percentile": 15,
     "bb9_percentile": 89,
@@ -1621,33 +1643,33 @@
     "strikeouts": 70,
     "walks": 17,
     "home_runs_allowed": 6,
-    "era_percentile": 74,
+    "era_percentile": 73,
     "fip_percentile": 76,
     "k9_percentile": 61,
-    "bb9_percentile": 85,
+    "bb9_percentile": 86,
     "whip_percentile": 79
   },
   {
-    "player_id": 643511,
-    "name": "Tyler Rogers",
+    "player_id": 680755,
+    "name": "Braydon Fisher",
     "team": "TOR",
     "team_name": "Toronto Blue Jays",
     "division": "American League East",
-    "era": 2.52,
-    "fip": 2.98,
+    "era": 2.56,
+    "fip": 2.97,
     "xfip": null,
-    "k_per_9": 5.4,
-    "bb_per_9": 3.24,
-    "whip": 1.12,
-    "innings_pitched": 25.0,
-    "strikeouts": 15,
-    "walks": 9,
-    "home_runs_allowed": 0,
-    "era_percentile": 81,
+    "k_per_9": 9.38,
+    "bb_per_9": 3.41,
+    "whip": 0.98,
+    "innings_pitched": 31.7,
+    "strikeouts": 33,
+    "walks": 12,
+    "home_runs_allowed": 2,
+    "era_percentile": 78,
     "fip_percentile": 76,
-    "k9_percentile": 5,
-    "bb9_percentile": 51,
-    "whip_percentile": 68
+    "k9_percentile": 65,
+    "bb9_percentile": 45,
+    "whip_percentile": 89
   },
   {
     "player_id": 642528,
@@ -1711,7 +1733,7 @@
     "home_runs_allowed": 6,
     "era_percentile": 85,
     "fip_percentile": 75,
-    "k9_percentile": 72,
+    "k9_percentile": 71,
     "bb9_percentile": 72,
     "whip_percentile": 81
   },
@@ -1731,55 +1753,11 @@
     "strikeouts": 45,
     "walks": 16,
     "home_runs_allowed": 3,
-    "era_percentile": 57,
-    "fip_percentile": 75,
-    "k9_percentile": 92,
-    "bb9_percentile": 29,
-    "whip_percentile": 62
-  },
-  {
-    "player_id": 666171,
-    "name": "Ryan Zeferjahn",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "era": 4.81,
-    "fip": 3.02,
-    "xfip": null,
-    "k_per_9": 11.1,
-    "bb_per_9": 5.55,
-    "whip": 1.23,
-    "innings_pitched": 24.3,
-    "strikeouts": 30,
-    "walks": 15,
-    "home_runs_allowed": 1,
-    "era_percentile": 26,
+    "era_percentile": 55,
     "fip_percentile": 75,
     "k9_percentile": 93,
-    "bb9_percentile": 7,
-    "whip_percentile": 53
-  },
-  {
-    "player_id": 680755,
-    "name": "Braydon Fisher",
-    "team": "TOR",
-    "team_name": "Toronto Blue Jays",
-    "division": "American League East",
-    "era": 2.64,
-    "fip": 3.03,
-    "xfip": null,
-    "k_per_9": 9.39,
-    "bb_per_9": 3.52,
-    "whip": 1.01,
-    "innings_pitched": 30.7,
-    "strikeouts": 32,
-    "walks": 12,
-    "home_runs_allowed": 2,
-    "era_percentile": 77,
-    "fip_percentile": 74,
-    "k9_percentile": 65,
-    "bb9_percentile": 43,
-    "whip_percentile": 87
+    "bb9_percentile": 29,
+    "whip_percentile": 61
   },
   {
     "player_id": 660761,
@@ -1799,8 +1777,8 @@
     "home_runs_allowed": 1,
     "era_percentile": 14,
     "fip_percentile": 74,
-    "k9_percentile": 91,
-    "bb9_percentile": 8,
+    "k9_percentile": 90,
+    "bb9_percentile": 7,
     "whip_percentile": 2
   },
   {
@@ -1821,7 +1799,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 7,
     "fip_percentile": 74,
-    "k9_percentile": 67,
+    "k9_percentile": 68,
     "bb9_percentile": 68,
     "whip_percentile": 17
   },
@@ -1842,10 +1820,10 @@
     "walks": 23,
     "home_runs_allowed": 3,
     "era_percentile": 50,
-    "fip_percentile": 73,
+    "fip_percentile": 74,
     "k9_percentile": 30,
-    "bb9_percentile": 52,
-    "whip_percentile": 36
+    "bb9_percentile": 53,
+    "whip_percentile": 35
   },
   {
     "player_id": 663567,
@@ -1864,10 +1842,32 @@
     "walks": 18,
     "home_runs_allowed": 2,
     "era_percentile": 48,
-    "fip_percentile": 73,
-    "k9_percentile": 56,
+    "fip_percentile": 74,
+    "k9_percentile": 57,
     "bb9_percentile": 26,
-    "whip_percentile": 62
+    "whip_percentile": 61
+  },
+  {
+    "player_id": 702193,
+    "name": "Andrew Morris",
+    "team": "MIN",
+    "team_name": "Minnesota Twins",
+    "division": "American League Central",
+    "era": 4.18,
+    "fip": 3.1,
+    "xfip": null,
+    "k_per_9": 7.61,
+    "bb_per_9": 3.42,
+    "whip": 1.52,
+    "innings_pitched": 23.7,
+    "strikeouts": 20,
+    "walks": 9,
+    "home_runs_allowed": 1,
+    "era_percentile": 38,
+    "fip_percentile": 74,
+    "k9_percentile": 33,
+    "bb9_percentile": 45,
+    "whip_percentile": 14
   },
   {
     "player_id": 670280,
@@ -1885,8 +1885,8 @@
     "strikeouts": 28,
     "walks": 10,
     "home_runs_allowed": 2,
-    "era_percentile": 29,
-    "fip_percentile": 73,
+    "era_percentile": 28,
+    "fip_percentile": 74,
     "k9_percentile": 91,
     "bb9_percentile": 30,
     "whip_percentile": 12
@@ -1911,7 +1911,7 @@
     "fip_percentile": 72,
     "k9_percentile": 23,
     "bb9_percentile": 79,
-    "whip_percentile": 94
+    "whip_percentile": 95
   },
   {
     "player_id": 693433,
@@ -1931,7 +1931,7 @@
     "home_runs_allowed": 6,
     "era_percentile": 46,
     "fip_percentile": 72,
-    "k9_percentile": 47,
+    "k9_percentile": 48,
     "bb9_percentile": 89,
     "whip_percentile": 81
   },
@@ -1951,9 +1951,9 @@
     "strikeouts": 45,
     "walks": 18,
     "home_runs_allowed": 3,
-    "era_percentile": 83,
+    "era_percentile": 82,
     "fip_percentile": 72,
-    "k9_percentile": 34,
+    "k9_percentile": 35,
     "bb9_percentile": 55,
     "whip_percentile": 71
   },
@@ -1975,9 +1975,9 @@
     "home_runs_allowed": 5,
     "era_percentile": 73,
     "fip_percentile": 71,
-    "k9_percentile": 81,
+    "k9_percentile": 80,
     "bb9_percentile": 49,
-    "whip_percentile": 62
+    "whip_percentile": 61
   },
   {
     "player_id": 596133,
@@ -2024,6 +2024,28 @@
     "whip_percentile": 64
   },
   {
+    "player_id": 666171,
+    "name": "Ryan Zeferjahn",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "era": 4.62,
+    "fip": 3.18,
+    "xfip": null,
+    "k_per_9": 11.01,
+    "bb_per_9": 6.04,
+    "whip": 1.26,
+    "innings_pitched": 25.3,
+    "strikeouts": 31,
+    "walks": 17,
+    "home_runs_allowed": 1,
+    "era_percentile": 30,
+    "fip_percentile": 71,
+    "k9_percentile": 92,
+    "bb9_percentile": 5,
+    "whip_percentile": 49
+  },
+  {
     "player_id": 664199,
     "name": "Taylor Clarke",
     "team": "AZ",
@@ -2039,7 +2061,7 @@
     "strikeouts": 10,
     "walks": 3,
     "home_runs_allowed": 1,
-    "era_percentile": 89,
+    "era_percentile": 90,
     "fip_percentile": 70,
     "k9_percentile": 0,
     "bb9_percentile": 99,
@@ -2090,6 +2112,28 @@
     "whip_percentile": 39
   },
   {
+    "player_id": 682254,
+    "name": "Mason Montgomery",
+    "team": "PIT",
+    "team_name": "Pittsburgh Pirates",
+    "division": "National League Central",
+    "era": 3.22,
+    "fip": 3.23,
+    "xfip": null,
+    "k_per_9": 12.09,
+    "bb_per_9": 3.22,
+    "whip": 1.12,
+    "innings_pitched": 22.3,
+    "strikeouts": 30,
+    "walks": 8,
+    "home_runs_allowed": 3,
+    "era_percentile": 61,
+    "fip_percentile": 70,
+    "k9_percentile": 96,
+    "bb9_percentile": 52,
+    "whip_percentile": 68
+  },
+  {
     "player_id": 669387,
     "name": "Carmen Mlodzinski",
     "team": "PIT",
@@ -2107,7 +2151,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 49,
     "fip_percentile": 70,
-    "k9_percentile": 31,
+    "k9_percentile": 32,
     "bb9_percentile": 50,
     "whip_percentile": 27
   },
@@ -2128,9 +2172,9 @@
     "walks": 13,
     "home_runs_allowed": 0,
     "era_percentile": 22,
-    "fip_percentile": 69,
+    "fip_percentile": 68,
     "k9_percentile": 32,
-    "bb9_percentile": 9,
+    "bb9_percentile": 8,
     "whip_percentile": 6
   },
   {
@@ -2150,10 +2194,10 @@
     "walks": 18,
     "home_runs_allowed": 1,
     "era_percentile": 98,
-    "fip_percentile": 69,
+    "fip_percentile": 68,
     "k9_percentile": 46,
-    "bb9_percentile": 15,
-    "whip_percentile": 49
+    "bb9_percentile": 14,
+    "whip_percentile": 50
   },
   {
     "player_id": 623211,
@@ -2172,9 +2216,9 @@
     "walks": 11,
     "home_runs_allowed": 1,
     "era_percentile": 94,
-    "fip_percentile": 69,
+    "fip_percentile": 68,
     "k9_percentile": 21,
-    "bb9_percentile": 36,
+    "bb9_percentile": 37,
     "whip_percentile": 90
   },
   {
@@ -2194,10 +2238,10 @@
     "walks": 13,
     "home_runs_allowed": 5,
     "era_percentile": 74,
-    "fip_percentile": 69,
+    "fip_percentile": 68,
     "k9_percentile": 94,
     "bb9_percentile": 61,
-    "whip_percentile": 95
+    "whip_percentile": 96
   },
   {
     "player_id": 701542,
@@ -2215,11 +2259,11 @@
     "strikeouts": 65,
     "walks": 16,
     "home_runs_allowed": 7,
-    "era_percentile": 55,
-    "fip_percentile": 69,
+    "era_percentile": 53,
+    "fip_percentile": 68,
     "k9_percentile": 76,
     "bb9_percentile": 78,
-    "whip_percentile": 62
+    "whip_percentile": 61
   },
   {
     "player_id": 624133,
@@ -2240,7 +2284,7 @@
     "era_percentile": 66,
     "fip_percentile": 67,
     "k9_percentile": 38,
-    "bb9_percentile": 63,
+    "bb9_percentile": 64,
     "whip_percentile": 75
   },
   {
@@ -2282,32 +2326,10 @@
     "walks": 19,
     "home_runs_allowed": 8,
     "era_percentile": 35,
-    "fip_percentile": 67,
+    "fip_percentile": 66,
     "k9_percentile": 92,
     "bb9_percentile": 67,
     "whip_percentile": 73
-  },
-  {
-    "player_id": 696147,
-    "name": "Sam Bachman",
-    "team": "LAA",
-    "team_name": "Los Angeles Angels",
-    "division": "American League West",
-    "era": 2.42,
-    "fip": 3.29,
-    "xfip": null,
-    "k_per_9": 9.35,
-    "bb_per_9": 3.81,
-    "whip": 1.04,
-    "innings_pitched": 26.0,
-    "strikeouts": 27,
-    "walks": 11,
-    "home_runs_allowed": 2,
-    "era_percentile": 82,
-    "fip_percentile": 66,
-    "k9_percentile": 65,
-    "bb9_percentile": 33,
-    "whip_percentile": 81
   },
   {
     "player_id": 646241,
@@ -2327,31 +2349,9 @@
     "home_runs_allowed": 1,
     "era_percentile": 8,
     "fip_percentile": 66,
-    "k9_percentile": 54,
+    "k9_percentile": 55,
     "bb9_percentile": 16,
     "whip_percentile": 6
-  },
-  {
-    "player_id": 681293,
-    "name": "Spencer Arrighetti",
-    "team": "HOU",
-    "team_name": "Houston Astros",
-    "division": "American League West",
-    "era": 1.32,
-    "fip": 3.3,
-    "xfip": null,
-    "k_per_9": 8.78,
-    "bb_per_9": 5.49,
-    "whip": 1.2,
-    "innings_pitched": 41.0,
-    "strikeouts": 40,
-    "walks": 25,
-    "home_runs_allowed": 1,
-    "era_percentile": 97,
-    "fip_percentile": 66,
-    "k9_percentile": 53,
-    "bb9_percentile": 8,
-    "whip_percentile": 57
   },
   {
     "player_id": 667755,
@@ -2370,8 +2370,8 @@
     "walks": 31,
     "home_runs_allowed": 6,
     "era_percentile": 77,
-    "fip_percentile": 65,
-    "k9_percentile": 73,
+    "fip_percentile": 66,
+    "k9_percentile": 72,
     "bb9_percentile": 30,
     "whip_percentile": 64
   },
@@ -2392,9 +2392,9 @@
     "walks": 10,
     "home_runs_allowed": 1,
     "era_percentile": 66,
-    "fip_percentile": 65,
+    "fip_percentile": 66,
     "k9_percentile": 25,
-    "bb9_percentile": 34,
+    "bb9_percentile": 33,
     "whip_percentile": 39
   },
   {
@@ -2437,9 +2437,9 @@
     "home_runs_allowed": 3,
     "era_percentile": 66,
     "fip_percentile": 65,
-    "k9_percentile": 78,
+    "k9_percentile": 77,
     "bb9_percentile": 57,
-    "whip_percentile": 92
+    "whip_percentile": 93
   },
   {
     "player_id": 669923,
@@ -2457,10 +2457,10 @@
     "strikeouts": 55,
     "walks": 16,
     "home_runs_allowed": 6,
-    "era_percentile": 55,
+    "era_percentile": 54,
     "fip_percentile": 65,
-    "k9_percentile": 25,
-    "bb9_percentile": 87,
+    "k9_percentile": 24,
+    "bb9_percentile": 88,
     "whip_percentile": 56
   },
   {
@@ -2483,7 +2483,7 @@
     "fip_percentile": 65,
     "k9_percentile": 31,
     "bb9_percentile": 75,
-    "whip_percentile": 44
+    "whip_percentile": 43
   },
   {
     "player_id": 640455,
@@ -2501,11 +2501,11 @@
     "strikeouts": 38,
     "walks": 15,
     "home_runs_allowed": 3,
-    "era_percentile": 14,
+    "era_percentile": 13,
     "fip_percentile": 64,
-    "k9_percentile": 77,
+    "k9_percentile": 76,
     "bb9_percentile": 27,
-    "whip_percentile": 9
+    "whip_percentile": 8
   },
   {
     "player_id": 693855,
@@ -2525,9 +2525,9 @@
     "home_runs_allowed": 3,
     "era_percentile": 33,
     "fip_percentile": 63,
-    "k9_percentile": 75,
+    "k9_percentile": 74,
     "bb9_percentile": 52,
-    "whip_percentile": 49
+    "whip_percentile": 50
   },
   {
     "player_id": 656605,
@@ -2569,31 +2569,9 @@
     "home_runs_allowed": 4,
     "era_percentile": 95,
     "fip_percentile": 63,
-    "k9_percentile": 6,
-    "bb9_percentile": 94,
-    "whip_percentile": 69
-  },
-  {
-    "player_id": 702193,
-    "name": "Andrew Morris",
-    "team": "MIN",
-    "team_name": "Minnesota Twins",
-    "division": "American League Central",
-    "era": 4.43,
-    "fip": 3.37,
-    "xfip": null,
-    "k_per_9": 6.85,
-    "bb_per_9": 3.63,
-    "whip": 1.52,
-    "innings_pitched": 22.3,
-    "strikeouts": 17,
-    "walks": 9,
-    "home_runs_allowed": 1,
-    "era_percentile": 35,
-    "fip_percentile": 63,
-    "k9_percentile": 19,
-    "bb9_percentile": 38,
-    "whip_percentile": 15
+    "k9_percentile": 5,
+    "bb9_percentile": 95,
+    "whip_percentile": 70
   },
   {
     "player_id": 657277,
@@ -2615,7 +2593,7 @@
     "fip_percentile": 63,
     "k9_percentile": 38,
     "bb9_percentile": 66,
-    "whip_percentile": 31
+    "whip_percentile": 30
   },
   {
     "player_id": 657612,
@@ -2635,7 +2613,7 @@
     "home_runs_allowed": 1,
     "era_percentile": 80,
     "fip_percentile": 62,
-    "k9_percentile": 2,
+    "k9_percentile": 1,
     "bb9_percentile": 87,
     "whip_percentile": 75
   },
@@ -2655,10 +2633,10 @@
     "strikeouts": 17,
     "walks": 5,
     "home_runs_allowed": 2,
-    "era_percentile": 69,
+    "era_percentile": 68,
     "fip_percentile": 62,
     "k9_percentile": 9,
-    "bb9_percentile": 93,
+    "bb9_percentile": 94,
     "whip_percentile": 97
   },
   {
@@ -2677,7 +2655,7 @@
     "strikeouts": 25,
     "walks": 6,
     "home_runs_allowed": 3,
-    "era_percentile": 63,
+    "era_percentile": 62,
     "fip_percentile": 62,
     "k9_percentile": 55,
     "bb9_percentile": 86,
@@ -2701,9 +2679,9 @@
     "home_runs_allowed": 2,
     "era_percentile": 85,
     "fip_percentile": 61,
-    "k9_percentile": 50,
-    "bb9_percentile": 47,
-    "whip_percentile": 42
+    "k9_percentile": 51,
+    "bb9_percentile": 48,
+    "whip_percentile": 41
   },
   {
     "player_id": 695505,
@@ -2722,7 +2700,7 @@
     "walks": 20,
     "home_runs_allowed": 8,
     "era_percentile": 90,
-    "fip_percentile": 60,
+    "fip_percentile": 61,
     "k9_percentile": 77,
     "bb9_percentile": 67,
     "whip_percentile": 90
@@ -2744,7 +2722,7 @@
     "walks": 18,
     "home_runs_allowed": 2,
     "era_percentile": 78,
-    "fip_percentile": 60,
+    "fip_percentile": 61,
     "k9_percentile": 17,
     "bb9_percentile": 40,
     "whip_percentile": 54
@@ -2772,6 +2750,28 @@
     "whip_percentile": 79
   },
   {
+    "player_id": 696147,
+    "name": "Sam Bachman",
+    "team": "LAA",
+    "team_name": "Los Angeles Angels",
+    "division": "American League West",
+    "era": 2.33,
+    "fip": 3.43,
+    "xfip": null,
+    "k_per_9": 9.33,
+    "bb_per_9": 4.33,
+    "whip": 1.11,
+    "innings_pitched": 27.0,
+    "strikeouts": 28,
+    "walks": 13,
+    "home_runs_allowed": 2,
+    "era_percentile": 83,
+    "fip_percentile": 60,
+    "k9_percentile": 64,
+    "bb9_percentile": 21,
+    "whip_percentile": 70
+  },
+  {
     "player_id": 695418,
     "name": "Brad Lord",
     "team": "WSH",
@@ -2790,7 +2790,7 @@
     "era_percentile": 71,
     "fip_percentile": 59,
     "k9_percentile": 29,
-    "bb9_percentile": 97,
+    "bb9_percentile": 98,
     "whip_percentile": 84
   },
   {
@@ -2813,29 +2813,7 @@
     "fip_percentile": 59,
     "k9_percentile": 3,
     "bb9_percentile": 84,
-    "whip_percentile": 69
-  },
-  {
-    "player_id": 682254,
-    "name": "Mason Montgomery",
-    "team": "PIT",
-    "team_name": "Pittsburgh Pirates",
-    "division": "National League Central",
-    "era": 3.48,
-    "fip": 3.44,
-    "xfip": null,
-    "k_per_9": 12.19,
-    "bb_per_9": 3.48,
-    "whip": 1.21,
-    "innings_pitched": 20.7,
-    "strikeouts": 28,
-    "walks": 8,
-    "home_runs_allowed": 3,
-    "era_percentile": 56,
-    "fip_percentile": 59,
-    "k9_percentile": 96,
-    "bb9_percentile": 44,
-    "whip_percentile": 56
+    "whip_percentile": 70
   },
   {
     "player_id": 676534,
@@ -2857,7 +2835,7 @@
     "fip_percentile": 59,
     "k9_percentile": 68,
     "bb9_percentile": 1,
-    "whip_percentile": 8
+    "whip_percentile": 7
   },
   {
     "player_id": 662253,
@@ -2875,10 +2853,10 @@
     "strikeouts": 33,
     "walks": 7,
     "home_runs_allowed": 4,
-    "era_percentile": 27,
+    "era_percentile": 26,
     "fip_percentile": 59,
     "k9_percentile": 99,
-    "bb9_percentile": 55,
+    "bb9_percentile": 56,
     "whip_percentile": 42
   },
   {
@@ -2900,8 +2878,8 @@
     "era_percentile": 90,
     "fip_percentile": 58,
     "k9_percentile": 95,
-    "bb9_percentile": 9,
-    "whip_percentile": 44
+    "bb9_percentile": 8,
+    "whip_percentile": 43
   },
   {
     "player_id": 656876,
@@ -2922,7 +2900,7 @@
     "era_percentile": 72,
     "fip_percentile": 58,
     "k9_percentile": 48,
-    "bb9_percentile": 96,
+    "bb9_percentile": 97,
     "whip_percentile": 89
   },
   {
@@ -2942,9 +2920,9 @@
     "walks": 11,
     "home_runs_allowed": 2,
     "era_percentile": 79,
-    "fip_percentile": 57,
+    "fip_percentile": 58,
     "k9_percentile": 60,
-    "bb9_percentile": 26,
+    "bb9_percentile": 27,
     "whip_percentile": 79
   },
   {
@@ -2964,10 +2942,10 @@
     "walks": 15,
     "home_runs_allowed": 8,
     "era_percentile": 72,
-    "fip_percentile": 57,
-    "k9_percentile": 53,
+    "fip_percentile": 58,
+    "k9_percentile": 54,
     "bb9_percentile": 88,
-    "whip_percentile": 87
+    "whip_percentile": 86
   },
   {
     "player_id": 642121,
@@ -2985,11 +2963,11 @@
     "strikeouts": 16,
     "walks": 9,
     "home_runs_allowed": 1,
-    "era_percentile": 51,
-    "fip_percentile": 57,
+    "era_percentile": 50,
+    "fip_percentile": 58,
     "k9_percentile": 16,
     "bb9_percentile": 36,
-    "whip_percentile": 38
+    "whip_percentile": 37
   },
   {
     "player_id": 650633,
@@ -3008,7 +2986,7 @@
     "walks": 28,
     "home_runs_allowed": 5,
     "era_percentile": 73,
-    "fip_percentile": 56,
+    "fip_percentile": 57,
     "k9_percentile": 61,
     "bb9_percentile": 25,
     "whip_percentile": 64
@@ -3030,10 +3008,32 @@
     "walks": 16,
     "home_runs_allowed": 2,
     "era_percentile": 58,
-    "fip_percentile": 56,
-    "k9_percentile": 89,
-    "bb9_percentile": 10,
+    "fip_percentile": 57,
+    "k9_percentile": 88,
+    "bb9_percentile": 9,
     "whip_percentile": 54
+  },
+  {
+    "player_id": 681293,
+    "name": "Spencer Arrighetti",
+    "team": "HOU",
+    "team_name": "Houston Astros",
+    "division": "American League West",
+    "era": 1.34,
+    "fip": 3.48,
+    "xfip": null,
+    "k_per_9": 8.23,
+    "bb_per_9": 4.98,
+    "whip": 1.13,
+    "innings_pitched": 47.0,
+    "strikeouts": 43,
+    "walks": 26,
+    "home_runs_allowed": 2,
+    "era_percentile": 97,
+    "fip_percentile": 56,
+    "k9_percentile": 45,
+    "bb9_percentile": 12,
+    "whip_percentile": 66
   },
   {
     "player_id": 677960,
@@ -3051,8 +3051,8 @@
     "strikeouts": 65,
     "walks": 16,
     "home_runs_allowed": 8,
-    "era_percentile": 64,
-    "fip_percentile": 55,
+    "era_percentile": 63,
+    "fip_percentile": 56,
     "k9_percentile": 80,
     "bb9_percentile": 75,
     "whip_percentile": 68
@@ -3074,9 +3074,9 @@
     "walks": 17,
     "home_runs_allowed": 5,
     "era_percentile": 30,
-    "fip_percentile": 55,
+    "fip_percentile": 56,
     "k9_percentile": 45,
-    "bb9_percentile": 61,
+    "bb9_percentile": 62,
     "whip_percentile": 29
   },
   {
@@ -3095,10 +3095,10 @@
     "strikeouts": 21,
     "walks": 8,
     "home_runs_allowed": 2,
-    "era_percentile": 85,
+    "era_percentile": 86,
     "fip_percentile": 55,
     "k9_percentile": 63,
-    "bb9_percentile": 43,
+    "bb9_percentile": 42,
     "whip_percentile": 75
   },
   {
@@ -3117,10 +3117,10 @@
     "strikeouts": 34,
     "walks": 11,
     "home_runs_allowed": 4,
-    "era_percentile": 61,
+    "era_percentile": 60,
     "fip_percentile": 55,
     "k9_percentile": 21,
-    "bb9_percentile": 84,
+    "bb9_percentile": 85,
     "whip_percentile": 57
   },
   {
@@ -3141,9 +3141,31 @@
     "home_runs_allowed": 4,
     "era_percentile": 24,
     "fip_percentile": 55,
-    "k9_percentile": 30,
-    "bb9_percentile": 53,
-    "whip_percentile": 42
+    "k9_percentile": 31,
+    "bb9_percentile": 54,
+    "whip_percentile": 41
+  },
+  {
+    "player_id": 615698,
+    "name": "Cal Quantrill",
+    "team": "TEX",
+    "team_name": "Texas Rangers",
+    "division": "American League West",
+    "era": 2.53,
+    "fip": 3.52,
+    "xfip": null,
+    "k_per_9": 5.91,
+    "bb_per_9": 3.38,
+    "whip": 1.22,
+    "innings_pitched": 21.3,
+    "strikeouts": 14,
+    "walks": 8,
+    "home_runs_allowed": 1,
+    "era_percentile": 80,
+    "fip_percentile": 54,
+    "k9_percentile": 8,
+    "bb9_percentile": 47,
+    "whip_percentile": 54
   },
   {
     "player_id": 679883,
@@ -3168,28 +3190,6 @@
     "whip_percentile": 3
   },
   {
-    "player_id": 607455,
-    "name": "Anthony Banda",
-    "team": "MIN",
-    "team_name": "Minnesota Twins",
-    "division": "American League Central",
-    "era": 5.79,
-    "fip": 3.53,
-    "xfip": null,
-    "k_per_9": 7.71,
-    "bb_per_9": 3.09,
-    "whip": 1.2,
-    "innings_pitched": 23.3,
-    "strikeouts": 20,
-    "walks": 8,
-    "home_runs_allowed": 2,
-    "era_percentile": 11,
-    "fip_percentile": 54,
-    "k9_percentile": 35,
-    "bb9_percentile": 55,
-    "whip_percentile": 57
-  },
-  {
     "player_id": 605130,
     "name": "Scott Barlow",
     "team": "ATH",
@@ -3205,9 +3205,9 @@
     "strikeouts": 22,
     "walks": 10,
     "home_runs_allowed": 2,
-    "era_percentile": 70,
+    "era_percentile": 69,
     "fip_percentile": 53,
-    "k9_percentile": 38,
+    "k9_percentile": 39,
     "bb9_percentile": 40,
     "whip_percentile": 95
   },
@@ -3251,9 +3251,9 @@
     "home_runs_allowed": 2,
     "era_percentile": 84,
     "fip_percentile": 53,
-    "k9_percentile": 24,
-    "bb9_percentile": 58,
-    "whip_percentile": 36
+    "k9_percentile": 23,
+    "bb9_percentile": 59,
+    "whip_percentile": 35
   },
   {
     "player_id": 676428,
@@ -3271,7 +3271,7 @@
     "strikeouts": 18,
     "walks": 12,
     "home_runs_allowed": 1,
-    "era_percentile": 71,
+    "era_percentile": 70,
     "fip_percentile": 52,
     "k9_percentile": 13,
     "bb9_percentile": 22,
@@ -3296,7 +3296,7 @@
     "era_percentile": 30,
     "fip_percentile": 52,
     "k9_percentile": 82,
-    "bb9_percentile": 10,
+    "bb9_percentile": 9,
     "whip_percentile": 11
   },
   {
@@ -3315,11 +3315,33 @@
     "strikeouts": 36,
     "walks": 22,
     "home_runs_allowed": 2,
-    "era_percentile": 79,
+    "era_percentile": 78,
     "fip_percentile": 52,
-    "k9_percentile": 49,
-    "bb9_percentile": 11,
-    "whip_percentile": 36
+    "k9_percentile": 50,
+    "bb9_percentile": 10,
+    "whip_percentile": 35
+  },
+  {
+    "player_id": 607455,
+    "name": "Anthony Banda",
+    "team": "MIN",
+    "team_name": "Minnesota Twins",
+    "division": "American League Central",
+    "era": 5.55,
+    "fip": 3.63,
+    "xfip": null,
+    "k_per_9": 7.4,
+    "bb_per_9": 3.33,
+    "whip": 1.19,
+    "innings_pitched": 24.3,
+    "strikeouts": 20,
+    "walks": 9,
+    "home_runs_allowed": 2,
+    "era_percentile": 14,
+    "fip_percentile": 51,
+    "k9_percentile": 29,
+    "bb9_percentile": 48,
+    "whip_percentile": 59
   },
   {
     "player_id": 663460,
@@ -3359,10 +3381,10 @@
     "strikeouts": 15,
     "walks": 10,
     "home_runs_allowed": 1,
-    "era_percentile": 62,
+    "era_percentile": 61,
     "fip_percentile": 51,
     "k9_percentile": 8,
-    "bb9_percentile": 25,
+    "bb9_percentile": 26,
     "whip_percentile": 25
   },
   {
@@ -3381,7 +3403,7 @@
     "strikeouts": 62,
     "walks": 26,
     "home_runs_allowed": 6,
-    "era_percentile": 35,
+    "era_percentile": 34,
     "fip_percentile": 51,
     "k9_percentile": 79,
     "bb9_percentile": 22,
@@ -3405,7 +3427,7 @@
     "home_runs_allowed": 9,
     "era_percentile": 64,
     "fip_percentile": 50,
-    "k9_percentile": 46,
+    "k9_percentile": 47,
     "bb9_percentile": 93,
     "whip_percentile": 89
   },
@@ -3427,31 +3449,9 @@
     "home_runs_allowed": 2,
     "era_percentile": 91,
     "fip_percentile": 50,
-    "k9_percentile": 20,
+    "k9_percentile": 21,
     "bb9_percentile": 55,
     "whip_percentile": 99
-  },
-  {
-    "player_id": 571578,
-    "name": "Patrick Corbin",
-    "team": "TOR",
-    "team_name": "Toronto Blue Jays",
-    "division": "American League East",
-    "era": 3.86,
-    "fip": 3.71,
-    "xfip": null,
-    "k_per_9": 6.5,
-    "bb_per_9": 2.64,
-    "whip": 1.4,
-    "innings_pitched": 44.3,
-    "strikeouts": 32,
-    "walks": 13,
-    "home_runs_allowed": 4,
-    "era_percentile": 45,
-    "fip_percentile": 50,
-    "k9_percentile": 16,
-    "bb9_percentile": 72,
-    "whip_percentile": 31
   },
   {
     "player_id": 593958,
@@ -3470,7 +3470,7 @@
     "walks": 25,
     "home_runs_allowed": 5,
     "era_percentile": 83,
-    "fip_percentile": 49,
+    "fip_percentile": 50,
     "k9_percentile": 18,
     "bb9_percentile": 46,
     "whip_percentile": 56
@@ -3513,9 +3513,9 @@
     "strikeouts": 21,
     "walks": 10,
     "home_runs_allowed": 2,
-    "era_percentile": 61,
+    "era_percentile": 60,
     "fip_percentile": 49,
-    "k9_percentile": 51,
+    "k9_percentile": 52,
     "bb9_percentile": 24,
     "whip_percentile": 47
   },
@@ -3525,21 +3525,21 @@
     "team": "PIT",
     "team_name": "Pittsburgh Pirates",
     "division": "National League Central",
-    "era": 4.75,
-    "fip": 3.76,
+    "era": 4.88,
+    "fip": 3.77,
     "xfip": null,
-    "k_per_9": 10.38,
-    "bb_per_9": 5.04,
-    "whip": 1.45,
-    "innings_pitched": 30.3,
-    "strikeouts": 35,
-    "walks": 17,
+    "k_per_9": 10.34,
+    "bb_per_9": 5.17,
+    "whip": 1.47,
+    "innings_pitched": 31.3,
+    "strikeouts": 36,
+    "walks": 18,
     "home_runs_allowed": 3,
-    "era_percentile": 28,
-    "fip_percentile": 48,
-    "k9_percentile": 84,
-    "bb9_percentile": 12,
-    "whip_percentile": 22
+    "era_percentile": 24,
+    "fip_percentile": 49,
+    "k9_percentile": 83,
+    "bb9_percentile": 10,
+    "whip_percentile": 20
   },
   {
     "player_id": 695076,
@@ -3586,6 +3586,28 @@
     "whip_percentile": 85
   },
   {
+    "player_id": 571578,
+    "name": "Patrick Corbin",
+    "team": "TOR",
+    "team_name": "Toronto Blue Jays",
+    "division": "American League East",
+    "era": 3.65,
+    "fip": 3.81,
+    "xfip": null,
+    "k_per_9": 6.57,
+    "bb_per_9": 2.55,
+    "whip": 1.36,
+    "innings_pitched": 49.3,
+    "strikeouts": 36,
+    "walks": 14,
+    "home_runs_allowed": 5,
+    "era_percentile": 51,
+    "fip_percentile": 48,
+    "k9_percentile": 17,
+    "bb9_percentile": 73,
+    "whip_percentile": 37
+  },
+  {
     "player_id": 669084,
     "name": "DL Hall",
     "team": "MIL",
@@ -3605,7 +3627,7 @@
     "fip_percentile": 47,
     "k9_percentile": 67,
     "bb9_percentile": 2,
-    "whip_percentile": 48
+    "whip_percentile": 49
   },
   {
     "player_id": 664141,
@@ -3623,9 +3645,9 @@
     "strikeouts": 19,
     "walks": 15,
     "home_runs_allowed": 1,
-    "era_percentile": 68,
+    "era_percentile": 67,
     "fip_percentile": 47,
-    "k9_percentile": 11,
+    "k9_percentile": 12,
     "bb9_percentile": 13,
     "whip_percentile": 25
   },
@@ -3648,7 +3670,7 @@
     "era_percentile": 40,
     "fip_percentile": 47,
     "k9_percentile": 64,
-    "bb9_percentile": 81,
+    "bb9_percentile": 82,
     "whip_percentile": 77
   },
   {
@@ -3670,7 +3692,7 @@
     "era_percentile": 53,
     "fip_percentile": 46,
     "k9_percentile": 31,
-    "bb9_percentile": 87,
+    "bb9_percentile": 88,
     "whip_percentile": 84
   },
   {
@@ -3736,7 +3758,7 @@
     "era_percentile": 58,
     "fip_percentile": 45,
     "k9_percentile": 22,
-    "bb9_percentile": 85,
+    "bb9_percentile": 86,
     "whip_percentile": 64
   },
   {
@@ -3759,7 +3781,7 @@
     "fip_percentile": 45,
     "k9_percentile": 59,
     "bb9_percentile": 87,
-    "whip_percentile": 69
+    "whip_percentile": 70
   },
   {
     "player_id": 656638,
@@ -3777,33 +3799,11 @@
     "strikeouts": 23,
     "walks": 13,
     "home_runs_allowed": 2,
-    "era_percentile": 26,
+    "era_percentile": 25,
     "fip_percentile": 45,
-    "k9_percentile": 50,
-    "bb9_percentile": 15,
-    "whip_percentile": 31
-  },
-  {
-    "player_id": 689296,
-    "name": "Anthony Nunez",
-    "team": "BAL",
-    "team_name": "Baltimore Orioles",
-    "division": "American League East",
-    "era": 4.91,
-    "fip": 3.88,
-    "xfip": null,
-    "k_per_9": 9.82,
-    "bb_per_9": 2.81,
-    "whip": 1.17,
-    "innings_pitched": 25.7,
-    "strikeouts": 28,
-    "walks": 8,
-    "home_runs_allowed": 4,
-    "era_percentile": 24,
-    "fip_percentile": 45,
-    "k9_percentile": 73,
-    "bb9_percentile": 66,
-    "whip_percentile": 62
+    "k9_percentile": 51,
+    "bb9_percentile": 14,
+    "whip_percentile": 30
   },
   {
     "player_id": 686218,
@@ -3821,7 +3821,7 @@
     "strikeouts": 59,
     "walks": 14,
     "home_runs_allowed": 9,
-    "era_percentile": 29,
+    "era_percentile": 28,
     "fip_percentile": 44,
     "k9_percentile": 82,
     "bb9_percentile": 79,
@@ -3845,9 +3845,31 @@
     "home_runs_allowed": 7,
     "era_percentile": 19,
     "fip_percentile": 44,
-    "k9_percentile": 78,
+    "k9_percentile": 77,
     "bb9_percentile": 32,
     "whip_percentile": 39
+  },
+  {
+    "player_id": 571948,
+    "name": "Hoby Milner",
+    "team": "CHC",
+    "team_name": "Chicago Cubs",
+    "division": "National League Central",
+    "era": 2.52,
+    "fip": 3.9,
+    "xfip": null,
+    "k_per_9": 4.32,
+    "bb_per_9": 2.16,
+    "whip": 1.04,
+    "innings_pitched": 25.0,
+    "strikeouts": 12,
+    "walks": 6,
+    "home_runs_allowed": 2,
+    "era_percentile": 81,
+    "fip_percentile": 44,
+    "k9_percentile": 1,
+    "bb9_percentile": 86,
+    "whip_percentile": 81
   },
   {
     "player_id": 676979,
@@ -3868,7 +3890,7 @@
     "era_percentile": 5,
     "fip_percentile": 44,
     "k9_percentile": 93,
-    "bb9_percentile": 48,
+    "bb9_percentile": 49,
     "whip_percentile": 20
   },
   {
@@ -3932,32 +3954,32 @@
     "walks": 18,
     "home_runs_allowed": 6,
     "era_percentile": 44,
-    "fip_percentile": 43,
+    "fip_percentile": 42,
     "k9_percentile": 69,
     "bb9_percentile": 36,
-    "whip_percentile": 44
+    "whip_percentile": 43
   },
   {
-    "player_id": 605135,
-    "name": "Chris Bassitt",
-    "team": "BAL",
-    "team_name": "Baltimore Orioles",
-    "division": "American League East",
-    "era": 5.51,
-    "fip": 3.97,
+    "player_id": 595345,
+    "name": "Steven Okert",
+    "team": "HOU",
+    "team_name": "Houston Astros",
+    "division": "American League West",
+    "era": 3.75,
+    "fip": 3.98,
     "xfip": null,
-    "k_per_9": 6.46,
-    "bb_per_9": 3.61,
-    "whip": 1.67,
-    "innings_pitched": 47.3,
-    "strikeouts": 34,
-    "walks": 19,
-    "home_runs_allowed": 4,
-    "era_percentile": 15,
+    "k_per_9": 7.88,
+    "bb_per_9": 3.0,
+    "whip": 1.04,
+    "innings_pitched": 24.0,
+    "strikeouts": 21,
+    "walks": 8,
+    "home_runs_allowed": 3,
+    "era_percentile": 49,
     "fip_percentile": 42,
-    "k9_percentile": 15,
-    "bb9_percentile": 39,
-    "whip_percentile": 7
+    "k9_percentile": 38,
+    "bb9_percentile": 59,
+    "whip_percentile": 81
   },
   {
     "player_id": 622491,
@@ -3975,33 +3997,11 @@
     "strikeouts": 53,
     "walks": 20,
     "home_runs_allowed": 7,
-    "era_percentile": 9,
+    "era_percentile": 8,
     "fip_percentile": 42,
-    "k9_percentile": 66,
+    "k9_percentile": 67,
     "bb9_percentile": 41,
     "whip_percentile": 15
-  },
-  {
-    "player_id": 571948,
-    "name": "Hoby Milner",
-    "team": "CHC",
-    "team_name": "Chicago Cubs",
-    "division": "National League Central",
-    "era": 2.59,
-    "fip": 4.0,
-    "xfip": null,
-    "k_per_9": 4.07,
-    "bb_per_9": 2.22,
-    "whip": 1.03,
-    "innings_pitched": 24.3,
-    "strikeouts": 11,
-    "walks": 6,
-    "home_runs_allowed": 2,
-    "era_percentile": 78,
-    "fip_percentile": 42,
-    "k9_percentile": 1,
-    "bb9_percentile": 85,
-    "whip_percentile": 84
   },
   {
     "player_id": 668941,
@@ -4019,33 +4019,11 @@
     "strikeouts": 23,
     "walks": 10,
     "home_runs_allowed": 3,
-    "era_percentile": 72,
-    "fip_percentile": 42,
+    "era_percentile": 71,
+    "fip_percentile": 41,
     "k9_percentile": 41,
-    "bb9_percentile": 43,
+    "bb9_percentile": 42,
     "whip_percentile": 56
-  },
-  {
-    "player_id": 595345,
-    "name": "Steven Okert",
-    "team": "HOU",
-    "team_name": "Houston Astros",
-    "division": "American League West",
-    "era": 3.86,
-    "fip": 4.0,
-    "xfip": null,
-    "k_per_9": 8.1,
-    "bb_per_9": 3.09,
-    "whip": 1.07,
-    "innings_pitched": 23.3,
-    "strikeouts": 21,
-    "walks": 8,
-    "home_runs_allowed": 3,
-    "era_percentile": 45,
-    "fip_percentile": 42,
-    "k9_percentile": 42,
-    "bb9_percentile": 55,
-    "whip_percentile": 77
   },
   {
     "player_id": 669358,
@@ -4063,8 +4041,8 @@
     "strikeouts": 57,
     "walks": 27,
     "home_runs_allowed": 7,
-    "era_percentile": 34,
-    "fip_percentile": 42,
+    "era_percentile": 33,
+    "fip_percentile": 41,
     "k9_percentile": 40,
     "bb9_percentile": 34,
     "whip_percentile": 25
@@ -4085,10 +4063,10 @@
     "strikeouts": 25,
     "walks": 7,
     "home_runs_allowed": 4,
-    "era_percentile": 43,
-    "fip_percentile": 40,
+    "era_percentile": 44,
+    "fip_percentile": 41,
     "k9_percentile": 55,
-    "bb9_percentile": 76,
+    "bb9_percentile": 77,
     "whip_percentile": 84
   },
   {
@@ -4107,9 +4085,9 @@
     "strikeouts": 27,
     "walks": 8,
     "home_runs_allowed": 4,
-    "era_percentile": 48,
-    "fip_percentile": 40,
-    "k9_percentile": 82,
+    "era_percentile": 47,
+    "fip_percentile": 41,
+    "k9_percentile": 81,
     "bb9_percentile": 57,
     "whip_percentile": 60
   },
@@ -4132,8 +4110,8 @@
     "era_percentile": 42,
     "fip_percentile": 40,
     "k9_percentile": 32,
-    "bb9_percentile": 28,
-    "whip_percentile": 38
+    "bb9_percentile": 29,
+    "whip_percentile": 37
   },
   {
     "player_id": 676760,
@@ -4155,7 +4133,29 @@
     "fip_percentile": 40,
     "k9_percentile": 26,
     "bb9_percentile": 73,
-    "whip_percentile": 48
+    "whip_percentile": 49
+  },
+  {
+    "player_id": 689296,
+    "name": "Anthony Nunez",
+    "team": "BAL",
+    "team_name": "Baltimore Orioles",
+    "division": "American League East",
+    "era": 5.06,
+    "fip": 4.04,
+    "xfip": null,
+    "k_per_9": 10.12,
+    "bb_per_9": 3.71,
+    "whip": 1.28,
+    "innings_pitched": 26.7,
+    "strikeouts": 30,
+    "walks": 11,
+    "home_runs_allowed": 4,
+    "era_percentile": 22,
+    "fip_percentile": 40,
+    "k9_percentile": 77,
+    "bb9_percentile": 36,
+    "whip_percentile": 46
   },
   {
     "player_id": 668873,
@@ -4176,7 +4176,7 @@
     "era_percentile": 85,
     "fip_percentile": 39,
     "k9_percentile": 70,
-    "bb9_percentile": 20,
+    "bb9_percentile": 19,
     "whip_percentile": 88
   },
   {
@@ -4197,7 +4197,7 @@
     "home_runs_allowed": 6,
     "era_percentile": 63,
     "fip_percentile": 39,
-    "k9_percentile": 40,
+    "k9_percentile": 41,
     "bb9_percentile": 32,
     "whip_percentile": 66
   },
@@ -4217,11 +4217,11 @@
     "strikeouts": 43,
     "walks": 13,
     "home_runs_allowed": 8,
-    "era_percentile": 27,
+    "era_percentile": 26,
     "fip_percentile": 39,
     "k9_percentile": 15,
     "bb9_percentile": 91,
-    "whip_percentile": 44
+    "whip_percentile": 43
   },
   {
     "player_id": 642547,
@@ -4239,10 +4239,10 @@
     "strikeouts": 63,
     "walks": 27,
     "home_runs_allowed": 8,
-    "era_percentile": 55,
+    "era_percentile": 54,
     "fip_percentile": 38,
     "k9_percentile": 62,
-    "bb9_percentile": 28,
+    "bb9_percentile": 29,
     "whip_percentile": 47
   },
   {
@@ -4264,7 +4264,7 @@
     "era_percentile": 53,
     "fip_percentile": 38,
     "k9_percentile": 57,
-    "bb9_percentile": 5,
+    "bb9_percentile": 6,
     "whip_percentile": 19
   },
   {
@@ -4290,6 +4290,28 @@
     "whip_percentile": 59
   },
   {
+    "player_id": 605135,
+    "name": "Chris Bassitt",
+    "team": "BAL",
+    "team_name": "Baltimore Orioles",
+    "division": "American League East",
+    "era": 5.06,
+    "fip": 4.09,
+    "xfip": null,
+    "k_per_9": 6.07,
+    "bb_per_9": 3.38,
+    "whip": 1.58,
+    "innings_pitched": 53.3,
+    "strikeouts": 36,
+    "walks": 20,
+    "home_runs_allowed": 5,
+    "era_percentile": 22,
+    "fip_percentile": 37,
+    "k9_percentile": 9,
+    "bb9_percentile": 47,
+    "whip_percentile": 11
+  },
+  {
     "player_id": 663568,
     "name": "Stephen Kolek",
     "team": "KC",
@@ -4309,7 +4331,7 @@
     "fip_percentile": 37,
     "k9_percentile": 2,
     "bb9_percentile": 95,
-    "whip_percentile": 94
+    "whip_percentile": 95
   },
   {
     "player_id": 681190,
@@ -4327,9 +4349,9 @@
     "strikeouts": 47,
     "walks": 17,
     "home_runs_allowed": 8,
-    "era_percentile": 60,
+    "era_percentile": 59,
     "fip_percentile": 37,
-    "k9_percentile": 21,
+    "k9_percentile": 22,
     "bb9_percentile": 74,
     "whip_percentile": 53
   },
@@ -4351,7 +4373,7 @@
     "home_runs_allowed": 7,
     "era_percentile": 45,
     "fip_percentile": 37,
-    "k9_percentile": 65,
+    "k9_percentile": 66,
     "bb9_percentile": 17,
     "whip_percentile": 20
   },
@@ -4373,31 +4395,9 @@
     "home_runs_allowed": 9,
     "era_percentile": 29,
     "fip_percentile": 37,
-    "k9_percentile": 9,
+    "k9_percentile": 10,
     "bb9_percentile": 75,
     "whip_percentile": 41
-  },
-  {
-    "player_id": 543135,
-    "name": "Nathan Eovaldi",
-    "team": "TEX",
-    "team_name": "Texas Rangers",
-    "division": "American League West",
-    "era": 3.65,
-    "fip": 4.12,
-    "xfip": null,
-    "k_per_9": 8.9,
-    "bb_per_9": 2.04,
-    "whip": 1.14,
-    "innings_pitched": 61.7,
-    "strikeouts": 61,
-    "walks": 14,
-    "home_runs_allowed": 11,
-    "era_percentile": 51,
-    "fip_percentile": 36,
-    "k9_percentile": 56,
-    "bb9_percentile": 88,
-    "whip_percentile": 66
   },
   {
     "player_id": 685299,
@@ -4437,9 +4437,9 @@
     "strikeouts": 24,
     "walks": 6,
     "home_runs_allowed": 4,
-    "era_percentile": 48,
+    "era_percentile": 47,
     "fip_percentile": 35,
-    "k9_percentile": 78,
+    "k9_percentile": 77,
     "bb9_percentile": 74,
     "whip_percentile": 98
   },
@@ -4461,7 +4461,7 @@
     "home_runs_allowed": 8,
     "era_percentile": 67,
     "fip_percentile": 35,
-    "k9_percentile": 13,
+    "k9_percentile": 14,
     "bb9_percentile": 85,
     "whip_percentile": 73
   },
@@ -4481,9 +4481,9 @@
     "strikeouts": 20,
     "walks": 8,
     "home_runs_allowed": 3,
-    "era_percentile": 61,
+    "era_percentile": 60,
     "fip_percentile": 35,
-    "k9_percentile": 45,
+    "k9_percentile": 44,
     "bb9_percentile": 50,
     "whip_percentile": 53
   },
@@ -4503,7 +4503,7 @@
     "strikeouts": 26,
     "walks": 7,
     "home_runs_allowed": 5,
-    "era_percentile": 53,
+    "era_percentile": 52,
     "fip_percentile": 35,
     "k9_percentile": 25,
     "bb9_percentile": 91,
@@ -4527,7 +4527,7 @@
     "home_runs_allowed": 7,
     "era_percentile": 39,
     "fip_percentile": 35,
-    "k9_percentile": 12,
+    "k9_percentile": 13,
     "bb9_percentile": 79,
     "whip_percentile": 77
   },
@@ -4547,33 +4547,11 @@
     "strikeouts": 15,
     "walks": 9,
     "home_runs_allowed": 2,
-    "era_percentile": 38,
+    "era_percentile": 39,
     "fip_percentile": 34,
     "k9_percentile": 10,
     "bb9_percentile": 35,
     "whip_percentile": 19
-  },
-  {
-    "player_id": 663558,
-    "name": "Jovani Morán",
-    "team": "BOS",
-    "team_name": "Boston Red Sox",
-    "division": "American League East",
-    "era": 3.25,
-    "fip": 4.18,
-    "xfip": null,
-    "k_per_9": 10.41,
-    "bb_per_9": 4.55,
-    "whip": 1.16,
-    "innings_pitched": 27.7,
-    "strikeouts": 32,
-    "walks": 14,
-    "home_runs_allowed": 4,
-    "era_percentile": 61,
-    "fip_percentile": 33,
-    "k9_percentile": 85,
-    "bb9_percentile": 18,
-    "whip_percentile": 62
   },
   {
     "player_id": 656492,
@@ -4591,11 +4569,11 @@
     "strikeouts": 60,
     "walks": 19,
     "home_runs_allowed": 10,
-    "era_percentile": 52,
+    "era_percentile": 51,
     "fip_percentile": 33,
-    "k9_percentile": 52,
-    "bb9_percentile": 69,
-    "whip_percentile": 67
+    "k9_percentile": 53,
+    "bb9_percentile": 68,
+    "whip_percentile": 66
   },
   {
     "player_id": 594798,
@@ -4613,11 +4591,11 @@
     "strikeouts": 70,
     "walks": 12,
     "home_runs_allowed": 13,
-    "era_percentile": 49,
+    "era_percentile": 48,
     "fip_percentile": 33,
-    "k9_percentile": 87,
-    "bb9_percentile": 94,
-    "whip_percentile": 87
+    "k9_percentile": 86,
+    "bb9_percentile": 95,
+    "whip_percentile": 86
   },
   {
     "player_id": 683004,
@@ -4635,11 +4613,11 @@
     "strikeouts": 64,
     "walks": 26,
     "home_runs_allowed": 9,
-    "era_percentile": 28,
-    "fip_percentile": 32,
+    "era_percentile": 27,
+    "fip_percentile": 33,
     "k9_percentile": 67,
     "bb9_percentile": 32,
-    "whip_percentile": 37
+    "whip_percentile": 36
   },
   {
     "player_id": 686799,
@@ -4657,11 +4635,11 @@
     "strikeouts": 45,
     "walks": 31,
     "home_runs_allowed": 5,
-    "era_percentile": 22,
+    "era_percentile": 23,
     "fip_percentile": 32,
     "k9_percentile": 17,
     "bb9_percentile": 18,
-    "whip_percentile": 33
+    "whip_percentile": 32
   },
   {
     "player_id": 622663,
@@ -4681,7 +4659,7 @@
     "home_runs_allowed": 8,
     "era_percentile": 37,
     "fip_percentile": 32,
-    "k9_percentile": 64,
+    "k9_percentile": 65,
     "bb9_percentile": 18,
     "whip_percentile": 24
   },
@@ -4702,10 +4680,32 @@
     "walks": 22,
     "home_runs_allowed": 9,
     "era_percentile": 68,
-    "fip_percentile": 31,
-    "k9_percentile": 48,
+    "fip_percentile": 32,
+    "k9_percentile": 49,
     "bb9_percentile": 51,
     "whip_percentile": 62
+  },
+  {
+    "player_id": 641755,
+    "name": "Tyler Kinley",
+    "team": "ATL",
+    "team_name": "Atlanta Braves",
+    "division": "National League East",
+    "era": 3.42,
+    "fip": 4.24,
+    "xfip": null,
+    "k_per_9": 9.89,
+    "bb_per_9": 3.42,
+    "whip": 1.23,
+    "innings_pitched": 23.7,
+    "strikeouts": 26,
+    "walks": 9,
+    "home_runs_allowed": 4,
+    "era_percentile": 56,
+    "fip_percentile": 32,
+    "k9_percentile": 73,
+    "bb9_percentile": 45,
+    "whip_percentile": 53
   },
   {
     "player_id": 668678,
@@ -4723,9 +4723,9 @@
     "strikeouts": 40,
     "walks": 17,
     "home_runs_allowed": 7,
-    "era_percentile": 27,
-    "fip_percentile": 31,
-    "k9_percentile": 17,
+    "era_percentile": 26,
+    "fip_percentile": 32,
+    "k9_percentile": 18,
     "bb9_percentile": 65,
     "whip_percentile": 24
   },
@@ -4746,10 +4746,10 @@
     "walks": 18,
     "home_runs_allowed": 2,
     "era_percentile": 7,
-    "fip_percentile": 31,
+    "fip_percentile": 32,
     "k9_percentile": 96,
     "bb9_percentile": 1,
-    "whip_percentile": 2
+    "whip_percentile": 3
   },
   {
     "player_id": 663947,
@@ -4767,8 +4767,8 @@
     "strikeouts": 23,
     "walks": 8,
     "home_runs_allowed": 4,
-    "era_percentile": 33,
-    "fip_percentile": 30,
+    "era_percentile": 32,
+    "fip_percentile": 31,
     "k9_percentile": 41,
     "bb9_percentile": 66,
     "whip_percentile": 24
@@ -4793,7 +4793,7 @@
     "fip_percentile": 30,
     "k9_percentile": 22,
     "bb9_percentile": 50,
-    "whip_percentile": 49
+    "whip_percentile": 50
   },
   {
     "player_id": 691725,
@@ -4834,10 +4834,32 @@
     "walks": 8,
     "home_runs_allowed": 3,
     "era_percentile": 71,
-    "fip_percentile": 29,
+    "fip_percentile": 30,
     "k9_percentile": 25,
-    "bb9_percentile": 51,
+    "bb9_percentile": 52,
     "whip_percentile": 77
+  },
+  {
+    "player_id": 543135,
+    "name": "Nathan Eovaldi",
+    "team": "TEX",
+    "team_name": "Texas Rangers",
+    "division": "American League West",
+    "era": 3.93,
+    "fip": 4.31,
+    "xfip": null,
+    "k_per_9": 8.78,
+    "bb_per_9": 2.1,
+    "whip": 1.11,
+    "innings_pitched": 68.7,
+    "strikeouts": 67,
+    "walks": 16,
+    "home_runs_allowed": 13,
+    "era_percentile": 43,
+    "fip_percentile": 30,
+    "k9_percentile": 54,
+    "bb9_percentile": 88,
+    "whip_percentile": 70
   },
   {
     "player_id": 663978,
@@ -4857,31 +4879,31 @@
     "home_runs_allowed": 6,
     "era_percentile": 4,
     "fip_percentile": 29,
-    "k9_percentile": 36,
-    "bb9_percentile": 54,
+    "k9_percentile": 37,
+    "bb9_percentile": 55,
     "whip_percentile": 7
   },
   {
-    "player_id": 607067,
-    "name": "Colin Rea",
-    "team": "CHC",
-    "team_name": "Chicago Cubs",
-    "division": "National League Central",
-    "era": 4.83,
-    "fip": 4.34,
+    "player_id": 656427,
+    "name": "Jack Flaherty",
+    "team": "DET",
+    "team_name": "Detroit Tigers",
+    "division": "American League Central",
+    "era": 5.81,
+    "fip": 4.35,
     "xfip": null,
-    "k_per_9": 7.33,
-    "bb_per_9": 2.83,
-    "whip": 1.37,
-    "innings_pitched": 54.0,
-    "strikeouts": 44,
-    "walks": 17,
+    "k_per_9": 10.94,
+    "bb_per_9": 5.13,
+    "whip": 1.61,
+    "innings_pitched": 52.7,
+    "strikeouts": 64,
+    "walks": 30,
     "home_runs_allowed": 8,
-    "era_percentile": 25,
+    "era_percentile": 10,
     "fip_percentile": 29,
-    "k9_percentile": 27,
-    "bb9_percentile": 64,
-    "whip_percentile": 37
+    "k9_percentile": 91,
+    "bb9_percentile": 11,
+    "whip_percentile": 9
   },
   {
     "player_id": 605400,
@@ -4901,7 +4923,7 @@
     "home_runs_allowed": 10,
     "era_percentile": 12,
     "fip_percentile": 28,
-    "k9_percentile": 55,
+    "k9_percentile": 56,
     "bb9_percentile": 63,
     "whip_percentile": 22
   },
@@ -4928,28 +4950,6 @@
     "whip_percentile": 92
   },
   {
-    "player_id": 641755,
-    "name": "Tyler Kinley",
-    "team": "ATL",
-    "team_name": "Atlanta Braves",
-    "division": "National League East",
-    "era": 3.57,
-    "fip": 4.38,
-    "xfip": null,
-    "k_per_9": 9.93,
-    "bb_per_9": 3.57,
-    "whip": 1.24,
-    "innings_pitched": 22.7,
-    "strikeouts": 25,
-    "walks": 9,
-    "home_runs_allowed": 4,
-    "era_percentile": 54,
-    "fip_percentile": 28,
-    "k9_percentile": 74,
-    "bb9_percentile": 41,
-    "whip_percentile": 51
-  },
-  {
     "player_id": 663687,
     "name": "Hogan Harris",
     "team": "ATH",
@@ -4965,11 +4965,11 @@
     "strikeouts": 28,
     "walks": 21,
     "home_runs_allowed": 2,
-    "era_percentile": 71,
-    "fip_percentile": 27,
-    "k9_percentile": 75,
+    "era_percentile": 70,
+    "fip_percentile": 28,
+    "k9_percentile": 74,
     "bb9_percentile": 1,
-    "whip_percentile": 8
+    "whip_percentile": 7
   },
   {
     "player_id": 665795,
@@ -4988,10 +4988,32 @@
     "walks": 20,
     "home_runs_allowed": 8,
     "era_percentile": 41,
-    "fip_percentile": 27,
-    "k9_percentile": 37,
-    "bb9_percentile": 47,
+    "fip_percentile": 28,
+    "k9_percentile": 38,
+    "bb9_percentile": 48,
     "whip_percentile": 39
+  },
+  {
+    "player_id": 663558,
+    "name": "Jovani Morán",
+    "team": "BOS",
+    "team_name": "Boston Red Sox",
+    "division": "American League East",
+    "era": 3.34,
+    "fip": 4.41,
+    "xfip": null,
+    "k_per_9": 10.31,
+    "bb_per_9": 4.25,
+    "whip": 1.11,
+    "innings_pitched": 29.7,
+    "strikeouts": 34,
+    "walks": 14,
+    "home_runs_allowed": 5,
+    "era_percentile": 57,
+    "fip_percentile": 27,
+    "k9_percentile": 82,
+    "bb9_percentile": 22,
+    "whip_percentile": 70
   },
   {
     "player_id": 641927,
@@ -5011,7 +5033,7 @@
     "home_runs_allowed": 9,
     "era_percentile": 43,
     "fip_percentile": 27,
-    "k9_percentile": 10,
+    "k9_percentile": 11,
     "bb9_percentile": 78,
     "whip_percentile": 71
   },
@@ -5035,7 +5057,29 @@
     "fip_percentile": 27,
     "k9_percentile": 83,
     "bb9_percentile": 26,
-    "whip_percentile": 48
+    "whip_percentile": 49
+  },
+  {
+    "player_id": 607067,
+    "name": "Colin Rea",
+    "team": "CHC",
+    "team_name": "Chicago Cubs",
+    "division": "National League Central",
+    "era": 4.7,
+    "fip": 4.43,
+    "xfip": null,
+    "k_per_9": 7.43,
+    "bb_per_9": 3.03,
+    "whip": 1.37,
+    "innings_pitched": 59.3,
+    "strikeouts": 49,
+    "walks": 20,
+    "home_runs_allowed": 9,
+    "era_percentile": 28,
+    "fip_percentile": 26,
+    "k9_percentile": 29,
+    "bb9_percentile": 58,
+    "whip_percentile": 36
   },
   {
     "player_id": 677865,
@@ -5121,8 +5165,8 @@
     "home_runs_allowed": 4,
     "era_percentile": 20,
     "fip_percentile": 25,
-    "k9_percentile": 90,
-    "bb9_percentile": 21,
+    "k9_percentile": 89,
+    "bb9_percentile": 20,
     "whip_percentile": 29
   },
   {
@@ -5141,11 +5185,11 @@
     "strikeouts": 52,
     "walks": 31,
     "home_runs_allowed": 7,
-    "era_percentile": 54,
-    "fip_percentile": 25,
-    "k9_percentile": 41,
-    "bb9_percentile": 15,
-    "whip_percentile": 31
+    "era_percentile": 53,
+    "fip_percentile": 24,
+    "k9_percentile": 42,
+    "bb9_percentile": 14,
+    "whip_percentile": 30
   },
   {
     "player_id": 669432,
@@ -5164,10 +5208,10 @@
     "walks": 17,
     "home_runs_allowed": 6,
     "era_percentile": 3,
-    "fip_percentile": 25,
+    "fip_percentile": 24,
     "k9_percentile": 28,
-    "bb9_percentile": 41,
-    "whip_percentile": 9
+    "bb9_percentile": 40,
+    "whip_percentile": 8
   },
   {
     "player_id": 688642,
@@ -5188,8 +5232,8 @@
     "era_percentile": 5,
     "fip_percentile": 24,
     "k9_percentile": 11,
-    "bb9_percentile": 58,
-    "whip_percentile": 33
+    "bb9_percentile": 59,
+    "whip_percentile": 32
   },
   {
     "player_id": 643377,
@@ -5208,10 +5252,10 @@
     "walks": 15,
     "home_runs_allowed": 4,
     "era_percentile": 59,
-    "fip_percentile": 24,
+    "fip_percentile": 23,
     "k9_percentile": 42,
-    "bb9_percentile": 19,
-    "whip_percentile": 37
+    "bb9_percentile": 18,
+    "whip_percentile": 36
   },
   {
     "player_id": 666808,
@@ -5230,32 +5274,10 @@
     "walks": 4,
     "home_runs_allowed": 4,
     "era_percentile": 20,
-    "fip_percentile": 24,
-    "k9_percentile": 26,
-    "bb9_percentile": 95,
-    "whip_percentile": 79
-  },
-  {
-    "player_id": 669711,
-    "name": "Greg Weissert",
-    "team": "BOS",
-    "team_name": "Boston Red Sox",
-    "division": "American League East",
-    "era": 3.8,
-    "fip": 4.55,
-    "xfip": null,
-    "k_per_9": 8.86,
-    "bb_per_9": 2.95,
-    "whip": 1.41,
-    "innings_pitched": 21.3,
-    "strikeouts": 21,
-    "walks": 7,
-    "home_runs_allowed": 4,
-    "era_percentile": 48,
     "fip_percentile": 23,
-    "k9_percentile": 54,
-    "bb9_percentile": 61,
-    "whip_percentile": 29
+    "k9_percentile": 26,
+    "bb9_percentile": 96,
+    "whip_percentile": 79
   },
   {
     "player_id": 677944,
@@ -5276,7 +5298,7 @@
     "era_percentile": 19,
     "fip_percentile": 23,
     "k9_percentile": 28,
-    "bb9_percentile": 53,
+    "bb9_percentile": 54,
     "whip_percentile": 19
   },
   {
@@ -5299,7 +5321,7 @@
     "fip_percentile": 23,
     "k9_percentile": 68,
     "bb9_percentile": 2,
-    "whip_percentile": 10
+    "whip_percentile": 9
   },
   {
     "player_id": 593974,
@@ -5321,7 +5343,7 @@
     "fip_percentile": 22,
     "k9_percentile": 19,
     "bb9_percentile": 22,
-    "whip_percentile": 36
+    "whip_percentile": 35
   },
   {
     "player_id": 670036,
@@ -5342,7 +5364,7 @@
     "era_percentile": 34,
     "fip_percentile": 22,
     "k9_percentile": 63,
-    "bb9_percentile": 74,
+    "bb9_percentile": 73,
     "whip_percentile": 59
   },
   {
@@ -5361,33 +5383,11 @@
     "strikeouts": 57,
     "walks": 20,
     "home_runs_allowed": 12,
-    "era_percentile": 39,
+    "era_percentile": 40,
     "fip_percentile": 22,
     "k9_percentile": 36,
     "bb9_percentile": 70,
     "whip_percentile": 59
-  },
-  {
-    "player_id": 670245,
-    "name": "Ryan Watson",
-    "team": "BOS",
-    "team_name": "Boston Red Sox",
-    "division": "American League East",
-    "era": 4.96,
-    "fip": 4.66,
-    "xfip": null,
-    "k_per_9": 7.71,
-    "bb_per_9": 3.86,
-    "whip": 1.44,
-    "innings_pitched": 32.7,
-    "strikeouts": 28,
-    "walks": 14,
-    "home_runs_allowed": 5,
-    "era_percentile": 23,
-    "fip_percentile": 21,
-    "k9_percentile": 35,
-    "bb9_percentile": 32,
-    "whip_percentile": 24
   },
   {
     "player_id": 641743,
@@ -5407,9 +5407,9 @@
     "home_runs_allowed": 7,
     "era_percentile": 42,
     "fip_percentile": 21,
-    "k9_percentile": 18,
-    "bb9_percentile": 28,
-    "whip_percentile": 33
+    "k9_percentile": 19,
+    "bb9_percentile": 29,
+    "whip_percentile": 32
   },
   {
     "player_id": 669461,
@@ -5430,7 +5430,7 @@
     "era_percentile": 27,
     "fip_percentile": 21,
     "k9_percentile": 49,
-    "bb9_percentile": 44,
+    "bb9_percentile": 42,
     "whip_percentile": 12
   },
   {
@@ -5450,7 +5450,7 @@
     "walks": 11,
     "home_runs_allowed": 3,
     "era_percentile": 89,
-    "fip_percentile": 20,
+    "fip_percentile": 21,
     "k9_percentile": 25,
     "bb9_percentile": 20,
     "whip_percentile": 68
@@ -5473,7 +5473,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 58,
     "fip_percentile": 20,
-    "k9_percentile": 22,
+    "k9_percentile": 23,
     "bb9_percentile": 24,
     "whip_percentile": 64
   },
@@ -5493,10 +5493,10 @@
     "strikeouts": 35,
     "walks": 17,
     "home_runs_allowed": 7,
-    "era_percentile": 29,
+    "era_percentile": 28,
     "fip_percentile": 20,
     "k9_percentile": 23,
-    "bb9_percentile": 45,
+    "bb9_percentile": 43,
     "whip_percentile": 51
   },
   {
@@ -5515,11 +5515,11 @@
     "strikeouts": 26,
     "walks": 16,
     "home_runs_allowed": 5,
-    "era_percentile": 56,
-    "fip_percentile": 19,
+    "era_percentile": 55,
+    "fip_percentile": 20,
     "k9_percentile": 14,
-    "bb9_percentile": 28,
-    "whip_percentile": 31
+    "bb9_percentile": 29,
+    "whip_percentile": 30
   },
   {
     "player_id": 681517,
@@ -5559,33 +5559,11 @@
     "strikeouts": 49,
     "walks": 19,
     "home_runs_allowed": 11,
-    "era_percentile": 30,
+    "era_percentile": 29,
     "fip_percentile": 19,
     "k9_percentile": 27,
-    "bb9_percentile": 63,
+    "bb9_percentile": 64,
     "whip_percentile": 60
-  },
-  {
-    "player_id": 656427,
-    "name": "Jack Flaherty",
-    "team": "DET",
-    "team_name": "Detroit Tigers",
-    "division": "American League Central",
-    "era": 5.94,
-    "fip": 4.82,
-    "xfip": null,
-    "k_per_9": 10.53,
-    "bb_per_9": 5.55,
-    "whip": 1.66,
-    "innings_pitched": 47.0,
-    "strikeouts": 55,
-    "walks": 29,
-    "home_runs_allowed": 8,
-    "era_percentile": 8,
-    "fip_percentile": 18,
-    "k9_percentile": 86,
-    "bb9_percentile": 7,
-    "whip_percentile": 8
   },
   {
     "player_id": 676440,
@@ -5604,10 +5582,10 @@
     "walks": 21,
     "home_runs_allowed": 12,
     "era_percentile": 32,
-    "fip_percentile": 18,
-    "k9_percentile": 37,
-    "bb9_percentile": 58,
-    "whip_percentile": 42
+    "fip_percentile": 19,
+    "k9_percentile": 38,
+    "bb9_percentile": 59,
+    "whip_percentile": 41
   },
   {
     "player_id": 664875,
@@ -5626,10 +5604,10 @@
     "walks": 12,
     "home_runs_allowed": 4,
     "era_percentile": 17,
-    "fip_percentile": 18,
+    "fip_percentile": 19,
     "k9_percentile": 81,
     "bb9_percentile": 14,
-    "whip_percentile": 13
+    "whip_percentile": 12
   },
   {
     "player_id": 665871,
@@ -5648,7 +5626,7 @@
     "walks": 7,
     "home_runs_allowed": 4,
     "era_percentile": 9,
-    "fip_percentile": 18,
+    "fip_percentile": 19,
     "k9_percentile": 2,
     "bb9_percentile": 80,
     "whip_percentile": 47
@@ -5670,10 +5648,10 @@
     "walks": 24,
     "home_runs_allowed": 9,
     "era_percentile": 48,
-    "fip_percentile": 17,
+    "fip_percentile": 18,
     "k9_percentile": 45,
     "bb9_percentile": 24,
-    "whip_percentile": 44
+    "whip_percentile": 43
   },
   {
     "player_id": 641816,
@@ -5692,10 +5670,10 @@
     "walks": 24,
     "home_runs_allowed": 11,
     "era_percentile": 6,
-    "fip_percentile": 17,
+    "fip_percentile": 18,
     "k9_percentile": 59,
     "bb9_percentile": 33,
-    "whip_percentile": 14
+    "whip_percentile": 13
   },
   {
     "player_id": 663362,
@@ -5714,7 +5692,7 @@
     "walks": 7,
     "home_runs_allowed": 5,
     "era_percentile": 1,
-    "fip_percentile": 16,
+    "fip_percentile": 17,
     "k9_percentile": 50,
     "bb9_percentile": 70,
     "whip_percentile": 5
@@ -5736,8 +5714,8 @@
     "walks": 22,
     "home_runs_allowed": 7,
     "era_percentile": 4,
-    "fip_percentile": 16,
-    "k9_percentile": 73,
+    "fip_percentile": 17,
+    "k9_percentile": 72,
     "bb9_percentile": 12,
     "whip_percentile": 14
   },
@@ -5757,10 +5735,10 @@
     "strikeouts": 42,
     "walks": 27,
     "home_runs_allowed": 9,
-    "era_percentile": 44,
+    "era_percentile": 45,
     "fip_percentile": 16,
     "k9_percentile": 8,
-    "bb9_percentile": 30,
+    "bb9_percentile": 31,
     "whip_percentile": 27
   },
   {
@@ -5780,10 +5758,32 @@
     "walks": 36,
     "home_runs_allowed": 7,
     "era_percentile": 24,
-    "fip_percentile": 15,
+    "fip_percentile": 16,
     "k9_percentile": 57,
     "bb9_percentile": 4,
-    "whip_percentile": 15
+    "whip_percentile": 14
+  },
+  {
+    "player_id": 670245,
+    "name": "Ryan Watson",
+    "team": "BOS",
+    "team_name": "Boston Red Sox",
+    "division": "American League East",
+    "era": 5.35,
+    "fip": 4.94,
+    "xfip": null,
+    "k_per_9": 7.75,
+    "bb_per_9": 3.74,
+    "whip": 1.46,
+    "innings_pitched": 33.7,
+    "strikeouts": 29,
+    "walks": 14,
+    "home_runs_allowed": 6,
+    "era_percentile": 16,
+    "fip_percentile": 16,
+    "k9_percentile": 37,
+    "bb9_percentile": 35,
+    "whip_percentile": 21
   },
   {
     "player_id": 675989,
@@ -5803,7 +5803,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 16,
     "fip_percentile": 15,
-    "k9_percentile": 74,
+    "k9_percentile": 73,
     "bb9_percentile": 4,
     "whip_percentile": 5
   },
@@ -5826,7 +5826,7 @@
     "era_percentile": 23,
     "fip_percentile": 15,
     "k9_percentile": 50,
-    "bb9_percentile": 42,
+    "bb9_percentile": 41,
     "whip_percentile": 27
   },
   {
@@ -5847,9 +5847,9 @@
     "home_runs_allowed": 3,
     "era_percentile": 23,
     "fip_percentile": 15,
-    "k9_percentile": 15,
+    "k9_percentile": 16,
     "bb9_percentile": 13,
-    "whip_percentile": 15
+    "whip_percentile": 14
   },
   {
     "player_id": 605288,
@@ -5892,7 +5892,7 @@
     "era_percentile": 3,
     "fip_percentile": 14,
     "k9_percentile": 20,
-    "bb9_percentile": 57,
+    "bb9_percentile": 58,
     "whip_percentile": 2
   },
   {
@@ -5911,11 +5911,11 @@
     "strikeouts": 24,
     "walks": 13,
     "home_runs_allowed": 4,
-    "era_percentile": 2,
+    "era_percentile": 3,
     "fip_percentile": 14,
-    "k9_percentile": 67,
+    "k9_percentile": 68,
     "bb9_percentile": 11,
-    "whip_percentile": 14
+    "whip_percentile": 13
   },
   {
     "player_id": 694297,
@@ -5934,10 +5934,10 @@
     "walks": 15,
     "home_runs_allowed": 6,
     "era_percentile": 12,
-    "fip_percentile": 13,
+    "fip_percentile": 14,
     "k9_percentile": 20,
-    "bb9_percentile": 33,
-    "whip_percentile": 33
+    "bb9_percentile": 32,
+    "whip_percentile": 32
   },
   {
     "player_id": 681347,
@@ -5957,9 +5957,53 @@
     "home_runs_allowed": 13,
     "era_percentile": 16,
     "fip_percentile": 13,
-    "k9_percentile": 33,
-    "bb9_percentile": 59,
+    "k9_percentile": 34,
+    "bb9_percentile": 60,
     "whip_percentile": 22
+  },
+  {
+    "player_id": 625643,
+    "name": "Reynaldo López",
+    "team": "ATL",
+    "team_name": "Atlanta Braves",
+    "division": "National League East",
+    "era": 3.41,
+    "fip": 5.08,
+    "xfip": null,
+    "k_per_9": 7.6,
+    "bb_per_9": 4.19,
+    "whip": 1.34,
+    "innings_pitched": 34.3,
+    "strikeouts": 29,
+    "walks": 16,
+    "home_runs_allowed": 6,
+    "era_percentile": 56,
+    "fip_percentile": 13,
+    "k9_percentile": 32,
+    "bb9_percentile": 23,
+    "whip_percentile": 40
+  },
+  {
+    "player_id": 672782,
+    "name": "Yoendrys Gómez",
+    "team": "MIN",
+    "team_name": "Minnesota Twins",
+    "division": "American League Central",
+    "era": 4.33,
+    "fip": 5.1,
+    "xfip": null,
+    "k_per_9": 8.33,
+    "bb_per_9": 4.33,
+    "whip": 1.37,
+    "innings_pitched": 27.0,
+    "strikeouts": 25,
+    "walks": 13,
+    "home_runs_allowed": 5,
+    "era_percentile": 36,
+    "fip_percentile": 13,
+    "k9_percentile": 47,
+    "bb9_percentile": 21,
+    "whip_percentile": 36
   },
   {
     "player_id": 669947,
@@ -5978,9 +6022,9 @@
     "walks": 11,
     "home_runs_allowed": 8,
     "era_percentile": 46,
-    "fip_percentile": 13,
+    "fip_percentile": 12,
     "k9_percentile": 24,
-    "bb9_percentile": 73,
+    "bb9_percentile": 72,
     "whip_percentile": 47
   },
   {
@@ -6006,26 +6050,26 @@
     "whip_percentile": 12
   },
   {
-    "player_id": 625643,
-    "name": "Reynaldo López",
-    "team": "ATL",
-    "team_name": "Atlanta Braves",
-    "division": "National League East",
-    "era": 3.62,
+    "player_id": 669711,
+    "name": "Greg Weissert",
+    "team": "BOS",
+    "team_name": "Boston Red Sox",
+    "division": "American League East",
+    "era": 4.43,
     "fip": 5.2,
     "xfip": null,
-    "k_per_9": 8.07,
-    "bb_per_9": 4.45,
-    "whip": 1.39,
-    "innings_pitched": 32.3,
-    "strikeouts": 29,
-    "walks": 16,
-    "home_runs_allowed": 6,
-    "era_percentile": 53,
+    "k_per_9": 8.46,
+    "bb_per_9": 3.22,
+    "whip": 1.43,
+    "innings_pitched": 22.3,
+    "strikeouts": 21,
+    "walks": 8,
+    "home_runs_allowed": 5,
+    "era_percentile": 34,
     "fip_percentile": 12,
-    "k9_percentile": 41,
-    "bb9_percentile": 19,
-    "whip_percentile": 33
+    "k9_percentile": 50,
+    "bb9_percentile": 52,
+    "whip_percentile": 25
   },
   {
     "player_id": 670167,
@@ -6044,10 +6088,10 @@
     "walks": 10,
     "home_runs_allowed": 3,
     "era_percentile": 68,
-    "fip_percentile": 12,
+    "fip_percentile": 11,
     "k9_percentile": 4,
     "bb9_percentile": 23,
-    "whip_percentile": 38
+    "whip_percentile": 37
   },
   {
     "player_id": 518876,
@@ -6068,7 +6112,7 @@
     "era_percentile": 18,
     "fip_percentile": 11,
     "k9_percentile": 7,
-    "bb9_percentile": 35,
+    "bb9_percentile": 34,
     "whip_percentile": 27
   },
   {
@@ -6110,10 +6154,10 @@
     "walks": 16,
     "home_runs_allowed": 11,
     "era_percentile": 41,
-    "fip_percentile": 11,
+    "fip_percentile": 10,
     "k9_percentile": 2,
     "bb9_percentile": 78,
-    "whip_percentile": 49
+    "whip_percentile": 50
   },
   {
     "player_id": 622554,
@@ -6131,33 +6175,11 @@
     "strikeouts": 26,
     "walks": 11,
     "home_runs_allowed": 5,
-    "era_percentile": 36,
+    "era_percentile": 35,
     "fip_percentile": 10,
     "k9_percentile": 94,
     "bb9_percentile": 15,
-    "whip_percentile": 48
-  },
-  {
-    "player_id": 672782,
-    "name": "Yoendrys Gómez",
-    "team": "MIN",
-    "team_name": "Minnesota Twins",
-    "division": "American League Central",
-    "era": 4.5,
-    "fip": 5.33,
-    "xfip": null,
-    "k_per_9": 7.96,
-    "bb_per_9": 4.5,
-    "whip": 1.38,
-    "innings_pitched": 26.0,
-    "strikeouts": 23,
-    "walks": 13,
-    "home_runs_allowed": 5,
-    "era_percentile": 33,
-    "fip_percentile": 10,
-    "k9_percentile": 39,
-    "bb9_percentile": 19,
-    "whip_percentile": 36
+    "whip_percentile": 49
   },
   {
     "player_id": 702275,
@@ -6175,10 +6197,10 @@
     "strikeouts": 21,
     "walks": 16,
     "home_runs_allowed": 4,
-    "era_percentile": 33,
+    "era_percentile": 32,
     "fip_percentile": 10,
-    "k9_percentile": 28,
-    "bb9_percentile": 6,
+    "k9_percentile": 27,
+    "bb9_percentile": 7,
     "whip_percentile": 24
   },
   {
@@ -6200,7 +6222,7 @@
     "era_percentile": 1,
     "fip_percentile": 10,
     "k9_percentile": 60,
-    "bb9_percentile": 10,
+    "bb9_percentile": 9,
     "whip_percentile": 1
   },
   {
@@ -6219,7 +6241,7 @@
     "strikeouts": 32,
     "walks": 15,
     "home_runs_allowed": 6,
-    "era_percentile": 56,
+    "era_percentile": 55,
     "fip_percentile": 9,
     "k9_percentile": 93,
     "bb9_percentile": 10,
@@ -6241,11 +6263,11 @@
     "strikeouts": 48,
     "walks": 27,
     "home_runs_allowed": 9,
-    "era_percentile": 10,
+    "era_percentile": 9,
     "fip_percentile": 9,
-    "k9_percentile": 71,
-    "bb9_percentile": 9,
-    "whip_percentile": 14
+    "k9_percentile": 70,
+    "bb9_percentile": 8,
+    "whip_percentile": 13
   },
   {
     "player_id": 650644,
@@ -6265,7 +6287,7 @@
     "home_runs_allowed": 12,
     "era_percentile": 38,
     "fip_percentile": 8,
-    "k9_percentile": 11,
+    "k9_percentile": 12,
     "bb9_percentile": 69,
     "whip_percentile": 20
   },
@@ -6285,11 +6307,11 @@
     "strikeouts": 24,
     "walks": 21,
     "home_runs_allowed": 5,
-    "era_percentile": 26,
+    "era_percentile": 25,
     "fip_percentile": 8,
-    "k9_percentile": 13,
-    "bb9_percentile": 6,
-    "whip_percentile": 31
+    "k9_percentile": 14,
+    "bb9_percentile": 7,
+    "whip_percentile": 30
   },
   {
     "player_id": 571945,
@@ -6310,8 +6332,8 @@
     "era_percentile": 12,
     "fip_percentile": 8,
     "k9_percentile": 6,
-    "bb9_percentile": 75,
-    "whip_percentile": 33
+    "bb9_percentile": 76,
+    "whip_percentile": 32
   },
   {
     "player_id": 683175,
@@ -6355,7 +6377,7 @@
     "fip_percentile": 7,
     "k9_percentile": 30,
     "bb9_percentile": 48,
-    "whip_percentile": 45
+    "whip_percentile": 44
   },
   {
     "player_id": 678394,
@@ -6399,7 +6421,7 @@
     "fip_percentile": 6,
     "k9_percentile": 44,
     "bb9_percentile": 19,
-    "whip_percentile": 36
+    "whip_percentile": 35
   },
   {
     "player_id": 837227,
@@ -6441,7 +6463,7 @@
     "home_runs_allowed": 4,
     "era_percentile": 6,
     "fip_percentile": 6,
-    "k9_percentile": 8,
+    "k9_percentile": 9,
     "bb9_percentile": 3,
     "whip_percentile": 8
   },
@@ -6465,7 +6487,7 @@
     "fip_percentile": 5,
     "k9_percentile": 35,
     "bb9_percentile": 32,
-    "whip_percentile": 36
+    "whip_percentile": 35
   },
   {
     "player_id": 676571,
@@ -6483,7 +6505,7 @@
     "strikeouts": 17,
     "walks": 16,
     "home_runs_allowed": 4,
-    "era_percentile": 60,
+    "era_percentile": 59,
     "fip_percentile": 5,
     "k9_percentile": 9,
     "bb9_percentile": 5,
@@ -6507,7 +6529,7 @@
     "home_runs_allowed": 5,
     "era_percentile": 5,
     "fip_percentile": 5,
-    "k9_percentile": 33,
+    "k9_percentile": 34,
     "bb9_percentile": 40,
     "whip_percentile": 17
   },
@@ -6530,7 +6552,7 @@
     "era_percentile": 2,
     "fip_percentile": 5,
     "k9_percentile": 46,
-    "bb9_percentile": 59,
+    "bb9_percentile": 60,
     "whip_percentile": 5
   },
   {
@@ -6551,9 +6573,31 @@
     "home_runs_allowed": 5,
     "era_percentile": 1,
     "fip_percentile": 4,
-    "k9_percentile": 83,
+    "k9_percentile": 84,
     "bb9_percentile": 5,
     "whip_percentile": 1
+  },
+  {
+    "player_id": 680573,
+    "name": "Simeon Woods Richardson",
+    "team": "MIN",
+    "team_name": "Minnesota Twins",
+    "division": "American League Central",
+    "era": 7.74,
+    "fip": 6.04,
+    "xfip": null,
+    "k_per_9": 4.91,
+    "bb_per_9": 4.72,
+    "whip": 1.89,
+    "innings_pitched": 47.7,
+    "strikeouts": 26,
+    "walks": 25,
+    "home_runs_allowed": 9,
+    "era_percentile": 2,
+    "fip_percentile": 4,
+    "k9_percentile": 3,
+    "bb9_percentile": 15,
+    "whip_percentile": 2
   },
   {
     "player_id": 666142,
@@ -6578,28 +6622,6 @@
     "whip_percentile": 27
   },
   {
-    "player_id": 680573,
-    "name": "Simeon Woods Richardson",
-    "team": "MIN",
-    "team_name": "Minnesota Twins",
-    "division": "American League Central",
-    "era": 7.2,
-    "fip": 6.19,
-    "xfip": null,
-    "k_per_9": 4.4,
-    "bb_per_9": 4.4,
-    "whip": 1.82,
-    "innings_pitched": 45.0,
-    "strikeouts": 22,
-    "walks": 22,
-    "home_runs_allowed": 9,
-    "era_percentile": 3,
-    "fip_percentile": 4,
-    "k9_percentile": 1,
-    "bb9_percentile": 21,
-    "whip_percentile": 3
-  },
-  {
     "player_id": 607200,
     "name": "Erick Fedde",
     "team": "CWS",
@@ -6615,7 +6637,7 @@
     "strikeouts": 31,
     "walks": 20,
     "home_runs_allowed": 12,
-    "era_percentile": 15,
+    "era_percentile": 14,
     "fip_percentile": 3,
     "k9_percentile": 6,
     "bb9_percentile": 37,
@@ -6640,7 +6662,7 @@
     "era_percentile": 5,
     "fip_percentile": 3,
     "k9_percentile": 18,
-    "bb9_percentile": 82,
+    "bb9_percentile": 83,
     "whip_percentile": 5
   },
   {
@@ -6661,9 +6683,9 @@
     "home_runs_allowed": 19,
     "era_percentile": 16,
     "fip_percentile": 3,
-    "k9_percentile": 32,
-    "bb9_percentile": 59,
-    "whip_percentile": 45
+    "k9_percentile": 33,
+    "bb9_percentile": 60,
+    "whip_percentile": 46
   },
   {
     "player_id": 682052,
@@ -6706,7 +6728,7 @@
     "era_percentile": 11,
     "fip_percentile": 2,
     "k9_percentile": 7,
-    "bb9_percentile": 37,
+    "bb9_percentile": 38,
     "whip_percentile": 22
   },
   {
@@ -6727,9 +6749,9 @@
     "home_runs_allowed": 12,
     "era_percentile": 8,
     "fip_percentile": 2,
-    "k9_percentile": 12,
+    "k9_percentile": 13,
     "bb9_percentile": 39,
-    "whip_percentile": 33
+    "whip_percentile": 32
   },
   {
     "player_id": 641793,
@@ -6750,8 +6772,8 @@
     "era_percentile": 19,
     "fip_percentile": 1,
     "k9_percentile": 4,
-    "bb9_percentile": 62,
-    "whip_percentile": 33
+    "bb9_percentile": 63,
+    "whip_percentile": 32
   },
   {
     "player_id": 680802,
@@ -6794,7 +6816,7 @@
     "era_percentile": 13,
     "fip_percentile": 1,
     "k9_percentile": 57,
-    "bb9_percentile": 15,
+    "bb9_percentile": 16,
     "whip_percentile": 19
   },
   {
@@ -6816,7 +6838,7 @@
     "era_percentile": 0,
     "fip_percentile": 0,
     "k9_percentile": 19,
-    "bb9_percentile": 21,
+    "bb9_percentile": 20,
     "whip_percentile": 1
   }
 ]
