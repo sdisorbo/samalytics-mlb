@@ -2,6 +2,7 @@ import { getPitchers } from '@/lib/data'
 import PitcherScatter from '@/components/PitcherScatter'
 import YearSelector from '@/components/YearSelector'
 import PitcherLookup from '@/components/PitcherLookup'
+import PitcherSeasonLookup from '@/components/PitcherSeasonLookup'
 import { Suspense } from 'react'
 
 export const dynamic = 'force-dynamic'
@@ -12,6 +13,19 @@ export default function PitchersPage({ searchParams }: { searchParams: { year?: 
 
   return (
     <div className="space-y-10">
+      {/* Section 0 — Season Zone Breakdown */}
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-538-muted">
+            Season Zone Breakdown
+          </h2>
+          <div className="flex-1 h-px bg-538-border" />
+        </div>
+        <Suspense>
+          <PitcherSeasonLookup />
+        </Suspense>
+      </div>
+
       {/* Section 1 — Pitcher Lookup */}
       <div>
         <div className="flex items-center gap-3 mb-4">
