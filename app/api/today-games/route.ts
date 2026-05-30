@@ -93,7 +93,7 @@ function teamAvgPitcher(abbr: string, teamName: string, pitchers: Pitcher[]): Si
 
 export async function GET() {
   try {
-    const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
 
     const schedRes = await fetch(
       `${MLB_API}/schedule?sportId=1&date=${today}&hydrate=probablePitcher,team,linescore`,

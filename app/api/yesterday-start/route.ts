@@ -9,13 +9,16 @@ const MLB_API = 'https://statsapi.mlb.com/api/v1'
 
 export async function GET() {
   try {
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-    const dateStr     = yesterday.toLocaleDateString('en-CA')
-    const dateDisplay = yesterday.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+    const now = new Date()
+    // Use Eastern time so the date doesn't flip at midnight UTC (7–8 PM ET)
+    const dateStr     = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+    dateStr.setDate(dateStr.getDate() - 1)
+    const etYesterday = dateStr
+    const dateStrFmt  = etYesterday.toLocaleDateString('en-CA')
+    const dateDisplay = etYesterday.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
 
     const schedRes = await fetch(
-      `${MLB_API}/schedule?sportId=1&date=${dateStr}&hydrate=team,linescore`,
+      `${MLB_API}/schedule?sportId=1&date=${dateStrFmt}&hydrate=team,linescore`,
       { next: { revalidate: 3600 } },
     )
     if (!schedRes.ok) return NextResponse.json(null)
