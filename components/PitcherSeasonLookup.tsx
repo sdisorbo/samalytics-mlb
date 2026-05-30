@@ -128,6 +128,22 @@ function StatBox({ label, value }: { label: string; value: string }) {
   )
 }
 
+
+function computeWeightedMean(zones: ZoneCell[][], key: StatKey): number | null {
+  if (key === 'zone_pct') return null
+  let sumVal = 0, sumPa = 0
+  for (const row of zones) {
+    for (const cell of row) {
+      const val = (cell as unknown as Record<string, number | null>)[key]
+      if (val !== null && val !== undefined && cell.pa > 0) {
+        sumVal += (val as number) * cell.pa
+        sumPa += cell.pa
+      }
+    }
+  }
+  return sumPa > 0 ? sumVal / sumPa : null
+}
+
 // ── Zone Grid ──────────────────────────────────────────────────────────────────
 
 const CELL_W = 44
@@ -175,6 +191,7 @@ function ZoneGrid({ zones, pitchTypes }: ZoneGridProps) {
 
   const flatCells: ZoneCell[] = activeZones.flat()
   const colorMap = buildColorMap(flatCells, activeStat)
+  const overall = computeWeightedMean(activeZones, activeStat)
 
   return (
     <div className="flex flex-col gap-3">
@@ -318,6 +335,12 @@ function ZoneGrid({ zones, pitchTypes }: ZoneGridProps) {
             <span>No data</span>
           </div>
         </div>
+        {overall !== null && (
+          <div className="flex items-center gap-1 mt-1.5 text-[9px]">
+            <span className="text-538-muted">View avg:</span>
+            <span className="font-bold text-538-text tabular-nums">{formatStat(overall, activeStat)}</span>
+          </div>
+        )}
         <span className="text-[8px] text-538-muted mt-1 block">Catcher&apos;s view · inner box = strike zone</span>
       </div>
     </div>

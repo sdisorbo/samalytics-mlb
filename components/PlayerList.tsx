@@ -188,6 +188,22 @@ function formatZoneStat(val: number | null, key: StatKey): string {
   return val.toFixed(3)
 }
 
+
+function computeWeightedMean(zones: ZoneCell[][], key: StatKey): number | null {
+  if (key === 'zone_pct') return null
+  let sumVal = 0, sumPa = 0
+  for (const row of zones) {
+    for (const cell of row) {
+      const val = (cell as unknown as Record<string, number | null>)[key]
+      if (val !== null && val !== undefined && cell.pa > 0) {
+        sumVal += (val as number) * cell.pa
+        sumPa += cell.pa
+      }
+    }
+  }
+  return sumPa > 0 ? sumVal / sumPa : null
+}
+
 // ── Compact Zone Grid (for card) ───────────────────────────────────────────────
 
 interface CompactZoneGridProps {
@@ -206,6 +222,7 @@ function CompactZoneGrid({ zones, pitchTypes }: CompactZoneGridProps) {
 
   const flatCells: ZoneCell[] = activeZones.flat()
   const colorMap = buildColorMap(flatCells, activeStat)
+  const overall = computeWeightedMean(activeZones, activeStat)
 
   const gridW = CELL_W * 5
   const gridH = CELL_H * 5
@@ -334,6 +351,12 @@ function CompactZoneGrid({ zones, pitchTypes }: CompactZoneGridProps) {
           <span>None</span>
         </div>
       </div>
+      {overall !== null && (
+        <div className="flex items-center gap-1 text-[8px]">
+          <span className="text-538-muted">Avg:</span>
+          <span className="font-bold text-538-text tabular-nums">{formatZoneStat(overall, activeStat)}</span>
+        </div>
+      )}
       <span className="text-[7px] text-538-muted">Catcher&apos;s view · inner box = strike zone</span>
     </div>
   )
