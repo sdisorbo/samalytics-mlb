@@ -12,7 +12,7 @@ const LINKS = [
   { href: '/standings', label: 'Standings' },
   { href: '/ratings',   label: 'ELO Ratings' },
   { href: '/pitchers',  label: 'Pitchers' },
-  { href: '/players',   label: 'Players' },
+  { href: '/players',   label: 'Batters' },
   { href: '/matchup',     label: 'Pitch Lab' },
   { href: '/matchup-lab', label: 'Matchup Lab' },
   { href: '/live-ab',          label: 'Live At Bat' },

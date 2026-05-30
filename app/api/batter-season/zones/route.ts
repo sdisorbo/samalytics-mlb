@@ -24,20 +24,24 @@ const EXCLUDE_EVENTS = new Set([
   'walk', 'intent_walk', 'hit_by_pitch', 'sac_fly', 'sac_bunt', 'catcher_interf',
 ])
 
-
 // ── MLB API types ──────────────────────────────────────────────────────────────
 
-interface SeasonStatsResponse {
+interface BatterSeasonStatsResponse {
   stats?: {
     splits?: {
       stat?: {
-        era?: string
-        whip?: string
+        avg?: string
+        obp?: string
+        slg?: string
+        ops?: string
         strikeOuts?: number
         baseOnBalls?: number
-        inningsPitched?: string
-        wins?: number
-        losses?: number
+        atBats?: number
+        plateAppearances?: number
+        hits?: number
+        homeRuns?: number
+        rbi?: number
+        stolenBases?: number
       }
     }[]
   }[]
@@ -66,10 +70,16 @@ interface PlayEvent {
     type?: { code?: string }
     code?: string
   }
+  hitData?: {
+    coordinates?: {
+      coordX?: number
+      coordY?: number
+    }
+  }
 }
 
 interface Play {
-  matchup?: { pitcher?: { id?: number } }
+  matchup?: { batter?: { id?: number } }
   result?: { eventType?: string }
   playEvents?: PlayEvent[]
 }
@@ -78,18 +88,12 @@ interface FeedLive {
   gameData?: {
     players?: Record<string, { fullName?: string }>
     teams?: {
-      away?: { abbreviation?: string; pitchers?: number[] }
-      home?: { abbreviation?: string; pitchers?: number[] }
+      away?: { abbreviation?: string }
+      home?: { abbreviation?: string }
     }
   }
   liveData?: {
     plays?: { allPlays?: Play[] }
-    boxscore?: {
-      teams?: {
-        away?: { team?: { abbreviation?: string } }
-        home?: { team?: { abbreviation?: string } }
-      }
-    }
   }
 }
 
@@ -134,6 +138,28 @@ interface ZoneTotals {
   slg: number | null
   obp: number | null
   ops: number | null
+}
+
+interface SeasonStats {
+  avg: number
+  obp: number
+  slg: number
+  ops: number
+  k_pct: number
+  bb_pct: number
+  hr: number
+  rbi: number
+  sb: number
+  hits: number
+  ab: number
+  pa: number
+}
+
+interface SprayPoint {
+  x: number
+  y: number
+  eventType: string
+  pitchType: string
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -183,8 +209,8 @@ function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 
     if (isWalk(o.eventType)) bb++
   }
 
-  const avg  = ab >= 5 ? h / Math.max(ab, 1)       : null
-  const slg  = ab >= 5 ? tb / Math.max(ab, 1)      : null
+  const avg  = ab >= 5 ? h / Math.max(ab, 1)        : null
+  const slg  = ab >= 5 ? tb / Math.max(ab, 1)       : null
   const obp  = pa >= 5 ? (h + bb) / Math.max(pa, 1) : null
   const ops  = pa >= 5 && obp !== null && slg !== null ? obp + slg : null
 
@@ -247,66 +273,73 @@ function applyZonePct(grid: ZoneCell[][]): ZoneCell[][] {
 
 // ── Route handler ──────────────────────────────────────────────────────────────
 
-// GET /api/pitcher-season/zones?pitcherId=605135&season=2025
+// GET /api/batter-season/zones?batterId=592450&season=2025
 export async function GET(req: Request): Promise<NextResponse> {
   const { searchParams } = new URL(req.url)
-  const pitcherIdStr = searchParams.get('pitcherId') ?? ''
-  const seasonStr    = searchParams.get('season') ?? String(new Date().getFullYear())
+  const batterIdStr = searchParams.get('batterId') ?? ''
+  const seasonStr   = searchParams.get('season') ?? String(new Date().getFullYear())
 
-  const pitcherId = parseInt(pitcherIdStr, 10)
-  const season    = parseInt(seasonStr, 10)
+  const batterId = parseInt(batterIdStr, 10)
+  const season   = parseInt(seasonStr, 10)
 
-  if (!pitcherId || isNaN(pitcherId)) {
-    return NextResponse.json({ error: 'pitcherId required' }, { status: 400 })
+  if (!batterId || isNaN(batterId)) {
+    return NextResponse.json({ error: 'batterId required' }, { status: 400 })
   }
 
   try {
-    // 1. Season stats
+    // 1. Season stats (hitting) + game log
     const [seasonRes, gameLogRes] = await Promise.all([
       fetch(
-        `https://statsapi.mlb.com/api/v1/people/${pitcherId}/stats?stats=season&group=pitching&season=${season}&gameType=R`,
+        `https://statsapi.mlb.com/api/v1/people/${batterId}/stats?stats=season&group=hitting&season=${season}&gameType=R`,
         { cache: 'no-store' },
       ),
       fetch(
-        `https://statsapi.mlb.com/api/v1/people/${pitcherId}/stats?stats=gameLog&group=pitching&season=${season}&gameType=R`,
+        `https://statsapi.mlb.com/api/v1/people/${batterId}/stats?stats=gameLog&group=hitting&season=${season}&gameType=R`,
         { cache: 'no-store' },
       ),
     ])
 
-    let pitcherName = `Pitcher ${pitcherId}`
-    let teamAbbr    = ''
-    let seasonStats = { era: 0, whip: 0, k9: 0, bb9: 0, wins: 0, losses: 0, ip: '0.0' }
+    let batterName = `Batter ${batterId}`
+    let teamAbbr   = ''
+    let seasonStats: SeasonStats = {
+      avg: 0, obp: 0, slg: 0, ops: 0, k_pct: 0, bb_pct: 0,
+      hr: 0, rbi: 0, sb: 0, hits: 0, ab: 0, pa: 0,
+    }
 
     if (seasonRes.ok) {
-      const sd: SeasonStatsResponse = await seasonRes.json()
+      const sd: BatterSeasonStatsResponse = await seasonRes.json()
       const split = sd.stats?.[0]?.splits?.[0]?.stat
       if (split) {
-        const ip    = split.inningsPitched ?? '0.0'
-        const ipVal = parseFloat(ip.replace(/\.\d/, m => String(parseInt(m.slice(1), 10) / 3)))
-        const k9    = ipVal > 0 ? ((split.strikeOuts ?? 0) / ipVal) * 9 : 0
-        const bb9   = ipVal > 0 ? ((split.baseOnBalls ?? 0) / ipVal) * 9 : 0
+        const pa = split.plateAppearances ?? 0
+        const k_pct = pa > 0 ? ((split.strikeOuts ?? 0) / pa) * 100 : 0
+        const bb_pct = pa > 0 ? ((split.baseOnBalls ?? 0) / pa) * 100 : 0
         seasonStats = {
-          era:    parseFloat(split.era ?? '0'),
-          whip:   parseFloat(split.whip ?? '0'),
-          k9:     Math.round(k9 * 10) / 10,
-          bb9:    Math.round(bb9 * 10) / 10,
-          wins:   split.wins ?? 0,
-          losses: split.losses ?? 0,
-          ip,
+          avg:  parseFloat(split.avg ?? '0'),
+          obp:  parseFloat(split.obp ?? '0'),
+          slg:  parseFloat(split.slg ?? '0'),
+          ops:  parseFloat(split.ops ?? '0'),
+          k_pct:  Math.round(k_pct * 10) / 10,
+          bb_pct: Math.round(bb_pct * 10) / 10,
+          hr:   split.homeRuns ?? 0,
+          rbi:  split.rbi ?? 0,
+          sb:   split.stolenBases ?? 0,
+          hits: split.hits ?? 0,
+          ab:   split.atBats ?? 0,
+          pa,
         }
       }
     }
 
-    // Resolve pitcher name + team from people endpoint
+    // Resolve batter name + team from people endpoint
     const peopleRes = await fetch(
-      `https://statsapi.mlb.com/api/v1/people/${pitcherId}?hydrate=currentTeam`,
+      `https://statsapi.mlb.com/api/v1/people/${batterId}?hydrate=currentTeam`,
       { cache: 'no-store' },
     )
     if (peopleRes.ok) {
       const pd = await peopleRes.json()
       const person = pd.people?.[0]
       if (person) {
-        pitcherName = person.fullName ?? pitcherName
+        batterName = person.fullName ?? batterName
         const ct = person.currentTeam
         teamAbbr = (ct?.abbreviation ?? (ct?.id ? TEAM_ID_TO_ABBR[ct.id] : '') ?? '').toUpperCase()
       }
@@ -345,20 +378,25 @@ export async function GET(req: Request): Promise<NextResponse> {
       ),
     )
 
-    // 4. Collect all pitches (both outcome and non-outcome)
+    // 4. Collect all pitches seen by this batter (both outcome and non-outcome)
     const allOutcomes: OutcomePitch[] = []
-    // per-cell: all pitches (for k_pct), and per-cell outcomes (for avg/obp/slg/ops)
+    // per-cell: all pitches (for zone_pct), and per-cell outcomes (for avg/obp/slg/ops)
     const allPitchesByCell: AllPitch[][] = Array.from({ length: 25 }, () => [])
 
     // per-pitch-type: map from pitchType code -> AllPitch[]
     const pitchTypeMap: Map<string, AllPitch[]> = new Map()
+
+    // spray chart points
+    const sprayPoints: SprayPoint[] = []
+
+    const HIT_EVENTS = new Set(['single', 'double', 'triple', 'home_run'])
 
     for (const feed of feeds) {
       if (!feed) continue
       const allPlays: Play[] = feed.liveData?.plays?.allPlays ?? []
 
       for (const play of allPlays) {
-        if (play.matchup?.pitcher?.id !== pitcherId) continue
+        if (play.matchup?.batter?.id !== batterId) continue
         const playEventType = play.result?.eventType ?? ''
 
         const events: PlayEvent[] = play.playEvents ?? []
@@ -378,6 +416,7 @@ export async function GET(req: Request): Promise<NextResponse> {
         }
 
         // Loop ALL pitch events with coords
+        let lastPitchType = 'UN'
         for (let i = 0; i < events.length; i++) {
           const ev = events[i]
           if (!ev.isPitch) continue
@@ -386,6 +425,7 @@ export async function GET(req: Request): Promise<NextResponse> {
           if (pX == null || pZ == null) continue
 
           const pitchType = ev.details?.type?.code ?? 'UN'
+          lastPitchType = pitchType
 
           // eventType only set on outcome pitch
           const isOutcomePitch = i === lastPitchIdx && playEventType !== ''
@@ -412,14 +452,33 @@ export async function GET(req: Request): Promise<NextResponse> {
             allOutcomes.push({ pX, pZ, eventType: playEventType })
           }
         }
+
+        // Spray chart: collect hit locations from the last event in the play
+        if (HIT_EVENTS.has(playEventType)) {
+          // Find the last event with hitData coordinates
+          for (let i = events.length - 1; i >= 0; i--) {
+            const ev = events[i]
+            const coordX = ev.hitData?.coordinates?.coordX
+            const coordY = ev.hitData?.coordinates?.coordY
+            if (coordX != null && coordY != null) {
+              sprayPoints.push({
+                x: coordX,
+                y: coordY,
+                eventType: playEventType,
+                pitchType: lastPitchType,
+              })
+              break
+            }
+          }
+        }
       }
     }
 
-    // 5. Build 5×5 zone grid (all pitches)
+    // 5. Build 5×5 zone grid (all pitches seen by batter)
     const zones = applyZonePct(buildZoneGrid(allPitchesByCell))
 
     // 6. Totals (outcome pitches only)
-    const totRaw   = computeStats(allOutcomes)
+    const totRaw = computeStats(allOutcomes)
     const totals: ZoneTotals = {
       ...totRaw,
       avg: round3(totRaw.avg),
@@ -453,16 +512,17 @@ export async function GET(req: Request): Promise<NextResponse> {
     pitchTypes.sort((a, b) => b.count - a.count)
 
     return NextResponse.json({
-      pitcherName,
+      batterName,
       teamAbbr,
       season,
       seasonStats,
       zones,
       totals,
       pitchTypes,
+      sprayPoints,
     })
   } catch (err) {
-    console.error('[pitcher-season/zones]', err)
+    console.error('[batter-season/zones]', err)
     return NextResponse.json({ error: 'Failed to load season data' }, { status: 500 })
   }
 }

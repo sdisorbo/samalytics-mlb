@@ -29,7 +29,7 @@ interface MLBSearchResponse {
   people?: MLBPersonResult[]
 }
 
-// GET /api/pitcher-season/search?q=gerrit+cole
+// GET /api/batter-season/search?q=mike+trout
 export async function GET(req: Request): Promise<NextResponse> {
   const { searchParams } = new URL(req.url)
   const q = (searchParams.get('q') ?? '').trim()
@@ -46,10 +46,10 @@ export async function GET(req: Request): Promise<NextResponse> {
     const data: MLBSearchResponse = await res.json()
     const people = data.people ?? []
 
-    const pitchers = people
+    const batters = people
       .filter(p =>
-        p.primaryPosition?.type === 'Pitcher' ||
-        p.primaryPosition?.abbreviation === 'P',
+        p.primaryPosition?.type !== 'Pitcher' &&
+        p.primaryPosition?.abbreviation !== 'P',
       )
       .map(p => ({
         id: p.id,
@@ -57,7 +57,7 @@ export async function GET(req: Request): Promise<NextResponse> {
         teamAbbr: (p.currentTeam?.abbreviation ?? (p.currentTeam?.id ? TEAM_ID_TO_ABBR[p.currentTeam.id] : '') ?? ''),
       }))
 
-    return NextResponse.json(pitchers)
+    return NextResponse.json(batters)
   } catch {
     return NextResponse.json([])
   }
