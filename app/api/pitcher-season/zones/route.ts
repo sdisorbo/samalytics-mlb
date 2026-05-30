@@ -24,6 +24,14 @@ const EXCLUDE_EVENTS = new Set([
   'walk', 'intent_walk', 'hit_by_pitch', 'sac_fly', 'sac_bunt', 'catcher_interf',
 ])
 
+const RV_WEIGHTS: Record<string, number> = {
+  walk: 0.33, intent_walk: 0.33, hit_by_pitch: 0.34,
+  single: 0.47, double: 0.77, triple: 1.07, home_run: 1.40,
+  strikeout: -0.30,
+}
+function getRV(eventType: string): number {
+  return RV_WEIGHTS[eventType] ?? -0.27
+}
 
 // ── MLB API types ──────────────────────────────────────────────────────────────
 
@@ -122,6 +130,7 @@ interface ZoneCell {
   ops: number | null
   total_pitches: number
   zone_pct: number | null
+  avg_rv: number | null
 }
 
 interface ZoneTotals {
@@ -172,7 +181,7 @@ function isWalk(eventType: string): boolean {
   return eventType === 'walk' || eventType === 'intent_walk'
 }
 
-function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 'total_pitches' | 'zone_pct'> {
+function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 'total_pitches' | 'zone_pct' | 'avg_rv'> {
   const pa = outcomes.length
   let ab = 0, h = 0, tb = 0, bb = 0
 
@@ -199,6 +208,8 @@ function computeZoneCell(
 ): ZoneCell {
   const stats = computeStats(outcomes)
   const total_pitches = allPitchesInCell.length
+  const rv_sum = outcomes.reduce((s, o) => s + getRV(o.eventType), 0)
+  const avg_rv = outcomes.length >= 5 ? round3(rv_sum / outcomes.length) : null
 
   return {
     row,
@@ -209,7 +220,8 @@ function computeZoneCell(
     obp:      round3(stats.obp),
     ops:      round3(stats.ops),
     total_pitches,
-    zone_pct: null,  // set after grid is built once we know the total
+    zone_pct: null,
+    avg_rv,
   }
 }
 

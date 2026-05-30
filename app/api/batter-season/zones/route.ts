@@ -24,6 +24,17 @@ const EXCLUDE_EVENTS = new Set([
   'walk', 'intent_walk', 'hit_by_pitch', 'sac_fly', 'sac_bunt', 'catcher_interf',
 ])
 
+const RV_WEIGHTS: Record<string, number> = {
+  walk: 0.33, intent_walk: 0.33, hit_by_pitch: 0.34,
+  single: 0.47, double: 0.77, triple: 1.07, home_run: 1.40,
+  strikeout: -0.30,
+}
+function getRV(eventType: string): number {
+  return RV_WEIGHTS[eventType] ?? -0.27
+}
+const SWING_CODES = new Set(['S','W','T','F','X','D','E','L','M','O','Q','R'])
+const WHIFF_CODES = new Set(['S','W','M','Q'])
+
 // ── MLB API types ──────────────────────────────────────────────────────────────
 
 interface BatterSeasonStatsResponse {
@@ -126,6 +137,7 @@ interface ZoneCell {
   ops: number | null
   total_pitches: number
   zone_pct: number | null
+  avg_rv: number | null
 }
 
 interface ZoneTotals {
@@ -147,6 +159,7 @@ interface SeasonStats {
   ops: number
   k_pct: number
   bb_pct: number
+  whiff_pct: number
   hr: number
   rbi: number
   sb: number
@@ -198,7 +211,7 @@ function isWalk(eventType: string): boolean {
   return eventType === 'walk' || eventType === 'intent_walk'
 }
 
-function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 'total_pitches' | 'zone_pct'> {
+function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 'total_pitches' | 'zone_pct' | 'avg_rv'> {
   const pa = outcomes.length
   let ab = 0, h = 0, tb = 0, bb = 0
 
@@ -225,6 +238,9 @@ function computeZoneCell(
 ): ZoneCell {
   const stats = computeStats(outcomes)
   const total_pitches = allPitchesInCell.length
+  // avg RV per PA in this zone
+  const rv_sum = outcomes.reduce((s, o) => s + getRV(o.eventType), 0)
+  const avg_rv = outcomes.length >= 5 ? round3(rv_sum / outcomes.length) : null
 
   return {
     row,
@@ -235,7 +251,8 @@ function computeZoneCell(
     obp:      round3(stats.obp),
     ops:      round3(stats.ops),
     total_pitches,
-    zone_pct: null,  // set after grid is built once we know the total
+    zone_pct: null,
+    avg_rv,
   }
 }
 
@@ -302,7 +319,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     let batterName = `Batter ${batterId}`
     let teamAbbr   = ''
     let seasonStats: SeasonStats = {
-      avg: 0, obp: 0, slg: 0, ops: 0, k_pct: 0, bb_pct: 0,
+      avg: 0, obp: 0, slg: 0, ops: 0, k_pct: 0, bb_pct: 0, whiff_pct: 0,
       hr: 0, rbi: 0, sb: 0, hits: 0, ab: 0, pa: 0,
     }
 
@@ -320,6 +337,7 @@ export async function GET(req: Request): Promise<NextResponse> {
           ops:  parseFloat(split.ops ?? '0'),
           k_pct:  Math.round(k_pct * 10) / 10,
           bb_pct: Math.round(bb_pct * 10) / 10,
+          whiff_pct: 0,
           hr:   split.homeRuns ?? 0,
           rbi:  split.rbi ?? 0,
           sb:   split.stolenBases ?? 0,
@@ -391,6 +409,8 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     const HIT_EVENTS = new Set(['single', 'double', 'triple', 'home_run'])
 
+    let swings = 0, whiffs = 0
+
     for (const feed of feeds) {
       if (!feed) continue
       const allPlays: Play[] = feed.liveData?.plays?.allPlays ?? []
@@ -426,6 +446,14 @@ export async function GET(req: Request): Promise<NextResponse> {
 
           const pitchType = ev.details?.type?.code ?? 'UN'
           lastPitchType = pitchType
+
+          const pitchCode = ev.details?.code
+          if (pitchCode) {
+            if (SWING_CODES.has(pitchCode)) {
+              swings++
+              if (WHIFF_CODES.has(pitchCode)) whiffs++
+            }
+          }
 
           // eventType only set on outcome pitch
           const isOutcomePitch = i === lastPitchIdx && playEventType !== ''
@@ -473,6 +501,10 @@ export async function GET(req: Request): Promise<NextResponse> {
         }
       }
     }
+
+    // Compute whiff_pct from game feeds
+    const whiff_pct = swings > 0 ? Math.round((whiffs / swings) * 1000) / 10 : 0
+    seasonStats = { ...seasonStats, whiff_pct }
 
     // 5. Build 5×5 zone grid (all pitches seen by batter)
     const zones = applyZonePct(buildZoneGrid(allPitchesByCell))

@@ -21,14 +21,29 @@ const STATS: { key: keyof Player; label: string; pctKey: keyof Player; higherBet
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
 
+const TURQ_SCALE = ['#CFE8E8', '#8EC6C8', '#5BAEB3', '#3C999E']
+const PINK_SCALE_REV = ['#9B405A', '#C96E85', '#E5A8B5', '#F3D6DB']  // dark→light
+
+function lerpHex(a: string, b: string, t: number): string {
+  const na = parseInt(a.slice(1), 16)
+  const nb = parseInt(b.slice(1), 16)
+  const r = Math.round(((na >> 16) & 255) + (((nb >> 16) & 255) - ((na >> 16) & 255)) * t)
+  const g = Math.round(((na >> 8) & 255)  + (((nb >> 8) & 255)  - ((na >> 8) & 255)) * t)
+  const bv = Math.round((na & 255) + ((nb & 255) - (na & 255)) * t)
+  return '#' + [r, g, bv].map(v => v.toString(16).padStart(2, '0')).join('')
+}
+
+function multiStop(colors: string[], t: number): string {
+  const n = colors.length - 1
+  const s = Math.min(Math.max(t * n, 0), n - 0.001)
+  const seg = Math.floor(s)
+  return lerpHex(colors[seg], colors[seg + 1], s - seg)
+}
+
 function pctColor(v: number): string {
-  const t = 1 - Math.min(Math.max(v, 0), 100) / 100
-  const teal = [60, 153, 158]
-  const pink = [155, 64, 90]
-  const r = Math.round(teal[0] + (pink[0] - teal[0]) * t)
-  const g = Math.round(teal[1] + (pink[1] - teal[1]) * t)
-  const b = Math.round(teal[2] + (pink[2] - teal[2]) * t)
-  return `rgb(${r},${g},${b})`
+  const p = Math.min(Math.max(v, 0), 100) / 100
+  if (p >= 0.5) return multiStop(TURQ_SCALE, (p - 0.5) * 2)
+  return multiStop(PINK_SCALE_REV, p * 2)
 }
 
 function formatStat(val: number | null, key: keyof Player): string {
@@ -53,6 +68,7 @@ interface ZoneCell {
   ops: number | null
   total_pitches: number
   zone_pct: number | null
+  avg_rv: number | null
 }
 
 interface PitchTypeEntry {
@@ -73,6 +89,7 @@ interface BatterZoneData {
     ops: number
     k_pct: number
     bb_pct: number
+    whiff_pct: number
     hr: number
     rbi: number
     sb: number
@@ -96,7 +113,7 @@ interface BatterZoneData {
   sprayPoints: { x: number; y: number; eventType: string; pitchType: string }[]
 }
 
-type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct'
+type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
 const TEAL = '#3C999E'
 const PINK = '#9B405A'
@@ -117,6 +134,7 @@ const STAT_TABS: { key: StatKey; label: string }[] = [
   { key: 'slg',      label: 'SLG'   },
   { key: 'ops',      label: 'OPS'   },
   { key: 'zone_pct', label: 'Zone%' },
+  { key: 'avg_rv',   label: 'Avg RV' },
 ]
 
 function lerp(a: number, b: number, t: number): number {
@@ -146,17 +164,17 @@ function buildColorMap(cells: ZoneCell[], key: StatKey): Map<string, string> {
       values.push({ row: cell.row, col: cell.col, val })
     }
   }
-
   if (values.length === 0) return new Map()
-
   const nums = values.map(v => v.val)
   const min = Math.min(...nums)
   const max = Math.max(...nums)
   const range = max - min
-
+  // For batting stats: higher is better → teal; for zone_pct: lower t = teal = less pitched there
+  const invertScale = key !== 'zone_pct'
   const map = new Map<string, string>()
   for (const { row, col, val } of values) {
-    const t = range > 0 ? (val - min) / range : 0.5
+    let t = range > 0 ? (val - min) / range : 0.5
+    if (invertScale) t = 1 - t
     map.set(`${row}-${col}`, interpolateColor(t))
   }
   return map
@@ -165,6 +183,7 @@ function buildColorMap(cells: ZoneCell[], key: StatKey): Map<string, string> {
 function formatZoneStat(val: number | null, key: StatKey): string {
   if (val === null) return '-'
   if (key === 'zone_pct') return `${Math.round(val * 100)}%`
+  if (key === 'avg_rv') return (val >= 0 ? '+' : '') + val.toFixed(2)
   if (key === 'avg' || key === 'obp' || key === 'slg') return val.toFixed(3).replace(/^0/, '')
   return val.toFixed(3)
 }

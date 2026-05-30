@@ -21,6 +21,7 @@ interface ZoneCell {
   ops: number | null
   total_pitches: number
   zone_pct: number | null
+  avg_rv: number | null
 }
 
 interface PitchTypeEntry {
@@ -37,6 +38,7 @@ interface SeasonStats {
   ops: number
   k_pct: number
   bb_pct: number
+  whiff_pct: number
   hr: number
   rbi: number
   sb: number
@@ -73,7 +75,7 @@ interface BatterZoneData {
   sprayPoints: SprayPoint[]
 }
 
-type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct'
+type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
 
@@ -108,17 +110,17 @@ function buildColorMap(cells: ZoneCell[], key: StatKey): Map<string, string> {
       values.push({ row: cell.row, col: cell.col, val })
     }
   }
-
   if (values.length === 0) return new Map()
-
   const nums = values.map(v => v.val)
   const min = Math.min(...nums)
   const max = Math.max(...nums)
   const range = max - min
-
+  // For batting stats: higher = better = teal, so invert t
+  const invertScale = key !== 'zone_pct'
   const map = new Map<string, string>()
   for (const { row, col, val } of values) {
-    const t = range > 0 ? (val - min) / range : 0.5
+    let t = range > 0 ? (val - min) / range : 0.5
+    if (invertScale) t = 1 - t
     map.set(`${row}-${col}`, interpolateColor(t))
   }
   return map
@@ -127,6 +129,7 @@ function buildColorMap(cells: ZoneCell[], key: StatKey): Map<string, string> {
 function formatZoneStat(val: number | null, key: StatKey): string {
   if (val === null) return '-'
   if (key === 'zone_pct') return `${Math.round(val * 100)}%`
+  if (key === 'avg_rv') return (val >= 0 ? '+' : '') + val.toFixed(2)
   if (key === 'avg' || key === 'obp' || key === 'slg') return val.toFixed(3).replace(/^0/, '')
   return val.toFixed(3)
 }
@@ -150,6 +153,7 @@ const STAT_TABS: { key: StatKey; label: string }[] = [
   { key: 'slg',      label: 'SLG'   },
   { key: 'ops',      label: 'OPS'   },
   { key: 'zone_pct', label: 'Zone%' },
+  { key: 'avg_rv',   label: 'Avg RV' },
 ]
 
 interface ZoneGridProps {
@@ -249,11 +253,11 @@ function ZoneGrid({ zones, pitchTypes, selectedPitchType, activeStat }: ZoneGrid
       <div className="flex items-center gap-3 mt-2 text-[9px] text-538-muted">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: TEAL }} />
-          <span>{activeStat === 'zone_pct' ? 'Less often thrown' : 'Better (higher)'}</span>
+          <span>{activeStat === 'zone_pct' ? 'Less often thrown' : activeStat === 'avg_rv' ? 'More run value' : 'Better (higher)'}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: PINK }} />
-          <span>{activeStat === 'zone_pct' ? 'More often thrown' : 'Worse (lower)'}</span>
+          <span>{activeStat === 'zone_pct' ? 'More often thrown' : activeStat === 'avg_rv' ? 'Less run value' : 'Worse (lower)'}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: EMPTY_CELL }} />
@@ -334,6 +338,13 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
         viewBox="0 0 250 250"
         style={{ display: 'block', backgroundColor: '#1F2937', borderRadius: '8px' }}
       >
+        <defs>
+          <clipPath id="fair-territory">
+            {/* Home plate at (125,220); foul lines at 45°; left hits x=0 at y=95, right hits x=250 at y=95 */}
+            <polygon points="125,220 0,95 0,0 250,0 250,95" />
+          </clipPath>
+        </defs>
+
         {/* Infield dirt circle */}
         <circle
           cx={homePlateX}
@@ -377,23 +388,23 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
         />
 
         {/* Spray dots */}
-        {filteredPoints.map((pt, i) => {
-          const svgX = toSvgX(pt.x)
-          const svgY = toSvgY(pt.y)
-          // Skip if out of viewbox
-          if (svgX < 0 || svgX > 250 || svgY < 0 || svgY > 250) return null
-          const dotColor = EVENT_COLORS[pt.eventType] ?? '#6B7280'
-          return (
-            <circle
-              key={i}
-              cx={svgX}
-              cy={svgY}
-              r={4}
-              fill={dotColor}
-              opacity={0.75}
-            />
-          )
-        })}
+        <g clipPath="url(#fair-territory)">
+          {filteredPoints.map((pt, i) => {
+            const svgX = toSvgX(pt.x)
+            const svgY = toSvgY(pt.y)
+            const dotColor = EVENT_COLORS[pt.eventType] ?? '#6B7280'
+            return (
+              <circle
+                key={i}
+                cx={svgX}
+                cy={svgY}
+                r={4}
+                fill={dotColor}
+                opacity={0.75}
+              />
+            )
+          })}
+        </g>
       </svg>
 
       {/* Legend */}
@@ -531,6 +542,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
         <StatBox label="OPS"  value={fmt3(seasonStats.ops)} />
         <StatBox label="K%"   value={fmtPct(seasonStats.k_pct)} />
         <StatBox label="BB%"  value={fmtPct(seasonStats.bb_pct)} />
+        <StatBox label="Whiff%" value={fmtPct(seasonStats.whiff_pct)} />
         <StatBox label="HR"   value={String(seasonStats.hr)} />
         <StatBox label="RBI"  value={String(seasonStats.rbi)} />
         <StatBox label="SB"   value={String(seasonStats.sb)} />

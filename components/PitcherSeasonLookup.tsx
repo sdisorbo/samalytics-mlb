@@ -34,6 +34,7 @@ interface ZoneCell {
   ops: number | null
   total_pitches: number
   zone_pct: number | null
+  avg_rv: number | null
 }
 
 interface ZoneTotals {
@@ -65,7 +66,7 @@ interface SeasonZoneData {
   pitchTypes: PitchTypeEntry[]
 }
 
-type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct'
+type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
 
@@ -146,11 +147,13 @@ const STAT_TABS: { key: StatKey; label: string }[] = [
   { key: 'slg',      label: 'SLG'   },
   { key: 'ops',      label: 'OPS'   },
   { key: 'zone_pct', label: 'Zone%' },
+  { key: 'avg_rv',   label: 'Avg RV' },
 ]
 
 function formatStat(val: number | null, key: StatKey): string {
   if (val === null) return '-'
   if (key === 'zone_pct') return `${Math.round(val * 100)}%`
+  if (key === 'avg_rv') return (val >= 0 ? '+' : '') + val.toFixed(2)
   if (key === 'avg' || key === 'obp' || key === 'slg') return val.toFixed(3).replace(/^0/, '')
   return val.toFixed(3)
 }
@@ -304,7 +307,7 @@ function ZoneGrid({ zones, pitchTypes }: ZoneGridProps) {
         <div className="flex items-center gap-3 mt-2 text-[9px] text-538-muted">
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: TEAL }} />
-            <span>{activeStat === 'zone_pct' ? 'Less often thrown' : 'Better (lower)'}</span>
+            <span>{activeStat === 'zone_pct' ? 'Less often thrown' : activeStat === 'avg_rv' ? 'Less run value allowed' : 'Better (lower)'}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: PINK }} />
