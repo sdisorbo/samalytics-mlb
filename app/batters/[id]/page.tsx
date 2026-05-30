@@ -318,26 +318,17 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
     ? sprayPoints
     : sprayPoints.filter(p => p.pitchType === selectedPitchType)
 
-  // ViewBox: 0 0 250 250
-  // Home plate at (125, 220)
-  // Scale: 1 foot = 1.2px
-  // svgX = 125 + coordX * 1.2
-  // svgY = 220 - coordY * 1.2
+  // ViewBox: 0 0 300 300, home plate at (150,285), scale 0.65px/ft
+  // 400ft deep → svgY = 285 - 260 = 25  (visible at top)
+  // foul lines at 45°; left hits x=0 at y=135, right hits x=300 at y=135
 
-  const toSvgX = (x: number) => 125 + x * 1.2
-  const toSvgY = (y: number) => 220 - y * 1.2
+  const toSvgX = (x: number) => 150 + x * 0.65
+  const toSvgY = (y: number) => 285 - y * 0.65
 
-  // Field lines and arc
-  // Home plate origin at (125, 220)
-  // Foul lines at 45° from home plate (down left and down right in SVG coords)
-  // Left foul: goes toward upper-left → angle 135° from positive x-axis
-  // Right foul: goes toward upper-right → angle 45° from positive x-axis
-  // Outfield wall arc: radius ~200 feet → ~240px in SVG, centered at home plate
-
-  const homePlateX = 125
-  const homePlateY = 220
-  const lineLen = 260    // long enough to reach edge of viewbox
-  const arcRadius = 240  // ~200 feet * 1.2px/ft
+  const homePlateX = 150
+  const homePlateY = 285
+  const lineLen = 420    // long enough to reach corner of viewbox
+  const arcRadius = 202  // ~310 feet * 0.65px/ft
 
   // Foul line endpoints
   const lfX = homePlateX - lineLen * Math.cos(Math.PI / 4)
@@ -356,15 +347,15 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
   return (
     <div className="flex flex-col gap-2">
       <svg
-        width={250}
-        height={250}
-        viewBox="0 0 250 250"
+        width={300}
+        height={300}
+        viewBox="0 0 300 300"
         style={{ display: 'block', backgroundColor: '#1F2937', borderRadius: '8px' }}
       >
         <defs>
           <clipPath id="fair-territory">
-            {/* Home plate at (125,220); foul lines at 45°; left hits x=0 at y=95, right hits x=250 at y=95 */}
-            <polygon points="125,220 0,95 0,0 250,0 250,95" />
+            {/* Home plate at (150,285); foul lines at 45°; left hits x=0 at y=135, right hits x=300 at y=135 */}
+            <polygon points="150,285 0,135 0,0 300,0 300,135" />
           </clipPath>
         </defs>
 
