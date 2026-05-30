@@ -240,7 +240,7 @@ function computeZoneCell(
   const total_pitches = allPitchesInCell.length
   // avg RV per PA in this zone
   const rv_sum = outcomes.reduce((s, o) => s + getRV(o.eventType), 0)
-  const avg_rv = outcomes.length >= 5 ? round3(rv_sum / outcomes.length) : null
+  const avg_rv = outcomes.length >= 1 ? round3(rv_sum / outcomes.length) : null
 
   return {
     row,
