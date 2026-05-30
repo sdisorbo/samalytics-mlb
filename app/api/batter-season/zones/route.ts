@@ -222,10 +222,10 @@ function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 
     if (isWalk(o.eventType)) bb++
   }
 
-  const avg  = ab >= 5 ? h / Math.max(ab, 1)        : null
-  const slg  = ab >= 5 ? tb / Math.max(ab, 1)       : null
-  const obp  = pa >= 5 ? (h + bb) / Math.max(pa, 1) : null
-  const ops  = pa >= 5 && obp !== null && slg !== null ? obp + slg : null
+  const avg  = ab >= 1 ? h / Math.max(ab, 1)        : null
+  const slg  = ab >= 1 ? tb / Math.max(ab, 1)       : null
+  const obp  = pa >= 1 ? (h + bb) / Math.max(pa, 1) : null
+  const ops  = pa >= 1 && obp !== null && slg !== null ? obp + slg : null
 
   return { pa, ab, h, tb, bb, avg, slg, obp, ops }
 }
