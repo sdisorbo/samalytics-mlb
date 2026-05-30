@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { PITCH_NAMES } from '@/lib/pitcherGame'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,9 @@ const Z_BREAKS = [5.0, 3.5, 2.75, 2.0, 1.4, 0.0]
 const EXCLUDE_EVENTS = new Set([
   'walk', 'intent_walk', 'hit_by_pitch', 'sac_fly', 'sac_bunt', 'catcher_interf',
 ])
+
+// Result codes that count as strikes
+const STRIKE_RESULT_CODES = new Set(['C', 'S', 'F', 'T', 'L', 'O', 'M', 'Q', 'R', 'W'])
 
 // ── MLB API types ──────────────────────────────────────────────────────────────
 
@@ -34,6 +38,7 @@ interface SeasonStatsResponse {
 
 interface GameLogSplit {
   game?: { gamePk?: number }
+  team?: { abbreviation?: string }
 }
 
 interface GameLogResponse {
@@ -49,6 +54,10 @@ interface PlayEvent {
       pX?: number
       pZ?: number
     }
+  }
+  details?: {
+    type?: { code?: string }
+    code?: string
   }
 }
 
@@ -85,6 +94,14 @@ interface OutcomePitch {
   eventType: string
 }
 
+interface AllPitch {
+  pX: number
+  pZ: number
+  pitchType: string
+  isStrike: boolean
+  eventType: string  // only set on outcome pitch (last pitch of PA); otherwise ''
+}
+
 interface ZoneCell {
   row: number
   col: number
@@ -97,6 +114,9 @@ interface ZoneCell {
   slg: number | null
   obp: number | null
   ops: number | null
+  total_pitches: number
+  strikes: number
+  k_pct: number | null
 }
 
 interface ZoneTotals {
@@ -147,7 +167,7 @@ function isWalk(eventType: string): boolean {
   return eventType === 'walk' || eventType === 'intent_walk'
 }
 
-function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col'> {
+function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 'total_pitches' | 'strikes' | 'k_pct'> {
   const pa = outcomes.length
   let ab = 0, h = 0, tb = 0, bb = 0
 
@@ -166,8 +186,53 @@ function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col'> {
   return { pa, ab, h, tb, bb, avg, slg, obp, ops }
 }
 
+function computeZoneCell(
+  row: number,
+  col: number,
+  outcomes: OutcomePitch[],
+  allPitchesInCell: AllPitch[],
+): ZoneCell {
+  const stats = computeStats(outcomes)
+  const total_pitches = allPitchesInCell.length
+  const strikes = allPitchesInCell.filter(p => p.isStrike).length
+  const k_pct = total_pitches >= 10 ? Math.round((strikes / total_pitches) * 1000) / 1000 : null
+
+  return {
+    row,
+    col,
+    ...stats,
+    avg: round3(stats.avg),
+    slg: round3(stats.slg),
+    obp: round3(stats.obp),
+    ops: round3(stats.ops),
+    total_pitches,
+    strikes,
+    k_pct,
+  }
+}
+
 function round3(n: number | null): number | null {
   return n !== null ? Math.round(n * 1000) / 1000 : null
+}
+
+function buildZoneGrid(
+  allPitchesByCell: AllPitch[][],
+): ZoneCell[][] {
+  const zones: ZoneCell[][] = []
+  for (let row = 0; row < 5; row++) {
+    const rowCells: ZoneCell[] = []
+    for (let col = 0; col < 5; col++) {
+      const idx = row * 5 + col
+      const cellPitches = allPitchesByCell[idx]
+      // outcome pitches = those with a non-empty eventType
+      const outcomes: OutcomePitch[] = cellPitches
+        .filter(p => p.eventType !== '')
+        .map(p => ({ pX: p.pX, pZ: p.pZ, eventType: p.eventType }))
+      rowCells.push(computeZoneCell(row, col, outcomes, cellPitches))
+    }
+    zones.push(rowCells)
+  }
+  return zones
 }
 
 // ── Route handler ──────────────────────────────────────────────────────────────
@@ -199,7 +264,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     ])
 
     let pitcherName = `Pitcher ${pitcherId}`
-    let teamAbbr    = '???'
+    let teamAbbr    = ''
     let seasonStats = { era: 0, whip: 0, k9: 0, bb9: 0, wins: 0, losses: 0, ip: '0.0' }
 
     if (seasonRes.ok) {
@@ -232,15 +297,22 @@ export async function GET(req: Request): Promise<NextResponse> {
       const person = pd.people?.[0]
       if (person) {
         pitcherName = person.fullName ?? pitcherName
-        teamAbbr    = (person.currentTeam?.abbreviation ?? teamAbbr).toUpperCase()
+        teamAbbr    = (person.currentTeam?.abbreviation ?? '').toUpperCase()
       }
     }
 
-    // 2. Collect unique gamePks from game log
+    // 2. Collect unique gamePks from game log; also try to get team from game log splits
     const gamePks: number[] = []
     if (gameLogRes.ok) {
       const gld: GameLogResponse = await gameLogRes.json()
       const splits = gld.stats?.[0]?.splits ?? []
+
+      // Use game log team abbreviation as primary source if not already set
+      if (!teamAbbr) {
+        const glTeamAbbr = gld.stats?.[0]?.splits?.[0]?.team?.abbreviation ?? ''
+        if (glTeamAbbr) teamAbbr = glTeamAbbr.toUpperCase()
+      }
+
       const seen = new Set<number>()
       for (const s of splits) {
         const pk = s.game?.gamePk
@@ -261,9 +333,13 @@ export async function GET(req: Request): Promise<NextResponse> {
       ),
     )
 
-    // 4. Collect outcome pitches
+    // 4. Collect all pitches (both outcome and non-outcome)
     const allOutcomes: OutcomePitch[] = []
-    const cellOutcomes: OutcomePitch[][] = Array.from({ length: 25 }, () => [])
+    // per-cell: all pitches (for k_pct), and per-cell outcomes (for avg/obp/slg/ops)
+    const allPitchesByCell: AllPitch[][] = Array.from({ length: 25 }, () => [])
+
+    // per-pitch-type: map from pitchType code -> AllPitch[]
+    const pitchTypeMap: Map<string, AllPitch[]> = new Map()
 
     for (const feed of feeds) {
       if (!feed) continue
@@ -271,12 +347,12 @@ export async function GET(req: Request): Promise<NextResponse> {
 
       for (const play of allPlays) {
         if (play.matchup?.pitcher?.id !== pitcherId) continue
-        const eventType = play.result?.eventType ?? ''
-        if (!eventType) continue
+        const playEventType = play.result?.eventType ?? ''
 
         const events: PlayEvent[] = play.playEvents ?? []
-        // Find the last pitch event with coordinates
-        let lastPitchEvent: PlayEvent | null = null
+
+        // Find the last pitch event index with coords (outcome pitch)
+        let lastPitchIdx = -1
         for (let i = events.length - 1; i >= 0; i--) {
           const ev = events[i]
           if (
@@ -284,48 +360,55 @@ export async function GET(req: Request): Promise<NextResponse> {
             ev.pitchData?.coordinates?.pX != null &&
             ev.pitchData?.coordinates?.pZ != null
           ) {
-            lastPitchEvent = ev
+            lastPitchIdx = i
             break
           }
         }
-        if (!lastPitchEvent) continue
 
-        const pX = lastPitchEvent.pitchData!.coordinates!.pX!
-        const pZ = lastPitchEvent.pitchData!.coordinates!.pZ!
+        // Loop ALL pitch events with coords
+        for (let i = 0; i < events.length; i++) {
+          const ev = events[i]
+          if (!ev.isPitch) continue
+          const pX = ev.pitchData?.coordinates?.pX
+          const pZ = ev.pitchData?.coordinates?.pZ
+          if (pX == null || pZ == null) continue
 
-        const outcome: OutcomePitch = { pX, pZ, eventType }
-        allOutcomes.push(outcome)
+          const pitchType = ev.details?.type?.code ?? 'UN'
+          const resultCode = ev.details?.code ?? ''
+          const isStrike = STRIKE_RESULT_CODES.has(resultCode)
 
-        const col = getCol(pX)
-        const row = getRow(pZ)
-        if (row >= 0 && col >= 0) {
-          const idx = row * 5 + col
-          cellOutcomes[idx].push(outcome)
+          // eventType only set on outcome pitch
+          const isOutcomePitch = i === lastPitchIdx && playEventType !== ''
+          const eventType = isOutcomePitch ? playEventType : ''
+
+          const pitch: AllPitch = { pX, pZ, pitchType, isStrike, eventType }
+
+          // Per-cell
+          const col = getCol(pX)
+          const row = getRow(pZ)
+          if (row >= 0 && col >= 0) {
+            const idx = row * 5 + col
+            allPitchesByCell[idx].push(pitch)
+          }
+
+          // Per-pitch-type
+          if (!pitchTypeMap.has(pitchType)) {
+            pitchTypeMap.set(pitchType, [])
+          }
+          pitchTypeMap.get(pitchType)!.push(pitch)
+
+          // Outcome pitches for totals
+          if (isOutcomePitch) {
+            allOutcomes.push({ pX, pZ, eventType: playEventType })
+          }
         }
       }
     }
 
-    // 5. Build 5×5 zone grid
-    const zones: ZoneCell[][] = []
-    for (let row = 0; row < 5; row++) {
-      const rowCells: ZoneCell[] = []
-      for (let col = 0; col < 5; col++) {
-        const idx = row * 5 + col
-        const stats = computeStats(cellOutcomes[idx])
-        rowCells.push({
-          row,
-          col,
-          ...stats,
-          avg: round3(stats.avg),
-          slg: round3(stats.slg),
-          obp: round3(stats.obp),
-          ops: round3(stats.ops),
-        })
-      }
-      zones.push(rowCells)
-    }
+    // 5. Build 5×5 zone grid (all pitches)
+    const zones = buildZoneGrid(allPitchesByCell)
 
-    // 6. Totals
+    // 6. Totals (outcome pitches only)
     const totRaw   = computeStats(allOutcomes)
     const totals: ZoneTotals = {
       ...totRaw,
@@ -335,6 +418,30 @@ export async function GET(req: Request): Promise<NextResponse> {
       ops: round3(totRaw.ops),
     }
 
+    // 7. Per-pitch-type zone breakdown
+    const pitchTypes: { code: string; name: string; count: number; zones: ZoneCell[][] }[] = []
+    for (const [code, pitches] of pitchTypeMap.entries()) {
+      if (pitches.length < 10) continue
+
+      // Build per-cell buckets for this pitch type
+      const ptByCell: AllPitch[][] = Array.from({ length: 25 }, () => [])
+      for (const p of pitches) {
+        const col = getCol(p.pX)
+        const row = getRow(p.pZ)
+        if (row >= 0 && col >= 0) {
+          ptByCell[row * 5 + col].push(p)
+        }
+      }
+
+      pitchTypes.push({
+        code,
+        name: PITCH_NAMES[code] ?? code,
+        count: pitches.length,
+        zones: buildZoneGrid(ptByCell),
+      })
+    }
+    pitchTypes.sort((a, b) => b.count - a.count)
+
     return NextResponse.json({
       pitcherName,
       teamAbbr,
@@ -342,6 +449,7 @@ export async function GET(req: Request): Promise<NextResponse> {
       seasonStats,
       zones,
       totals,
+      pitchTypes,
     })
   } catch (err) {
     console.error('[pitcher-season/zones]', err)

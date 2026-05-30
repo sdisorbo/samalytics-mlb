@@ -32,6 +32,9 @@ interface ZoneCell {
   slg: number | null
   obp: number | null
   ops: number | null
+  total_pitches: number
+  strikes: number
+  k_pct: number | null
 }
 
 interface ZoneTotals {
@@ -46,6 +49,13 @@ interface ZoneTotals {
   ops: number | null
 }
 
+interface PitchTypeEntry {
+  code: string
+  name: string
+  count: number
+  zones: ZoneCell[][]
+}
+
 interface SeasonZoneData {
   pitcherName: string
   teamAbbr: string
@@ -53,9 +63,10 @@ interface SeasonZoneData {
   seasonStats: SeasonStats
   zones: ZoneCell[][]
   totals: ZoneTotals
+  pitchTypes: PitchTypeEntry[]
 }
 
-type StatKey = 'avg' | 'obp' | 'slg' | 'ops'
+type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'k_pct'
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
 
@@ -131,31 +142,70 @@ const SZ_W = CELL_W * 3
 const SZ_H = CELL_H * 3
 
 const STAT_TABS: { key: StatKey; label: string }[] = [
-  { key: 'avg', label: 'AVG' },
-  { key: 'obp', label: 'OBP' },
-  { key: 'slg', label: 'SLG' },
-  { key: 'ops', label: 'OPS' },
+  { key: 'avg',   label: 'AVG'   },
+  { key: 'obp',   label: 'OBP'   },
+  { key: 'slg',   label: 'SLG'   },
+  { key: 'ops',   label: 'OPS'   },
+  { key: 'k_pct', label: 'K%'    },
 ]
 
 function formatStat(val: number | null, key: StatKey): string {
   if (val === null) return '-'
+  if (key === 'k_pct') return `${Math.round(val * 100)}%`
   if (key === 'avg' || key === 'obp' || key === 'slg') return val.toFixed(3).replace(/^0/, '')
   return val.toFixed(3)
 }
 
 interface ZoneGridProps {
   zones: ZoneCell[][]
+  pitchTypes: PitchTypeEntry[]
 }
 
-function ZoneGrid({ zones }: ZoneGridProps) {
+function ZoneGrid({ zones, pitchTypes }: ZoneGridProps) {
   const [activeStat, setActiveStat] = useState<StatKey>('avg')
+  const [selectedPitchType, setSelectedPitchType] = useState<string>('ALL')
   const [hovered, setHovered] = useState<{ row: number; col: number } | null>(null)
 
-  const flatCells: ZoneCell[] = zones.flat()
+  const activeZones =
+    selectedPitchType === 'ALL'
+      ? zones
+      : (pitchTypes.find(pt => pt.code === selectedPitchType)?.zones ?? zones)
+
+  const flatCells: ZoneCell[] = activeZones.flat()
   const colorMap = buildColorMap(flatCells, activeStat)
 
   return (
     <div className="flex flex-col gap-3">
+      {/* Pitch type toggles */}
+      <div className="flex items-center gap-1 overflow-x-auto pb-1">
+        <button
+          onClick={() => setSelectedPitchType('ALL')}
+          className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded transition-colors whitespace-nowrap"
+          style={
+            selectedPitchType === 'ALL'
+              ? { backgroundColor: '#3D405B', color: '#fff' }
+              : { backgroundColor: 'transparent', color: '#9CA3AF', border: '1px solid #374151' }
+          }
+        >
+          All
+        </button>
+        {pitchTypes.map(pt => (
+          <button
+            key={pt.code}
+            onClick={() => setSelectedPitchType(pt.code)}
+            className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded transition-colors whitespace-nowrap"
+            style={
+              selectedPitchType === pt.code
+                ? { backgroundColor: '#3D405B', color: '#fff' }
+                : { backgroundColor: 'transparent', color: '#9CA3AF', border: '1px solid #374151' }
+            }
+          >
+            {pt.name} <span className="opacity-60">({pt.count})</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Stat tabs */}
       <div className="flex items-center gap-2">
         <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Zone</span>
         <div className="flex gap-1">
@@ -183,7 +233,7 @@ function ZoneGrid({ zones }: ZoneGridProps) {
           viewBox={`0 0 ${GRID_W} ${GRID_H}`}
           style={{ display: 'block' }}
         >
-          {zones.map((rowCells, row) =>
+          {activeZones.map((rowCells, row) =>
             rowCells.map((cell, col) => {
               const key = `${row}-${col}`
               const color = colorMap.get(key) ?? EMPTY_CELL
@@ -276,10 +326,11 @@ function ZoneGrid({ zones }: ZoneGridProps) {
 
 function ResultsCard({ data }: { data: SeasonZoneData }) {
   const { seasonStats } = data
+  const showTeam = data.teamAbbr && data.teamAbbr !== '???' && data.teamAbbr !== "'???'"
 
   return (
-    <div className="bg-surface border border-538-border rounded-xl overflow-hidden">
-      <div className="h-1 w-full" style={{ backgroundColor: '#3D405B' }} />
+    <div className="bg-surface border border-538-border rounded-xl">
+      <div className="h-1 w-full rounded-t-xl" style={{ backgroundColor: '#3D405B' }} />
       <div className="p-4 space-y-5">
         <div className="flex items-center gap-3 flex-wrap">
           <span
@@ -290,7 +341,9 @@ function ResultsCard({ data }: { data: SeasonZoneData }) {
           </span>
           <div className="flex items-center gap-2">
             <span className="text-lg font-black text-538-text">{data.pitcherName}</span>
-            <span className="text-[11px] font-semibold text-538-muted uppercase">{data.teamAbbr}</span>
+            {showTeam && (
+              <span className="text-[11px] font-semibold text-538-muted uppercase">{data.teamAbbr}</span>
+            )}
           </div>
         </div>
 
@@ -304,7 +357,7 @@ function ResultsCard({ data }: { data: SeasonZoneData }) {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-6">
-          <ZoneGrid zones={data.zones} />
+          <ZoneGrid zones={data.zones} pitchTypes={data.pitchTypes} />
 
           <div className="flex flex-col gap-2">
             <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Season Totals vs Pitcher</div>
@@ -423,9 +476,9 @@ export default function PitcherSeasonLookup() {
 
   return (
     <div className="space-y-4">
-      {/* Search card */}
-      <div className="bg-surface border border-538-border rounded-xl overflow-hidden">
-        <div className="h-1 w-full" style={{ backgroundColor: '#3D405B' }} />
+      {/* Search card — overflow-visible so dropdown is not clipped */}
+      <div className="bg-surface border border-538-border rounded-xl">
+        <div className="h-1 w-full rounded-t-xl" style={{ backgroundColor: '#3D405B' }} />
         <div className="p-4 space-y-4">
           <div className="flex items-center gap-2">
             <span
