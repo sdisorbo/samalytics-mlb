@@ -15,8 +15,6 @@ const EXCLUDE_EVENTS = new Set([
   'walk', 'intent_walk', 'hit_by_pitch', 'sac_fly', 'sac_bunt', 'catcher_interf',
 ])
 
-// Result codes that count as strikes
-const STRIKE_RESULT_CODES = new Set(['C', 'S', 'F', 'T', 'L', 'O', 'M', 'Q', 'R', 'W'])
 
 // ── MLB API types ──────────────────────────────────────────────────────────────
 
@@ -98,7 +96,6 @@ interface AllPitch {
   pX: number
   pZ: number
   pitchType: string
-  isStrike: boolean
   eventType: string  // only set on outcome pitch (last pitch of PA); otherwise ''
 }
 
@@ -115,8 +112,7 @@ interface ZoneCell {
   obp: number | null
   ops: number | null
   total_pitches: number
-  strikes: number
-  k_pct: number | null
+  zone_pct: number | null
 }
 
 interface ZoneTotals {
@@ -167,7 +163,7 @@ function isWalk(eventType: string): boolean {
   return eventType === 'walk' || eventType === 'intent_walk'
 }
 
-function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 'total_pitches' | 'strikes' | 'k_pct'> {
+function computeStats(outcomes: OutcomePitch[]): Omit<ZoneCell, 'row' | 'col' | 'total_pitches' | 'zone_pct'> {
   const pa = outcomes.length
   let ab = 0, h = 0, tb = 0, bb = 0
 
@@ -194,20 +190,17 @@ function computeZoneCell(
 ): ZoneCell {
   const stats = computeStats(outcomes)
   const total_pitches = allPitchesInCell.length
-  const strikes = allPitchesInCell.filter(p => p.isStrike).length
-  const k_pct = total_pitches >= 10 ? Math.round((strikes / total_pitches) * 1000) / 1000 : null
 
   return {
     row,
     col,
     ...stats,
-    avg: round3(stats.avg),
-    slg: round3(stats.slg),
-    obp: round3(stats.obp),
-    ops: round3(stats.ops),
+    avg:      round3(stats.avg),
+    slg:      round3(stats.slg),
+    obp:      round3(stats.obp),
+    ops:      round3(stats.ops),
     total_pitches,
-    strikes,
-    k_pct,
+    zone_pct: null,  // set after grid is built once we know the total
   }
 }
 
@@ -215,16 +208,13 @@ function round3(n: number | null): number | null {
   return n !== null ? Math.round(n * 1000) / 1000 : null
 }
 
-function buildZoneGrid(
-  allPitchesByCell: AllPitch[][],
-): ZoneCell[][] {
+function buildZoneGrid(allPitchesByCell: AllPitch[][]): ZoneCell[][] {
   const zones: ZoneCell[][] = []
   for (let row = 0; row < 5; row++) {
     const rowCells: ZoneCell[] = []
     for (let col = 0; col < 5; col++) {
       const idx = row * 5 + col
       const cellPitches = allPitchesByCell[idx]
-      // outcome pitches = those with a non-empty eventType
       const outcomes: OutcomePitch[] = cellPitches
         .filter(p => p.eventType !== '')
         .map(p => ({ pX: p.pX, pZ: p.pZ, eventType: p.eventType }))
@@ -233,6 +223,17 @@ function buildZoneGrid(
     zones.push(rowCells)
   }
   return zones
+}
+
+function applyZonePct(grid: ZoneCell[][]): ZoneCell[][] {
+  const total = grid.flat().reduce((s, c) => s + c.total_pitches, 0)
+  if (total === 0) return grid
+  return grid.map(row =>
+    row.map(cell => ({
+      ...cell,
+      zone_pct: round3(cell.total_pitches / total),
+    })),
+  )
 }
 
 // ── Route handler ──────────────────────────────────────────────────────────────
@@ -374,14 +375,12 @@ export async function GET(req: Request): Promise<NextResponse> {
           if (pX == null || pZ == null) continue
 
           const pitchType = ev.details?.type?.code ?? 'UN'
-          const resultCode = ev.details?.code ?? ''
-          const isStrike = STRIKE_RESULT_CODES.has(resultCode)
 
           // eventType only set on outcome pitch
           const isOutcomePitch = i === lastPitchIdx && playEventType !== ''
           const eventType = isOutcomePitch ? playEventType : ''
 
-          const pitch: AllPitch = { pX, pZ, pitchType, isStrike, eventType }
+          const pitch: AllPitch = { pX, pZ, pitchType, eventType }
 
           // Per-cell
           const col = getCol(pX)
@@ -406,7 +405,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     }
 
     // 5. Build 5×5 zone grid (all pitches)
-    const zones = buildZoneGrid(allPitchesByCell)
+    const zones = applyZonePct(buildZoneGrid(allPitchesByCell))
 
     // 6. Totals (outcome pitches only)
     const totRaw   = computeStats(allOutcomes)
@@ -437,7 +436,7 @@ export async function GET(req: Request): Promise<NextResponse> {
         code,
         name: PITCH_NAMES[code] ?? code,
         count: pitches.length,
-        zones: buildZoneGrid(ptByCell),
+        zones: applyZonePct(buildZoneGrid(ptByCell)),
       })
     }
     pitchTypes.sort((a, b) => b.count - a.count)

@@ -33,8 +33,7 @@ interface ZoneCell {
   obp: number | null
   ops: number | null
   total_pitches: number
-  strikes: number
-  k_pct: number | null
+  zone_pct: number | null
 }
 
 interface ZoneTotals {
@@ -66,7 +65,7 @@ interface SeasonZoneData {
   pitchTypes: PitchTypeEntry[]
 }
 
-type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'k_pct'
+type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct'
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
 
@@ -142,16 +141,16 @@ const SZ_W = CELL_W * 3
 const SZ_H = CELL_H * 3
 
 const STAT_TABS: { key: StatKey; label: string }[] = [
-  { key: 'avg',   label: 'AVG'   },
-  { key: 'obp',   label: 'OBP'   },
-  { key: 'slg',   label: 'SLG'   },
-  { key: 'ops',   label: 'OPS'   },
-  { key: 'k_pct', label: 'K%'    },
+  { key: 'avg',      label: 'AVG'   },
+  { key: 'obp',      label: 'OBP'   },
+  { key: 'slg',      label: 'SLG'   },
+  { key: 'ops',      label: 'OPS'   },
+  { key: 'zone_pct', label: 'Zone%' },
 ]
 
 function formatStat(val: number | null, key: StatKey): string {
   if (val === null) return '-'
-  if (key === 'k_pct') return `${Math.round(val * 100)}%`
+  if (key === 'zone_pct') return `${Math.round(val * 100)}%`
   if (key === 'avg' || key === 'obp' || key === 'slg') return val.toFixed(3).replace(/^0/, '')
   return val.toFixed(3)
 }
@@ -305,15 +304,15 @@ function ZoneGrid({ zones, pitchTypes }: ZoneGridProps) {
         <div className="flex items-center gap-3 mt-2 text-[9px] text-538-muted">
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: TEAL }} />
-            <span>Better (lower for pitcher)</span>
+            <span>{activeStat === 'zone_pct' ? 'Less often thrown' : 'Better (lower)'}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: PINK }} />
-            <span>Worse (higher for pitcher)</span>
+            <span>{activeStat === 'zone_pct' ? 'More often thrown' : 'Worse (higher)'}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: EMPTY_CELL }} />
-            <span>&lt;5 PA</span>
+            <span>No data</span>
           </div>
         </div>
         <span className="text-[8px] text-538-muted mt-1 block">Catcher&apos;s view · inner box = strike zone</span>
@@ -326,7 +325,7 @@ function ZoneGrid({ zones, pitchTypes }: ZoneGridProps) {
 
 function ResultsCard({ data }: { data: SeasonZoneData }) {
   const { seasonStats } = data
-  const showTeam = data.teamAbbr && data.teamAbbr !== '???' && data.teamAbbr !== "'???'"
+  const showTeam = !!data.teamAbbr
 
   return (
     <div className="bg-surface border border-538-border rounded-xl">
@@ -454,7 +453,9 @@ export default function PitcherSeasonLookup() {
         return r.json() as Promise<SeasonZoneData>
       })
       .then(data => {
-        setZoneData(data)
+        // Use team from search result if API couldn't resolve it
+        const teamAbbr = data.teamAbbr || result.teamAbbr || ''
+        setZoneData({ ...data, teamAbbr })
         setZoneError('')
       })
       .catch((err: Error) => {
