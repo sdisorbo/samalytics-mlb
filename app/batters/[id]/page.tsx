@@ -59,8 +59,6 @@ interface BatterZoneData {
   teamAbbr: string
   season: number
   seasonStats: SeasonStats
-  rv_per_100: number
-  rv_per_100_pct: number
   zones: ZoneCell[][]
   totals: {
     pa: number
@@ -320,31 +318,32 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
     ? sprayPoints
     : sprayPoints.filter(p => p.pitchType === selectedPitchType)
 
-  // ViewBox: 0 0 300 300, home plate at (150,285), scale 0.65px/ft
-  // 400ft deep → svgY = 285 - 260 = 25  (visible at top)
-  // foul lines at 45°; left hits x=0 at y=135, right hits x=300 at y=135
+  // MLB hitData.coordinates are image pixel coords (0–250 range).
+  // Home plate ≈ (125, 204): small coordY = deep outfield (y increases toward plate).
+  // Direct scale ×1.2 maps 250-unit space → 300px SVG.
+  // Home plate in SVG ≈ (150, 245).
+  // Foul lines at 45°: left line hits x=0 at y=95, right line hits x=300 at y=95.
 
-  const toSvgX = (x: number) => 150 + x * 0.65
-  const toSvgY = (y: number) => 285 - y * 0.65
+  const SCALE = 1.2
+  const toSvgX = (x: number) => x * SCALE
+  const toSvgY = (y: number) => y * SCALE
 
-  const homePlateX = 150
-  const homePlateY = 285
-  const lineLen = 420    // long enough to reach corner of viewbox
-  const arcRadius = 202  // ~310 feet * 0.65px/ft
+  const homePlateX = 125 * SCALE   // 150
+  const homePlateY = 204 * SCALE   // 244.8
 
-  // Foul line endpoints
+  // Foul lines: from home plate, going upper-left / upper-right at 45° in SVG
+  const lineLen = 420
   const lfX = homePlateX - lineLen * Math.cos(Math.PI / 4)
   const lfY = homePlateY - lineLen * Math.sin(Math.PI / 4)
   const rfX = homePlateX + lineLen * Math.cos(Math.PI / 4)
   const rfY = homePlateY - lineLen * Math.sin(Math.PI / 4)
 
-  // Outfield arc: from left foul line angle (135°) to right foul line angle (45°)
-  // In SVG, angles: left foul direction is upper-left = 225° (clockwise), right foul = 315°
-  // But we draw from left field to right field going through center field
-  const arcStartX = homePlateX + arcRadius * Math.cos((135 * Math.PI) / 180)
-  const arcStartY = homePlateY + arcRadius * Math.sin((135 * Math.PI) / 180)
-  const arcEndX   = homePlateX + arcRadius * Math.cos((45 * Math.PI) / 180)
-  const arcEndY   = homePlateY + arcRadius * Math.sin((45 * Math.PI) / 180)
+  // Outfield arc endpoints on foul lines (radius ≈ 200px ≈ 310-ft wall)
+  const arcR = 200
+  const arcStartX = homePlateX - arcR * Math.cos(Math.PI / 4)
+  const arcStartY = homePlateY - arcR * Math.sin(Math.PI / 4)
+  const arcEndX   = homePlateX + arcR * Math.cos(Math.PI / 4)
+  const arcEndY   = homePlateY - arcR * Math.sin(Math.PI / 4)
 
   return (
     <div className="flex flex-col gap-2">
@@ -356,16 +355,16 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
       >
         <defs>
           <clipPath id="fair-territory">
-            {/* Home plate at (150,285); foul lines at 45°; left hits x=0 at y=135, right hits x=300 at y=135 */}
-            <polygon points="150,285 0,135 0,0 300,0 300,135" />
+            {/* Home plate at (150,245); foul lines at 45°; left hits x=0 at y=95, right hits x=300 at y=95 */}
+            <polygon points="150,245 0,95 0,0 300,0 300,95" />
           </clipPath>
         </defs>
 
         {/* Infield dirt circle */}
         <circle
           cx={homePlateX}
-          cy={homePlateY - 90}
-          r={60}
+          cy={homePlateY - 70}
+          r={42}
           fill="none"
           stroke="#374151"
           strokeWidth={0.5}
@@ -388,7 +387,7 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
 
         {/* Outfield arc */}
         <path
-          d={`M ${arcStartX} ${arcStartY} A ${arcRadius} ${arcRadius} 0 0 1 ${arcEndX} ${arcEndY}`}
+          d={`M ${arcStartX} ${arcStartY} A ${arcR} ${arcR} 0 0 0 ${arcEndX} ${arcEndY}`}
           fill="none"
           stroke="#4B5563"
           strokeWidth={1}
@@ -517,7 +516,8 @@ export default function BatterPage({ params }: { params: { id: string } }) {
 
   if (!data) return null
 
-  const { batterName, teamAbbr, season, seasonStats, zones, pitchTypes, sprayPoints, rv_per_100, rv_per_100_pct } = data
+  const { batterName, teamAbbr, season, seasonStats, zones, pitchTypes, sprayPoints } = data
+  const { rv_per_100, rv_per_100_pct } = seasonStats
 
   const fmt3 = (v: number) => v.toFixed(3).replace(/^0/, '')
   const fmtPct = (v: number) => `${v.toFixed(1)}%`
