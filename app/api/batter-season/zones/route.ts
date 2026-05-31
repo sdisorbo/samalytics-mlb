@@ -175,6 +175,8 @@ interface SeasonStats {
   k_pct: number
   bb_pct: number
   whiff_pct: number
+  rv_per_100: number
+  rv_per_100_pct: number
   hr: number
   rbi: number
   sb: number
