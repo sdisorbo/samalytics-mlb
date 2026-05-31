@@ -33,6 +33,20 @@ function getRV(eventType: string): number {
   return RV_WEIGHTS[eventType] ?? -0.27
 }
 
+function normalCDF(z: number): number {
+  const sign = z >= 0 ? 1 : -1
+  const x = Math.abs(z) / Math.SQRT2
+  const t = 1 / (1 + 0.3275911 * x)
+  const poly = t * (0.254829592 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))))
+  return 0.5 * (1 + sign * (1 - poly * Math.exp(-x * x)))
+}
+
+/** RV/100 pitches thrown → 1–99th percentile vs league (lower RV allowed = higher pct for pitcher) */
+function rvPercentile(rv100: number): number {
+  const z = -rv100 / 1.4   // negate: pitcher wants low RV allowed
+  return Math.round(Math.min(99, Math.max(1, normalCDF(z) * 100)))
+}
+
 // ── MLB API types ──────────────────────────────────────────────────────────────
 
 interface SeasonStatsResponse {
@@ -359,6 +373,7 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     // 4. Collect all pitches (both outcome and non-outcome)
     const allOutcomes: OutcomePitch[] = []
+    let totalPitches = 0
     // per-cell: all pitches (for k_pct), and per-cell outcomes (for avg/obp/slg/ops)
     const allPitchesByCell: AllPitch[][] = Array.from({ length: 25 }, () => [])
 
@@ -393,6 +408,7 @@ export async function GET(req: Request): Promise<NextResponse> {
         for (let i = 0; i < events.length; i++) {
           const ev = events[i]
           if (!ev.isPitch) continue
+          totalPitches++
           const pX = ev.pitchData?.coordinates?.pX
           const pZ = ev.pitchData?.coordinates?.pZ
           if (pX == null || pZ == null) continue
@@ -464,11 +480,17 @@ export async function GET(req: Request): Promise<NextResponse> {
     }
     pitchTypes.sort((a, b) => b.count - a.count)
 
+    const totalRV = allOutcomes.reduce((s, o) => s + getRV(o.eventType), 0)
+    const rv_per_100 = totalPitches > 0 ? Math.round((totalRV / totalPitches) * 10000) / 100 : 0
+    const rv_per_100_pct = rvPercentile(rv_per_100)
+
     return NextResponse.json({
       pitcherName,
       teamAbbr,
       season,
       seasonStats,
+      rv_per_100,
+      rv_per_100_pct,
       zones,
       totals,
       pitchTypes,

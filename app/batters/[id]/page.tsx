@@ -59,6 +59,8 @@ interface BatterZoneData {
   teamAbbr: string
   season: number
   seasonStats: SeasonStats
+  rv_per_100: number
+  rv_per_100_pct: number
   zones: ZoneCell[][]
   totals: {
     pa: number
@@ -440,11 +442,12 @@ function SprayChart({ sprayPoints, selectedPitchType }: SprayChartProps) {
 
 // ── Stat Box ───────────────────────────────────────────────────────────────────
 
-function StatBox({ label, value }: { label: string; value: string }) {
+function StatBox({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
     <div className="flex flex-col items-center bg-538-border/20 rounded-lg px-3 py-2 min-w-[52px]">
       <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">{label}</span>
       <span className="text-xl font-black text-538-text tabular-nums leading-tight">{value}</span>
+      {sub && <span className="text-[9px] text-538-muted mt-0.5 tabular-nums">{sub}</span>}
     </div>
   )
 }
@@ -514,7 +517,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
 
   if (!data) return null
 
-  const { batterName, teamAbbr, season, seasonStats, zones, pitchTypes, sprayPoints } = data
+  const { batterName, teamAbbr, season, seasonStats, zones, pitchTypes, sprayPoints, rv_per_100, rv_per_100_pct } = data
 
   const fmt3 = (v: number) => v.toFixed(3).replace(/^0/, '')
   const fmtPct = (v: number) => `${v.toFixed(1)}%`
@@ -557,6 +560,11 @@ export default function BatterPage({ params }: { params: { id: string } }) {
         <StatBox label="K%"   value={fmtPct(seasonStats.k_pct)} />
         <StatBox label="BB%"  value={fmtPct(seasonStats.bb_pct)} />
         <StatBox label="Whiff%" value={fmtPct(seasonStats.whiff_pct)} />
+        <StatBox
+          label="RV/100"
+          value={(rv_per_100 >= 0 ? '+' : '') + rv_per_100.toFixed(1)}
+          sub={`${rv_per_100_pct}th pct`}
+        />
         <StatBox label="HR"   value={String(seasonStats.hr)} />
         <StatBox label="RBI"  value={String(seasonStats.rbi)} />
         <StatBox label="SB"   value={String(seasonStats.sb)} />

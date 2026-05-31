@@ -32,6 +32,21 @@ const RV_WEIGHTS: Record<string, number> = {
 function getRV(eventType: string): number {
   return RV_WEIGHTS[eventType] ?? -0.27
 }
+
+// Abramowitz & Stegun approximation (max error 1.5e-7)
+function normalCDF(z: number): number {
+  const sign = z >= 0 ? 1 : -1
+  const x = Math.abs(z) / Math.SQRT2
+  const t = 1 / (1 + 0.3275911 * x)
+  const poly = t * (0.254829592 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429))))
+  return 0.5 * (1 + sign * (1 - poly * Math.exp(-x * x)))
+}
+
+/** RV/100 pitches → 1–99th percentile vs league (std dev ≈ 1.4 RV/100) */
+function rvPercentile(rv100: number): number {
+  const z = rv100 / 1.4   // higher = better for batter
+  return Math.round(Math.min(99, Math.max(1, normalCDF(z) * 100)))
+}
 const SWING_CODES = new Set(['S','W','T','F','X','D','E','L','M','O','Q','R'])
 const WHIFF_CODES = new Set(['S','W','M','Q'])
 
@@ -319,7 +334,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     let batterName = `Batter ${batterId}`
     let teamAbbr   = ''
     let seasonStats: SeasonStats = {
-      avg: 0, obp: 0, slg: 0, ops: 0, k_pct: 0, bb_pct: 0, whiff_pct: 0,
+      avg: 0, obp: 0, slg: 0, ops: 0, k_pct: 0, bb_pct: 0, whiff_pct: 0, rv_per_100: 0, rv_per_100_pct: 50,
       hr: 0, rbi: 0, sb: 0, hits: 0, ab: 0, pa: 0,
     }
 
@@ -338,6 +353,8 @@ export async function GET(req: Request): Promise<NextResponse> {
           k_pct:  Math.round(k_pct * 10) / 10,
           bb_pct: Math.round(bb_pct * 10) / 10,
           whiff_pct: 0,
+          rv_per_100: 0,
+          rv_per_100_pct: 50,
           hr:   split.homeRuns ?? 0,
           rbi:  split.rbi ?? 0,
           sb:   split.stolenBases ?? 0,
@@ -409,7 +426,7 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     const HIT_EVENTS = new Set(['single', 'double', 'triple', 'home_run'])
 
-    let swings = 0, whiffs = 0
+    let swings = 0, whiffs = 0, totalPitches = 0
 
     for (const feed of feeds) {
       if (!feed) continue
@@ -440,6 +457,7 @@ export async function GET(req: Request): Promise<NextResponse> {
         for (let i = 0; i < events.length; i++) {
           const ev = events[i]
           if (!ev.isPitch) continue
+          totalPitches++
           const pX = ev.pitchData?.coordinates?.pX
           const pZ = ev.pitchData?.coordinates?.pZ
           if (pX == null || pZ == null) continue
@@ -504,7 +522,10 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     // Compute whiff_pct from game feeds
     const whiff_pct = swings > 0 ? Math.round((whiffs / swings) * 1000) / 10 : 0
-    seasonStats = { ...seasonStats, whiff_pct }
+    const totalRV = allOutcomes.reduce((s, o) => s + getRV(o.eventType), 0)
+    const rv_per_100 = totalPitches > 0 ? Math.round((totalRV / totalPitches) * 10000) / 100 : 0
+    const rv_per_100_pct = rvPercentile(rv_per_100)
+    seasonStats = { ...seasonStats, whiff_pct, rv_per_100, rv_per_100_pct }
 
     // 5. Build 5×5 zone grid (all pitches seen by batter)
     const zones = applyZonePct(buildZoneGrid(allPitchesByCell))
