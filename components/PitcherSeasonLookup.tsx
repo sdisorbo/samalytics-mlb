@@ -393,7 +393,7 @@ function ResultsCard({ data }: { data: SeasonZoneData }) {
           <ZoneGrid zones={data.zones} pitchTypes={data.pitchTypes} />
 
           <div className="flex flex-col gap-2">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Season Totals vs Pitcher</div>
+            <div className="flex items-baseline gap-2"><span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Totals vs Pitcher</span><span className="text-[9px] text-538-muted">· Last 40 games</span></div>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-538-muted">
               <span>PA <span className="font-semibold text-538-text">{data.totals.pa}</span></span>
               <span>AB <span className="font-semibold text-538-text">{data.totals.ab}</span></span>
@@ -415,7 +415,7 @@ function ResultsCard({ data }: { data: SeasonZoneData }) {
               )}
             </div>
             <p className="text-[9px] text-538-muted max-w-[240px] leading-relaxed mt-2">
-              Zone shows batting outcomes on the last pitch of each plate appearance. Strike zone boundary shown. Values only appear with 5+ PA per zone.
+              Based on last 40 games pitched. Batting outcomes on the final pitch of each plate appearance.
             </p>
           </div>
         </div>
@@ -520,7 +520,7 @@ export default function PitcherSeasonLookup() {
               className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full text-white"
               style={{ backgroundColor: '#3D405B' }}
             >
-              Season Zone Breakdown
+              Zone Breakdown · Last 40 games
             </span>
             <span className="text-[11px] text-538-muted">
               Search any active pitcher — {currentSeason} regular season

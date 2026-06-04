@@ -630,7 +630,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
       <div className="flex flex-col sm:flex-row gap-6 items-start">
         {/* Zone grid */}
         <div className="bg-surface border border-538-border rounded-xl p-4">
-          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-3">Zone Breakdown</div>
+          <div className="flex items-baseline gap-2 mb-3"><span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Zone Breakdown</span><span className="text-[9px] text-538-muted">· Last 40 games</span></div>
           <ZoneGrid
             zones={zones}
             pitchTypes={pitchTypes}
@@ -655,7 +655,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
 
       {/* Season totals */}
       <div className="bg-surface border border-538-border rounded-xl p-4">
-        <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Season Totals (from Game Feed)</div>
+        <div className="flex items-baseline gap-2 mb-2"><span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Totals</span><span className="text-[9px] text-538-muted">· Last 40 games</span></div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-538-muted">
           <span>PA <span className="font-semibold text-538-text">{data.totals.pa}</span></span>
           <span>AB <span className="font-semibold text-538-text">{data.totals.ab}</span></span>
@@ -675,7 +675,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
           )}
         </div>
         <p className="text-[9px] text-538-muted max-w-[400px] leading-relaxed mt-2">
-          Zone data from up to 40 game feeds. Shows batting outcomes on the last pitch of each plate appearance. Values only shown with 5+ PA per zone.
+          Based on last 40 games played. Shows batting outcomes on the final pitch of each plate appearance.
         </p>
       </div>
     </div>
