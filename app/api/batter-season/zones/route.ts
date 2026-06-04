@@ -406,7 +406,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     }
 
     // 3. Fetch all game feeds in parallel (max 40)
-    const capped = gamePks.slice(0, 40)
+    const capped = gamePks.slice(-40)
     const feeds = await Promise.all(
       capped.map(pk =>
         fetch(`https://statsapi.mlb.com/api/v1.1/game/${pk}/feed/live`, { cache: 'no-store' })
