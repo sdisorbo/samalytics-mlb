@@ -308,7 +308,7 @@ export async function GET(req: Request): Promise<NextResponse> {
       const split = sd.stats?.[0]?.splits?.[0]?.stat
       if (split) {
         const ip    = split.inningsPitched ?? '0.0'
-        const ipVal = parseFloat(ip.replace(/\.\d/, m => String(parseInt(m.slice(1), 10) / 3)))
+        const [ipWhole, ipFrac = '0'] = ip.split('.'); const ipVal = parseInt(ipWhole, 10) + parseInt(ipFrac, 10) / 3
         const k9    = ipVal > 0 ? ((split.strikeOuts ?? 0) / ipVal) * 9 : 0
         const bb9   = ipVal > 0 ? ((split.baseOnBalls ?? 0) / ipVal) * 9 : 0
         seasonStats = {
