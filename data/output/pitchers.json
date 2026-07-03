@@ -220,28 +220,6 @@
     "whip_percentile": 57
   },
   {
-    "player_id": 681911,
-    "name": "Alex Vesia",
-    "team": "LAD",
-    "team_name": "Los Angeles Dodgers",
-    "division": "National League West",
-    "era": 2.54,
-    "fip": 1.97,
-    "xfip": null,
-    "k_per_9": 12.71,
-    "bb_per_9": 5.08,
-    "whip": 1.06,
-    "innings_pitched": 28.3,
-    "strikeouts": 40,
-    "walks": 16,
-    "home_runs_allowed": 0,
-    "era_percentile": 86,
-    "fip_percentile": 98,
-    "k9_percentile": 97,
-    "bb9_percentile": 11,
-    "whip_percentile": 84
-  },
-  {
     "player_id": 628452,
     "name": "Raisel Iglesias",
     "team": "ATL",
@@ -258,10 +236,32 @@
     "walks": 6,
     "home_runs_allowed": 1,
     "era_percentile": 99,
-    "fip_percentile": 97,
+    "fip_percentile": 98,
     "k9_percentile": 71,
     "bb9_percentile": 94,
     "whip_percentile": 91
+  },
+  {
+    "player_id": 681911,
+    "name": "Alex Vesia",
+    "team": "LAD",
+    "team_name": "Los Angeles Dodgers",
+    "division": "National League West",
+    "era": 2.51,
+    "fip": 2.09,
+    "xfip": null,
+    "k_per_9": 12.56,
+    "bb_per_9": 5.34,
+    "whip": 1.08,
+    "innings_pitched": 28.7,
+    "strikeouts": 40,
+    "walks": 17,
+    "home_runs_allowed": 0,
+    "era_percentile": 88,
+    "fip_percentile": 97,
+    "k9_percentile": 97,
+    "bb9_percentile": 9,
+    "whip_percentile": 82
   },
   {
     "player_id": 670059,
@@ -389,7 +389,7 @@
     "strikeouts": 109,
     "walks": 22,
     "home_runs_allowed": 6,
-    "era_percentile": 94,
+    "era_percentile": 93,
     "fip_percentile": 96,
     "k9_percentile": 88,
     "bb9_percentile": 87,
@@ -638,28 +638,6 @@
     "whip_percentile": 23
   },
   {
-    "player_id": 656945,
-    "name": "Tanner Scott",
-    "team": "LAD",
-    "team_name": "Los Angeles Dodgers",
-    "division": "National League West",
-    "era": 2.1,
-    "fip": 2.43,
-    "xfip": null,
-    "k_per_9": 11.01,
-    "bb_per_9": 0.79,
-    "whip": 0.7,
-    "innings_pitched": 34.3,
-    "strikeouts": 42,
-    "walks": 3,
-    "home_runs_allowed": 4,
-    "era_percentile": 94,
-    "fip_percentile": 93,
-    "k9_percentile": 90,
-    "bb9_percentile": 100,
-    "whip_percentile": 99
-  },
-  {
     "player_id": 663158,
     "name": "Robert Suarez",
     "team": "ATL",
@@ -680,6 +658,28 @@
     "k9_percentile": 26,
     "bb9_percentile": 98,
     "whip_percentile": 97
+  },
+  {
+    "player_id": 656945,
+    "name": "Tanner Scott",
+    "team": "LAD",
+    "team_name": "Los Angeles Dodgers",
+    "division": "National League West",
+    "era": 2.08,
+    "fip": 2.44,
+    "xfip": null,
+    "k_per_9": 10.9,
+    "bb_per_9": 0.78,
+    "whip": 0.72,
+    "innings_pitched": 34.7,
+    "strikeouts": 42,
+    "walks": 3,
+    "home_runs_allowed": 4,
+    "era_percentile": 94,
+    "fip_percentile": 93,
+    "k9_percentile": 88,
+    "bb9_percentile": 100,
+    "whip_percentile": 99
   },
   {
     "player_id": 663554,
@@ -709,21 +709,21 @@
     "team": "LAD",
     "team_name": "Los Angeles Dodgers",
     "division": "National League West",
-    "era": 2.76,
-    "fip": 2.49,
+    "era": 2.67,
+    "fip": 2.45,
     "xfip": null,
     "k_per_9": 9.09,
-    "bb_per_9": 3.03,
-    "whip": 0.95,
-    "innings_pitched": 32.7,
-    "strikeouts": 33,
+    "bb_per_9": 2.94,
+    "whip": 0.92,
+    "innings_pitched": 33.7,
+    "strikeouts": 34,
     "walks": 11,
     "home_runs_allowed": 1,
-    "era_percentile": 82,
+    "era_percentile": 83,
     "fip_percentile": 92,
     "k9_percentile": 56,
-    "bb9_percentile": 61,
-    "whip_percentile": 93
+    "bb9_percentile": 64,
+    "whip_percentile": 95
   },
   {
     "player_id": 695611,
@@ -2306,7 +2306,7 @@
     "era_percentile": 96,
     "fip_percentile": 75,
     "k9_percentile": 41,
-    "bb9_percentile": 32,
+    "bb9_percentile": 33,
     "whip_percentile": 93
   },
   {
@@ -3117,7 +3117,7 @@
     "strikeouts": 19,
     "walks": 8,
     "home_runs_allowed": 2,
-    "era_percentile": 82,
+    "era_percentile": 81,
     "fip_percentile": 66,
     "k9_percentile": 7,
     "bb9_percentile": 80,
@@ -3142,7 +3142,7 @@
     "era_percentile": 28,
     "fip_percentile": 66,
     "k9_percentile": 58,
-    "bb9_percentile": 9,
+    "bb9_percentile": 10,
     "whip_percentile": 20
   },
   {
@@ -4330,7 +4330,7 @@
     "era_percentile": 53,
     "fip_percentile": 52,
     "k9_percentile": 79,
-    "bb9_percentile": 33,
+    "bb9_percentile": 34,
     "whip_percentile": 52
   },
   {
@@ -4462,7 +4462,7 @@
     "era_percentile": 21,
     "fip_percentile": 51,
     "k9_percentile": 77,
-    "bb9_percentile": 34,
+    "bb9_percentile": 35,
     "whip_percentile": 39
   },
   {
@@ -5386,7 +5386,7 @@
     "era_percentile": 68,
     "fip_percentile": 41,
     "k9_percentile": 37,
-    "bb9_percentile": 34,
+    "bb9_percentile": 35,
     "whip_percentile": 49
   },
   {
@@ -5474,7 +5474,7 @@
     "era_percentile": 65,
     "fip_percentile": 40,
     "k9_percentile": 25,
-    "bb9_percentile": 33,
+    "bb9_percentile": 34,
     "whip_percentile": 74
   },
   {
@@ -5669,7 +5669,7 @@
     "strikeouts": 31,
     "walks": 11,
     "home_runs_allowed": 5,
-    "era_percentile": 12,
+    "era_percentile": 11,
     "fip_percentile": 38,
     "k9_percentile": 56,
     "bb9_percentile": 53,
@@ -6177,7 +6177,7 @@
     "home_runs_allowed": 8,
     "era_percentile": 37,
     "fip_percentile": 32,
-    "k9_percentile": 5,
+    "k9_percentile": 6,
     "bb9_percentile": 91,
     "whip_percentile": 60
   },
@@ -7014,7 +7014,7 @@
     "era_percentile": 19,
     "fip_percentile": 23,
     "k9_percentile": 67,
-    "bb9_percentile": 27,
+    "bb9_percentile": 28,
     "whip_percentile": 43
   },
   {
@@ -7058,7 +7058,7 @@
     "era_percentile": 25,
     "fip_percentile": 22,
     "k9_percentile": 27,
-    "bb9_percentile": 34,
+    "bb9_percentile": 35,
     "whip_percentile": 23
   },
   {
@@ -7410,7 +7410,7 @@
     "era_percentile": 23,
     "fip_percentile": 18,
     "k9_percentile": 82,
-    "bb9_percentile": 10,
+    "bb9_percentile": 11,
     "whip_percentile": 17
   },
   {
@@ -7585,7 +7585,7 @@
     "home_runs_allowed": 4,
     "era_percentile": 79,
     "fip_percentile": 16,
-    "k9_percentile": 6,
+    "k9_percentile": 7,
     "bb9_percentile": 14,
     "whip_percentile": 53
   },
@@ -8026,7 +8026,7 @@
     "era_percentile": 28,
     "fip_percentile": 11,
     "k9_percentile": 25,
-    "bb9_percentile": 33,
+    "bb9_percentile": 34,
     "whip_percentile": 24
   },
   {
@@ -8683,7 +8683,7 @@
     "strikeouts": 47,
     "walks": 33,
     "home_runs_allowed": 18,
-    "era_percentile": 13,
+    "era_percentile": 12,
     "fip_percentile": 4,
     "k9_percentile": 3,
     "bb9_percentile": 40,
@@ -8915,20 +8915,20 @@
     "team": "SD",
     "team_name": "San Diego Padres",
     "division": "National League West",
-    "era": 5.87,
-    "fip": 6.46,
+    "era": 5.79,
+    "fip": 6.44,
     "xfip": null,
-    "k_per_9": 5.87,
-    "bb_per_9": 3.82,
+    "k_per_9": 5.51,
+    "bb_per_9": 4.13,
     "whip": 1.47,
-    "innings_pitched": 30.7,
+    "innings_pitched": 32.7,
     "strikeouts": 20,
-    "walks": 13,
+    "walks": 15,
     "home_runs_allowed": 8,
-    "era_percentile": 12,
+    "era_percentile": 13,
     "fip_percentile": 1,
-    "k9_percentile": 7,
-    "bb9_percentile": 35,
+    "k9_percentile": 4,
+    "bb9_percentile": 27,
     "whip_percentile": 23
   },
   {
