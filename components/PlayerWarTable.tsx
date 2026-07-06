@@ -6,20 +6,23 @@ import dynamic from 'next/dynamic'
 
 const WarComparisonModal = dynamic(() => import('./WarComparisonModal'), { ssr: false })
 
-// ── Position groups ───────────────────────────────────────────────────────────
-const POSITIONS = ['All', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'OF', 'DH']
-
-// ── Multi-stop teal/pink WAR color scale (same as standings) ─────────────────
-function lerpHex(a: string, b: string, t: number): string {
-  const ah = parseInt(a.slice(1), 16), bh = parseInt(b.slice(1), 16)
-  const ar = (ah >> 16) & 0xff, ag = (ah >> 8) & 0xff, ab = ah & 0xff
-  const br = (bh >> 16) & 0xff, bg = (bh >> 8) & 0xff, bb = bh & 0xff
-  const r = Math.round(ar + (br - ar) * t)
-  const g = Math.round(ag + (bg - ag) * t)
-  const b2 = Math.round(ab + (bb - ab) * t)
-  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b2.toString(16).padStart(2,'0')}`
+export interface PlayerWarWithPos extends PlayerWar {
+  position?: string
 }
 
+// ── Position groups ───────────────────────────────────────────────────────────
+const ALL_POSITIONS = ['All', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'OF', 'DH']
+
+// ── Multi-stop teal/pink WAR color scale ──────────────────────────────────────
+function lerpHex(a: string, b: string, t: number): string {
+  const ah = parseInt(a.slice(1), 16), bh = parseInt(b.slice(1), 16)
+  const ar = (ah >> 16) & 0xff, ag = (ah >> 8) & 0xff, ab2 = ah & 0xff
+  const br = (bh >> 16) & 0xff, bg = (bh >> 8) & 0xff, bb2 = bh & 0xff
+  const r = Math.round(ar + (br - ar) * t)
+  const g = Math.round(ag + (bg - ag) * t)
+  const b3 = Math.round(ab2 + (bb2 - ab2) * t)
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b3.toString(16).padStart(2,'0')}`
+}
 function multiStop(stops: string[], t: number): string {
   if (t <= 0) return stops[0]
   if (t >= 1) return stops[stops.length - 1]
@@ -27,75 +30,92 @@ function multiStop(stops: string[], t: number): string {
   const lo = Math.floor(seg)
   return lerpHex(stops[lo], stops[lo + 1], seg - lo)
 }
-
 const TEAL = ['#CFE8E8','#8EC6C8','#5BAEB3','#3C999E']
 const PINK = ['#F3D6DB','#E5A8B5','#C96E85','#9B405A']
 
 function warColor(value: number, min: number, max: number): string {
   if (max === min) return '#F3D6DB'
-  const t = (value - min) / (max - min)
+  const t = Math.max(0, Math.min(1, (value - min) / (max - min)))
   return t >= 0.5
     ? multiStop(TEAL, (t - 0.5) * 2)
     : multiStop(PINK, 1 - t * 2)
 }
 
-// ── Sort icon ─────────────────────────────────────────────────────────────────
-function SortIcon({ active, dir }: { active: boolean; dir: 'asc' | 'desc' }) {
-  return (
-    <span className={`ml-1 inline-block text-xs ${active ? 'text-538-orange' : 'text-538-muted/40'}`}>
-      {active ? (dir === 'desc' ? '▼' : '▲') : '⇅'}
-    </span>
-  )
-}
-
 type SortKey = 'war' | 'off_war' | 'def_war' | 'g' | 'pa'
 
+function getVal(p: PlayerWarWithPos, key: SortKey): number {
+  if (key === 'war')     return p.war
+  if (key === 'off_war') return p.off_war
+  if (key === 'def_war') return p.def_war
+  if (key === 'g')       return p.g
+  if (key === 'pa')      return p.pa
+  return 0
+}
+
 interface Props {
-  players: PlayerWar[]
+  players: PlayerWarWithPos[]
   legendWar: LegendWar
 }
 
 export default function PlayerWarTable({ players, legendWar }: Props) {
-  const [position, setPosition] = useState('All')
-  const [search, setSearch] = useState('')
-  const [sortKey, setSortKey] = useState<SortKey>('war')
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
-  const [selected, setSelected] = useState<PlayerWar | null>(null)
+  const [position, setPosition]   = useState('All')
+  const [search, setSearch]       = useState('')
+  const [sortKey, setSortKey]     = useState<SortKey>('war')
+  const [sortDir, setSortDir]     = useState<'asc' | 'desc'>('desc')
+  const [selected, setSelected]   = useState<PlayerWarWithPos | null>(null)
 
   function handleSort(key: SortKey) {
-    if (sortKey === key) setSortDir((d) => (d === 'desc' ? 'asc' : 'desc'))
-    else { setSortKey(key); setSortDir('desc') }
+    if (sortKey === key) {
+      setSortDir((d) => (d === 'desc' ? 'asc' : 'desc'))
+    } else {
+      setSortKey(key)
+      setSortDir('desc')
+    }
   }
 
-  // Derive position from existing data (players.json has position field joined in WAR page)
   const filtered = useMemo(() => {
     let rows = players.filter((p) => p.pa >= 50)
-    if (search) {
-      const q = search.toLowerCase()
-      rows = rows.filter((p) => p.name.toLowerCase().includes(q) || p.team.toLowerCase().includes(q))
+
+    if (search.trim()) {
+      const q = search.trim().toLowerCase()
+      rows = rows.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.team.toLowerCase().includes(q),
+      )
     }
-    // Position filter is handled by the parent — we'll just sort/display here.
-    rows = [...rows].sort((a, b) => {
-      const av = a[sortKey] ?? 0, bv = b[sortKey] ?? 0
+
+    if (position !== 'All') {
+      rows = rows.filter((p) => {
+        const pos = p.position ?? ''
+        if (position === 'OF') return ['LF','CF','RF','OF'].includes(pos)
+        return pos === position
+      })
+    }
+
+    return [...rows].sort((a, b) => {
+      const av = getVal(a, sortKey)
+      const bv = getVal(b, sortKey)
       return sortDir === 'desc' ? bv - av : av - bv
     })
-    return rows
-  }, [players, search, sortKey, sortDir])
+  }, [players, search, position, sortKey, sortDir])
 
-  // Color scale bounds
-  const wars = filtered.map((p) => p.war)
-  const minWar = Math.min(...wars), maxWar = Math.max(...wars)
+  const wars    = filtered.map((p) => p.war)
   const offWars = filtered.map((p) => p.off_war)
-  const minOff = Math.min(...offWars), maxOff = Math.max(...offWars)
   const defWars = filtered.map((p) => p.def_war)
-  const minDef = Math.min(...defWars), maxDef = Math.max(...defWars)
+  const minWar  = wars.length    ? Math.min(...wars)    : 0
+  const maxWar  = wars.length    ? Math.max(...wars)    : 0
+  const minOff  = offWars.length ? Math.min(...offWars) : 0
+  const maxOff  = offWars.length ? Math.max(...offWars) : 0
+  const minDef  = defWars.length ? Math.min(...defWars) : 0
+  const maxDef  = defWars.length ? Math.max(...defWars) : 0
 
   const cols: { key: SortKey; label: string; title: string }[] = [
-    { key: 'g',       label: 'G',    title: 'Games played' },
-    { key: 'pa',      label: 'PA',   title: 'Plate appearances' },
-    { key: 'off_war', label: 'Off',  title: 'Offensive WAR (runs above avg / 10)' },
-    { key: 'def_war', label: 'Def',  title: 'Defensive WAR (runs above avg / 10)' },
-    { key: 'war',     label: 'WAR',  title: 'Total Wins Above Replacement (bRef bWAR)' },
+    { key: 'g',       label: 'G',   title: 'Games played' },
+    { key: 'pa',      label: 'PA',  title: 'Plate appearances' },
+    { key: 'off_war', label: 'Off', title: 'Offensive WAR' },
+    { key: 'def_war', label: 'Def', title: 'Defensive WAR' },
+    { key: 'war',     label: 'WAR', title: 'Total Wins Above Replacement (bRef bWAR)' },
   ]
 
   return (
@@ -110,7 +130,7 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
           className="border border-538-border rounded px-3 py-1.5 text-sm bg-surface text-538-text placeholder-538-muted focus:outline-none focus:ring-1 focus:ring-538-orange w-52"
         />
         <div className="flex flex-wrap gap-1">
-          {POSITIONS.map((pos) => (
+          {ALL_POSITIONS.map((pos) => (
             <button
               key={pos}
               onClick={() => setPosition(pos)}
@@ -124,7 +144,9 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
             </button>
           ))}
         </div>
-        <span className="text-xs text-538-muted ml-auto">{filtered.length} players · 50+ PA</span>
+        <span className="text-xs text-538-muted ml-auto">
+          {filtered.length} players
+        </span>
       </div>
 
       {/* ── Table ── */}
@@ -132,73 +154,77 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b-2 border-538-border bg-surface">
-              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs w-10">#</th>
-              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs min-w-[160px]">Player</th>
-              <th className="text-center py-3 px-3 text-538-muted font-bold text-xs">Age</th>
-              <th className="text-center py-3 px-3 text-538-muted font-bold text-xs">Team</th>
+              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs w-10 select-none">#</th>
+              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs min-w-[160px] select-none">Player</th>
+              <th className="text-center py-3 px-3 text-538-muted font-bold text-xs select-none">Pos</th>
+              <th className="text-center py-3 px-3 text-538-muted font-bold text-xs select-none">Team</th>
               {cols.map((c) => (
-                <th key={c.key}
+                <th
+                  key={c.key}
                   className="text-right py-3 px-3 text-538-muted font-bold text-xs cursor-pointer hover:text-538-text select-none"
                   title={c.title}
                   onClick={() => handleSort(c.key)}
                 >
                   {c.label}
-                  <SortIcon active={sortKey === c.key} dir={sortDir} />
+                  <span className={`ml-1 ${sortKey === c.key ? 'text-538-orange' : 'text-538-muted/30'}`}>
+                    {sortKey === c.key ? (sortDir === 'desc' ? '▼' : '▲') : '⇅'}
+                  </span>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {filtered.map((player, idx) => {
-              const isEven = idx % 2 === 0
-              return (
-                <tr
-                  key={player.player_id ?? player.name}
-                  onClick={() => setSelected(player)}
-                  className="border-b border-538-border/40 cursor-pointer hover:bg-538-orange/5 transition-colors"
-                  style={{ backgroundColor: isEven ? 'var(--color-surface)' : 'var(--color-surface-alt, rgba(0,0,0,0.02))' }}
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={9} className="py-8 text-center text-538-muted text-sm">
+                  No players match your filters.
+                </td>
+              </tr>
+            )}
+            {filtered.map((player, idx) => (
+              <tr
+                key={player.player_id ?? player.name}
+                onClick={() => setSelected(player)}
+                className={`border-b border-538-border/40 cursor-pointer hover:bg-538-orange/5 transition-colors ${
+                  idx % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''
+                }`}
+              >
+                <td className="py-2.5 px-3 text-538-muted text-xs font-bold">{idx + 1}</td>
+                <td className="py-2.5 px-3 font-semibold text-538-text text-sm">{player.name}</td>
+                <td className="py-2.5 px-3 text-center text-538-muted text-xs">{player.position ?? '—'}</td>
+                <td className="py-2.5 px-3 text-center text-xs font-semibold text-538-muted">{player.team}</td>
+                <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.g}</td>
+                <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.pa}</td>
+                <td
+                  className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
+                  style={{ color: warColor(player.off_war, minOff, maxOff) }}
                 >
-                  <td className="py-2.5 px-3 text-538-muted text-xs font-bold">{idx + 1}</td>
-                  <td className="py-2.5 px-3">
-                    <span className="font-semibold text-538-text">{player.name}</span>
-                  </td>
-                  <td className="py-2.5 px-3 text-center text-538-muted text-xs">—</td>
-                  <td className="py-2.5 px-3 text-center text-xs font-semibold text-538-muted">{player.team}</td>
-                  <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.g}</td>
-                  <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.pa}</td>
-
-                  {/* oWAR — orange-tinted color scale */}
-                  <td className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
-                    style={{ color: warColor(player.off_war, minOff, maxOff) }}>
-                    {player.off_war > 0 ? '+' : ''}{player.off_war.toFixed(1)}
-                  </td>
-
-                  {/* dWAR */}
-                  <td className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
-                    style={{ color: warColor(player.def_war, minDef, maxDef) }}>
-                    {player.def_war > 0 ? '+' : ''}{player.def_war.toFixed(1)}
-                  </td>
-
-                  {/* Total WAR — background cell color */}
-                  <td className="py-2.5 px-3 text-right text-xs font-mono font-bold rounded-sm"
-                    style={{
-                      backgroundColor: warColor(player.war, minWar, maxWar) + '55',
-                      color: 'var(--color-text)',
-                    }}>
-                    {player.war > 0 ? '+' : ''}{player.war.toFixed(1)}
-                  </td>
-                </tr>
-              )
-            })}
+                  {(player.off_war > 0 ? '+' : '') + player.off_war.toFixed(1)}
+                </td>
+                <td
+                  className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
+                  style={{ color: warColor(player.def_war, minDef, maxDef) }}
+                >
+                  {(player.def_war > 0 ? '+' : '') + player.def_war.toFixed(1)}
+                </td>
+                <td
+                  className="py-2.5 px-3 text-right text-xs font-mono font-bold"
+                  style={{
+                    backgroundColor: warColor(player.war, minWar, maxWar) + '55',
+                  }}
+                >
+                  {(player.war > 0 ? '+' : '') + player.war.toFixed(1)}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
       <p className="text-xs text-538-muted mt-3">
-        Click any player to compare their WAR to historical legends. Data: Baseball Reference bWAR.
+        Click any player to compare against historical legends. Data: Baseball Reference bWAR · 50+ PA minimum.
       </p>
 
-      {/* ── Modal ── */}
       {selected && (
         <WarComparisonModal
           player={selected}

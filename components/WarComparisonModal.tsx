@@ -3,34 +3,158 @@
 import { useState, useMemo } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  Legend, ResponsiveContainer, ReferenceLine,
+  ReferenceLine, ResponsiveContainer, Label,
 } from 'recharts'
 import type { PlayerWar, LegendWar } from '../lib/types'
 
 type WarMetric = 'war' | 'off_war' | 'def_war'
-type ViewMode = 'career' | 'season'
+type ViewMode  = 'career' | 'season'
 
-// ── Legend color palette (FiveThirtyEight-ish muted colors) ─────────────────
+// ── Colors ───────────────────────────────────────────────────────────────────
 const LEGEND_COLORS: Record<string, string> = {
-  'Aaron Judge':       '#E64A19',
-  'Shohei Ohtani':     '#1565C0',
-  'Barry Bonds':       '#6A1B9A',
-  'Derek Jeter':       '#00695C',
-  'Albert Pujols':     '#C62828',
-  'David Ortiz':       '#37474F',
-  'Johnny Damon':      '#F57C00',
-  'Mike Trout':        '#0277BD',
-  'Justin Verlander':  '#558B2F',
-  'Michael Young':     '#78909C',
-  'Nick Swisher':      '#A1887F',
-  '__selected__':      '#E8390E',
-  '__compare__':       '#1565C0',
+  'Barry Bonds':      '#6A1B9A',
+  'Derek Jeter':      '#00695C',
+  'Albert Pujols':    '#C62828',
+  'David Ortiz':      '#37474F',
+  'Johnny Damon':     '#F57C00',
+  'Mike Trout':       '#0277BD',
+  'Justin Verlander': '#558B2F',
+  'Michael Young':    '#78909C',
+  'Nick Swisher':     '#A1887F',
 }
 
-function legendColor(name: string, idx: number): string {
-  if (LEGEND_COLORS[name]) return LEGEND_COLORS[name]
-  const fallbacks = ['#5C6BC0','#00838F','#6D4C41','#546E7A','#558B2F','#AD1457']
-  return fallbacks[idx % fallbacks.length]
+const PLAYER_COLOR = '#C0392B'   // the selected player (red-orange, like Trump line)
+const LEGEND_LINE  = '#AAAAAA'   // gray for the legend line, overridden per-legend
+
+// ── Mini tooltip ─────────────────────────────────────────────────────────────
+function MiniTooltip({
+  active, payload, label, metricLabel,
+}: {
+  active?: boolean
+  payload?: Array<{ name: string; value: number; color: string }>
+  label?: string | number
+  metricLabel: string
+}) {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="bg-surface border border-538-border rounded px-2 py-1.5 shadow text-xs whitespace-nowrap">
+      <p className="font-bold text-538-text mb-0.5">{label}</p>
+      {payload.map((p) => (
+        <p key={p.name} style={{ color: p.color }}>
+          {p.name}: <span className="font-semibold">
+            {p.value > 0 ? '+' : ''}{p.value.toFixed(1)} {metricLabel}
+          </span>
+        </p>
+      ))}
+    </div>
+  )
+}
+
+// ── One comparison card: selected player reference vs legend career ────────────
+function ComparisonCard({
+  legendName,
+  legendSeasons,
+  playerName,
+  playerValue,
+  metric,
+  metricLabel,
+}: {
+  legendName: string
+  legendSeasons: Array<{ year: number; war: number; off_war: number; def_war: number }>
+  playerName: string
+  playerValue: number
+  metric: WarMetric
+  metricLabel: string
+}) {
+  const color = LEGEND_COLORS[legendName] ?? '#888'
+
+  // Build chart data: one row per year in the legend's career
+  const data = legendSeasons.map((s) => ({
+    year: s.year,
+    [legendName]: parseFloat(s[metric].toFixed(2)),
+  }))
+
+  const legendPeak = Math.max(...legendSeasons.map((s) => s[metric]))
+  const legendPeakYear = legendSeasons.find((s) => s[metric] === Math.max(...legendSeasons.map((x) => x[metric])))?.year
+
+  const allVals = legendSeasons.map((s) => s[metric])
+  const yMin = Math.floor(Math.min(...allVals, playerValue) - 0.5)
+  const yMax = Math.ceil(Math.max(...allVals, playerValue) + 0.5)
+
+  return (
+    <div className="border border-538-border rounded-lg p-4 bg-surface">
+      {/* Card header */}
+      <div className="mb-3">
+        <p className="text-xs font-bold text-538-muted uppercase tracking-wide">vs.</p>
+        <h3 className="text-base font-black text-538-text leading-tight">{legendName}</h3>
+        {legendName === 'Justin Verlander' && (
+          <span className="text-xs text-538-muted">(pitcher bWAR)</span>
+        )}
+      </div>
+
+      {/* Callout row */}
+      <div className="flex justify-between text-xs mb-3">
+        <div>
+          <span className="font-bold" style={{ color: PLAYER_COLOR }}>{playerName}</span>
+          <p className="font-mono font-black" style={{ color: PLAYER_COLOR }}>
+            {playerValue > 0 ? '+' : ''}{playerValue.toFixed(1)} WAR
+            <span className="text-538-muted font-normal"> (2025)</span>
+          </p>
+        </div>
+        <div className="text-right">
+          <span className="font-bold" style={{ color }}>{legendName.split(' ').pop()}</span>
+          <p className="font-mono font-black" style={{ color }}>
+            {legendPeak > 0 ? '+' : ''}{legendPeak.toFixed(1)} WAR
+            <span className="text-538-muted font-normal"> (peak {legendPeakYear})</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Chart */}
+      <ResponsiveContainer width="100%" height={160}>
+        <LineChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border, #e5e5e5)" vertical={false} />
+          <XAxis
+            dataKey="year" tick={{ fontSize: 9, fill: 'var(--color-muted)' }}
+            tickLine={false} axisLine={false}
+            tickFormatter={(v) => `'${String(v).slice(2)}`}
+          />
+          <YAxis
+            domain={[yMin, yMax]}
+            tick={{ fontSize: 9, fill: 'var(--color-muted)' }}
+            tickLine={false} axisLine={false}
+            tickFormatter={(v) => (v > 0 ? `+${v}` : String(v))}
+          />
+          <Tooltip content={<MiniTooltip metricLabel={metricLabel} />} />
+
+          {/* Horizontal reference line for the player's current season value */}
+          <ReferenceLine
+            y={playerValue}
+            stroke={PLAYER_COLOR}
+            strokeDasharray="5 3"
+            strokeWidth={1.5}
+            label={
+              <Label
+                value={playerName.split(' ').pop()!}
+                position="insideTopLeft"
+                style={{ fontSize: 8, fill: PLAYER_COLOR, fontWeight: 700 }}
+              />
+            }
+          />
+
+          {/* Legend career line */}
+          <Line
+            type="monotone"
+            dataKey={legendName}
+            stroke={color}
+            strokeWidth={2}
+            dot={false}
+            activeDot={{ r: 3, stroke: color }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
 }
 
 interface Props {
@@ -40,165 +164,59 @@ interface Props {
   onClose: () => void
 }
 
-// ── Tooltip ───────────────────────────────────────────────────────────────────
-function CustomTooltip({ active, payload, label, metric }: {
-  active?: boolean
-  payload?: Array<{ name: string; value: number; color: string }>
-  label?: string | number
-  metric: WarMetric
-}) {
-  if (!active || !payload?.length) return null
-  const metricLabel = metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : 'dWAR'
-  return (
-    <div className="bg-surface border border-538-border rounded px-3 py-2 shadow text-xs">
-      <p className="font-bold text-538-text mb-1">{label}</p>
-      {payload.map((p) => (
-        <p key={p.name} style={{ color: p.color }}>
-          {p.name}: <span className="font-semibold">{p.value > 0 ? '+' : ''}{p.value.toFixed(1)} {metricLabel}</span>
-        </p>
-      ))}
-    </div>
-  )
-}
-
 export default function WarComparisonModal({ player, allPlayers, legendWar, onClose }: Props) {
   const [metric, setMetric] = useState<WarMetric>('war')
   const [view, setView] = useState<ViewMode>('career')
   const [comparePlayerId, setComparePlayerId] = useState<number | null>(null)
-  const [visibleLines, setVisibleLines] = useState<Set<string>>(
-    () => new Set(['__selected__', ...Object.keys(legendWar)])
-  )
 
-  const comparePlayer = allPlayers.find((p) => p.player_id === comparePlayerId) ?? null
+  const metricLabel = metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : 'dWAR'
 
-  // ── Career view data ──────────────────────────────────────────────────────
-  // Build { year, [name]: cumWAR } for the selected player using their bref
-  // career data from legendWar if present, otherwise just the current season.
-  const careerData = useMemo(() => {
-    // Collect all years from all legend series.
-    const yearSet = new Set<number>()
-    Object.values(legendWar).forEach((seasons) => seasons.forEach((s) => yearSet.add(s.year)))
+  const playerValue = player[metric]
 
-    // If the player is themselves a legend (bref_id match), include their career.
-    // Otherwise, we only have their current season point.
-    const playerLegendKey = Object.keys(legendWar).find(
-      (k) => legendWar[k].some(() => false) // placeholder — we'll match by name below
-    )
-    const playerCareer = legendWar[player.name] ?? null
-
-    if (playerCareer) {
-      playerCareer.forEach((s) => yearSet.add(s.year))
-    }
-
-    const years = Array.from(yearSet).sort()
-
-    // Cumulative WAR per legend.
-    const cumMap: Record<string, Record<number, number>> = {}
-    Object.entries(legendWar).forEach(([name, seasons]) => {
-      let cum = 0
-      const byYear: Record<number, number> = {}
-      seasons.forEach((s) => { cum += s[metric]; byYear[s.year] = cum })
-      // Forward-fill: for years after career end, keep last value.
-      let last = 0
-      years.forEach((y) => {
-        if (byYear[y] !== undefined) last = byYear[y]
-        byYear[y] = last
-      })
-      cumMap[name] = byYear
-    })
-
-    // Player's own career if they are a legend.
-    if (playerCareer) {
-      let cum = 0
-      const byYear: Record<number, number> = {}
-      playerCareer.forEach((s) => { cum += s[metric]; byYear[s.year] = cum })
-      let last = 0
-      years.forEach((y) => {
-        if (byYear[y] !== undefined) last = byYear[y]
-        byYear[y] = last
-      })
-      cumMap['__selected__'] = byYear
-    }
-
-    return years.map((y) => {
-      const row: Record<string, number | string> = { year: y }
-      Object.entries(cumMap).forEach(([name, byYear]) => {
-        if (byYear[y] !== undefined) row[name] = parseFloat(byYear[y].toFixed(1))
-      })
-      return row
-    })
-  }, [legendWar, metric, player.name])
-
-  // ── Season view data ──────────────────────────────────────────────────────
-  // Show all qualified current players sorted by the selected metric, as a bar-
-  // like leaderboard. We don't have game-by-game data, so we show per-player
-  // single data points ranked by their WAR total — displayed as a horizontal
-  // ranking chart using a simple bar approach inside Recharts.
+  // Season leaderboard
   const seasonData = useMemo(() => {
-    const pool = allPlayers
+    return allPlayers
       .filter((p) => p.pa >= 50)
       .sort((a, b) => b[metric] - a[metric])
       .slice(0, 40)
-
-    return pool.map((p, i) => ({
-      rank: i + 1,
-      name: p.name.split(' ').pop() ?? p.name,
-      fullName: p.name,
-      value: parseFloat(p[metric].toFixed(2)),
-      isSelected: p.player_id === player.player_id,
-      isCompare: p.player_id === comparePlayerId,
-    }))
-  }, [allPlayers, metric, player.player_id, comparePlayerId])
-
-  // ── Legend toggle ─────────────────────────────────────────────────────────
-  function toggleLine(name: string) {
-    setVisibleLines((prev) => {
-      const next = new Set(prev)
-      if (next.has(name)) next.delete(name)
-      else next.add(name)
-      return next
-    })
-  }
+  }, [allPlayers, metric])
 
   const metricOptions: { value: WarMetric; label: string }[] = [
-    { value: 'war', label: 'Total WAR' },
+    { value: 'war',     label: 'Total WAR' },
     { value: 'off_war', label: 'Offense' },
     { value: 'def_war', label: 'Defense' },
   ]
 
-  const hasCareerData = !!legendWar[player.name]
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}>
-      <div className="bg-surface rounded-xl border border-538-border shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div className="bg-surface rounded-xl border border-538-border shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto">
 
-        {/* Header */}
-        <div className="flex items-start justify-between px-6 pt-5 pb-4 border-b border-538-border">
+        {/* ── Header ── */}
+        <div className="flex items-start justify-between px-6 pt-5 pb-4 border-b border-538-border sticky top-0 bg-surface z-10">
           <div>
             <h2 className="text-xl font-black text-538-text tracking-tight">{player.name}</h2>
             <p className="text-xs text-538-muted mt-0.5">
               {player.team} · {player.g} G · {player.pa} PA ·{' '}
-              <span className="font-semibold text-538-text">{player.war.toFixed(1)} WAR</span>
+              <span className="font-semibold" style={{ color: PLAYER_COLOR }}>{player.war.toFixed(1)} WAR</span>
               {' / '}
               <span className="text-538-orange">{player.off_war.toFixed(1)} oWAR</span>
               {' / '}
               <span className="text-538-muted">{player.def_war.toFixed(1)} dWAR</span>
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className="text-538-muted hover:text-538-text transition-colors p-1"
-            aria-label="Close"
-          >
+          <button onClick={onClose} className="text-538-muted hover:text-538-text transition-colors p-1" aria-label="Close">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
 
-        {/* Controls */}
+        {/* ── Controls ── */}
         <div className="px-6 py-3 flex flex-wrap items-center gap-3 border-b border-538-border">
-          {/* Metric toggle */}
           <div className="inline-flex rounded border border-538-border overflow-hidden">
             {metricOptions.map((opt) => (
               <button key={opt.value} onClick={() => setMetric(opt.value)}
@@ -207,27 +225,23 @@ export default function WarComparisonModal({ player, allPlayers, legendWar, onCl
               </button>
             ))}
           </div>
-
-          {/* View toggle */}
           <div className="inline-flex rounded border border-538-border overflow-hidden">
-            <button onClick={() => setView('season')}
-              className={`px-3 py-1 text-xs font-semibold transition-colors ${view === 'season' ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
-              2025 Season
-            </button>
             <button onClick={() => setView('career')}
               className={`px-3 py-1 text-xs font-semibold transition-colors ${view === 'career' ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
-              Career (vs. Legends)
+              vs. Legends
+            </button>
+            <button onClick={() => setView('season')}
+              className={`px-3 py-1 text-xs font-semibold transition-colors ${view === 'season' ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
+              2025 Leaderboard
             </button>
           </div>
-
-          {/* Season: compare player picker */}
           {view === 'season' && (
             <select
               value={comparePlayerId ?? ''}
               onChange={(e) => setComparePlayerId(e.target.value ? Number(e.target.value) : null)}
               className="text-xs border border-538-border rounded px-2 py-1 bg-surface text-538-text"
             >
-              <option value="">+ Compare another player</option>
+              <option value="">+ Highlight another player</option>
               {allPlayers
                 .filter((p) => p.pa >= 50 && p.player_id !== player.player_id)
                 .sort((a, b) => b.war - a.war)
@@ -240,96 +254,38 @@ export default function WarComparisonModal({ player, allPlayers, legendWar, onCl
           )}
         </div>
 
-        {/* Chart area */}
+        {/* ── Content ── */}
         <div className="px-6 py-5">
 
+          {/* Career: grid of individual comparison cards */}
           {view === 'career' && (
             <>
-              {!hasCareerData && (
-                <p className="text-xs text-538-muted mb-3 italic">
-                  Career trajectory not available for {player.name} — showing legend comparisons only.
-                </p>
-              )}
-              <p className="text-xs text-538-muted mb-4">
-                Cumulative {metric === 'war' ? 'WAR' : metric === 'off_war' ? 'offensive WAR' : 'defensive WAR'} by season vs. historical comparisons.
-                Click a name below to toggle visibility.
+              <p className="text-xs text-538-muted mb-5">
+                Each card shows a legend&apos;s year-by-year {metricLabel} (colored line).
+                The dashed line marks <span className="font-semibold" style={{ color: PLAYER_COLOR }}>{player.name}&apos;s 2025 {metricLabel}</span> ({playerValue > 0 ? '+' : ''}{playerValue.toFixed(1)}) for reference.
               </p>
-
-              <ResponsiveContainer width="100%" height={360}>
-                <LineChart data={careerData} margin={{ top: 8, right: 24, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border, #e5e5e5)" />
-                  <XAxis dataKey="year" tick={{ fontSize: 11, fill: 'var(--color-muted)' }} />
-                  <YAxis tick={{ fontSize: 11, fill: 'var(--color-muted)' }} />
-                  <Tooltip content={<CustomTooltip metric={metric} />} />
-                  <ReferenceLine y={0} stroke="var(--color-border)" />
-
-                  {/* Selected player's own career line (if they are a legend) */}
-                  {hasCareerData && visibleLines.has('__selected__') && (
-                    <Line
-                      type="monotone" dataKey="__selected__"
-                      name={player.name}
-                      stroke={LEGEND_COLORS['__selected__']}
-                      strokeWidth={3} dot={false}
-                    />
-                  )}
-
-                  {/* Legend comparison lines */}
-                  {Object.keys(legendWar)
-                    .filter((name) => name !== player.name)
-                    .map((name, idx) => (
-                      visibleLines.has(name) && (
-                        <Line
-                          key={name} type="monotone" dataKey={name}
-                          name={name}
-                          stroke={legendColor(name, idx)}
-                          strokeWidth={2} dot={false}
-                          strokeDasharray={name === 'Justin Verlander' ? '5 3' : undefined}
-                        />
-                      )
-                    ))}
-                </LineChart>
-              </ResponsiveContainer>
-
-              {/* Legend toggle chips */}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {hasCareerData && (
-                  <button
-                    onClick={() => toggleLine('__selected__')}
-                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border transition-opacity ${visibleLines.has('__selected__') ? 'opacity-100' : 'opacity-40'}`}
-                    style={{ borderColor: LEGEND_COLORS['__selected__'], color: LEGEND_COLORS['__selected__'] }}
-                  >
-                    <span className="w-3 h-0.5 inline-block" style={{ backgroundColor: LEGEND_COLORS['__selected__'] }} />
-                    {player.name}
-                  </button>
-                )}
-                {Object.keys(legendWar)
-                  .filter((name) => name !== player.name)
-                  .map((name, idx) => {
-                    const color = legendColor(name, idx)
-                    return (
-                      <button key={name}
-                        onClick={() => toggleLine(name)}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border transition-opacity ${visibleLines.has(name) ? 'opacity-100' : 'opacity-40'}`}
-                        style={{ borderColor: color, color }}>
-                        <span className="w-3 h-0.5 inline-block" style={{ backgroundColor: color }} />
-                        {name}{name === 'Justin Verlander' ? ' (P)' : ''}
-                      </button>
-                    )
-                  })}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Object.entries(legendWar).map(([name, seasons]) => (
+                  <ComparisonCard
+                    key={name}
+                    legendName={name}
+                    legendSeasons={seasons}
+                    playerName={player.name}
+                    playerValue={playerValue}
+                    metric={metric}
+                    metricLabel={metricLabel}
+                  />
+                ))}
               </div>
             </>
           )}
 
+          {/* Season: ranked leaderboard */}
           {view === 'season' && (
             <>
               <p className="text-xs text-538-muted mb-4">
-                2025 season {metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : 'dWAR'} leaderboard — top 40 qualified batters (50+ PA).
-                <span className="ml-1 font-semibold" style={{ color: LEGEND_COLORS['__selected__'] }}>■ {player.name}</span>
-                {comparePlayer && (
-                  <span className="ml-2 font-semibold" style={{ color: LEGEND_COLORS['__compare__'] }}>■ {comparePlayer.name}</span>
-                )}
+                2025 {metricLabel} leaderboard — top 40 qualified batters (50+ PA).
               </p>
-
               <div className="overflow-x-auto">
                 <table className="w-full text-xs border-collapse">
                   <thead>
@@ -344,41 +300,29 @@ export default function WarComparisonModal({ player, allPlayers, legendWar, onCl
                     </tr>
                   </thead>
                   <tbody>
-                    {seasonData.map((row) => {
-                      const fullPlayer = allPlayers.find((p) => p.name === row.fullName)
-                      const isSelected = fullPlayer?.player_id === player.player_id
-                      const isCompare = fullPlayer?.player_id === comparePlayerId
+                    {seasonData.map((p, i) => {
+                      const isSelected = p.player_id === player.player_id
+                      const isCompare  = p.player_id === comparePlayerId
                       return (
-                        <tr key={row.fullName}
-                          className={`border-b border-538-border/40 transition-colors ${
-                            isSelected ? 'font-bold' : isCompare ? 'font-semibold' : ''
-                          }`}
+                        <tr key={p.player_id ?? p.name}
+                          className="border-b border-538-border/40"
                           style={{
-                            backgroundColor: isSelected
-                              ? `${LEGEND_COLORS['__selected__']}18`
-                              : isCompare
-                              ? `${LEGEND_COLORS['__compare__']}18`
-                              : undefined,
+                            backgroundColor: isSelected ? `${PLAYER_COLOR}18` : isCompare ? '#1565C018' : undefined,
+                            fontWeight: isSelected || isCompare ? 700 : undefined,
                           }}
                         >
-                          <td className="py-1.5 px-2 text-538-muted">{row.rank}</td>
+                          <td className="py-1.5 px-2 text-538-muted">{i + 1}</td>
                           <td className="py-1.5 px-2 text-538-text">
-                            {isSelected && <span className="mr-1" style={{ color: LEGEND_COLORS['__selected__'] }}>●</span>}
-                            {isCompare && <span className="mr-1" style={{ color: LEGEND_COLORS['__compare__'] }}>●</span>}
-                            {row.fullName}
-                            <span className="ml-1 text-538-muted">{fullPlayer?.team}</span>
+                            {isSelected && <span className="mr-1" style={{ color: PLAYER_COLOR }}>●</span>}
+                            {isCompare  && <span className="mr-1 text-blue-600">●</span>}
+                            {p.name}
+                            <span className="ml-1 text-538-muted font-normal">{p.team}</span>
                           </td>
-                          <td className="py-1.5 px-2 text-right text-538-muted">{fullPlayer?.g}</td>
-                          <td className="py-1.5 px-2 text-right text-538-muted">{fullPlayer?.pa}</td>
-                          <td className="py-1.5 px-2 text-right font-mono">
-                            {fullPlayer ? (fullPlayer.war > 0 ? '+' : '') + fullPlayer.war.toFixed(1) : '—'}
-                          </td>
-                          <td className="py-1.5 px-2 text-right font-mono text-538-orange">
-                            {fullPlayer ? (fullPlayer.off_war > 0 ? '+' : '') + fullPlayer.off_war.toFixed(1) : '—'}
-                          </td>
-                          <td className="py-1.5 px-2 text-right font-mono text-538-muted">
-                            {fullPlayer ? (fullPlayer.def_war > 0 ? '+' : '') + fullPlayer.def_war.toFixed(1) : '—'}
-                          </td>
+                          <td className="py-1.5 px-2 text-right text-538-muted">{p.g}</td>
+                          <td className="py-1.5 px-2 text-right text-538-muted">{p.pa}</td>
+                          <td className="py-1.5 px-2 text-right font-mono">{(p.war > 0 ? '+' : '') + p.war.toFixed(1)}</td>
+                          <td className="py-1.5 px-2 text-right font-mono text-538-orange">{(p.off_war > 0 ? '+' : '') + p.off_war.toFixed(1)}</td>
+                          <td className="py-1.5 px-2 text-right font-mono text-538-muted">{(p.def_war > 0 ? '+' : '') + p.def_war.toFixed(1)}</td>
                         </tr>
                       )
                     })}
@@ -390,8 +334,8 @@ export default function WarComparisonModal({ player, allPlayers, legendWar, onCl
         </div>
 
         <div className="px-6 pb-4 text-xs text-538-muted border-t border-538-border pt-3">
-          WAR data via Baseball Reference (bRef bWAR). oWAR and dWAR derived from runs above average.
-          {metric === 'def_war' && ' Defense: negative values indicate below-average range/fielding.'}
+          WAR data via Baseball Reference (bWAR). oWAR and dWAR derived from runs above average ÷ 10.
+          {metric === 'def_war' && ' Negative defensive WAR = below-average range/fielding.'}
         </div>
       </div>
     </div>
