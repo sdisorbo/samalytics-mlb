@@ -182,6 +182,25 @@ export interface PlayoffTeam {
   win_ws: number
 }
 
+export interface PlayerWar {
+  player_id: number | null
+  bref_id: string
+  name: string
+  team: string
+  g: number
+  pa: number
+  war: number
+  off_war: number
+  def_war: number
+}
+
+export type LegendWar = Record<string, Array<{
+  year: number
+  war: number
+  off_war: number
+  def_war: number
+}>>
+
 export interface BatterGameLog {
   name: string
   pa: number

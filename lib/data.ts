@@ -9,6 +9,8 @@ import type {
   PitcherArsenal,
   BatterVsPitch,
   TeamGameLog,
+  PlayerWar,
+  LegendWar,
 } from './types'
 
 // Resolve data directory: env var → data/output at repo root
@@ -93,4 +95,12 @@ export function getBatterVsPitch(year?: string): BatterVsPitch[] {
 
 export function getTeamGameLogs(year?: string): TeamGameLog[] {
   return readJson<TeamGameLog[]>('team_game_logs.json', year)
+}
+
+export function getPlayerWar(): PlayerWar[] {
+  return readJson<PlayerWar[]>('player_war.json')
+}
+
+export function getLegendWar(): LegendWar {
+  return readJson<LegendWar>('legend_war.json')
 }

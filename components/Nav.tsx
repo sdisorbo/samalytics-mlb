@@ -13,9 +13,9 @@ const LINKS = [
   { href: '/ratings',   label: 'ELO Ratings' },
   { href: '/pitchers',  label: 'Pitchers' },
   { href: '/players',   label: 'Batters' },
+  { href: '/war',       label: 'Player WAR' },
   { href: '/matchup',     label: 'Pitch Lab' },
   { href: '/matchup-lab', label: 'Matchup Lab' },
-  { href: '/live-ab',          label: 'Live At Bat' },
   { href: '/pitch-vis',        label: 'Pitch Vis' },
   { href: '/team-performance', label: 'Team Performance' },
 ]

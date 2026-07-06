@@ -95,6 +95,17 @@ def export_team_game_logs(team_game_logs):
     _write("team_game_logs.json", team_game_logs)
 
 
+def export_war(current_war: list, legend_war: dict):
+    """
+    Export player_war.json and legend_war.json.
+
+    player_war.json: [{ player_id, bref_id, name, team, g, pa, war, off_war, def_war }, ...]
+    legend_war.json: { "Derek Jeter": [{ year, war, off_war, def_war }, ...], ... }
+    """
+    _write("player_war.json", current_war)
+    _write("legend_war.json", legend_war)
+
+
 def export_playoff_odds(sim_results, n_sims):
     """
     Export playoff_odds.json
