@@ -1,10 +1,36 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import type { PlayerWar, LegendWar } from '../lib/types'
 import dynamic from 'next/dynamic'
 
 const WarComparisonModal = dynamic(() => import('./WarComparisonModal'), { ssr: false })
+
+// bRef team abbr → ESPN team abbr for logo CDN
+const ESPN_ABBR: Record<string, string> = {
+  BAL: 'bal', BOS: 'bos', NYY: 'nyy', TBR: 'tb',  TOR: 'tor',
+  CHW: 'cws', CLE: 'cle', DET: 'det', KCR: 'kc',  MIN: 'min',
+  HOU: 'hou', LAA: 'laa', OAK: 'oak', SEA: 'sea', TEX: 'tex',
+  ATL: 'atl', MIA: 'mia', NYM: 'nym', PHI: 'phi', WSN: 'wsh',
+  CHC: 'chc', CIN: 'cin', MIL: 'mil', PIT: 'pit', STL: 'stl',
+  ARI: 'ari', COL: 'col', LAD: 'lad', SDP: 'sd',  SFG: 'sf',
+}
+
+function TeamLogo({ team, size = 20 }: { team: string; size?: number }) {
+  const abbr = ESPN_ABBR[team]
+  if (!abbr) return null
+  return (
+    <Image
+      src={`https://a.espncdn.com/i/teamlogos/mlb/500/${abbr}.png`}
+      alt={team}
+      width={size}
+      height={size}
+      className="object-contain flex-shrink-0"
+      unoptimized
+    />
+  )
+}
 
 export interface PlayerWarWithPos extends PlayerWar {
   position?: string
@@ -187,7 +213,12 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                 }`}
               >
                 <td className="py-2.5 px-3 text-538-muted text-xs font-bold">{idx + 1}</td>
-                <td className="py-2.5 px-3 font-semibold text-538-text text-sm">{player.name}</td>
+                <td className="py-2.5 px-3">
+                  <div className="flex items-center gap-2">
+                    <TeamLogo team={player.team} size={22} />
+                    <span className="font-semibold text-538-text text-sm">{player.name}</span>
+                  </div>
+                </td>
                 <td className="py-2.5 px-3 text-center text-538-muted text-xs">{player.position ?? '—'}</td>
                 <td className="py-2.5 px-3 text-center text-xs font-semibold text-538-muted">{player.team}</td>
                 <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.g}</td>

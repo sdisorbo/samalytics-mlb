@@ -182,6 +182,13 @@ export interface PlayoffTeam {
   win_ws: number
 }
 
+export interface WarSeason {
+  year: number
+  war: number
+  off_war: number
+  def_war: number
+}
+
 export interface PlayerWar {
   player_id: number | null
   bref_id: string
@@ -192,6 +199,7 @@ export interface PlayerWar {
   war: number
   off_war: number
   def_war: number
+  career: WarSeason[]
 }
 
 export type LegendWar = Record<string, Array<{

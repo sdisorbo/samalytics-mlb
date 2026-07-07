@@ -104,6 +104,29 @@ def fetch_current_war(season: int) -> list[dict]:
             else:
                 merged[bid] = dict(row)
 
+        # Attach career WAR history for each player so the frontend can draw
+        # their career arc on the legend comparison charts.
+        print("  [war] Fetching full career data for current players...")
+        full_df = bwar_bat(return_all=True)
+        full_batters = full_df[full_df["pitcher"] == "N"]
+
+        for bid, row in merged.items():
+            career_sub = full_batters[full_batters["player_ID"] == bid].sort_values("year_ID")
+            career = []
+            for _, cr in career_sub.iterrows():
+                w = _safe_float(cr.get("WAR"))
+                if w is None:
+                    w = 0.0
+                d_r = _safe_float(cr.get("runs_above_avg_def", 0)) or 0.0
+                d_war = round(d_r / RUNS_PER_WIN, 2)
+                career.append({
+                    "year":    int(cr["year_ID"]),
+                    "war":     w,
+                    "off_war": round(w - d_war, 2),
+                    "def_war": d_war,
+                })
+            row["career"] = career
+
         rows = sorted(merged.values(), key=lambda x: x["war"], reverse=True)
         return rows
 

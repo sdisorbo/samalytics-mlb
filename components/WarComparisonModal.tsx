@@ -3,72 +3,96 @@
 import { useState } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ReferenceLine, ResponsiveContainer, Label,
+  ReferenceLine, ResponsiveContainer,
 } from 'recharts'
-import type { PlayerWar, LegendWar } from '../lib/types'
+import type { PlayerWar, LegendWar, WarSeason } from '../lib/types'
 
 type WarMetric = 'war' | 'off_war' | 'def_war'
 
-// All legend career lines render in gray — the selected player's color pops
-const LEGEND_GRAY = '#BBBBBB'
+const LEGEND_GRAY = '#CCCCCC'
 
-// MLB team colors keyed by bRef team abbreviation
 const TEAM_COLORS: Record<string, string> = {
-  // AL East
   BAL: '#DF4601', BOS: '#BD3039', NYY: '#003087', TBR: '#092C5C', TOR: '#134A8E',
-  // AL Central
   CHW: '#27251F', CLE: '#E31937', DET: '#0C2340', KCR: '#004687', MIN: '#002B5C',
-  // AL West
   HOU: '#EB6E1F', LAA: '#BA0021', OAK: '#003831', SEA: '#0C2C56', TEX: '#003278',
-  // NL East
   ATL: '#CE1141', MIA: '#00A3E0', NYM: '#002D72', PHI: '#E81828', WSN: '#AB0003',
-  // NL Central
   CHC: '#0E3386', CIN: '#C6011F', MIL: '#12284B', PIT: '#FDB827', STL: '#C41E3A',
-  // NL West
   ARI: '#A71930', COL: '#333366', LAD: '#005A9C', SDP: '#2F241D', SFG: '#FD5A1E',
-  // Short aliases some bRef rows use
-  TB:  '#092C5C', KC:  '#004687', SD:  '#2F241D', SF:  '#FD5A1E',
+  TB: '#092C5C', KC: '#004687', SD: '#2F241D', SF: '#FD5A1E',
   CWS: '#27251F', WSH: '#AB0003',
 }
 
-function getTeamColor(team: string): string {
-  return TEAM_COLORS[team] ?? '#C0392B'
+export function getTeamColor(team: string): string {
+  return TEAM_COLORS[team] ?? '#888888'
 }
 
-// ── One card: selected player dashed line vs a single legend's career arc ─────
+// ── Tooltip ───────────────────────────────────────────────────────────────────
+function ChartTooltip({
+  active, payload, label, metricLabel, legendName, playerName,
+}: {
+  active?: boolean
+  payload?: Array<{ name: string; value: number; color: string }>
+  label?: number
+  metricLabel: string
+  legendName: string
+  playerName: string
+}) {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="bg-surface border border-538-border rounded px-2 py-1.5 shadow text-xs">
+      <p className="font-bold text-538-muted mb-1">Career Year {label}</p>
+      {payload.map((p) => (
+        <p key={p.name} style={{ color: p.color }}>
+          {p.name === 'legend' ? legendName : playerName}:{' '}
+          <span className="font-semibold">
+            {p.value > 0 ? '+' : ''}{p.value.toFixed(1)} {metricLabel}
+          </span>
+        </p>
+      ))}
+    </div>
+  )
+}
+
+// ── One card: player career arc vs a single legend's career arc ───────────────
 function ComparisonCard({
   legendName,
   legendSeasons,
   playerName,
   playerTeam,
-  playerValue,
+  playerCareer,
   metric,
   metricLabel,
 }: {
   legendName: string
-  legendSeasons: Array<{ year: number; war: number; off_war: number; def_war: number }>
+  legendSeasons: WarSeason[]
   playerName: string
   playerTeam: string
-  playerValue: number
+  playerCareer: WarSeason[]
   metric: WarMetric
   metricLabel: string
 }) {
   const playerColor = getTeamColor(playerTeam)
+  const maxYears    = Math.max(legendSeasons.length, playerCareer.length)
 
-  // Convert calendar years → career year index (Yr 1, Yr 2 …)
-  const data = legendSeasons.map((s, i) => ({
+  // Merge both careers onto a shared career-year x-axis
+  const data = Array.from({ length: maxYears }, (_, i) => ({
     careerYear: i + 1,
-    value: parseFloat(s[metric].toFixed(2)),
+    legend: i < legendSeasons.length ? parseFloat(legendSeasons[i][metric].toFixed(2)) : null,
+    player: i < playerCareer.length  ? parseFloat(playerCareer[i][metric].toFixed(2))  : null,
   }))
 
-  const allVals = legendSeasons.map((s) => s[metric])
-  const legendPeak = Math.max(...allVals)
-  const yMin = Math.floor(Math.min(...allVals, playerValue) - 0.5)
-  const yMax = Math.ceil(Math.max(...allVals, playerValue) + 0.5)
+  const legendVals = legendSeasons.map((s) => s[metric])
+  const playerVals = playerCareer.map((s)  => s[metric])
+  const allVals    = [...legendVals, ...playerVals].filter((v) => v != null) as number[]
+  const legendPeak = Math.max(...legendVals)
+  const yMin = Math.floor(Math.min(...allVals) - 0.5)
+  const yMax = Math.ceil(Math.max(...allVals)  + 0.5)
+
+  const playerPeak    = playerVals.length ? Math.max(...playerVals) : 0
+  const playerCurrent = playerVals.length ? playerVals[playerVals.length - 1] : 0
 
   return (
     <div className="border border-538-border rounded-lg p-4 bg-surface">
-      {/* Card header */}
       <div className="mb-2">
         <p className="text-xs font-bold text-538-muted uppercase tracking-wide">vs.</p>
         <h3 className="text-base font-black text-538-text leading-tight">{legendName}</h3>
@@ -77,25 +101,29 @@ function ComparisonCard({
         )}
       </div>
 
-      {/* Callout row */}
+      {/* Callout */}
       <div className="flex justify-between text-xs mb-3">
         <div>
           <span className="font-bold" style={{ color: playerColor }}>{playerName}</span>
           <p className="font-mono font-black" style={{ color: playerColor }}>
-            {playerValue > 0 ? '+' : ''}{playerValue.toFixed(1)}{' '}
-            <span className="font-normal text-538-muted">{metricLabel} this season</span>
+            {playerCurrent > 0 ? '+' : ''}{playerCurrent.toFixed(1)}{' '}
+            <span className="font-normal text-538-muted">this season</span>
           </p>
+          {playerPeak !== playerCurrent && (
+            <p className="font-mono text-[10px]" style={{ color: playerColor, opacity: 0.7 }}>
+              {playerPeak > 0 ? '+' : ''}{playerPeak.toFixed(1)} career peak
+            </p>
+          )}
         </div>
         <div className="text-right">
           <span className="font-bold text-538-muted">{legendName.split(' ').pop()}</span>
           <p className="font-mono font-black text-538-muted">
             {legendPeak > 0 ? '+' : ''}{legendPeak.toFixed(1)}{' '}
-            <span className="font-normal">peak season</span>
+            <span className="font-normal">career peak</span>
           </p>
         </div>
       </div>
 
-      {/* Chart */}
       <ResponsiveContainer width="100%" height={150}>
         <LineChart data={data} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
           <CartesianGrid
@@ -118,42 +146,35 @@ function ComparisonCard({
             axisLine={false}
             tickFormatter={(v) => (v > 0 ? `+${v}` : String(v))}
           />
+          <ReferenceLine y={0} stroke="var(--color-border, #e5e5e5)" strokeWidth={1} />
           <Tooltip
-            labelFormatter={(v) => `Career Year ${v}`}
-            formatter={(val: number) => [
-              `${val > 0 ? '+' : ''}${val.toFixed(1)} ${metricLabel}`,
-              legendName,
-            ]}
-            contentStyle={{
-              fontSize: 11,
-              border: '1px solid var(--color-border)',
-              background: 'var(--color-surface)',
-            }}
-          />
-
-          {/* Player current-season reference — team color dashed */}
-          <ReferenceLine
-            y={playerValue}
-            stroke={playerColor}
-            strokeDasharray="5 3"
-            strokeWidth={1.5}
-            label={
-              <Label
-                value={playerName.split(' ').pop()!}
-                position="insideTopLeft"
-                style={{ fontSize: 8, fill: playerColor, fontWeight: 700 }}
+            content={
+              <ChartTooltip
+                metricLabel={metricLabel}
+                legendName={legendName}
+                playerName={playerName}
               />
             }
           />
-
-          {/* Legend career arc — neutral gray */}
+          {/* Legend career — gray */}
           <Line
             type="monotone"
-            dataKey="value"
+            dataKey="legend"
             stroke={LEGEND_GRAY}
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 3, stroke: LEGEND_GRAY }}
+            connectNulls={false}
+          />
+          {/* Player career — team color */}
+          <Line
+            type="monotone"
+            dataKey="player"
+            stroke={playerColor}
+            strokeWidth={2.5}
+            dot={false}
+            activeDot={{ r: 3, stroke: playerColor }}
+            connectNulls={false}
           />
         </LineChart>
       </ResponsiveContainer>
@@ -171,9 +192,8 @@ interface Props {
 export default function WarComparisonModal({ player, legendWar, onClose }: Props) {
   const [metric, setMetric] = useState<WarMetric>('war')
 
-  const metricLabel = metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : 'dWAR'
-  const playerValue = player[metric]
-  const playerColor = getTeamColor(player.team)
+  const metricLabel  = metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : 'dWAR'
+  const playerColor  = getTeamColor(player.team)
 
   const metricOptions: { value: WarMetric; label: string }[] = [
     { value: 'war',     label: 'Total WAR' },
@@ -189,7 +209,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
     >
       <div className="bg-surface rounded-xl border border-538-border shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto">
 
-        {/* ── Header ── */}
+        {/* Header */}
         <div className="flex items-start justify-between px-6 pt-5 pb-4 border-b border-538-border sticky top-0 bg-surface z-10">
           <div>
             <h2 className="text-xl font-black text-538-text tracking-tight">{player.name}</h2>
@@ -216,17 +236,15 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
           </button>
         </div>
 
-        {/* ── Metric toggle ── */}
-        <div className="px-6 py-3 border-b border-538-border">
+        {/* Controls */}
+        <div className="px-6 py-3 border-b border-538-border flex items-center gap-4">
           <div className="inline-flex rounded border border-538-border overflow-hidden">
             {metricOptions.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setMetric(opt.value)}
                 className={`px-3 py-1 text-xs font-semibold transition-colors ${
-                  metric === opt.value
-                    ? 'text-white'
-                    : 'text-538-muted hover:text-538-text'
+                  metric === opt.value ? 'text-white' : 'text-538-muted hover:text-538-text'
                 }`}
                 style={metric === opt.value ? { backgroundColor: playerColor } : {}}
               >
@@ -234,18 +252,21 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
               </button>
             ))}
           </div>
+          <span className="text-xs text-538-muted">
+            <span className="inline-block w-5 border-b-2 border-dashed mr-1 align-middle" style={{ borderColor: LEGEND_GRAY }} />
+            Legend career &nbsp;
+            <span className="inline-block w-5 border-b-2 mr-1 align-middle" style={{ borderColor: playerColor }} />
+            {player.name}
+          </span>
         </div>
 
-        {/* ── Cards ── */}
+        {/* Cards */}
         <div className="px-6 py-5">
           <p className="text-xs text-538-muted mb-5">
-            Gray line = legend&apos;s {metricLabel} by career year.&ensp;
-            <span className="font-semibold" style={{ color: playerColor }}>
-              {player.name}&apos;s
-            </span>{' '}
-            {playerValue > 0 ? '+' : ''}{playerValue.toFixed(1)} {metricLabel} this season shown as dashed line.
+            X-axis = career year (Year 1 = MLB debut). {' '}
+            <span style={{ color: playerColor }} className="font-semibold">{player.name}</span>
+            {' '}career arc vs. each legend&apos;s full career.
           </p>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(legendWar).map(([name, seasons]) => (
               <ComparisonCard
@@ -254,7 +275,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
                 legendSeasons={seasons}
                 playerName={player.name}
                 playerTeam={player.team}
-                playerValue={playerValue}
+                playerCareer={player.career}
                 metric={metric}
                 metricLabel={metricLabel}
               />
@@ -263,7 +284,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
         </div>
 
         <div className="px-6 pb-4 text-xs text-538-muted border-t border-538-border pt-3">
-          WAR data via Baseball Reference (bWAR). oWAR and dWAR derived from runs above average ÷ 10.
+          WAR data via Baseball Reference (bWAR). oWAR = total WAR − dWAR (batting + baserunning + positional adj + replacement level).
         </div>
       </div>
     </div>
