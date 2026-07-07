@@ -29,7 +29,7 @@ export default function WarPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-black text-538-text tracking-tight">Player WAR</h1>
         <p className="text-sm text-538-muted mt-1">
-          2025 Wins Above Replacement — offensive, defensive, and total — for all qualified batters (50+ PA).
+          Wins Above Replacement — offensive, defensive, and total — for all qualified batters (50+ PA).
           Click any player to compare their season against historical legends.
         </p>
       </div>

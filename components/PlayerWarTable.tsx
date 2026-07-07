@@ -180,7 +180,7 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
             )}
             {filtered.map((player, idx) => (
               <tr
-                key={player.player_id ?? player.name}
+                key={player.bref_id}
                 onClick={() => setSelected(player)}
                 className={`border-b border-538-border/40 cursor-pointer hover:bg-538-orange/5 transition-colors ${
                   idx % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''
@@ -225,7 +225,6 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
       {selected && (
         <WarComparisonModal
           player={selected}
-          allPlayers={players}
           legendWar={legendWar}
           onClose={() => setSelected(null)}
         />

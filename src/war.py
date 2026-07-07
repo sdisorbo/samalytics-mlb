@@ -86,7 +86,24 @@ def fetch_current_war(season: int) -> list[dict]:
                 "def_war":   def_war,
             })
 
-        rows.sort(key=lambda x: x["war"], reverse=True)
+        # Merge traded-player rows (same bref_id across multiple team stints).
+        # bWAR splits mid-season trades into one row per team; we sum stats and
+        # label the team as "2TM" (matching baseball-reference convention).
+        merged: dict[str, dict] = {}
+        for row in rows:
+            bid = row["bref_id"]
+            if bid in merged:
+                m = merged[bid]
+                m["g"]       += row["g"]
+                m["pa"]      += row["pa"]
+                m["war"]     = round(m["war"]     + row["war"],     2)
+                m["off_war"] = round(m["off_war"] + row["off_war"], 2)
+                m["def_war"] = round(m["def_war"] + row["def_war"], 2)
+                m["team"]    = "2TM"
+            else:
+                merged[bid] = dict(row)
+
+        rows = sorted(merged.values(), key=lambda x: x["war"], reverse=True)
         return rows
 
     except Exception as e:
