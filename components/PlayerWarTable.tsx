@@ -15,6 +15,7 @@ const ESPN_ABBR: Record<string, string> = {
   ATL: 'atl', MIA: 'mia', NYM: 'nym', PHI: 'phi', WSN: 'wsh',
   CHC: 'chc', CIN: 'cin', MIL: 'mil', PIT: 'pit', STL: 'stl',
   ARI: 'ari', COL: 'col', LAD: 'lad', SDP: 'sd',  SFG: 'sf',
+  ATH: 'oak',
 }
 
 function TeamLogo({ team, size = 20 }: { team: string; size?: number }) {
