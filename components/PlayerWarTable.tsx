@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import type { PlayerWar, LegendWar } from '../lib/types'
 import dynamic from 'next/dynamic'
 
@@ -73,32 +73,29 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
     }
   }
 
-  const filtered = useMemo(() => {
-    let rows = players.filter((p) => p.pa >= 50)
+  // Compute inline — no useMemo so state changes always immediately take effect
+  let filtered = players.filter((p) => p.pa >= 50)
 
-    if (search.trim()) {
-      const q = search.trim().toLowerCase()
-      rows = rows.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.team.toLowerCase().includes(q),
-      )
-    }
+  if (search.trim()) {
+    const q = search.trim().toLowerCase()
+    filtered = filtered.filter(
+      (p) => p.name.toLowerCase().includes(q) || p.team.toLowerCase().includes(q),
+    )
+  }
 
-    if (position !== 'All') {
-      rows = rows.filter((p) => {
-        const pos = p.position ?? ''
-        if (position === 'OF') return ['LF','CF','RF','OF'].includes(pos)
-        return pos === position
-      })
-    }
-
-    return [...rows].sort((a, b) => {
-      const av = getVal(a, sortKey)
-      const bv = getVal(b, sortKey)
-      return sortDir === 'desc' ? bv - av : av - bv
+  if (position !== 'All') {
+    filtered = filtered.filter((p) => {
+      const pos = p.position ?? ''
+      if (position === 'OF') return ['LF', 'CF', 'RF', 'OF'].includes(pos)
+      return pos === position
     })
-  }, [players, search, position, sortKey, sortDir])
+  }
+
+  filtered = [...filtered].sort((a, b) => {
+    const av = getVal(a, sortKey)
+    const bv = getVal(b, sortKey)
+    return sortDir === 'desc' ? bv - av : av - bv
+  })
 
   const wars    = filtered.map((p) => p.war)
   const offWars = filtered.map((p) => p.off_war)

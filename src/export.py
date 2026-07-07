@@ -101,9 +101,27 @@ def export_war(current_war: list, legend_war: dict):
 
     player_war.json: [{ player_id, bref_id, name, team, g, pa, war, off_war, def_war }, ...]
     legend_war.json: { "Derek Jeter": [{ year, war, off_war, def_war }, ...], ... }
+
+    If current_war is empty (bWAR not yet published for this season on baseball-reference),
+    we preserve the existing file rather than overwriting with an empty list.
     """
-    _write("player_war.json", current_war)
-    _write("legend_war.json", legend_war)
+    if current_war:
+        _write("player_war.json", current_war)
+    else:
+        existing = os.path.join(OUTPUT_DIR, "player_war.json")
+        if os.path.exists(existing):
+            print(f"  [skip] player_war.json — fetch returned 0 rows, preserving existing file")
+        else:
+            _write("player_war.json", current_war)
+
+    if legend_war:
+        _write("legend_war.json", legend_war)
+    else:
+        existing = os.path.join(OUTPUT_DIR, "legend_war.json")
+        if os.path.exists(existing):
+            print(f"  [skip] legend_war.json — fetch returned 0 legends, preserving existing file")
+        else:
+            _write("legend_war.json", legend_war)
 
 
 def export_playoff_odds(sim_results, n_sims):
