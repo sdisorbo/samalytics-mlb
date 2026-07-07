@@ -11,6 +11,26 @@ type WarMetric = 'war' | 'off_war' | 'def_war'
 
 const LEGEND_GRAY = '#CCCCCC'
 
+// Renders a filled circle only at the last data point of a line.
+// Must return a ReactElement (not null) to satisfy Recharts' LineDot type.
+function endDot(color: string, lastIndex: number) {
+  return (props: any) => {
+    const { cx, cy, index } = props as { cx?: number; cy?: number; index?: number }
+    if (index !== lastIndex || !cx || !cy) return <g key={`skip-${index}`} />
+    return (
+      <circle
+        key={`dot-${index}`}
+        cx={cx}
+        cy={cy}
+        r={4}
+        fill={color}
+        stroke="var(--color-surface, #fff)"
+        strokeWidth={1.5}
+      />
+    )
+  }
+}
+
 const TEAM_COLORS: Record<string, string> = {
   BAL: '#DF4601', BOS: '#BD3039', NYY: '#003087', TBR: '#092C5C', TOR: '#134A8E',
   CHW: '#27251F', CLE: '#E31937', DET: '#0C2340', KCR: '#004687', MIN: '#002B5C',
@@ -162,7 +182,7 @@ function ComparisonCard({
             dataKey="legend"
             stroke={LEGEND_GRAY}
             strokeWidth={2}
-            dot={false}
+            dot={endDot(LEGEND_GRAY, legendSeasons.length - 1)}
             activeDot={{ r: 3, stroke: LEGEND_GRAY }}
             connectNulls={false}
           />
@@ -172,7 +192,7 @@ function ComparisonCard({
             dataKey="player"
             stroke={playerColor}
             strokeWidth={2.5}
-            dot={false}
+            dot={endDot(playerColor, playerCareer.length - 1)}
             activeDot={{ r: 3, stroke: playerColor }}
             connectNulls={false}
           />
