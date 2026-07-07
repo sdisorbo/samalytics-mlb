@@ -41,12 +41,21 @@ def _safe_float(v):
 def fetch_current_war(season: int) -> list[dict]:
     """
     Return a list of batter WAR rows for `season`, non-pitchers only.
+    Falls back to season-1 if the requested season has no published data yet
+    (bWAR on baseball-reference can lag mid-season).
     Each row: { player_id, name, team, g, pa, war, off_war, def_war }
     """
     try:
         from pybaseball import bwar_bat
         df = bwar_bat(return_all=False)
-        df = df[df["year_ID"] == season]
+
+        season_df = df[df["year_ID"] == season]
+        if season_df.empty:
+            fallback = season - 1
+            print(f"  [war] No bWAR data for {season} yet — falling back to {fallback}")
+            season_df = df[df["year_ID"] == fallback]
+
+        df = season_df
         df = df[df["pitcher"] == "N"]
         df = df.dropna(subset=["WAR"])
         df = df[df["WAR"] != 0]
