@@ -68,11 +68,12 @@ def fetch_current_war(season: int) -> list[dict]:
             if total_war is None:
                 continue
 
-            # Convert runs above average to approximate WAR fractions.
-            # Each component is scaled by runs-per-win; replacement-level
-            # credit (~2 WAR) is added entirely to offense as a convention.
-            off_war = round(off_r / RUNS_PER_WIN, 2)
+            # dWAR = fielding runs above average / RPW (pure defense component).
+            # oWAR = everything else: batting, baserunning, positional adjustment,
+            # and replacement-level credit. Computed as total - dWAR so that
+            # off_war + def_war == total_war always (matches bRef's own split).
             def_war = round(def_r / RUNS_PER_WIN, 2)
+            off_war = round(total_war - def_war, 2)
 
             rows.append({
                 "player_id": int(r["mlb_ID"]) if r.get("mlb_ID") else None,
@@ -122,8 +123,8 @@ def _career_rows_for(df, bref_id: str, name: str) -> list[dict]:
         if war is None:
             war = 0.0
 
-        off_war = round(off_r / RUNS_PER_WIN, 2)
         def_war = round(def_r / RUNS_PER_WIN, 2)
+        off_war = round(war - def_war, 2)
 
         seasons.append({
             "year":    int(r["year_ID"]),
