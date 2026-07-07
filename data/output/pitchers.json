@@ -18,7 +18,7 @@
     "era_percentile": 100,
     "fip_percentile": 100,
     "k9_percentile": 100,
-    "bb9_percentile": 54,
+    "bb9_percentile": 55,
     "whip_percentile": 98
   },
   {
@@ -216,7 +216,7 @@
     "era_percentile": 85,
     "fip_percentile": 98,
     "k9_percentile": 86,
-    "bb9_percentile": 56,
+    "bb9_percentile": 57,
     "whip_percentile": 92
   },
   {
@@ -282,7 +282,7 @@
     "era_percentile": 96,
     "fip_percentile": 97,
     "k9_percentile": 83,
-    "bb9_percentile": 58,
+    "bb9_percentile": 59,
     "whip_percentile": 95
   },
   {
@@ -423,17 +423,17 @@
     "team": "LAD",
     "team_name": "Los Angeles Dodgers",
     "division": "National League West",
-    "era": 2.97,
+    "era": 2.7,
     "fip": 2.36,
     "xfip": null,
-    "k_per_9": 11.64,
-    "bb_per_9": 1.24,
-    "whip": 0.83,
-    "innings_pitched": 36.3,
+    "k_per_9": 11.54,
+    "bb_per_9": 1.23,
+    "whip": 0.82,
+    "innings_pitched": 36.7,
     "strikeouts": 47,
     "walks": 5,
     "home_runs_allowed": 4,
-    "era_percentile": 79,
+    "era_percentile": 84,
     "fip_percentile": 95,
     "k9_percentile": 94,
     "bb9_percentile": 100,
@@ -479,8 +479,8 @@
     "home_runs_allowed": 1,
     "era_percentile": 86,
     "fip_percentile": 95,
-    "k9_percentile": 50,
-    "bb9_percentile": 65,
+    "k9_percentile": 51,
+    "bb9_percentile": 66,
     "whip_percentile": 86
   },
   {
@@ -568,7 +568,7 @@
     "era_percentile": 79,
     "fip_percentile": 94,
     "k9_percentile": 85,
-    "bb9_percentile": 65,
+    "bb9_percentile": 66,
     "whip_percentile": 73
   },
   {
@@ -612,30 +612,8 @@
     "era_percentile": 97,
     "fip_percentile": 93,
     "k9_percentile": 47,
-    "bb9_percentile": 78,
+    "bb9_percentile": 79,
     "whip_percentile": 94
-  },
-  {
-    "player_id": 683618,
-    "name": "Edgardo Henriquez",
-    "team": "LAD",
-    "team_name": "Los Angeles Dodgers",
-    "division": "National League West",
-    "era": 2.6,
-    "fip": 2.41,
-    "xfip": null,
-    "k_per_9": 9.09,
-    "bb_per_9": 2.86,
-    "whip": 0.89,
-    "innings_pitched": 34.7,
-    "strikeouts": 35,
-    "walks": 11,
-    "home_runs_allowed": 1,
-    "era_percentile": 86,
-    "fip_percentile": 93,
-    "k9_percentile": 57,
-    "bb9_percentile": 68,
-    "whip_percentile": 95
   },
   {
     "player_id": 663158,
@@ -720,7 +698,7 @@
     "walks": 13,
     "home_runs_allowed": 2,
     "era_percentile": 85,
-    "fip_percentile": 92,
+    "fip_percentile": 93,
     "k9_percentile": 92,
     "bb9_percentile": 47,
     "whip_percentile": 86
@@ -744,7 +722,7 @@
     "era_percentile": 88,
     "fip_percentile": 92,
     "k9_percentile": 43,
-    "bb9_percentile": 79,
+    "bb9_percentile": 80,
     "whip_percentile": 84
   },
   {
@@ -808,7 +786,7 @@
     "walks": 16,
     "home_runs_allowed": 2,
     "era_percentile": 76,
-    "fip_percentile": 91,
+    "fip_percentile": 92,
     "k9_percentile": 81,
     "bb9_percentile": 44,
     "whip_percentile": 35
@@ -858,6 +836,28 @@
     "whip_percentile": 42
   },
   {
+    "player_id": 683618,
+    "name": "Edgardo Henriquez",
+    "team": "LAD",
+    "team_name": "Los Angeles Dodgers",
+    "division": "National League West",
+    "era": 2.45,
+    "fip": 2.61,
+    "xfip": null,
+    "k_per_9": 8.59,
+    "bb_per_9": 3.19,
+    "whip": 0.9,
+    "innings_pitched": 36.7,
+    "strikeouts": 35,
+    "walks": 13,
+    "home_runs_allowed": 1,
+    "era_percentile": 88,
+    "fip_percentile": 91,
+    "k9_percentile": 46,
+    "bb9_percentile": 55,
+    "whip_percentile": 95
+  },
+  {
     "player_id": 650911,
     "name": "Cristopher Sánchez",
     "team": "PHI",
@@ -897,7 +897,7 @@
     "home_runs_allowed": 1,
     "era_percentile": 71,
     "fip_percentile": 91,
-    "k9_percentile": 26,
+    "k9_percentile": 25,
     "bb9_percentile": 71,
     "whip_percentile": 90
   },
@@ -986,7 +986,7 @@
     "era_percentile": 10,
     "fip_percentile": 89,
     "k9_percentile": 97,
-    "bb9_percentile": 54,
+    "bb9_percentile": 55,
     "whip_percentile": 7
   },
   {
@@ -1008,7 +1008,7 @@
     "era_percentile": 97,
     "fip_percentile": 89,
     "k9_percentile": 70,
-    "bb9_percentile": 66,
+    "bb9_percentile": 67,
     "whip_percentile": 98
   },
   {
@@ -1029,7 +1029,7 @@
     "home_runs_allowed": 5,
     "era_percentile": 84,
     "fip_percentile": 89,
-    "k9_percentile": 55,
+    "k9_percentile": 56,
     "bb9_percentile": 91,
     "whip_percentile": 91
   },
@@ -1139,7 +1139,7 @@
     "home_runs_allowed": 6,
     "era_percentile": 75,
     "fip_percentile": 88,
-    "k9_percentile": 48,
+    "k9_percentile": 49,
     "bb9_percentile": 94,
     "whip_percentile": 82
   },
@@ -1227,7 +1227,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 32,
     "fip_percentile": 87,
-    "k9_percentile": 69,
+    "k9_percentile": 70,
     "bb9_percentile": 64,
     "whip_percentile": 42
   },
@@ -1291,7 +1291,7 @@
     "strikeouts": 119,
     "walks": 22,
     "home_runs_allowed": 11,
-    "era_percentile": 59,
+    "era_percentile": 58,
     "fip_percentile": 86,
     "k9_percentile": 90,
     "bb9_percentile": 91,
@@ -1425,7 +1425,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 57,
     "fip_percentile": 85,
-    "k9_percentile": 48,
+    "k9_percentile": 49,
     "bb9_percentile": 62,
     "whip_percentile": 73
   },
@@ -1496,28 +1496,6 @@
     "whip_percentile": 53
   },
   {
-    "player_id": 623474,
-    "name": "Jimmy Herget",
-    "team": "COL",
-    "team_name": "Colorado Rockies",
-    "division": "National League West",
-    "era": 3.68,
-    "fip": 2.92,
-    "xfip": null,
-    "k_per_9": 9.82,
-    "bb_per_9": 2.45,
-    "whip": 1.27,
-    "innings_pitched": 22.0,
-    "strikeouts": 24,
-    "walks": 6,
-    "home_runs_allowed": 2,
-    "era_percentile": 57,
-    "fip_percentile": 84,
-    "k9_percentile": 72,
-    "bb9_percentile": 81,
-    "whip_percentile": 56
-  },
-  {
     "player_id": 678606,
     "name": "José A. Ferrer",
     "team": "SEA",
@@ -1534,7 +1512,7 @@
     "walks": 10,
     "home_runs_allowed": 2,
     "era_percentile": 89,
-    "fip_percentile": 83,
+    "fip_percentile": 84,
     "k9_percentile": 29,
     "bb9_percentile": 82,
     "whip_percentile": 46
@@ -1556,7 +1534,7 @@
     "walks": 29,
     "home_runs_allowed": 6,
     "era_percentile": 75,
-    "fip_percentile": 83,
+    "fip_percentile": 84,
     "k9_percentile": 43,
     "bb9_percentile": 73,
     "whip_percentile": 57
@@ -1581,7 +1559,7 @@
     "fip_percentile": 83,
     "k9_percentile": 35,
     "bb9_percentile": 75,
-    "whip_percentile": 50
+    "whip_percentile": 51
   },
   {
     "player_id": 663738,
@@ -1668,7 +1646,7 @@
     "era_percentile": 45,
     "fip_percentile": 83,
     "k9_percentile": 76,
-    "bb9_percentile": 65,
+    "bb9_percentile": 66,
     "whip_percentile": 79
   },
   {
@@ -1775,7 +1753,7 @@
     "strikeouts": 70,
     "walks": 28,
     "home_runs_allowed": 4,
-    "era_percentile": 70,
+    "era_percentile": 69,
     "fip_percentile": 81,
     "k9_percentile": 96,
     "bb9_percentile": 16,
@@ -1822,7 +1800,7 @@
     "era_percentile": 98,
     "fip_percentile": 80,
     "k9_percentile": 2,
-    "bb9_percentile": 66,
+    "bb9_percentile": 67,
     "whip_percentile": 66
   },
   {
@@ -1844,7 +1822,7 @@
     "era_percentile": 80,
     "fip_percentile": 80,
     "k9_percentile": 71,
-    "bb9_percentile": 76,
+    "bb9_percentile": 77,
     "whip_percentile": 82
   },
   {
@@ -1956,6 +1934,28 @@
     "k9_percentile": 18,
     "bb9_percentile": 99,
     "whip_percentile": 91
+  },
+  {
+    "player_id": 623474,
+    "name": "Jimmy Herget",
+    "team": "COL",
+    "team_name": "Colorado Rockies",
+    "division": "National League West",
+    "era": 3.52,
+    "fip": 3.06,
+    "xfip": null,
+    "k_per_9": 9.39,
+    "bb_per_9": 2.74,
+    "whip": 1.3,
+    "innings_pitched": 23.0,
+    "strikeouts": 24,
+    "walks": 7,
+    "home_runs_allowed": 2,
+    "era_percentile": 62,
+    "fip_percentile": 79,
+    "k9_percentile": 63,
+    "bb9_percentile": 72,
+    "whip_percentile": 51
   },
   {
     "player_id": 676534,
@@ -2083,9 +2083,9 @@
     "strikeouts": 61,
     "walks": 20,
     "home_runs_allowed": 5,
-    "era_percentile": 79,
+    "era_percentile": 78,
     "fip_percentile": 77,
-    "k9_percentile": 47,
+    "k9_percentile": 48,
     "bb9_percentile": 69,
     "whip_percentile": 59
   },
@@ -2171,7 +2171,7 @@
     "strikeouts": 78,
     "walks": 24,
     "home_runs_allowed": 7,
-    "era_percentile": 58,
+    "era_percentile": 57,
     "fip_percentile": 76,
     "k9_percentile": 28,
     "bb9_percentile": 84,
@@ -2218,8 +2218,8 @@
     "era_percentile": 75,
     "fip_percentile": 76,
     "k9_percentile": 21,
-    "bb9_percentile": 78,
-    "whip_percentile": 50
+    "bb9_percentile": 79,
+    "whip_percentile": 51
   },
   {
     "player_id": 694738,
@@ -2261,7 +2261,7 @@
     "home_runs_allowed": 6,
     "era_percentile": 76,
     "fip_percentile": 75,
-    "k9_percentile": 49,
+    "k9_percentile": 50,
     "bb9_percentile": 56,
     "whip_percentile": 71
   },
@@ -2283,7 +2283,7 @@
     "home_runs_allowed": 9,
     "era_percentile": 91,
     "fip_percentile": 75,
-    "k9_percentile": 64,
+    "k9_percentile": 65,
     "bb9_percentile": 87,
     "whip_percentile": 94
   },
@@ -2328,7 +2328,7 @@
     "era_percentile": 86,
     "fip_percentile": 75,
     "k9_percentile": 71,
-    "bb9_percentile": 56,
+    "bb9_percentile": 57,
     "whip_percentile": 79
   },
   {
@@ -2369,10 +2369,10 @@
     "strikeouts": 49,
     "walks": 13,
     "home_runs_allowed": 5,
-    "era_percentile": 84,
+    "era_percentile": 83,
     "fip_percentile": 74,
     "k9_percentile": 90,
-    "bb9_percentile": 63,
+    "bb9_percentile": 64,
     "whip_percentile": 98
   },
   {
@@ -2420,6 +2420,28 @@
     "whip_percentile": 84
   },
   {
+    "player_id": 622608,
+    "name": "Antonio Senzatela",
+    "team": "COL",
+    "team_name": "Colorado Rockies",
+    "division": "National League West",
+    "era": 2.93,
+    "fip": 3.27,
+    "xfip": null,
+    "k_per_9": 7.43,
+    "bb_per_9": 2.93,
+    "whip": 1.17,
+    "innings_pitched": 46.0,
+    "strikeouts": 38,
+    "walks": 15,
+    "home_runs_allowed": 3,
+    "era_percentile": 79,
+    "fip_percentile": 74,
+    "k9_percentile": 27,
+    "bb9_percentile": 64,
+    "whip_percentile": 71
+  },
+  {
     "player_id": 669302,
     "name": "Logan Gilbert",
     "team": "SEA",
@@ -2447,21 +2469,21 @@
     "team": "COL",
     "team_name": "Colorado Rockies",
     "division": "National League West",
-    "era": 3.25,
+    "era": 3.22,
     "fip": 3.29,
     "xfip": null,
-    "k_per_9": 6.5,
-    "bb_per_9": 2.75,
-    "whip": 1.31,
-    "innings_pitched": 36.0,
+    "k_per_9": 6.44,
+    "bb_per_9": 2.72,
+    "whip": 1.32,
+    "innings_pitched": 36.3,
     "strikeouts": 26,
     "walks": 11,
     "home_runs_allowed": 2,
     "era_percentile": 70,
     "fip_percentile": 73,
-    "k9_percentile": 14,
-    "bb9_percentile": 71,
-    "whip_percentile": 49
+    "k9_percentile": 12,
+    "bb9_percentile": 73,
+    "whip_percentile": 46
   },
   {
     "player_id": 669923,
@@ -2502,32 +2524,10 @@
     "walks": 12,
     "home_runs_allowed": 3,
     "era_percentile": 83,
-    "fip_percentile": 73,
+    "fip_percentile": 72,
     "k9_percentile": 46,
     "bb9_percentile": 60,
     "whip_percentile": 90
-  },
-  {
-    "player_id": 622608,
-    "name": "Antonio Senzatela",
-    "team": "COL",
-    "team_name": "Colorado Rockies",
-    "division": "National League West",
-    "era": 3.0,
-    "fip": 3.3,
-    "xfip": null,
-    "k_per_9": 7.2,
-    "bb_per_9": 2.8,
-    "whip": 1.16,
-    "innings_pitched": 45.0,
-    "strikeouts": 36,
-    "walks": 14,
-    "home_runs_allowed": 3,
-    "era_percentile": 78,
-    "fip_percentile": 73,
-    "k9_percentile": 24,
-    "bb9_percentile": 70,
-    "whip_percentile": 73
   },
   {
     "player_id": 660761,
@@ -2546,7 +2546,7 @@
     "walks": 22,
     "home_runs_allowed": 3,
     "era_percentile": 30,
-    "fip_percentile": 73,
+    "fip_percentile": 72,
     "k9_percentile": 66,
     "bb9_percentile": 21,
     "whip_percentile": 11
@@ -2571,7 +2571,7 @@
     "fip_percentile": 72,
     "k9_percentile": 46,
     "bb9_percentile": 73,
-    "whip_percentile": 50
+    "whip_percentile": 51
   },
   {
     "player_id": 669330,
@@ -2636,7 +2636,7 @@
     "era_percentile": 73,
     "fip_percentile": 71,
     "k9_percentile": 73,
-    "bb9_percentile": 66,
+    "bb9_percentile": 67,
     "whip_percentile": 64
   },
   {
@@ -2835,7 +2835,7 @@
     "fip_percentile": 70,
     "k9_percentile": 94,
     "bb9_percentile": 29,
-    "whip_percentile": 50
+    "whip_percentile": 51
   },
   {
     "player_id": 801139,
@@ -2855,7 +2855,7 @@
     "home_runs_allowed": 8,
     "era_percentile": 64,
     "fip_percentile": 69,
-    "k9_percentile": 53,
+    "k9_percentile": 54,
     "bb9_percentile": 70,
     "whip_percentile": 77
   },
@@ -2988,7 +2988,7 @@
     "era_percentile": 56,
     "fip_percentile": 68,
     "k9_percentile": 59,
-    "bb9_percentile": 65,
+    "bb9_percentile": 66,
     "whip_percentile": 44
   },
   {
@@ -3164,7 +3164,7 @@
     "era_percentile": 93,
     "fip_percentile": 65,
     "k9_percentile": 12,
-    "bb9_percentile": 65,
+    "bb9_percentile": 66,
     "whip_percentile": 74
   },
   {
@@ -3205,7 +3205,7 @@
     "strikeouts": 106,
     "walks": 33,
     "home_runs_allowed": 12,
-    "era_percentile": 60,
+    "era_percentile": 59,
     "fip_percentile": 65,
     "k9_percentile": 69,
     "bb9_percentile": 61,
@@ -3318,7 +3318,7 @@
     "era_percentile": 67,
     "fip_percentile": 64,
     "k9_percentile": 23,
-    "bb9_percentile": 57,
+    "bb9_percentile": 58,
     "whip_percentile": 32
   },
   {
@@ -3472,7 +3472,7 @@
     "era_percentile": 91,
     "fip_percentile": 62,
     "k9_percentile": 70,
-    "bb9_percentile": 68,
+    "bb9_percentile": 69,
     "whip_percentile": 97
   },
   {
@@ -3491,7 +3491,7 @@
     "strikeouts": 18,
     "walks": 12,
     "home_runs_allowed": 1,
-    "era_percentile": 81,
+    "era_percentile": 80,
     "fip_percentile": 62,
     "k9_percentile": 12,
     "bb9_percentile": 24,
@@ -3648,7 +3648,7 @@
     "era_percentile": 46,
     "fip_percentile": 60,
     "k9_percentile": 64,
-    "bb9_percentile": 78,
+    "bb9_percentile": 79,
     "whip_percentile": 44
   },
   {
@@ -3997,7 +3997,7 @@
     "strikeouts": 42,
     "walks": 10,
     "home_runs_allowed": 6,
-    "era_percentile": 70,
+    "era_percentile": 69,
     "fip_percentile": 56,
     "k9_percentile": 82,
     "bb9_percentile": 79,
@@ -4131,7 +4131,7 @@
     "home_runs_allowed": 5,
     "era_percentile": 65,
     "fip_percentile": 55,
-    "k9_percentile": 27,
+    "k9_percentile": 26,
     "bb9_percentile": 87,
     "whip_percentile": 35
   },
@@ -4175,7 +4175,7 @@
     "home_runs_allowed": 7,
     "era_percentile": 65,
     "fip_percentile": 55,
-    "k9_percentile": 25,
+    "k9_percentile": 24,
     "bb9_percentile": 43,
     "whip_percentile": 38
   },
@@ -4395,7 +4395,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 23,
     "fip_percentile": 52,
-    "k9_percentile": 64,
+    "k9_percentile": 65,
     "bb9_percentile": 6,
     "whip_percentile": 9
   },
@@ -4659,7 +4659,7 @@
     "home_runs_allowed": 8,
     "era_percentile": 47,
     "fip_percentile": 50,
-    "k9_percentile": 68,
+    "k9_percentile": 69,
     "bb9_percentile": 48,
     "whip_percentile": 82
   },
@@ -4749,7 +4749,7 @@
     "fip_percentile": 48,
     "k9_percentile": 68,
     "bb9_percentile": 36,
-    "whip_percentile": 50
+    "whip_percentile": 51
   },
   {
     "player_id": 641745,
@@ -4880,7 +4880,7 @@
     "era_percentile": 32,
     "fip_percentile": 47,
     "k9_percentile": 21,
-    "bb9_percentile": 57,
+    "bb9_percentile": 58,
     "whip_percentile": 46
   },
   {
@@ -4902,7 +4902,7 @@
     "era_percentile": 93,
     "fip_percentile": 46,
     "k9_percentile": 10,
-    "bb9_percentile": 55,
+    "bb9_percentile": 56,
     "whip_percentile": 73
   },
   {
@@ -4921,7 +4921,7 @@
     "strikeouts": 30,
     "walks": 20,
     "home_runs_allowed": 3,
-    "era_percentile": 80,
+    "era_percentile": 79,
     "fip_percentile": 46,
     "k9_percentile": 10,
     "bb9_percentile": 27,
@@ -5099,7 +5099,7 @@
     "home_runs_allowed": 19,
     "era_percentile": 47,
     "fip_percentile": 45,
-    "k9_percentile": 63,
+    "k9_percentile": 64,
     "bb9_percentile": 90,
     "whip_percentile": 71
   },
@@ -5189,7 +5189,7 @@
     "fip_percentile": 43,
     "k9_percentile": 13,
     "bb9_percentile": 93,
-    "whip_percentile": 50
+    "whip_percentile": 51
   },
   {
     "player_id": 606996,
@@ -5363,7 +5363,7 @@
     "home_runs_allowed": 14,
     "era_percentile": 32,
     "fip_percentile": 41,
-    "k9_percentile": 51,
+    "k9_percentile": 52,
     "bb9_percentile": 43,
     "whip_percentile": 28
   },
@@ -5759,7 +5759,7 @@
     "home_runs_allowed": 5,
     "era_percentile": 66,
     "fip_percentile": 37,
-    "k9_percentile": 65,
+    "k9_percentile": 66,
     "bb9_percentile": 21,
     "whip_percentile": 42
   },
@@ -6112,7 +6112,7 @@
     "era_percentile": 27,
     "fip_percentile": 33,
     "k9_percentile": 75,
-    "bb9_percentile": 65,
+    "bb9_percentile": 66,
     "whip_percentile": 56
   },
   {
@@ -6244,7 +6244,7 @@
     "era_percentile": 21,
     "fip_percentile": 32,
     "k9_percentile": 21,
-    "bb9_percentile": 65,
+    "bb9_percentile": 66,
     "whip_percentile": 18
   },
   {
@@ -6287,7 +6287,7 @@
     "home_runs_allowed": 10,
     "era_percentile": 40,
     "fip_percentile": 31,
-    "k9_percentile": 52,
+    "k9_percentile": 53,
     "bb9_percentile": 30,
     "whip_percentile": 38
   },
@@ -6329,7 +6329,7 @@
     "strikeouts": 22,
     "walks": 8,
     "home_runs_allowed": 5,
-    "era_percentile": 87,
+    "era_percentile": 86,
     "fip_percentile": 31,
     "k9_percentile": 10,
     "bb9_percentile": 87,
@@ -6659,7 +6659,7 @@
     "strikeouts": 33,
     "walks": 12,
     "home_runs_allowed": 6,
-    "era_percentile": 59,
+    "era_percentile": 58,
     "fip_percentile": 27,
     "k9_percentile": 60,
     "bb9_percentile": 50,
@@ -6992,7 +6992,7 @@
     "era_percentile": 12,
     "fip_percentile": 23,
     "k9_percentile": 60,
-    "bb9_percentile": 68,
+    "bb9_percentile": 69,
     "whip_percentile": 23
   },
   {
@@ -7234,7 +7234,7 @@
     "era_percentile": 74,
     "fip_percentile": 21,
     "k9_percentile": 21,
-    "bb9_percentile": 57,
+    "bb9_percentile": 58,
     "whip_percentile": 62
   },
   {
@@ -7256,7 +7256,7 @@
     "era_percentile": 46,
     "fip_percentile": 21,
     "k9_percentile": 23,
-    "bb9_percentile": 77,
+    "bb9_percentile": 78,
     "whip_percentile": 75
   },
   {
@@ -7585,7 +7585,7 @@
     "home_runs_allowed": 8,
     "era_percentile": 6,
     "fip_percentile": 17,
-    "k9_percentile": 51,
+    "k9_percentile": 52,
     "bb9_percentile": 9,
     "whip_percentile": 11
   },
@@ -7652,7 +7652,7 @@
     "era_percentile": 58,
     "fip_percentile": 16,
     "k9_percentile": 11,
-    "bb9_percentile": 63,
+    "bb9_percentile": 64,
     "whip_percentile": 59
   },
   {
@@ -7673,7 +7673,7 @@
     "home_runs_allowed": 10,
     "era_percentile": 8,
     "fip_percentile": 16,
-    "k9_percentile": 13,
+    "k9_percentile": 14,
     "bb9_percentile": 42,
     "whip_percentile": 8
   },
@@ -7850,7 +7850,7 @@
     "era_percentile": 28,
     "fip_percentile": 14,
     "k9_percentile": 5,
-    "bb9_percentile": 58,
+    "bb9_percentile": 59,
     "whip_percentile": 22
   },
   {
@@ -7872,7 +7872,7 @@
     "era_percentile": 17,
     "fip_percentile": 14,
     "k9_percentile": 9,
-    "bb9_percentile": 56,
+    "bb9_percentile": 57,
     "whip_percentile": 19
   },
   {
@@ -8224,7 +8224,7 @@
     "era_percentile": 7,
     "fip_percentile": 10,
     "k9_percentile": 32,
-    "bb9_percentile": 63,
+    "bb9_percentile": 64,
     "whip_percentile": 19
   },
   {
@@ -8353,7 +8353,7 @@
     "strikeouts": 36,
     "walks": 18,
     "home_runs_allowed": 8,
-    "era_percentile": 59,
+    "era_percentile": 58,
     "fip_percentile": 8,
     "k9_percentile": 49,
     "bb9_percentile": 22,
@@ -8665,7 +8665,7 @@
     "fip_percentile": 5,
     "k9_percentile": 1,
     "bb9_percentile": 48,
-    "whip_percentile": 50
+    "whip_percentile": 51
   },
   {
     "player_id": 518876,
@@ -8730,7 +8730,7 @@
     "era_percentile": 29,
     "fip_percentile": 4,
     "k9_percentile": 5,
-    "bb9_percentile": 55,
+    "bb9_percentile": 56,
     "whip_percentile": 53
   },
   {
@@ -8862,8 +8862,8 @@
     "era_percentile": 20,
     "fip_percentile": 3,
     "k9_percentile": 36,
-    "bb9_percentile": 58,
-    "whip_percentile": 50
+    "bb9_percentile": 59,
+    "whip_percentile": 51
   },
   {
     "player_id": 664875,
