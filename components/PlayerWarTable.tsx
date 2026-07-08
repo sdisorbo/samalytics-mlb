@@ -86,10 +86,16 @@ interface Props {
 
 export default function PlayerWarTable({ players, legendWar }: Props) {
   const [position, setPosition]   = useState('All')
+  const [team, setTeam]           = useState('All')
   const [search, setSearch]       = useState('')
   const [sortKey, setSortKey]     = useState<SortKey>('war')
   const [sortDir, setSortDir]     = useState<'asc' | 'desc'>('desc')
   const [selected, setSelected]   = useState<PlayerWarWithPos | null>(null)
+
+  // Sorted unique team list derived from qualified players
+  const teamOptions = ['All', ...Array.from(
+    new Set(players.filter((p) => p.pa >= 50).map((p) => p.team))
+  ).sort()]
 
   function handleSort(key: SortKey) {
     if (sortKey === key) {
@@ -116,6 +122,10 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
       if (position === 'OF') return ['LF', 'CF', 'RF', 'OF'].includes(pos)
       return pos === position
     })
+  }
+
+  if (team !== 'All') {
+    filtered = filtered.filter((p) => p.team === team)
   }
 
   filtered = [...filtered].sort((a, b) => {
@@ -148,11 +158,20 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
       <div className="flex flex-wrap items-center gap-3 mb-5">
         <input
           type="text"
-          placeholder="Search player or team…"
+          placeholder="Search player…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border border-538-border rounded px-3 py-1.5 text-sm bg-surface text-538-text placeholder-538-muted focus:outline-none focus:ring-1 focus:ring-538-orange w-52"
+          className="border border-538-border rounded px-3 py-1.5 text-sm bg-surface text-538-text placeholder-538-muted focus:outline-none focus:ring-1 focus:ring-538-orange w-44"
         />
+        <select
+          value={team}
+          onChange={(e) => setTeam(e.target.value)}
+          className="border border-538-border rounded px-3 py-1.5 text-sm bg-surface text-538-text focus:outline-none focus:ring-1 focus:ring-538-orange"
+        >
+          {teamOptions.map((t) => (
+            <option key={t} value={t}>{t === 'All' ? 'All Teams' : t}</option>
+          ))}
+        </select>
         <div className="flex flex-wrap gap-1">
           {ALL_POSITIONS.map((pos) => (
             <button
