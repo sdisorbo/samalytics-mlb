@@ -58,7 +58,6 @@ def fetch_current_war(season: int) -> list[dict]:
         df = season_df
         df = df[df["pitcher"] == "N"]
         df = df.dropna(subset=["WAR"])
-        df = df[df["WAR"] != 0]
 
         rows = []
         for _, r in df.iterrows():
