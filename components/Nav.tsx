@@ -15,7 +15,7 @@ const LINKS = [
   { href: '/players',   label: 'Batters' },
   { href: '/war',       label: 'Player WAR' },
   { href: '/matchup',     label: 'Pitch Lab' },
-  { href: '/matchup-lab', label: 'Matchup Lab' },
+  { href: '/matchup-lab', label: 'Games' },
   { href: '/pitch-vis',        label: 'Pitch Vis' },
   { href: '/team-performance', label: 'Team Performance' },
 ]

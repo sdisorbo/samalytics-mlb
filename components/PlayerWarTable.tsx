@@ -68,14 +68,19 @@ function warColor(value: number, min: number, max: number): string {
     : multiStop(PINK, 1 - t * 2)
 }
 
-type SortKey = 'war' | 'off_war' | 'def_war' | 'g' | 'pa'
+type SortKey = 'war' | 'off_war' | 'def_war' | 'g' | 'pa' | 'rar_per_g'
+
+function rarPerGame(p: PlayerWarWithPos): number {
+  return p.g > 0 ? (p.war * 10) / p.g : 0
+}
 
 function getVal(p: PlayerWarWithPos, key: SortKey): number {
-  if (key === 'war')     return p.war
-  if (key === 'off_war') return p.off_war
-  if (key === 'def_war') return p.def_war
-  if (key === 'g')       return p.g
-  if (key === 'pa')      return p.pa
+  if (key === 'war')      return p.war
+  if (key === 'off_war')  return p.off_war
+  if (key === 'def_war')  return p.def_war
+  if (key === 'g')        return p.g
+  if (key === 'pa')       return p.pa
+  if (key === 'rar_per_g') return rarPerGame(p)
   return 0
 }
 
@@ -144,12 +149,17 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
   const minDef  = defWars.length ? Math.min(...defWars) : 0
   const maxDef  = defWars.length ? Math.max(...defWars) : 0
 
+  const rarVals  = filtered.map(rarPerGame)
+  const minRar   = rarVals.length ? Math.min(...rarVals) : 0
+  const maxRar   = rarVals.length ? Math.max(...rarVals) : 0
+
   const cols: { key: SortKey; label: string; title: string }[] = [
-    { key: 'g',       label: 'G',   title: 'Games played' },
-    { key: 'pa',      label: 'PA',  title: 'Plate appearances' },
-    { key: 'off_war', label: 'Off', title: 'Offensive WAR' },
-    { key: 'def_war', label: 'Def', title: 'Defensive WAR' },
-    { key: 'war',     label: 'WAR', title: 'Total Wins Above Replacement (bRef bWAR)' },
+    { key: 'g',        label: 'G',      title: 'Games played' },
+    { key: 'pa',       label: 'PA',     title: 'Plate appearances' },
+    { key: 'rar_per_g', label: 'RAR/G', title: 'Runs Above Replacement per Game (WAR × 10 ÷ G)' },
+    { key: 'off_war',  label: 'Off',    title: 'Offensive WAR' },
+    { key: 'def_war',  label: 'Def',    title: 'Defensive WAR' },
+    { key: 'war',      label: 'WAR',    title: 'Total Wins Above Replacement (bRef bWAR)' },
   ]
 
   return (
@@ -219,7 +229,7 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={9} className="py-8 text-center text-538-muted text-sm">
+                <td colSpan={10} className="py-8 text-center text-538-muted text-sm">
                   No players match your filters.
                 </td>
               </tr>
@@ -243,6 +253,12 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                 <td className="py-2.5 px-3 text-center text-xs font-semibold text-538-muted">{player.team}</td>
                 <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.g}</td>
                 <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.pa}</td>
+                <td
+                  className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
+                  style={{ color: warColor(rarPerGame(player), minRar, maxRar) }}
+                >
+                  {(rarPerGame(player) > 0 ? '+' : '') + rarPerGame(player).toFixed(2)}
+                </td>
                 <td
                   className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
                   style={{ color: warColor(player.off_war, minOff, maxOff) }}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
@@ -16,6 +17,9 @@ import {
   type GameSetup,
 } from '../lib/mlbSimulator'
 import { LogicBreakdown, Code } from './LogicBreakdown'
+import type { GameBreakdownProps } from './GameBreakdown'
+
+const GameBreakdown = dynamic(() => import('./GameBreakdown'), { ssr: false })
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -160,6 +164,9 @@ interface ScheduleGame {
   awayPitcherName: string | null
   homePitcherId: number | null
   homePitcherName: string | null
+  awayScore: number | null
+  homeScore: number | null
+  gameStatus: string  // "Preview" | "Live" | "Final"
 }
 
 async function fetchSchedule(date: string): Promise<ScheduleGame[]> {
@@ -170,6 +177,7 @@ async function fetchSchedule(date: string): Promise<ScheduleGame[]> {
   const games: ScheduleGame[] = []
   for (const dateEntry of data.dates ?? []) {
     for (const game of dateEntry.games ?? []) {
+      const status: string = game.status?.abstractGameState ?? 'Preview'
       games.push({
         gamePk: game.gamePk,
         gameDate: game.gameDate,
@@ -181,6 +189,9 @@ async function fetchSchedule(date: string): Promise<ScheduleGame[]> {
         awayPitcherName: game.teams.away.probablePitcher?.fullName ?? null,
         homePitcherId: game.teams.home.probablePitcher?.id ?? null,
         homePitcherName: game.teams.home.probablePitcher?.fullName ?? null,
+        awayScore: game.teams.away.score ?? null,
+        homeScore: game.teams.home.score ?? null,
+        gameStatus: status,
       })
     }
   }
@@ -214,6 +225,10 @@ interface GameState {
   simResults: SimResults | null
   expanded: boolean
   swapTarget: SwapTarget | null
+  awayScore: number | null
+  homeScore: number | null
+  gameStatus: string
+  breakdownOpen: boolean
 }
 
 // ── Run Distribution Chart ────────────────────────────────────────────────────
@@ -721,17 +736,39 @@ function MatchupCard({
 
         {/* Sim results row */}
         {sr ? (
-          <div className="grid grid-cols-3 gap-2 mb-3 text-center">
+          <div
+            className="grid grid-cols-3 gap-2 mb-3 text-center cursor-pointer"
+            onClick={() => onUpdate({ breakdownOpen: true })}
+            title="Click to open game breakdown"
+          >
             <div>
               <div className="text-2xs text-538-muted uppercase tracking-wider mb-0.5">Away Win</div>
               <div className="text-2xl font-black text-538-orange">{(sr.awayWinPct * 100).toFixed(0)}%</div>
               <div className="text-2xs text-538-muted">±{(sr.confidenceInterval * 100).toFixed(1)}%</div>
             </div>
             <div>
-              <div className="text-2xs text-538-muted uppercase tracking-wider mb-0.5">Proj. Score</div>
-              <div className="text-base font-bold text-538-text mt-1">
-                {sr.avgAwayRuns.toFixed(1)} — {sr.avgHomeRuns.toFixed(1)}
-              </div>
+              {(game.gameStatus === 'Final' || game.gameStatus === 'Live') &&
+               game.awayScore !== null && game.homeScore !== null ? (
+                <>
+                  <div className="text-2xs uppercase tracking-wider mb-0.5 font-bold"
+                    style={{ color: game.gameStatus === 'Live' ? '#16a34a' : '#888' }}>
+                    {game.gameStatus === 'Live' ? '● Live' : 'Final'}
+                  </div>
+                  <div className="text-xl font-black text-538-text">
+                    {game.awayScore} – {game.homeScore}
+                  </div>
+                  <div className="text-2xs text-538-muted mt-0.5">
+                    proj. {sr.avgAwayRuns.toFixed(1)} – {sr.avgHomeRuns.toFixed(1)}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xs text-538-muted uppercase tracking-wider mb-0.5">Proj. Score</div>
+                  <div className="text-base font-bold text-538-text mt-1">
+                    {sr.avgAwayRuns.toFixed(1)} — {sr.avgHomeRuns.toFixed(1)}
+                  </div>
+                </>
+              )}
             </div>
             <div>
               <div className="text-2xs text-538-muted uppercase tracking-wider mb-0.5">Home Win</div>
@@ -763,6 +800,13 @@ function MatchupCard({
 
         {/* Action row */}
         <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => onUpdate({ breakdownOpen: true })}
+            className="text-2xs border rounded px-2 py-1 font-semibold transition-colors hover:opacity-80"
+            style={{ borderColor: '#1467EB', color: '#1467EB' }}
+          >
+            Game Breakdown
+          </button>
           <button
             onClick={() => onUpdate({ swapTarget: swapTarget?.type === 'away-pitcher' ? null : { type: 'away-pitcher' } })}
             className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors"
@@ -802,6 +846,24 @@ function MatchupCard({
           />
         )}
       </div>
+
+      {/* Game breakdown modal */}
+      {game.breakdownOpen && sr && (
+        <GameBreakdown
+          awayTeamName={game.awayTeamName}
+          homeTeamName={game.homeTeamName}
+          awayTeamAbbr={game.awayTeamAbbr}
+          homeTeamAbbr={game.homeTeamAbbr}
+          awayLineup={game.awayLineup}
+          homeLineup={game.homeLineup}
+          awayBatterProjections={sr.awayBatterProjections}
+          homeBatterProjections={sr.homeBatterProjections}
+          awayScore={game.awayScore}
+          homeScore={game.homeScore}
+          gameStatus={game.gameStatus}
+          onClose={() => onUpdate({ breakdownOpen: false })}
+        />
+      )}
 
       {/* Expanded details */}
       {game.expanded && sr && (
@@ -979,6 +1041,10 @@ export default function MatchupLab({
         simResults: null,
         expanded: false,
         swapTarget: null,
+        awayScore: sg.awayScore,
+        homeScore: sg.homeScore,
+        gameStatus: sg.gameStatus ?? 'Preview',
+        breakdownOpen: false,
       }
     },
     [pitchers, players],
@@ -1015,6 +1081,9 @@ export default function MatchupLab({
       awayPitcherName: null,
       homePitcherId: null,
       homePitcherName: null,
+      awayScore: null,
+      homeScore: null,
+      gameStatus: 'Preview',
     }
     setGames([buildGameState(sg)])
     setScheduleError(null)

@@ -20,7 +20,7 @@ export default function MatchupLabPage() {
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-black text-538-text tracking-tight">Matchup Lab</h1>
+        <h1 className="text-2xl font-black text-538-text tracking-tight">Games</h1>
         <p className="text-sm text-538-muted mt-1">
           Game simulator — model pitcher vs. lineup matchups with {100}-game Monte Carlo simulations.
           Pick a date to load today&apos;s slate, or select two teams to simulate any matchup.
