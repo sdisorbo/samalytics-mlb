@@ -466,8 +466,8 @@ export default function GameBreakdown({
       onClick={onClose}
     >
       <div
-        className="bg-surface border border-538-border rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-5xl flex flex-col overflow-hidden"
-        style={{ maxHeight: '92dvh' }}
+        className="bg-surface border border-538-border rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-7xl flex flex-col overflow-hidden"
+        style={{ maxHeight: '95dvh' }}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -615,7 +615,7 @@ export default function GameBreakdown({
             </div>
 
             {/* Desktop field panel — right side, always visible */}
-            <div className="hidden sm:flex w-72 flex-shrink-0 flex-col items-center justify-center p-4 overflow-hidden">
+            <div className="hidden sm:flex w-96 flex-shrink-0 flex-col items-center justify-center p-4 overflow-hidden">
               {selectedEvents && selectedName ? (
                 <BaseballField
                   events={selectedEvents}
