@@ -17,8 +17,6 @@ import {
   type GameSetup,
 } from '../lib/mlbSimulator'
 import { LogicBreakdown, Code } from './LogicBreakdown'
-import type { GameBreakdownProps } from './GameBreakdown'
-
 const GameBreakdown = dynamic(() => import('./GameBreakdown'), { ssr: false })
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -848,16 +846,13 @@ function MatchupCard({
       </div>
 
       {/* Game breakdown modal */}
-      {game.breakdownOpen && sr && (
+      {game.breakdownOpen && (
         <GameBreakdown
+          gamePk={game.gameId}
           awayTeamName={game.awayTeamName}
           homeTeamName={game.homeTeamName}
           awayTeamAbbr={game.awayTeamAbbr}
           homeTeamAbbr={game.homeTeamAbbr}
-          awayLineup={game.awayLineup}
-          homeLineup={game.homeLineup}
-          awayBatterProjections={sr.awayBatterProjections}
-          homeBatterProjections={sr.homeBatterProjections}
           awayScore={game.awayScore}
           homeScore={game.homeScore}
           gameStatus={game.gameStatus}
