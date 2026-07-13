@@ -223,25 +223,25 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4"
       style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="bg-surface rounded-xl border border-538-border shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto">
+      <div className="bg-surface rounded-t-2xl sm:rounded-xl border border-538-border shadow-2xl w-full sm:max-w-5xl max-h-[92dvh] overflow-y-auto">
 
         {/* Header */}
-        <div className="flex items-start justify-between px-6 pt-5 pb-4 border-b border-538-border sticky top-0 bg-surface z-10">
+        <div className="flex items-start justify-between px-4 sm:px-6 pt-5 pb-4 border-b border-538-border sticky top-0 bg-surface z-10">
           <div>
-            <h2 className="text-xl font-black text-538-text tracking-tight">{player.name}</h2>
-            <p className="text-xs text-538-muted mt-0.5">
-              {player.team} · {player.g} G · {player.pa} PA ·{' '}
-              <span className="font-semibold" style={{ color: playerColor }}>
-                {player.war.toFixed(1)} WAR
+            <h2 className="text-lg sm:text-xl font-black text-538-text tracking-tight">{player.name}</h2>
+            <p className="text-xs text-538-muted mt-0.5 flex flex-wrap gap-x-2">
+              <span>{player.team} · {player.g} G · {player.pa} PA</span>
+              <span>
+                <span className="font-semibold" style={{ color: playerColor }}>{player.war.toFixed(1)} WAR</span>
+                {' / '}
+                <span style={{ color: playerColor }}>{player.off_war.toFixed(1)} oWAR</span>
+                {' / '}
+                <span className="text-538-muted">{player.def_war.toFixed(1)} dWAR</span>
               </span>
-              {' / '}
-              <span style={{ color: playerColor }}>{player.off_war.toFixed(1)} oWAR</span>
-              {' / '}
-              <span className="text-538-muted">{player.def_war.toFixed(1)} dWAR</span>
             </p>
           </div>
           <button
@@ -257,13 +257,13 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
         </div>
 
         {/* Controls */}
-        <div className="px-6 py-3 border-b border-538-border flex items-center gap-4">
-          <div className="inline-flex rounded border border-538-border overflow-hidden">
+        <div className="px-4 sm:px-6 py-3 border-b border-538-border flex flex-wrap items-center gap-3">
+          <div className="inline-flex rounded border border-538-border overflow-hidden shrink-0">
             {metricOptions.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setMetric(opt.value)}
-                className={`px-3 py-1 text-xs font-semibold transition-colors ${
+                className={`px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap ${
                   metric === opt.value ? 'text-white' : 'text-538-muted hover:text-538-text'
                 }`}
                 style={metric === opt.value ? { backgroundColor: playerColor } : {}}
@@ -272,16 +272,20 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
               </button>
             ))}
           </div>
-          <span className="text-xs text-538-muted">
-            <span className="inline-block w-5 border-b-2 border-dashed mr-1 align-middle" style={{ borderColor: LEGEND_GRAY }} />
-            Legend career &nbsp;
-            <span className="inline-block w-5 border-b-2 mr-1 align-middle" style={{ borderColor: playerColor }} />
-            {player.name}
+          <span className="text-xs text-538-muted flex items-center gap-2 flex-wrap">
+            <span className="flex items-center gap-1">
+              <span className="inline-block w-5 border-b-2 border-dashed" style={{ borderColor: LEGEND_GRAY }} />
+              Legend
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="inline-block w-5 border-b-2" style={{ borderColor: playerColor }} />
+              {player.name}
+            </span>
           </span>
         </div>
 
         {/* Cards */}
-        <div className="px-6 py-5">
+        <div className="px-4 sm:px-6 py-5">
           <p className="text-xs text-538-muted mb-5">
             X-axis = career year (Year 1 = MLB debut). {' '}
             <span style={{ color: playerColor }} className="font-semibold">{player.name}</span>
@@ -303,7 +307,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
           </div>
         </div>
 
-        <div className="px-6 pb-4 text-xs text-538-muted border-t border-538-border pt-3">
+        <div className="px-4 sm:px-6 pb-4 text-xs text-538-muted border-t border-538-border pt-3">
           WAR data via Baseball Reference (bWAR). oWAR = total WAR − dWAR (batting + baserunning + positional adj + replacement level).
         </div>
       </div>

@@ -211,14 +211,14 @@ export default function PitcherScatter({ pitchers }: Props) {
 
   return (
     <div>
-      {/* Division tabs */}
-      <div className="flex border border-538-border rounded overflow-hidden mb-5">
+      {/* Division tabs — horizontally scrollable on mobile */}
+      <div className="flex overflow-x-auto border border-538-border rounded mb-5" style={{ WebkitOverflowScrolling: 'touch' }}>
         {availableDivisions.map((div, i) => (
           <button
             key={div}
             onClick={() => setDivision(div)}
             className={clsx(
-              'flex-1 px-2 py-2 text-xs font-semibold transition-colors whitespace-nowrap',
+              'shrink-0 px-3 py-2 text-xs font-semibold transition-colors whitespace-nowrap',
               i > 0 && 'border-l border-538-border',
               div === activeDivision
                 ? 'bg-538-orange text-white'
@@ -269,7 +269,7 @@ export default function PitcherScatter({ pitchers }: Props) {
           <table className="data-table">
             <thead>
               <tr>
-                <th className="text-left">Pitcher</th>
+                <th className="text-left sticky left-0 z-10 bg-surface">Pitcher</th>
                 <th className="text-left">Team</th>
                 <th className="text-right">IP</th>
                 <th className="text-right">ERA</th>
@@ -287,7 +287,7 @@ export default function PitcherScatter({ pitchers }: Props) {
                 .slice(0, 25)
                 .map(p => (
                   <tr key={p.player_id}>
-                    <td className="font-medium">{p.name}</td>
+                    <td className="font-medium sticky left-0 z-10 bg-surface">{p.name}</td>
                     <td>
                       <span
                         className="inline-flex items-center justify-center w-8 h-5 rounded text-white font-bold"

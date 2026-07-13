@@ -207,8 +207,8 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b-2 border-538-border bg-surface">
-              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs w-10 select-none">#</th>
-              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs min-w-[160px] select-none">Player</th>
+              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs w-10 select-none sticky left-0 z-10 bg-surface">#</th>
+              <th className="text-left py-3 px-3 text-538-muted font-bold text-xs min-w-[160px] select-none sticky left-10 z-10 bg-surface">Player</th>
               <th className="text-center py-3 px-3 text-538-muted font-bold text-xs select-none">Pos</th>
               <th className="text-center py-3 px-3 text-538-muted font-bold text-xs select-none">Team</th>
               {cols.map((c) => (
@@ -242,8 +242,8 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                   idx % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''
                 }`}
               >
-                <td className="py-2.5 px-3 text-538-muted text-xs font-bold">{idx + 1}</td>
-                <td className="py-2.5 px-3">
+                <td className="py-2.5 px-3 text-538-muted text-xs font-bold sticky left-0 z-10 bg-surface">{idx + 1}</td>
+                <td className="py-2.5 px-3 sticky left-10 z-10 bg-surface">
                   <div className="flex items-center gap-2">
                     <TeamLogo team={player.team} size={22} />
                     <span className="font-semibold text-538-text text-sm">{player.name}</span>

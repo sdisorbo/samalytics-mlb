@@ -220,7 +220,7 @@ export default function StandingsTable({ standings }: Props) {
         <table className="data-table">
           <thead>
             <tr>
-              <Th col="team_abbr" align="left">Team</Th>
+              <Th col="team_abbr" align="left" className="sticky left-0 z-10 bg-surface">Team</Th>
               <Th col="wins">W</Th>
               <Th col="losses">L</Th>
               <th className="text-right text-538-muted text-2xs uppercase tracking-widest">PCT</th>
@@ -240,6 +240,7 @@ export default function StandingsTable({ standings }: Props) {
                     <tr className="division-header">
                       <td
                         colSpan={11}
+                        className="sticky left-0"
                         style={{ borderLeft: `3px solid ${divisionColor(division)}` }}
                       >
                         {division}
@@ -271,8 +272,8 @@ function TeamRow({ row, colStats }: { row: TeamStanding; colStats: ColStats }) {
 
   return (
     <tr>
-      {/* Team */}
-      <td className="text-left">
+      {/* Team — sticky so logo + name stay visible when scrolling horizontally */}
+      <td className="text-left sticky left-0 z-10 bg-surface">
         <div className="flex items-center gap-2">
           <TeamBadge abbr={row.team_abbr} />
           <span className="font-medium text-538-text">{row.team}</span>
