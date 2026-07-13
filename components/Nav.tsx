@@ -17,7 +17,7 @@ const LINKS = [
   { href: '/matchup',     label: 'Pitch Lab' },
   { href: '/matchup-lab', label: 'Games' },
   { href: '/pitch-vis',        label: 'Pitch Vis' },
-  { href: '/team-performance', label: 'Team Performance' },
+  { href: '/team-performance', label: 'Team Perf' },
 ]
 
 function ThemeToggle() {
@@ -69,41 +69,45 @@ function ThemeToggle() {
 
 export default function Nav() {
   const pathname = usePathname()
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  // Close mobile menu on route change
+  useEffect(() => { setMobileOpen(false) }, [pathname])
 
   return (
     <header className="border-b border-538-border sticky top-0 z-50" style={{ backgroundColor: 'var(--color-surface)' }}>
-      <div className="max-w-screen-xl mx-auto px-4 flex items-center gap-4 h-12">
+      <div className="max-w-screen-xl mx-auto px-4 flex items-center gap-3 h-12">
         {/* Dark mode toggle */}
         <ThemeToggle />
 
-        {/* Divider */}
-        <div className="h-5 w-px bg-538-border" />
+        {/* Divider — desktop only */}
+        <div className="h-5 w-px bg-538-border hidden sm:block" />
 
         {/* Logo + wordmark */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
+        <Link href="/" className="flex items-center gap-2 shrink-0" onClick={() => setMobileOpen(false)}>
           <Image
             src="/logo.png"
             alt="Samalytics MLB Engine"
-            width={48}
-            height={36}
+            width={40}
+            height={30}
             className="nav-logo object-contain"
             priority
           />
           <div className="flex flex-col leading-none">
-            <span className="font-orbitron font-black text-538-orange tracking-wider" style={{ fontSize: '0.85rem' }}>
+            <span className="font-orbitron font-black text-538-orange tracking-wider" style={{ fontSize: '0.78rem' }}>
               SAMALYTICS
             </span>
-            <span className="font-bold text-538-muted tracking-widest uppercase" style={{ fontSize: '0.6rem' }}>
+            <span className="font-bold text-538-muted tracking-widest uppercase hidden sm:block" style={{ fontSize: '0.55rem' }}>
               MLB ENGINE
             </span>
           </div>
         </Link>
 
-        {/* Divider */}
-        <div className="h-5 w-px bg-538-border" />
+        {/* Divider — desktop only */}
+        <div className="h-5 w-px bg-538-border hidden sm:block" />
 
-        {/* Nav links */}
-        <nav className="flex items-center gap-0.5 overflow-x-auto">
+        {/* Nav links — desktop */}
+        <nav className="hidden sm:flex items-center gap-0.5 overflow-x-auto flex-1">
           {LINKS.map(({ href, label }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
             return (
@@ -123,7 +127,43 @@ export default function Nav() {
             )
           })}
         </nav>
+
+        {/* Hamburger — mobile only */}
+        <button
+          className="sm:hidden ml-auto w-9 h-9 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-538-bg transition-colors"
+          onClick={() => setMobileOpen(v => !v)}
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+        >
+          <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && 'translate-y-2 rotate-45')} />
+          <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && 'opacity-0')} />
+          <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && '-translate-y-2 -rotate-45')} />
+        </button>
       </div>
+
+      {/* Mobile menu dropdown */}
+      {mobileOpen && (
+        <nav className="sm:hidden border-t border-538-border" style={{ backgroundColor: 'var(--color-surface)' }}>
+          <div className="max-w-screen-xl mx-auto px-2 py-2 grid grid-cols-2 gap-1">
+            {LINKS.map(({ href, label }) => {
+              const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={clsx(
+                    'px-3 py-2.5 rounded-lg text-sm font-semibold tracking-wide uppercase transition-colors text-center',
+                    active
+                      ? 'bg-538-orange text-white'
+                      : 'text-538-muted hover:text-538-text hover:bg-538-bg'
+                  )}
+                >
+                  {label}
+                </Link>
+              )
+            })}
+          </div>
+        </nav>
+      )}
 
       {/* Today's games ticker */}
       <GameTicker />

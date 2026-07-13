@@ -461,18 +461,20 @@ export default function GameBreakdown({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3"
-      style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
       onClick={onClose}
     >
       <div
-        className="bg-surface border border-538-border rounded-lg shadow-2xl w-full max-w-3xl flex flex-col overflow-hidden"
-        style={{ maxHeight: '90vh' }}
+        className="bg-surface border border-538-border rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-5xl flex flex-col overflow-hidden"
+        style={{ maxHeight: '92dvh' }}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-538-border flex-shrink-0">
-          <div>
+        <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-538-border flex-shrink-0">
+          {/* Drag handle — mobile only */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-2 w-10 h-1 bg-538-border rounded-full sm:hidden" />
+          <div className="pt-1 sm:pt-0">
             <div className="font-bold text-538-text text-sm">
               {awayTeamName} <span className="font-normal text-538-muted">@</span> {homeTeamName}
             </div>
@@ -480,7 +482,7 @@ export default function GameBreakdown({
               {(isLive || isFinal) && awayScore !== null ? (
                 <span style={{ color: isLive ? '#16a34a' : '#888' }}>
                   {isFinal ? 'FINAL' : '● LIVE'}: {awayScore} – {homeScore}
-                  <span className="text-538-muted ml-2">· Run values via linear weights</span>
+                  <span className="text-538-muted ml-2 hidden sm:inline">· Run values via linear weights</span>
                 </span>
               ) : (
                 <span className="text-538-muted">Game not yet started</span>
@@ -488,7 +490,7 @@ export default function GameBreakdown({
             </div>
           </div>
           <button onClick={onClose}
-            className="text-538-muted hover:text-538-text text-base leading-none w-7 h-7 flex items-center justify-center rounded-full hover:bg-538-bg flex-shrink-0">
+            className="text-538-muted hover:text-538-text text-base leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-538-bg flex-shrink-0">
             ✕
           </button>
         </div>
@@ -498,7 +500,7 @@ export default function GameBreakdown({
             Game hasn't started yet. Check back once the game is Live or Final.
           </div>
         ) : loading ? (
-          <div className="flex-1 flex items-center justify-center text-538-muted text-sm">
+          <div className="flex-1 flex items-center justify-center text-538-muted text-sm py-16">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 border-2 rounded-full animate-spin"
                 style={{ borderColor: `${BLUE} transparent` }} />
@@ -513,14 +515,16 @@ export default function GameBreakdown({
             </div>
           </div>
         ) : (
-          <div className="flex flex-1 overflow-hidden min-h-0">
-            {/* Left: list */}
-            <div className="flex flex-col flex-1 overflow-hidden border-r border-538-border min-w-0">
+          // On mobile: single column, field below list when selected
+          // On desktop (sm+): side-by-side
+          <div className="flex flex-col sm:flex-row flex-1 overflow-hidden min-h-0">
+            {/* Player list */}
+            <div className="flex flex-col sm:flex-1 overflow-hidden sm:border-r border-538-border min-w-0">
               {/* Main tabs */}
               <div className="flex border-b border-538-border flex-shrink-0">
                 {TABS.map(t => (
                   <button key={t.id} onClick={() => setTab(t.id)}
-                    className="flex-1 py-2 text-xs font-semibold uppercase tracking-wide transition-colors"
+                    className="flex-1 py-2.5 text-xs font-semibold uppercase tracking-wide transition-colors"
                     style={{
                       color: tab === t.id ? BLUE : undefined,
                       borderBottom: tab === t.id ? `2px solid ${BLUE}` : '2px solid transparent',
@@ -557,8 +561,8 @@ export default function GameBreakdown({
                 <div className="w-4" />
               </div>
 
-              {/* Rows */}
-              <div className="overflow-y-auto flex-1">
+              {/* Rows — scrollable */}
+              <div className="overflow-y-auto" style={{ maxHeight: selectedEvents ? '45dvh' : undefined, flex: selectedEvents ? 'none' : '1' }}>
                 {currentList.length === 0 ? (
                   <div className="text-center text-538-muted text-xs py-8">
                     {isLive ? 'Waiting for data…' : 'No data found.'}
@@ -596,10 +600,22 @@ export default function GameBreakdown({
                     : 'Pitcher RAR = runs prevented vs replacement · ▼ for batters faced'}
                 </div>
               </div>
+
+              {/* Mobile field — inline below list when player selected */}
+              {selectedEvents && selectedName && (
+                <div className="sm:hidden border-t border-538-border overflow-y-auto flex-1 flex items-center justify-center py-2">
+                  <BaseballField
+                    events={selectedEvents}
+                    name={selectedName}
+                    animKey={fieldKey}
+                    perspective={perspective}
+                  />
+                </div>
+              )}
             </div>
 
-            {/* Right: field */}
-            <div className="w-64 flex-shrink-0 flex flex-col items-center justify-center p-3 overflow-hidden">
+            {/* Desktop field panel — right side, always visible */}
+            <div className="hidden sm:flex w-72 flex-shrink-0 flex-col items-center justify-center p-4 overflow-hidden">
               {selectedEvents && selectedName ? (
                 <BaseballField
                   events={selectedEvents}
@@ -608,8 +624,8 @@ export default function GameBreakdown({
                   perspective={perspective}
                 />
               ) : (
-                <div className="flex flex-col items-center text-center text-538-muted text-xs gap-3 opacity-40">
-                  <svg viewBox="0 0 80 76" style={{ width: 56, height: 54 }}>
+                <div className="flex flex-col items-center text-center text-538-muted text-xs gap-3 opacity-35">
+                  <svg viewBox="0 0 80 76" style={{ width: 64, height: 60 }}>
                     <polygon points="40,68 58,50 40,32 22,50" fill="none" stroke="currentColor" strokeWidth="2" />
                     <path d="M 8 20 Q 40 4 72 20" fill="none" stroke="currentColor" strokeWidth="1.5" />
                     <line x1="40" y1="68" x2="8" y2="20" stroke="currentColor" strokeWidth="1.5" />

@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}>
         <Nav />
-        <main className="max-w-screen-xl mx-auto px-4 py-6">{children}</main>
+        <main className="max-w-screen-xl mx-auto px-3 sm:px-4 py-4 sm:py-6 overflow-x-hidden">{children}</main>
         <Analytics />
       </body>
     </html>

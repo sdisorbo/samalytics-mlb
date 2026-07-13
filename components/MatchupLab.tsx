@@ -698,10 +698,10 @@ function MatchupCard({
               <div className="text-2xs text-538-muted leading-tight">
                 {game.awayPitcher.isTbd ? (
                   <span className="text-amber-700">
-                    SP: TBD — {game.awayPitcher.isTeamAvg ? `${game.awayTeamAbbr} staff avg` : 'league avg'}
+                    SP: TBD
                   </span>
                 ) : (
-                  <span>SP: {game.awayPitcher.name} ({game.awayPitcher.handedness === '?' ? 'RHP' : `${game.awayPitcher.handedness}HP`})</span>
+                  <span className="truncate block max-w-[140px] sm:max-w-none">SP: {game.awayPitcher.name}</span>
                 )}
               </div>
             </div>
@@ -716,10 +716,10 @@ function MatchupCard({
               <div className="text-2xs text-538-muted leading-tight">
                 {game.homePitcher.isTbd ? (
                   <span className="text-amber-700">
-                    SP: TBD — {game.homePitcher.isTeamAvg ? `${game.homeTeamAbbr} staff avg` : 'league avg'}
+                    SP: TBD
                   </span>
                 ) : (
-                  <span>SP: {game.homePitcher.name} ({game.homePitcher.handedness === '?' ? 'RHP' : `${game.homePitcher.handedness}HP`})</span>
+                  <span className="truncate block max-w-[140px] sm:max-w-none text-right">SP: {game.homePitcher.name}</span>
                 )}
               </div>
             </div>
@@ -781,18 +781,20 @@ function MatchupCard({
         )}
 
         {/* ELO deltas */}
-        <div className="flex items-center justify-between text-2xs mb-3 border-t border-538-border pt-2">
-          <div className="flex gap-3">
-            <span>ELO win: <span className="font-bold text-538-green">+{awayDelta.winDelta}</span></span>
-            <span>lose: <span className="font-bold text-538-red">{awayDelta.lossDelta}</span></span>
-            <span className="text-538-border">|</span>
-            <span className="text-538-muted">{game.awayTeamAbbr} ELO: {awayElo.toFixed(0)}</span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-2xs mb-3 border-t border-538-border pt-2 gap-1">
+          <div className="flex gap-2 flex-wrap">
+            <span className="text-538-muted font-semibold">{game.awayTeamAbbr}</span>
+            <span className="text-538-muted">ELO {awayElo.toFixed(0)}</span>
+            <span className="text-538-border hidden sm:inline">·</span>
+            <span>W: <span className="font-bold text-538-green">+{awayDelta.winDelta}</span></span>
+            <span>L: <span className="font-bold text-538-red">{awayDelta.lossDelta}</span></span>
           </div>
-          <div className="flex gap-3">
-            <span className="text-538-muted">{game.homeTeamAbbr} ELO: {homeElo.toFixed(0)}</span>
-            <span className="text-538-border">|</span>
-            <span>ELO win: <span className="font-bold text-538-green">+{homeDelta.winDelta}</span></span>
-            <span>lose: <span className="font-bold text-538-red">{homeDelta.lossDelta}</span></span>
+          <div className="flex gap-2 flex-wrap sm:justify-end">
+            <span className="text-538-muted font-semibold">{game.homeTeamAbbr}</span>
+            <span className="text-538-muted">ELO {homeElo.toFixed(0)}</span>
+            <span className="text-538-border hidden sm:inline">·</span>
+            <span>W: <span className="font-bold text-538-green">+{homeDelta.winDelta}</span></span>
+            <span>L: <span className="font-bold text-538-red">{homeDelta.lossDelta}</span></span>
           </div>
         </div>
 
@@ -800,35 +802,35 @@ function MatchupCard({
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => onUpdate({ breakdownOpen: true })}
-            className="text-2xs border rounded px-2 py-1 font-semibold transition-colors hover:opacity-80"
+            className="text-2xs border rounded px-2.5 py-1.5 font-semibold transition-colors hover:opacity-80"
             style={{ borderColor: '#1467EB', color: '#1467EB' }}
           >
             Game Breakdown
           </button>
           <button
             onClick={() => onUpdate({ swapTarget: swapTarget?.type === 'away-pitcher' ? null : { type: 'away-pitcher' } })}
-            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors"
+            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors hidden sm:block"
           >
-            {game.awayPitcher.isTbd ? '+ Select Away SP' : 'Swap Away SP'}
+            {game.awayPitcher.isTbd ? '+ Away SP' : `Swap ${game.awayTeamAbbr} SP`}
           </button>
           <button
             onClick={() => onUpdate({ swapTarget: swapTarget?.type === 'home-pitcher' ? null : { type: 'home-pitcher' } })}
-            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors"
+            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors hidden sm:block"
           >
-            {game.homePitcher.isTbd ? '+ Select Home SP' : 'Swap Home SP'}
+            {game.homePitcher.isTbd ? '+ Home SP' : `Swap ${game.homeTeamAbbr} SP`}
           </button>
           <button
             onClick={handleSimulate}
-            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors ml-auto"
+            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors ml-auto"
           >
             Re-run
           </button>
           <button
             onClick={() => onUpdate({ expanded: !game.expanded })}
-            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:bg-538-bg transition-colors flex items-center gap-1"
+            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:bg-538-bg transition-colors flex items-center gap-1"
           >
             <span className={`inline-block transition-transform ${game.expanded ? 'rotate-180' : ''}`}>▼</span>
-            {game.expanded ? 'Collapse' : 'Expand Details'}
+            <span className="hidden sm:inline">{game.expanded ? 'Collapse' : 'Details'}</span>
           </button>
         </div>
 
