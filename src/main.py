@@ -14,15 +14,14 @@ from datetime import date
 SEASON = 2026   # Updated for 2026 season
 # ───────────────────────────────────────────────────────────
 
-N_PLAYOFF_SIMS = 100
+N_PLAYOFF_SIMS = 1000
 
 # Allow running directly from /src or from the project root
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from fetch_data import fetch_teams, fetch_standings, fetch_schedule
+from fetch_data import fetch_teams, fetch_standings, fetch_schedule, fetch_remaining_schedule
 from elo_model import build_ratings, regress_to_mean, get_7day_elo_change, INITIAL_RATING
 from playoff_sim import run_simulations
-from bubble_weights import calculate_playoff_probabilities
 from pitchers import process_pitchers
 from players import process_players
 from savant import fetch_pitcher_arsenal, fetch_batter_vs_pitch
@@ -73,7 +72,7 @@ def _remap_games(games, id_to_abbr):
     return remapped
 
 
-def _build_standings_output(standings_records, teams, ratings, history, sim_results, playoff_probs):
+def _build_standings_output(standings_records, teams, ratings, history, sim_results):
     """Merge all computed data into the standings.json schema."""
     today = date.today().isoformat()
     rows = []
@@ -99,7 +98,7 @@ def _build_standings_output(standings_records, teams, ratings, history, sim_resu
                     "wins": team_rec.get("wins", 0),
                     "losses": team_rec.get("losses", 0),
                     "run_diff": team_rec.get("runDifferential", 0),
-                    "playoff_probability": round(playoff_probs.get(abbr, 0.0), 3),
+                    "playoff_probability": sim.get("playoff_probability", 0.0),
                     "win_ds": sim.get("win_ds", 0.0),
                     "win_cs": sim.get("win_cs", 0.0),
                     "win_ws": sim.get("win_ws", 0.0),
@@ -145,13 +144,14 @@ def main():
     ratings, history = build_ratings(games_abbr, team_abbrs, initial_ratings=prior_ratings)
     print(f"      ELO ratings built for {len(ratings)} teams.")
 
-    # ── 4. Playoff probabilities ──────────────────────────────────────────────
-    print(f"\n[4/7] Computing playoff field probabilities...")
-    playoff_probs = calculate_playoff_probabilities(standings_records)
+    # ── 4. Remaining schedule + playoff simulations ───────────────────────────
+    print(f"\n[4/7] Fetching remaining {SEASON} schedule...")
+    remaining_raw = fetch_remaining_schedule(SEASON)
+    remaining_games = _remap_games(remaining_raw, id_to_abbr)
+    print(f"      {len(remaining_games)} games remaining in the season.")
 
-    # ── 5. Playoff simulations ────────────────────────────────────────────────
-    print(f"\n[5/7] Running {N_PLAYOFF_SIMS} playoff bracket simulations...")
-    sim_results = run_simulations(N_PLAYOFF_SIMS, standings_records, ratings)
+    print(f"\n[5/7] Running {N_PLAYOFF_SIMS} full-season simulations...")
+    sim_results = run_simulations(N_PLAYOFF_SIMS, standings_records, ratings, remaining_games)
     print(f"      Done.")
 
     # ── 6. Pitchers ───────────────────────────────────────────────────────────
@@ -181,7 +181,7 @@ def main():
     # ── Export ────────────────────────────────────────────────────────────────
     print(f"\n[Export] Writing output JSON files to {export.OUTPUT_DIR} ...")
     standings_output = _build_standings_output(
-        standings_records, teams, ratings, history, sim_results, playoff_probs
+        standings_records, teams, ratings, history, sim_results
     )
     export.export_standings(standings_output)
     export.export_ratings_history(history)

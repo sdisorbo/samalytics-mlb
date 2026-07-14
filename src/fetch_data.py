@@ -116,6 +116,41 @@ def fetch_schedule(season, start_date=None, end_date=None):
     return all_games
 
 
+def fetch_remaining_schedule(season):
+    """
+    Fetch scheduled (not yet played) regular-season games from today through
+    the end of the season. Returns a list of game dicts:
+      {game_id, date, home_id, away_id}
+    """
+    today = date.today()
+    season_end = date(season, 10, 5)
+    if today > season_end:
+        return []
+
+    params = {
+        "sportId": 1,
+        "startDate": today.strftime("%Y-%m-%d"),
+        "endDate": season_end.strftime("%Y-%m-%d"),
+        "gameType": "R",
+    }
+    data = _get("/schedule", params)
+
+    remaining = []
+    for day in data.get("dates", []):
+        for game in day.get("games", []):
+            status = game.get("status", {}).get("abstractGameState", "")
+            if status in ("Final", "Live"):
+                continue
+            remaining.append({
+                "game_id": game["gamePk"],
+                "date": day["date"],
+                "home_id": game["teams"]["home"]["team"]["id"],
+                "away_id": game["teams"]["away"]["team"]["id"],
+            })
+
+    return remaining
+
+
 def fetch_pitcher_stats(season):
     """Fetch season pitching splits for all pitchers. Returns list of split dicts."""
     splits = []
