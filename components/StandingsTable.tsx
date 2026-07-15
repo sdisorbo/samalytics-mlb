@@ -116,6 +116,7 @@ export default function StandingsTable({ standings }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>('wins')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [groupByDivision, setGroupByDivision] = useState(false)
+  const [search, setSearch] = useState('')
 
   function handleSort(key: SortKey) {
     if (key === sortKey) {
@@ -127,18 +128,30 @@ export default function StandingsTable({ standings }: Props) {
   }
 
   const sortedStandings = useMemo(() => {
-    return [...standings].sort((a, b) => {
+    const q = search.trim().toLowerCase()
+    const filtered = q
+      ? standings.filter(s =>
+          s.team.toLowerCase().includes(q) || s.team_abbr.toLowerCase().includes(q)
+        )
+      : standings
+    return [...filtered].sort((a, b) => {
       const av = a[sortKey] as number
       const bv = b[sortKey] as number
       return sortDir === 'desc' ? bv - av : av - bv
     })
-  }, [standings, sortKey, sortDir])
+  }, [standings, sortKey, sortDir, search])
 
   const grouped = useMemo(() => {
     if (!groupByDivision) return null
+    const q = search.trim().toLowerCase()
+    const source = q
+      ? standings.filter(s =>
+          s.team.toLowerCase().includes(q) || s.team_abbr.toLowerCase().includes(q)
+        )
+      : standings
     const map = new Map<string, TeamStanding[]>()
     for (const div of DIVISION_ORDER) map.set(div, [])
-    for (const row of standings) {
+    for (const row of source) {
       const normalized = normalizeDivision(row.division)
       const bucket = map.get(normalized)
       if (bucket) bucket.push(row)
@@ -201,17 +214,24 @@ export default function StandingsTable({ standings }: Props) {
   return (
     <div>
       {/* Controls */}
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex flex-wrap items-center gap-3 mb-3">
+        <input
+          type="text"
+          placeholder="Search team…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="border border-538-border rounded px-3 py-1.5 text-sm bg-surface text-538-text placeholder-538-muted focus:outline-none focus:ring-1 focus:ring-538-orange w-40"
+        />
         <button
           onClick={() => setGroupByDivision(v => !v)}
           className={clsx(
-            'text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-lg border transition-colors',
+            'text-xs font-semibold uppercase tracking-wide px-3 py-1.5 rounded-lg border transition-colors',
             groupByDivision
               ? 'bg-538-orange text-white border-538-orange'
               : 'bg-surface text-538-muted border-538-border hover:border-538-text'
           )}
         >
-          {groupByDivision ? 'By Division' : 'By Division'}
+          By Division
         </button>
         <span className="text-xs text-538-muted">Click column headers to sort</span>
       </div>

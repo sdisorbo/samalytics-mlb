@@ -184,9 +184,22 @@ export interface PlayoffTeam {
 
 export interface WarSeason {
   year: number
+  team?: string
+  g?: number
+  gs?: number
+  ip?: number
   war: number
-  off_war: number
-  def_war: number
+  off_war: number | null
+  def_war: number | null
+  // batting stats (null for pitchers)
+  pa?: number | null
+  h?: number | null
+  bb?: number | null
+  k?: number | null
+  avg?: number | null
+  obp?: number | null
+  slg?: number | null
+  ops?: number | null
 }
 
 export interface PlayerWar {
@@ -196,9 +209,12 @@ export interface PlayerWar {
   team: string
   g: number
   pa: number
+  gs?: number
+  ip?: number
   war: number
-  off_war: number
-  def_war: number
+  off_war: number | null
+  def_war: number | null
+  player_type: 'batter' | 'pitcher'
   career: WarSeason[]
 }
 

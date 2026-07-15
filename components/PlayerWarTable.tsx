@@ -39,6 +39,7 @@ export interface PlayerWarWithPos extends PlayerWar {
 
 // ── Position groups ───────────────────────────────────────────────────────────
 const ALL_POSITIONS = ['All', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'OF', 'DH']
+const PLAYER_TYPES = ['All', 'Batters', 'Pitchers']
 
 // ── Multi-stop teal/pink WAR color scale ──────────────────────────────────────
 function lerpHex(a: string, b: string, t: number): string {
@@ -71,15 +72,19 @@ function warColor(value: number, min: number, max: number): string {
 type SortKey = 'war' | 'off_war' | 'def_war' | 'g' | 'pa' | 'rar_per_g'
 
 function rarPerGame(p: PlayerWarWithPos): number {
+  if (p.player_type === 'pitcher') {
+    const gs = p.gs ?? p.g
+    return gs > 0 ? (p.war * 10) / gs : 0
+  }
   return p.g > 0 ? (p.war * 10) / p.g : 0
 }
 
 function getVal(p: PlayerWarWithPos, key: SortKey): number {
-  if (key === 'war')      return p.war
-  if (key === 'off_war')  return p.off_war
-  if (key === 'def_war')  return p.def_war
-  if (key === 'g')        return p.g
-  if (key === 'pa')       return p.pa
+  if (key === 'war')       return p.war
+  if (key === 'off_war')   return p.off_war ?? 0
+  if (key === 'def_war')   return p.def_war ?? 0
+  if (key === 'g')         return p.g
+  if (key === 'pa')        return p.player_type === 'pitcher' ? (p.ip ?? 0) : p.pa
   if (key === 'rar_per_g') return rarPerGame(p)
   return 0
 }
@@ -91,15 +96,19 @@ interface Props {
 
 export default function PlayerWarTable({ players, legendWar }: Props) {
   const [position, setPosition]   = useState('All')
+  const [playerType, setPlayerType] = useState('All')
   const [team, setTeam]           = useState('All')
   const [search, setSearch]       = useState('')
   const [sortKey, setSortKey]     = useState<SortKey>('war')
   const [sortDir, setSortDir]     = useState<'asc' | 'desc'>('desc')
   const [selected, setSelected]   = useState<PlayerWarWithPos | null>(null)
 
-  // Sorted unique team list derived from qualified players
+  const qualified = players.filter(p =>
+    p.player_type === 'pitcher' ? (p.ip ?? 0) >= 20 : p.pa >= 50
+  )
+
   const teamOptions = ['All', ...Array.from(
-    new Set(players.filter((p) => p.pa >= 50).map((p) => p.team))
+    new Set(qualified.map((p) => p.team))
   ).sort()]
 
   function handleSort(key: SortKey) {
@@ -112,7 +121,7 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
   }
 
   // Compute inline — no useMemo so state changes always immediately take effect
-  let filtered = players.filter((p) => p.pa >= 50)
+  let filtered = qualified
 
   if (search.trim()) {
     const q = search.trim().toLowerCase()
@@ -121,8 +130,15 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
     )
   }
 
+  if (playerType === 'Batters') {
+    filtered = filtered.filter(p => p.player_type !== 'pitcher')
+  } else if (playerType === 'Pitchers') {
+    filtered = filtered.filter(p => p.player_type === 'pitcher')
+  }
+
   if (position !== 'All') {
     filtered = filtered.filter((p) => {
+      if (p.player_type === 'pitcher') return false
       const pos = p.position ?? ''
       if (position === 'OF') return ['LF', 'CF', 'RF', 'OF'].includes(pos)
       return pos === position
@@ -140,8 +156,8 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
   })
 
   const wars    = filtered.map((p) => p.war)
-  const offWars = filtered.map((p) => p.off_war)
-  const defWars = filtered.map((p) => p.def_war)
+  const offWars = filtered.map((p) => p.off_war ?? 0)
+  const defWars = filtered.map((p) => p.def_war ?? 0)
   const minWar  = wars.length    ? Math.min(...wars)    : 0
   const maxWar  = wars.length    ? Math.max(...wars)    : 0
   const minOff  = offWars.length ? Math.min(...offWars) : 0
@@ -153,10 +169,11 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
   const minRar   = rarVals.length ? Math.min(...rarVals) : 0
   const maxRar   = rarVals.length ? Math.max(...rarVals) : 0
 
+  const isPitcherView = playerType === 'Pitchers'
   const cols: { key: SortKey; label: string; title: string }[] = [
     { key: 'g',        label: 'G',      title: 'Games played' },
-    { key: 'pa',       label: 'PA',     title: 'Plate appearances' },
-    { key: 'rar_per_g', label: 'RAR/G', title: 'Runs Above Replacement per Game (WAR × 10 ÷ G)' },
+    { key: 'pa',       label: isPitcherView ? 'IP' : 'PA', title: isPitcherView ? 'Innings pitched' : 'Plate appearances' },
+    { key: 'rar_per_g', label: 'RAR/G', title: isPitcherView ? 'Runs Above Replacement per GS (WAR × 10 ÷ GS)' : 'Runs Above Replacement per Game (WAR × 10 ÷ G)' },
     { key: 'off_war',  label: 'Off',    title: 'Offensive WAR' },
     { key: 'def_war',  label: 'Def',    title: 'Defensive WAR' },
     { key: 'war',      label: 'WAR',    title: 'Total Wins Above Replacement (bRef bWAR)' },
@@ -182,21 +199,38 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
             <option key={t} value={t}>{t === 'All' ? 'All Teams' : t}</option>
           ))}
         </select>
-        <div className="flex flex-wrap gap-1">
-          {ALL_POSITIONS.map((pos) => (
+        <div className="inline-flex rounded border border-538-border overflow-hidden">
+          {PLAYER_TYPES.map((pt) => (
             <button
-              key={pos}
-              onClick={() => setPosition(pos)}
-              className={`px-2.5 py-1 text-xs font-semibold rounded transition-colors border ${
-                position === pos
-                  ? 'bg-538-orange text-white border-538-orange'
-                  : 'text-538-muted border-538-border hover:text-538-text'
+              key={pt}
+              onClick={() => { setPlayerType(pt); if (pt === 'Pitchers') setPosition('All') }}
+              className={`px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap ${
+                playerType === pt
+                  ? 'bg-538-orange text-white'
+                  : 'bg-surface text-538-muted hover:text-538-text'
               }`}
             >
-              {pos}
+              {pt}
             </button>
           ))}
         </div>
+        {playerType !== 'Pitchers' && (
+          <div className="flex flex-wrap gap-1">
+            {ALL_POSITIONS.map((pos) => (
+              <button
+                key={pos}
+                onClick={() => setPosition(pos)}
+                className={`px-2.5 py-1 text-xs font-semibold rounded transition-colors border ${
+                  position === pos
+                    ? 'bg-538-orange text-white border-538-orange'
+                    : 'text-538-muted border-538-border hover:text-538-text'
+                }`}
+              >
+                {pos}
+              </button>
+            ))}
+          </div>
+        )}
         <span className="text-xs text-538-muted ml-auto">
           {filtered.length} players
         </span>
@@ -237,10 +271,10 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
             {filtered.map((player, idx) => (
               <tr
                 key={player.bref_id}
-                onClick={() => setSelected(player)}
-                className={`border-b border-538-border/40 cursor-pointer hover:bg-538-orange/5 transition-colors ${
-                  idx % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''
-                }`}
+                onClick={() => player.player_type !== 'pitcher' && setSelected(player)}
+                className={`border-b border-538-border/40 transition-colors ${
+                  player.player_type !== 'pitcher' ? 'cursor-pointer hover:bg-538-orange/5' : ''
+                } ${idx % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''}`}
               >
                 <td className="py-2.5 px-3 text-538-muted text-xs font-bold sticky left-0 z-10 bg-surface">{idx + 1}</td>
                 <td className="py-2.5 px-3 sticky left-10 z-10 bg-surface">
@@ -252,7 +286,9 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                 <td className="py-2.5 px-3 text-center text-538-muted text-xs">{player.position ?? '—'}</td>
                 <td className="py-2.5 px-3 text-center text-xs font-semibold text-538-muted">{player.team}</td>
                 <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.g}</td>
-                <td className="py-2.5 px-3 text-right text-538-muted text-xs">{player.pa}</td>
+                <td className="py-2.5 px-3 text-right text-538-muted text-xs">
+                  {player.player_type === 'pitcher' ? (player.ip?.toFixed(1) ?? '—') : player.pa}
+                </td>
                 <td
                   className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
                   style={{ color: warColor(rarPerGame(player), minRar, maxRar) }}
@@ -261,15 +297,15 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                 </td>
                 <td
                   className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
-                  style={{ color: warColor(player.off_war, minOff, maxOff) }}
+                  style={{ color: player.off_war != null ? warColor(player.off_war, minOff, maxOff) : undefined }}
                 >
-                  {(player.off_war > 0 ? '+' : '') + player.off_war.toFixed(1)}
+                  {player.off_war != null ? (player.off_war > 0 ? '+' : '') + player.off_war.toFixed(1) : '—'}
                 </td>
                 <td
                   className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
-                  style={{ color: warColor(player.def_war, minDef, maxDef) }}
+                  style={{ color: player.def_war != null ? warColor(player.def_war, minDef, maxDef) : undefined }}
                 >
-                  {(player.def_war > 0 ? '+' : '') + player.def_war.toFixed(1)}
+                  {player.def_war != null ? (player.def_war > 0 ? '+' : '') + player.def_war.toFixed(1) : '—'}
                 </td>
                 <td
                   className="py-2.5 px-3 text-right text-xs font-mono font-bold"
@@ -286,7 +322,7 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
       </div>
 
       <p className="text-xs text-538-muted mt-3">
-        Click any player to compare against historical legends. Data: Baseball Reference bWAR · 50+ PA minimum.
+        Click any batter to compare against historical legends. Data: Baseball Reference bWAR · 50+ PA / 20+ IP minimum.
       </p>
 
       {selected && (

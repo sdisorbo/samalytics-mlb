@@ -7,7 +7,7 @@ import {
 } from 'recharts'
 import type { PlayerWar, LegendWar, WarSeason } from '../lib/types'
 
-type WarMetric = 'war' | 'off_war' | 'def_war'
+type WarMetric = 'war' | 'off_war' | 'def_war' | 'table'
 
 const LEGEND_GRAY = '#CCCCCC'
 
@@ -202,6 +202,71 @@ function ComparisonCard({
   )
 }
 
+// ── Career stats table ────────────────────────────────────────────────────────
+
+function fmt3(v: number | null | undefined) {
+  if (v == null) return '—'
+  return v.toFixed(3).replace(/^0/, '')
+}
+
+function CareerTable({ career, playerColor }: { career: WarSeason[]; playerColor: string }) {
+  const hasStats = career.some(s => s.h != null)
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-xs border-collapse">
+        <thead>
+          <tr className="border-b-2 border-538-border">
+            <th className="text-left py-2 px-2 text-538-muted font-bold sticky left-0 bg-surface">Year</th>
+            <th className="text-left py-2 px-2 text-538-muted font-bold">Team</th>
+            <th className="text-right py-2 px-2 text-538-muted font-bold">G</th>
+            {hasStats && <>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">PA</th>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">H</th>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">BB</th>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">K</th>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">AVG</th>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">OBP</th>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">SLG</th>
+              <th className="text-right py-2 px-2 text-538-muted font-bold">OPS</th>
+            </>}
+            <th className="text-right py-2 px-2 text-538-muted font-bold">oWAR</th>
+            <th className="text-right py-2 px-2 text-538-muted font-bold">dWAR</th>
+            <th className="text-right py-2 px-2 text-538-muted font-bold" style={{ color: playerColor }}>WAR</th>
+            <th className="text-right py-2 px-2 text-538-muted font-bold">RAR/G</th>
+          </tr>
+        </thead>
+        <tbody>
+          {career.map((s, i) => {
+            const rar = (s.g ?? 0) > 0 ? (s.war * 10) / (s.g ?? 1) : 0
+            return (
+              <tr key={i} className={`border-b border-538-border/40 ${i % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''}`}>
+                <td className="py-1.5 px-2 font-semibold sticky left-0 bg-surface" style={{ color: playerColor }}>{s.year}</td>
+                <td className="py-1.5 px-2 text-538-muted">{s.team ?? '—'}</td>
+                <td className="py-1.5 px-2 text-right tabular text-538-muted">{s.g ?? '—'}</td>
+                {hasStats && <>
+                  <td className="py-1.5 px-2 text-right tabular text-538-muted">{s.pa ?? '—'}</td>
+                  <td className="py-1.5 px-2 text-right tabular text-538-muted">{s.h ?? '—'}</td>
+                  <td className="py-1.5 px-2 text-right tabular text-538-muted">{s.bb ?? '—'}</td>
+                  <td className="py-1.5 px-2 text-right tabular text-538-muted">{s.k ?? '—'}</td>
+                  <td className="py-1.5 px-2 text-right tabular font-mono">{fmt3(s.avg)}</td>
+                  <td className="py-1.5 px-2 text-right tabular font-mono">{fmt3(s.obp)}</td>
+                  <td className="py-1.5 px-2 text-right tabular font-mono">{fmt3(s.slg)}</td>
+                  <td className="py-1.5 px-2 text-right tabular font-mono font-semibold">{fmt3(s.ops)}</td>
+                </>}
+                <td className="py-1.5 px-2 text-right tabular font-mono">{s.off_war != null ? s.off_war.toFixed(1) : '—'}</td>
+                <td className="py-1.5 px-2 text-right tabular font-mono">{s.def_war != null ? s.def_war.toFixed(1) : '—'}</td>
+                <td className="py-1.5 px-2 text-right tabular font-mono font-bold" style={{ color: playerColor }}>{s.war > 0 ? '+' : ''}{s.war.toFixed(1)}</td>
+                <td className="py-1.5 px-2 text-right tabular font-mono text-538-muted">{rar > 0 ? '+' : ''}{rar.toFixed(2)}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+
 // ── Modal ─────────────────────────────────────────────────────────────────────
 interface Props {
   player: PlayerWar
@@ -212,13 +277,15 @@ interface Props {
 export default function WarComparisonModal({ player, legendWar, onClose }: Props) {
   const [metric, setMetric] = useState<WarMetric>('war')
 
-  const metricLabel  = metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : 'dWAR'
+  const metricLabel  = metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : metric === 'def_war' ? 'dWAR' : ''
   const playerColor  = getTeamColor(player.team)
+  const isTableView  = metric === 'table'
 
   const metricOptions: { value: WarMetric; label: string }[] = [
     { value: 'war',     label: 'Total WAR' },
     { value: 'off_war', label: 'Offense'   },
     { value: 'def_war', label: 'Defense'   },
+    { value: 'table',   label: 'Table'     },
   ]
 
   return (
@@ -237,10 +304,8 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
               <span>{player.team} · {player.g} G · {player.pa} PA</span>
               <span>
                 <span className="font-semibold" style={{ color: playerColor }}>{player.war.toFixed(1)} WAR</span>
-                {' / '}
-                <span style={{ color: playerColor }}>{player.off_war.toFixed(1)} oWAR</span>
-                {' / '}
-                <span className="text-538-muted">{player.def_war.toFixed(1)} dWAR</span>
+                {player.off_war != null && <>{' / '}<span style={{ color: playerColor }}>{player.off_war.toFixed(1)} oWAR</span></>}
+                {player.def_war != null && <>{' / '}<span className="text-538-muted">{player.def_war.toFixed(1)} dWAR</span></>}
               </span>
             </p>
           </div>
@@ -272,40 +337,54 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
               </button>
             ))}
           </div>
-          <span className="text-xs text-538-muted flex items-center gap-2 flex-wrap">
-            <span className="flex items-center gap-1">
-              <span className="inline-block w-5 border-b-2 border-dashed" style={{ borderColor: LEGEND_GRAY }} />
-              Legend
+          {!isTableView && (
+            <span className="text-xs text-538-muted flex items-center gap-2 flex-wrap">
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-5 border-b-2 border-dashed" style={{ borderColor: LEGEND_GRAY }} />
+                Legend
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-5 border-b-2" style={{ borderColor: playerColor }} />
+                {player.name}
+              </span>
             </span>
-            <span className="flex items-center gap-1">
-              <span className="inline-block w-5 border-b-2" style={{ borderColor: playerColor }} />
-              {player.name}
-            </span>
-          </span>
+          )}
         </div>
 
-        {/* Cards */}
-        <div className="px-4 sm:px-6 py-5">
-          <p className="text-xs text-538-muted mb-5">
-            X-axis = career year (Year 1 = MLB debut). {' '}
-            <span style={{ color: playerColor }} className="font-semibold">{player.name}</span>
-            {' '}career arc vs. each legend&apos;s full career.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.entries(legendWar).map(([name, seasons]) => (
-              <ComparisonCard
-                key={name}
-                legendName={name}
-                legendSeasons={seasons}
-                playerName={player.name}
-                playerTeam={player.team}
-                playerCareer={player.career}
-                metric={metric}
-                metricLabel={metricLabel}
-              />
-            ))}
+        {/* Table view */}
+        {isTableView ? (
+          <div className="px-4 sm:px-6 py-5">
+            <p className="text-xs text-538-muted mb-4">
+              Season-by-season career stats for{' '}
+              <span className="font-semibold" style={{ color: playerColor }}>{player.name}</span>.
+              {' '}Batting stats populate after the next pipeline run.
+            </p>
+            <CareerTable career={player.career} playerColor={playerColor} />
           </div>
-        </div>
+        ) : (
+          /* Chart cards */
+          <div className="px-4 sm:px-6 py-5">
+            <p className="text-xs text-538-muted mb-5">
+              X-axis = career year (Year 1 = MLB debut). {' '}
+              <span style={{ color: playerColor }} className="font-semibold">{player.name}</span>
+              {' '}career arc vs. each legend&apos;s full career.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(legendWar).map(([name, seasons]) => (
+                <ComparisonCard
+                  key={name}
+                  legendName={name}
+                  legendSeasons={seasons}
+                  playerName={player.name}
+                  playerTeam={player.team}
+                  playerCareer={player.career}
+                  metric={metric as 'war' | 'off_war' | 'def_war'}
+                  metricLabel={metricLabel}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="px-4 sm:px-6 pb-4 text-xs text-538-muted border-t border-538-border pt-3">
           WAR data via Baseball Reference (bWAR). oWAR = total WAR − dWAR (batting + baserunning + positional adj + replacement level).

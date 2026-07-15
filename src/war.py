@@ -1,18 +1,15 @@
 """
 war.py — WAR (Wins Above Replacement) data via pybaseball baseball-reference.
 
-Fetches current-season batter WAR (total, off, def) and career WAR
-for a set of historical legend players used in the comparison modal.
+Fetches current-season batter WAR (total, off, def) and pitcher WAR, plus career
+WAR with per-season batting stats for use in the legend comparison modal.
 """
 
 import warnings
 warnings.filterwarnings("ignore")
 
-# Approximate runs-per-win scale. bRef uses ~9.5–10.5 depending on season;
-# 10 is a fine constant for display purposes.
 RUNS_PER_WIN = 10.0
 
-# Legend player IDs in baseball-reference format, keyed by display name.
 LEGEND_BREF_IDS = {
     "Barry Bonds":    "bondsba01",
     "Derek Jeter":    "jeterde01",
@@ -24,7 +21,6 @@ LEGEND_BREF_IDS = {
     "Nick Swisher":   "swishni01",
 }
 
-# Justin Verlander is a pitcher — pulled separately from bwar_pitch.
 LEGEND_PITCHER_IDS = {
     "Justin Verlander": "verlaju01",
 }
@@ -33,17 +29,37 @@ LEGEND_PITCHER_IDS = {
 def _safe_float(v):
     try:
         f = float(v)
-        return None if (f != f) else round(f, 2)   # NaN → None
+        return None if (f != f) else round(f, 2)
     except (TypeError, ValueError):
         return None
+
+
+def _safe_int(v):
+    try:
+        return int(v) if v == v else 0
+    except (TypeError, ValueError):
+        return 0
+
+
+def _batting_stats_from_row(r) -> dict:
+    """Extract per-season batting stats from a bwar_bat row."""
+    return {
+        "pa":  _safe_int(r.get("PA", 0)),
+        "h":   _safe_int(r.get("H", 0)),
+        "bb":  _safe_int(r.get("BB", 0)),
+        "k":   _safe_int(r.get("SO", 0)),
+        "avg": _safe_float(r.get("batting_avg")),
+        "obp": _safe_float(r.get("onbase_perc")),
+        "slg": _safe_float(r.get("slugging_perc")),
+        "ops": _safe_float(r.get("onbase_plus_slugging")),
+    }
 
 
 def fetch_current_war(season: int) -> list[dict]:
     """
     Return a list of batter WAR rows for `season`, non-pitchers only.
-    Falls back to season-1 if the requested season has no published data yet
-    (bWAR on baseball-reference can lag mid-season).
-    Each row: { player_id, name, team, g, pa, war, off_war, def_war }
+    Each row: { player_id, bref_id, name, team, g, pa, war, off_war, def_war,
+                player_type, career }
     """
     try:
         from pybaseball import bwar_bat
@@ -61,34 +77,27 @@ def fetch_current_war(season: int) -> list[dict]:
 
         rows = []
         for _, r in df.iterrows():
-            off_r = _safe_float(r.get("runs_above_avg_off", 0)) or 0.0
             def_r = _safe_float(r.get("runs_above_avg_def", 0)) or 0.0
             total_war = _safe_float(r.get("WAR"))
             if total_war is None:
                 continue
-
-            # dWAR = fielding runs above average / RPW (pure defense component).
-            # oWAR = everything else: batting, baserunning, positional adjustment,
-            # and replacement-level credit. Computed as total - dWAR so that
-            # off_war + def_war == total_war always (matches bRef's own split).
             def_war = round(def_r / RUNS_PER_WIN, 2)
             off_war = round(total_war - def_war, 2)
 
             rows.append({
-                "player_id": int(r["mlb_ID"]) if r.get("mlb_ID") else None,
-                "bref_id":   str(r.get("player_ID", "")),
-                "name":      str(r.get("name_common", "")),
-                "team":      str(r.get("team_ID", "")),
-                "g":         int(r.get("G", 0) or 0),
-                "pa":        int(r.get("PA", 0) or 0),
-                "war":       total_war,
-                "off_war":   off_war,
-                "def_war":   def_war,
+                "player_id":   int(r["mlb_ID"]) if r.get("mlb_ID") else None,
+                "bref_id":     str(r.get("player_ID", "")),
+                "name":        str(r.get("name_common", "")),
+                "team":        str(r.get("team_ID", "")),
+                "g":           _safe_int(r.get("G", 0)),
+                "pa":          _safe_int(r.get("PA", 0)),
+                "war":         total_war,
+                "off_war":     off_war,
+                "def_war":     def_war,
+                "player_type": "batter",
             })
 
-        # Merge traded-player rows (same bref_id across multiple team stints).
-        # bWAR splits mid-season trades into one row per team; we sum stats and
-        # label the team as "2TM" (matching baseball-reference convention).
+        # Merge multi-team rows
         merged: dict[str, dict] = {}
         for row in rows:
             bid = row["bref_id"]
@@ -103,9 +112,8 @@ def fetch_current_war(season: int) -> list[dict]:
             else:
                 merged[bid] = dict(row)
 
-        # Attach career WAR history for each player so the frontend can draw
-        # their career arc on the legend comparison charts.
-        print("  [war] Fetching full career data for current players...")
+        # Attach career history (including per-season batting stats)
+        print("  [war] Fetching full career data for current batters...")
         full_df = bwar_bat(return_all=True)
         full_batters = full_df[full_df["pitcher"] == "N"]
 
@@ -113,16 +121,107 @@ def fetch_current_war(season: int) -> list[dict]:
             career_sub = full_batters[full_batters["player_ID"] == bid].sort_values("year_ID")
             career = []
             for _, cr in career_sub.iterrows():
-                w = _safe_float(cr.get("WAR"))
-                if w is None:
-                    w = 0.0
+                w = _safe_float(cr.get("WAR")) or 0.0
                 d_r = _safe_float(cr.get("runs_above_avg_def", 0)) or 0.0
                 d_war = round(d_r / RUNS_PER_WIN, 2)
-                career.append({
+                season_entry = {
                     "year":    int(cr["year_ID"]),
+                    "team":    str(cr.get("team_ID", "")),
+                    "g":       _safe_int(cr.get("G", 0)),
                     "war":     w,
                     "off_war": round(w - d_war, 2),
                     "def_war": d_war,
+                }
+                season_entry.update(_batting_stats_from_row(cr))
+                career.append(season_entry)
+            row["career"] = career
+
+        rows = sorted(merged.values(), key=lambda x: x["war"], reverse=True)
+        return rows
+
+    except Exception as e:
+        print(f"  [war] WARNING: could not fetch current batter WAR: {e}")
+        return []
+
+
+def fetch_current_pitcher_war(season: int) -> list[dict]:
+    """
+    Return a list of pitcher WAR rows for `season`.
+    Each row: { player_id, bref_id, name, team, g, gs, ip, war, player_type, career }
+    """
+    try:
+        from pybaseball import bwar_pitch
+        df = bwar_pitch(return_all=False)
+
+        season_df = df[df["year_ID"] == season]
+        if season_df.empty:
+            fallback = season - 1
+            print(f"  [war] No pitcher bWAR data for {season} — falling back to {fallback}")
+            season_df = df[df["year_ID"] == fallback]
+
+        df = season_df
+        df = df.dropna(subset=["WAR"])
+
+        rows = []
+        for _, r in df.iterrows():
+            total_war = _safe_float(r.get("WAR"))
+            if total_war is None:
+                continue
+            ip_outs = _safe_int(r.get("IPouts", 0))
+            ip = round(ip_outs / 3, 1)
+            if ip < 10:
+                continue
+
+            rows.append({
+                "player_id":   int(r["mlb_ID"]) if r.get("mlb_ID") else None,
+                "bref_id":     str(r.get("player_ID", "")),
+                "name":        str(r.get("name_common", "")),
+                "team":        str(r.get("team_ID", "")),
+                "g":           _safe_int(r.get("G", 0)),
+                "gs":          _safe_int(r.get("GS", 0)),
+                "ip":          ip,
+                "pa":          0,
+                "war":         total_war,
+                "off_war":     None,
+                "def_war":     None,
+                "player_type": "pitcher",
+            })
+
+        # Merge multi-team rows
+        merged: dict[str, dict] = {}
+        for row in rows:
+            bid = row["bref_id"]
+            if bid in merged:
+                m = merged[bid]
+                m["g"]   += row["g"]
+                m["gs"]  += row["gs"]
+                m["ip"]  = round(m["ip"] + row["ip"], 1)
+                m["war"] = round(m["war"] + row["war"], 2)
+                m["team"] = "2TM"
+            else:
+                merged[bid] = dict(row)
+
+        # Attach career history
+        print("  [war] Fetching full career data for current pitchers...")
+        full_df = bwar_pitch(return_all=True)
+
+        for bid, row in merged.items():
+            career_sub = full_df[full_df["player_ID"] == bid].sort_values("year_ID")
+            career = []
+            for _, cr in career_sub.iterrows():
+                w = _safe_float(cr.get("WAR")) or 0.0
+                ip_o = _safe_int(cr.get("IPouts", 0))
+                career.append({
+                    "year": int(cr["year_ID"]),
+                    "team": str(cr.get("team_ID", "")),
+                    "g":    _safe_int(cr.get("G", 0)),
+                    "gs":   _safe_int(cr.get("GS", 0)),
+                    "ip":   round(ip_o / 3, 1),
+                    "war":  w,
+                    "off_war": None,
+                    "def_war": None,
+                    "pa": None, "h": None, "bb": None, "k": None,
+                    "avg": None, "obp": None, "slg": None, "ops": None,
                 })
             row["career"] = career
 
@@ -130,37 +229,53 @@ def fetch_current_war(season: int) -> list[dict]:
         return rows
 
     except Exception as e:
-        print(f"  [war] WARNING: could not fetch current WAR: {e}")
+        print(f"  [war] WARNING: could not fetch current pitcher WAR: {e}")
         return []
 
 
-def _career_rows_for(df, bref_id: str, name: str) -> list[dict]:
-    """Extract season-by-season career WAR rows for one player."""
+def _career_rows_for(df, bref_id: str, is_pitcher: bool = False) -> list[dict]:
+    """Extract season-by-season career WAR rows (with batting stats for batters)."""
     sub = df[df["player_ID"] == bref_id].sort_values("year_ID")
     seasons = []
     for _, r in sub.iterrows():
-        war = _safe_float(r.get("WAR"))
-        off_r = _safe_float(r.get("runs_above_avg_off", 0)) or 0.0
-        def_r = _safe_float(r.get("runs_above_avg_def", 0)) or 0.0
-        if war is None:
-            war = 0.0
+        war = _safe_float(r.get("WAR")) or 0.0
 
-        def_war = round(def_r / RUNS_PER_WIN, 2)
-        off_war = round(war - def_war, 2)
+        if is_pitcher:
+            ip_o = _safe_int(r.get("IPouts", 0))
+            entry = {
+                "year":    int(r["year_ID"]),
+                "team":    str(r.get("team_ID", "")),
+                "g":       _safe_int(r.get("G", 0)),
+                "gs":      _safe_int(r.get("GS", 0)),
+                "ip":      round(ip_o / 3, 1),
+                "war":     war,
+                "off_war": 0.0,
+                "def_war": 0.0,
+                "pa": None, "h": None, "bb": None, "k": None,
+                "avg": None, "obp": None, "slg": None, "ops": None,
+            }
+        else:
+            def_r = _safe_float(r.get("runs_above_avg_def", 0)) or 0.0
+            d_war = round(def_r / RUNS_PER_WIN, 2)
+            entry = {
+                "year":    int(r["year_ID"]),
+                "team":    str(r.get("team_ID", "")),
+                "g":       _safe_int(r.get("G", 0)),
+                "war":     war,
+                "off_war": round(war - d_war, 2),
+                "def_war": d_war,
+            }
+            entry.update(_batting_stats_from_row(r))
 
-        seasons.append({
-            "year":    int(r["year_ID"]),
-            "war":     war,
-            "off_war": off_war,
-            "def_war": def_war,
-        })
+        seasons.append(entry)
     return seasons
 
 
 def fetch_legend_war() -> dict:
     """
-    Return career season-by-season WAR for all legend players.
-    Schema: { "Derek Jeter": [{ year, war, off_war, def_war }, ...], ... }
+    Return career season-by-season WAR (with batting stats) for all legend players.
+    Schema: { "Derek Jeter": [{ year, team, g, war, off_war, def_war, pa, h, bb, k,
+                                 avg, obp, slg, ops }, ...], ... }
     """
     result = {}
 
@@ -169,29 +284,17 @@ def fetch_legend_war() -> dict:
 
         bat_df = bwar_bat(return_all=True)
         for display_name, bref_id in LEGEND_BREF_IDS.items():
-            rows = _career_rows_for(bat_df, bref_id, display_name)
+            rows = _career_rows_for(bat_df, bref_id, is_pitcher=False)
             if rows:
                 result[display_name] = rows
             else:
-                print(f"  [war] WARNING: no career data found for {display_name} ({bref_id})")
+                print(f"  [war] WARNING: no career data for {display_name} ({bref_id})")
 
-        # Verlander — pitcher WAR from bwar_pitch
         pit_df = bwar_pitch(return_all=True)
         for display_name, bref_id in LEGEND_PITCHER_IDS.items():
-            sub = pit_df[pit_df["player_ID"] == bref_id].sort_values("year_ID")
-            seasons = []
-            for _, r in sub.iterrows():
-                war = _safe_float(r.get("WAR"))
-                if war is None:
-                    war = 0.0
-                seasons.append({
-                    "year":    int(r["year_ID"]),
-                    "war":     war,
-                    "off_war": 0.0,
-                    "def_war": 0.0,
-                })
-            if seasons:
-                result[display_name] = seasons
+            rows = _career_rows_for(pit_df, bref_id, is_pitcher=True)
+            if rows:
+                result[display_name] = rows
 
     except Exception as e:
         print(f"  [war] WARNING: could not fetch legend WAR: {e}")
