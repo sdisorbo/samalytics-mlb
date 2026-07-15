@@ -101,8 +101,8 @@ function ComparisonCard({
     player: i < playerCareer.length  ? parseFloat((playerCareer[i][metric]  ?? 0).toFixed(2)) : null,
   }))
 
-  const legendVals = legendSeasons.map((s) => s[metric])
-  const playerVals = playerCareer.map((s)  => s[metric])
+  const legendVals = legendSeasons.map((s) => s[metric] ?? 0)
+  const playerVals = playerCareer.map((s)  => s[metric] ?? 0)
   const allVals    = [...legendVals, ...playerVals].filter((v) => v != null) as number[]
   const legendPeak = Math.max(...legendVals)
   const yMin = Math.floor(Math.min(...allVals) - 0.5)
