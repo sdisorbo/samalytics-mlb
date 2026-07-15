@@ -88,7 +88,7 @@ function ComparisonCard({
   playerName: string
   playerTeam: string
   playerCareer: WarSeason[]
-  metric: WarMetric
+  metric: 'war' | 'off_war' | 'def_war'
   metricLabel: string
 }) {
   const playerColor = getTeamColor(playerTeam)
