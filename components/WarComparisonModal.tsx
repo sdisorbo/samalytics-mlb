@@ -97,8 +97,8 @@ function ComparisonCard({
   // Merge both careers onto a shared career-year x-axis
   const data = Array.from({ length: maxYears }, (_, i) => ({
     careerYear: i + 1,
-    legend: i < legendSeasons.length ? parseFloat(legendSeasons[i][metric].toFixed(2)) : null,
-    player: i < playerCareer.length  ? parseFloat(playerCareer[i][metric].toFixed(2))  : null,
+    legend: i < legendSeasons.length ? parseFloat((legendSeasons[i][metric] ?? 0).toFixed(2)) : null,
+    player: i < playerCareer.length  ? parseFloat((playerCareer[i][metric]  ?? 0).toFixed(2)) : null,
   }))
 
   const legendVals = legendSeasons.map((s) => s[metric])
