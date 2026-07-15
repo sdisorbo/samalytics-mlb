@@ -26,7 +26,7 @@ from pitchers import process_pitchers
 from players import process_players
 from savant import fetch_pitcher_arsenal, fetch_batter_vs_pitch
 from game_atbats import fetch_game_atbats, enrich_with_schedule
-from war import fetch_current_war, fetch_current_pitcher_war, fetch_legend_war
+from war import fetch_current_war, fetch_current_pitcher_war, fetch_legend_war, _fetch_bwar_bat, _fetch_bwar_pitch
 import export
 
 # Months with no MLB regular-season games
@@ -192,12 +192,14 @@ def main():
     export.export_batter_vs_pitch(batter_vs_pitch)
     export.export_team_game_logs(team_game_logs)
 
-    print(f"\n[WAR] Fetching batter + pitcher WAR from baseball-reference...")
-    current_war = fetch_current_war(SEASON)
+    print(f"\n[WAR] Fetching WAR data from baseball-reference (one download each)...")
+    bat_df   = _fetch_bwar_bat()
+    pitch_df = _fetch_bwar_pitch()
+    current_war        = fetch_current_war(SEASON, bat_df=bat_df)
     print(f"      {len(current_war)} batters.")
-    current_pitcher_war = fetch_current_pitcher_war(SEASON)
+    current_pitcher_war = fetch_current_pitcher_war(SEASON, pitch_df=pitch_df)
     print(f"      {len(current_pitcher_war)} pitchers.")
-    legend_war = fetch_legend_war()
+    legend_war = fetch_legend_war(bat_df=bat_df, pitch_df=pitch_df)
     print(f"      {len(legend_war)} legends.")
     export.export_war(current_war + current_pitcher_war, legend_war)
 

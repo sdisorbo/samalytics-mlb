@@ -357,7 +357,6 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
             <p className="text-xs text-538-muted mb-4">
               Season-by-season career stats for{' '}
               <span className="font-semibold" style={{ color: playerColor }}>{player.name}</span>.
-              {' '}Batting stats populate after the next pipeline run.
             </p>
             <CareerTable career={player.career} playerColor={playerColor} />
           </div>

@@ -55,15 +55,27 @@ def _batting_stats_from_row(r) -> dict:
     }
 
 
-def fetch_current_war(season: int) -> list[dict]:
+def _fetch_bwar_bat() -> "pd.DataFrame":
+    from pybaseball import bwar_bat
+    return bwar_bat(return_all=True)
+
+
+def _fetch_bwar_pitch() -> "pd.DataFrame":
+    from pybaseball import bwar_pitch
+    return bwar_pitch(return_all=True)
+
+
+def fetch_current_war(season: int, bat_df=None) -> list[dict]:
     """
     Return a list of batter WAR rows for `season`, non-pitchers only.
+    Pass bat_df to reuse an already-fetched DataFrame and avoid a second download.
     Each row: { player_id, bref_id, name, team, g, pa, war, off_war, def_war,
                 player_type, career }
     """
     try:
-        from pybaseball import bwar_bat
-        df = bwar_bat(return_all=False)
+        if bat_df is None:
+            bat_df = _fetch_bwar_bat()
+        df = bat_df
 
         season_df = df[df["year_ID"] == season]
         if season_df.empty:
@@ -112,10 +124,8 @@ def fetch_current_war(season: int) -> list[dict]:
             else:
                 merged[bid] = dict(row)
 
-        # Attach career history (including per-season batting stats)
-        print("  [war] Fetching full career data for current batters...")
-        full_df = bwar_bat(return_all=True)
-        full_batters = full_df[full_df["pitcher"] == "N"]
+        # Reuse the already-fetched full DataFrame for career data
+        full_batters = bat_df[bat_df["pitcher"] == "N"]
 
         for bid, row in merged.items():
             career_sub = full_batters[full_batters["player_ID"] == bid].sort_values("year_ID")
@@ -144,14 +154,16 @@ def fetch_current_war(season: int) -> list[dict]:
         return []
 
 
-def fetch_current_pitcher_war(season: int) -> list[dict]:
+def fetch_current_pitcher_war(season: int, pitch_df=None) -> list[dict]:
     """
     Return a list of pitcher WAR rows for `season`.
+    Pass pitch_df to reuse an already-fetched DataFrame and avoid a second download.
     Each row: { player_id, bref_id, name, team, g, gs, ip, war, player_type, career }
     """
     try:
-        from pybaseball import bwar_pitch
-        df = bwar_pitch(return_all=False)
+        if pitch_df is None:
+            pitch_df = _fetch_bwar_pitch()
+        df = pitch_df
 
         season_df = df[df["year_ID"] == season]
         if season_df.empty:
@@ -202,11 +214,8 @@ def fetch_current_pitcher_war(season: int) -> list[dict]:
                 merged[bid] = dict(row)
 
         # Attach career history
-        print("  [war] Fetching full career data for current pitchers...")
-        full_df = bwar_pitch(return_all=True)
-
         for bid, row in merged.items():
-            career_sub = full_df[full_df["player_ID"] == bid].sort_values("year_ID")
+            career_sub = pitch_df[pitch_df["player_ID"] == bid].sort_values("year_ID")
             career = []
             for _, cr in career_sub.iterrows():
                 w = _safe_float(cr.get("WAR")) or 0.0
@@ -271,18 +280,21 @@ def _career_rows_for(df, bref_id: str, is_pitcher: bool = False) -> list[dict]:
     return seasons
 
 
-def fetch_legend_war() -> dict:
+def fetch_legend_war(bat_df=None, pitch_df=None) -> dict:
     """
     Return career season-by-season WAR (with batting stats) for all legend players.
+    Pass bat_df/pitch_df to reuse already-fetched DataFrames.
     Schema: { "Derek Jeter": [{ year, team, g, war, off_war, def_war, pa, h, bb, k,
                                  avg, obp, slg, ops }, ...], ... }
     """
     result = {}
 
     try:
-        from pybaseball import bwar_bat, bwar_pitch
+        if bat_df is None:
+            bat_df = _fetch_bwar_bat()
+        if pitch_df is None:
+            pitch_df = _fetch_bwar_pitch()
 
-        bat_df = bwar_bat(return_all=True)
         for display_name, bref_id in LEGEND_BREF_IDS.items():
             rows = _career_rows_for(bat_df, bref_id, is_pitcher=False)
             if rows:
@@ -290,9 +302,8 @@ def fetch_legend_war() -> dict:
             else:
                 print(f"  [war] WARNING: no career data for {display_name} ({bref_id})")
 
-        pit_df = bwar_pitch(return_all=True)
         for display_name, bref_id in LEGEND_PITCHER_IDS.items():
-            rows = _career_rows_for(pit_df, bref_id, is_pitcher=True)
+            rows = _career_rows_for(pitch_df, bref_id, is_pitcher=True)
             if rows:
                 result[display_name] = rows
 
