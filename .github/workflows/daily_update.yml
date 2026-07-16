@@ -14,6 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Show checkout SHA
+        run: git log --oneline -3
+
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
