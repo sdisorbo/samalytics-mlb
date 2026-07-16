@@ -21,10 +21,7 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        run: pip install --no-cache-dir -r requirements.txt
-
-      - name: Verify pybaseball
-        run: python -c "import pybaseball; print('pybaseball OK:', pybaseball.__version__)"
+        run: pip install -r requirements.txt
 
       - name: Run MLB prediction pipeline
         run: python src/main.py
