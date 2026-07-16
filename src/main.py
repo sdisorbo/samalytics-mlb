@@ -193,15 +193,18 @@ def main():
     export.export_team_game_logs(team_game_logs)
 
     print(f"\n[WAR] Fetching WAR data from baseball-reference (one download each)...")
-    bat_df   = _fetch_bwar_bat()
-    pitch_df = _fetch_bwar_pitch()
-    current_war        = fetch_current_war(SEASON, bat_df=bat_df)
-    print(f"      {len(current_war)} batters.")
-    current_pitcher_war = fetch_current_pitcher_war(SEASON, pitch_df=pitch_df)
-    print(f"      {len(current_pitcher_war)} pitchers.")
-    legend_war = fetch_legend_war(bat_df=bat_df, pitch_df=pitch_df)
-    print(f"      {len(legend_war)} legends.")
-    export.export_war(current_war + current_pitcher_war, legend_war)
+    try:
+        bat_df   = _fetch_bwar_bat()
+        pitch_df = _fetch_bwar_pitch()
+        current_war        = fetch_current_war(SEASON, bat_df=bat_df)
+        print(f"      {len(current_war)} batters.")
+        current_pitcher_war = fetch_current_pitcher_war(SEASON, pitch_df=pitch_df)
+        print(f"      {len(current_pitcher_war)} pitchers.")
+        legend_war = fetch_legend_war(bat_df=bat_df, pitch_df=pitch_df)
+        print(f"      {len(legend_war)} legends.")
+        export.export_war(current_war + current_pitcher_war, legend_war)
+    except Exception as e:
+        print(f"  [WAR] WARNING: WAR fetch failed ({e}) — preserving existing player_war.json")
 
     print(f"\n=== Pipeline complete! ===")
     print(f"    Output -> {os.path.abspath(export.OUTPUT_DIR)}")
