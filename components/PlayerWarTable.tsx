@@ -270,7 +270,7 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
             )}
             {filtered.map((player, idx) => (
               <tr
-                key={player.bref_id}
+                key={`${player.bref_id}-${player.player_type}`}
                 onClick={() => player.player_type !== 'pitcher' && setSelected(player)}
                 className={`border-b border-538-border/40 transition-colors ${
                   player.player_type !== 'pitcher' ? 'cursor-pointer hover:bg-538-orange/5' : ''
