@@ -18,7 +18,7 @@
     "era_percentile": 100,
     "fip_percentile": 100,
     "k9_percentile": 100,
-    "bb9_percentile": 62,
+    "bb9_percentile": 63,
     "whip_percentile": 99
   },
   {
@@ -125,7 +125,7 @@
     "strikeouts": 27,
     "walks": 6,
     "home_runs_allowed": 0,
-    "era_percentile": 96,
+    "era_percentile": 97,
     "fip_percentile": 99,
     "k9_percentile": 80,
     "bb9_percentile": 84,
@@ -150,7 +150,7 @@
     "era_percentile": 98,
     "fip_percentile": 99,
     "k9_percentile": 99,
-    "bb9_percentile": 87,
+    "bb9_percentile": 88,
     "whip_percentile": 99
   },
   {
@@ -216,7 +216,7 @@
     "era_percentile": 87,
     "fip_percentile": 98,
     "k9_percentile": 99,
-    "bb9_percentile": 30,
+    "bb9_percentile": 29,
     "whip_percentile": 76
   },
   {
@@ -262,28 +262,6 @@
     "k9_percentile": 97,
     "bb9_percentile": 7,
     "whip_percentile": 74
-  },
-  {
-    "player_id": 680742,
-    "name": "Jonathan Bowlan",
-    "team": "PHI",
-    "team_name": "Philadelphia Phillies",
-    "division": "National League East",
-    "era": 2.93,
-    "fip": 2.15,
-    "xfip": null,
-    "k_per_9": 11.15,
-    "bb_per_9": 2.05,
-    "whip": 1.08,
-    "innings_pitched": 30.7,
-    "strikeouts": 38,
-    "walks": 7,
-    "home_runs_allowed": 2,
-    "era_percentile": 78,
-    "fip_percentile": 97,
-    "k9_percentile": 91,
-    "bb9_percentile": 91,
-    "whip_percentile": 83
   },
   {
     "player_id": 671922,
@@ -346,10 +324,32 @@
     "walks": 5,
     "home_runs_allowed": 4,
     "era_percentile": 87,
-    "fip_percentile": 96,
+    "fip_percentile": 97,
     "k9_percentile": 94,
     "bb9_percentile": 100,
     "whip_percentile": 99
+  },
+  {
+    "player_id": 680742,
+    "name": "Jonathan Bowlan",
+    "team": "PHI",
+    "team_name": "Philadelphia Phillies",
+    "division": "National League East",
+    "era": 2.84,
+    "fip": 2.28,
+    "xfip": null,
+    "k_per_9": 10.8,
+    "bb_per_9": 2.27,
+    "whip": 1.07,
+    "innings_pitched": 31.7,
+    "strikeouts": 38,
+    "walks": 8,
+    "home_runs_allowed": 2,
+    "era_percentile": 81,
+    "fip_percentile": 96,
+    "k9_percentile": 88,
+    "bb9_percentile": 85,
+    "whip_percentile": 85
   },
   {
     "player_id": 670970,
@@ -528,28 +528,6 @@
     "whip_percentile": 81
   },
   {
-    "player_id": 596133,
-    "name": "Luke Weaver",
-    "team": "NYM",
-    "team_name": "New York Mets",
-    "division": "National League East",
-    "era": 1.85,
-    "fip": 2.41,
-    "xfip": null,
-    "k_per_9": 9.92,
-    "bb_per_9": 2.54,
-    "whip": 0.82,
-    "innings_pitched": 39.0,
-    "strikeouts": 43,
-    "walks": 11,
-    "home_runs_allowed": 2,
-    "era_percentile": 97,
-    "fip_percentile": 94,
-    "k9_percentile": 73,
-    "bb9_percentile": 78,
-    "whip_percentile": 98
-  },
-  {
     "player_id": 676962,
     "name": "Ben Brown",
     "team": "CHC",
@@ -590,7 +568,7 @@
     "era_percentile": 88,
     "fip_percentile": 94,
     "k9_percentile": 50,
-    "bb9_percentile": 60,
+    "bb9_percentile": 61,
     "whip_percentile": 85
   },
   {
@@ -632,7 +610,7 @@
     "walks": 17,
     "home_runs_allowed": 4,
     "era_percentile": 82,
-    "fip_percentile": 93,
+    "fip_percentile": 94,
     "k9_percentile": 96,
     "bb9_percentile": 56,
     "whip_percentile": 81
@@ -741,7 +719,7 @@
     "strikeouts": 45,
     "walks": 14,
     "home_runs_allowed": 2,
-    "era_percentile": 79,
+    "era_percentile": 78,
     "fip_percentile": 92,
     "k9_percentile": 89,
     "bb9_percentile": 49,
@@ -918,7 +896,7 @@
     "walks": 11,
     "home_runs_allowed": 3,
     "era_percentile": 99,
-    "fip_percentile": 90,
+    "fip_percentile": 91,
     "k9_percentile": 61,
     "bb9_percentile": 87,
     "whip_percentile": 100
@@ -940,7 +918,7 @@
     "walks": 25,
     "home_runs_allowed": 12,
     "era_percentile": 86,
-    "fip_percentile": 90,
+    "fip_percentile": 91,
     "k9_percentile": 79,
     "bb9_percentile": 96,
     "whip_percentile": 69
@@ -962,7 +940,7 @@
     "walks": 18,
     "home_runs_allowed": 5,
     "era_percentile": 82,
-    "fip_percentile": 90,
+    "fip_percentile": 91,
     "k9_percentile": 56,
     "bb9_percentile": 90,
     "whip_percentile": 90
@@ -984,7 +962,7 @@
     "walks": 35,
     "home_runs_allowed": 9,
     "era_percentile": 63,
-    "fip_percentile": 90,
+    "fip_percentile": 91,
     "k9_percentile": 90,
     "bb9_percentile": 67,
     "whip_percentile": 66
@@ -1006,9 +984,9 @@
     "walks": 7,
     "home_runs_allowed": 2,
     "era_percentile": 77,
-    "fip_percentile": 89,
+    "fip_percentile": 90,
     "k9_percentile": 95,
-    "bb9_percentile": 61,
+    "bb9_percentile": 62,
     "whip_percentile": 90
   },
   {
@@ -1096,7 +1074,7 @@
     "era_percentile": 91,
     "fip_percentile": 89,
     "k9_percentile": 45,
-    "bb9_percentile": 45,
+    "bb9_percentile": 46,
     "whip_percentile": 94
   },
   {
@@ -1161,8 +1139,8 @@
     "home_runs_allowed": 1,
     "era_percentile": 19,
     "fip_percentile": 88,
-    "k9_percentile": 48,
-    "bb9_percentile": 61,
+    "k9_percentile": 49,
+    "bb9_percentile": 62,
     "whip_percentile": 43
   },
   {
@@ -1210,6 +1188,28 @@
     "whip_percentile": 94
   },
   {
+    "player_id": 596133,
+    "name": "Luke Weaver",
+    "team": "NYM",
+    "team_name": "New York Mets",
+    "division": "National League East",
+    "era": 2.03,
+    "fip": 2.75,
+    "xfip": null,
+    "k_per_9": 9.67,
+    "bb_per_9": 2.48,
+    "whip": 0.83,
+    "innings_pitched": 40.0,
+    "strikeouts": 43,
+    "walks": 11,
+    "home_runs_allowed": 3,
+    "era_percentile": 96,
+    "fip_percentile": 87,
+    "k9_percentile": 69,
+    "bb9_percentile": 80,
+    "whip_percentile": 98
+  },
+  {
     "player_id": 647336,
     "name": "Michael Soroka",
     "team": "AZ",
@@ -1225,7 +1225,7 @@
     "strikeouts": 79,
     "walks": 17,
     "home_runs_allowed": 6,
-    "era_percentile": 75,
+    "era_percentile": 74,
     "fip_percentile": 87,
     "k9_percentile": 50,
     "bb9_percentile": 96,
@@ -1317,7 +1317,7 @@
     "fip_percentile": 86,
     "k9_percentile": 70,
     "bb9_percentile": 29,
-    "whip_percentile": 23
+    "whip_percentile": 24
   },
   {
     "player_id": 596001,
@@ -1384,28 +1384,6 @@
     "k9_percentile": 83,
     "bb9_percentile": 89,
     "whip_percentile": 95
-  },
-  {
-    "player_id": 548384,
-    "name": "Brooks Raley",
-    "team": "NYM",
-    "team_name": "New York Mets",
-    "division": "National League East",
-    "era": 2.04,
-    "fip": 2.9,
-    "xfip": null,
-    "k_per_9": 9.17,
-    "bb_per_9": 3.31,
-    "whip": 1.13,
-    "innings_pitched": 35.3,
-    "strikeouts": 36,
-    "walks": 13,
-    "home_runs_allowed": 2,
-    "era_percentile": 96,
-    "fip_percentile": 85,
-    "k9_percentile": 60,
-    "bb9_percentile": 52,
-    "whip_percentile": 76
   },
   {
     "player_id": 518585,
@@ -1492,8 +1470,30 @@
     "era_percentile": 46,
     "fip_percentile": 84,
     "k9_percentile": 98,
-    "bb9_percentile": 27,
+    "bb9_percentile": 26,
     "whip_percentile": 51
+  },
+  {
+    "player_id": 548384,
+    "name": "Brooks Raley",
+    "team": "NYM",
+    "team_name": "New York Mets",
+    "division": "National League East",
+    "era": 2.02,
+    "fip": 2.93,
+    "xfip": null,
+    "k_per_9": 9.34,
+    "bb_per_9": 3.53,
+    "whip": 1.15,
+    "innings_pitched": 35.7,
+    "strikeouts": 37,
+    "walks": 14,
+    "home_runs_allowed": 2,
+    "era_percentile": 96,
+    "fip_percentile": 84,
+    "k9_percentile": 63,
+    "bb9_percentile": 42,
+    "whip_percentile": 73
   },
   {
     "player_id": 699134,
@@ -1558,7 +1558,7 @@
     "era_percentile": 44,
     "fip_percentile": 84,
     "k9_percentile": 98,
-    "bb9_percentile": 32,
+    "bb9_percentile": 31,
     "whip_percentile": 55
   },
   {
@@ -1577,7 +1577,7 @@
     "strikeouts": 101,
     "walks": 20,
     "home_runs_allowed": 10,
-    "era_percentile": 77,
+    "era_percentile": 76,
     "fip_percentile": 83,
     "k9_percentile": 89,
     "bb9_percentile": 88,
@@ -1690,7 +1690,7 @@
     "era_percentile": 42,
     "fip_percentile": 82,
     "k9_percentile": 71,
-    "bb9_percentile": 32,
+    "bb9_percentile": 31,
     "whip_percentile": 16
   },
   {
@@ -1843,8 +1843,8 @@
     "home_runs_allowed": 6,
     "era_percentile": 81,
     "fip_percentile": 80,
-    "k9_percentile": 47,
-    "bb9_percentile": 63,
+    "k9_percentile": 48,
+    "bb9_percentile": 64,
     "whip_percentile": 76
   },
   {
@@ -1907,7 +1907,7 @@
     "strikeouts": 48,
     "walks": 15,
     "home_runs_allowed": 4,
-    "era_percentile": 75,
+    "era_percentile": 74,
     "fip_percentile": 80,
     "k9_percentile": 84,
     "bb9_percentile": 53,
@@ -2127,7 +2127,7 @@
     "strikeouts": 87,
     "walks": 25,
     "home_runs_allowed": 8,
-    "era_percentile": 74,
+    "era_percentile": 73,
     "fip_percentile": 78,
     "k9_percentile": 62,
     "bb9_percentile": 75,
@@ -2460,7 +2460,7 @@
     "era_percentile": 83,
     "fip_percentile": 74,
     "k9_percentile": 91,
-    "bb9_percentile": 62,
+    "bb9_percentile": 63,
     "whip_percentile": 98
   },
   {
@@ -2503,7 +2503,7 @@
     "home_runs_allowed": 12,
     "era_percentile": 80,
     "fip_percentile": 73,
-    "k9_percentile": 48,
+    "k9_percentile": 49,
     "bb9_percentile": 92,
     "whip_percentile": 95
   },
@@ -2552,6 +2552,28 @@
     "whip_percentile": 88
   },
   {
+    "player_id": 642207,
+    "name": "Devin Williams",
+    "team": "NYM",
+    "team_name": "New York Mets",
+    "division": "National League East",
+    "era": 4.68,
+    "fip": 3.28,
+    "xfip": null,
+    "k_per_9": 12.4,
+    "bb_per_9": 5.23,
+    "whip": 1.65,
+    "innings_pitched": 32.7,
+    "strikeouts": 45,
+    "walks": 19,
+    "home_runs_allowed": 3,
+    "era_percentile": 30,
+    "fip_percentile": 73,
+    "k9_percentile": 96,
+    "bb9_percentile": 10,
+    "whip_percentile": 7
+  },
+  {
     "player_id": 657514,
     "name": "Brennan Bernardino",
     "team": "COL",
@@ -2567,8 +2589,8 @@
     "strikeouts": 27,
     "walks": 12,
     "home_runs_allowed": 2,
-    "era_percentile": 78,
-    "fip_percentile": 73,
+    "era_percentile": 77,
+    "fip_percentile": 72,
     "k9_percentile": 10,
     "bb9_percentile": 72,
     "whip_percentile": 57
@@ -2655,33 +2677,11 @@
     "strikeouts": 45,
     "walks": 20,
     "home_runs_allowed": 3,
-    "era_percentile": 76,
-    "fip_percentile": 72,
+    "era_percentile": 75,
+    "fip_percentile": 71,
     "k9_percentile": 93,
     "bb9_percentile": 13,
     "whip_percentile": 31
-  },
-  {
-    "player_id": 642207,
-    "name": "Devin Williams",
-    "team": "NYM",
-    "team_name": "New York Mets",
-    "division": "National League East",
-    "era": 4.83,
-    "fip": 3.35,
-    "xfip": null,
-    "k_per_9": 12.51,
-    "bb_per_9": 5.4,
-    "whip": 1.71,
-    "innings_pitched": 31.7,
-    "strikeouts": 44,
-    "walks": 19,
-    "home_runs_allowed": 3,
-    "era_percentile": 28,
-    "fip_percentile": 72,
-    "k9_percentile": 97,
-    "bb9_percentile": 9,
-    "whip_percentile": 6
   },
   {
     "player_id": 683769,
@@ -2838,6 +2838,28 @@
     "whip_percentile": 79
   },
   {
+    "player_id": 623211,
+    "name": "Huascar Brazobán",
+    "team": "NYM",
+    "team_name": "New York Mets",
+    "division": "National League East",
+    "era": 2.7,
+    "fip": 3.4,
+    "xfip": null,
+    "k_per_9": 8.49,
+    "bb_per_9": 4.05,
+    "whip": 1.07,
+    "innings_pitched": 46.7,
+    "strikeouts": 44,
+    "walks": 21,
+    "home_runs_allowed": 3,
+    "era_percentile": 84,
+    "fip_percentile": 70,
+    "k9_percentile": 45,
+    "bb9_percentile": 28,
+    "whip_percentile": 85
+  },
+  {
     "player_id": 594798,
     "name": "Jacob deGrom",
     "team": "TEX",
@@ -2855,31 +2877,9 @@
     "home_runs_allowed": 16,
     "era_percentile": 64,
     "fip_percentile": 70,
-    "k9_percentile": 89,
+    "k9_percentile": 90,
     "bb9_percentile": 94,
     "whip_percentile": 89
-  },
-  {
-    "player_id": 623211,
-    "name": "Huascar Brazobán",
-    "team": "NYM",
-    "team_name": "New York Mets",
-    "division": "National League East",
-    "era": 2.76,
-    "fip": 3.41,
-    "xfip": null,
-    "k_per_9": 8.67,
-    "bb_per_9": 4.14,
-    "whip": 1.09,
-    "innings_pitched": 45.7,
-    "strikeouts": 44,
-    "walks": 21,
-    "home_runs_allowed": 3,
-    "era_percentile": 83,
-    "fip_percentile": 69,
-    "k9_percentile": 50,
-    "bb9_percentile": 27,
-    "whip_percentile": 82
   },
   {
     "player_id": 543243,
@@ -2944,7 +2944,7 @@
     "era_percentile": 41,
     "fip_percentile": 69,
     "k9_percentile": 41,
-    "bb9_percentile": 90,
+    "bb9_percentile": 91,
     "whip_percentile": 73
   },
   {
@@ -2965,7 +2965,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 27,
     "fip_percentile": 68,
-    "k9_percentile": 89,
+    "k9_percentile": 90,
     "bb9_percentile": 19,
     "whip_percentile": 31
   },
@@ -3121,7 +3121,7 @@
     "fip_percentile": 67,
     "k9_percentile": 87,
     "bb9_percentile": 18,
-    "whip_percentile": 23
+    "whip_percentile": 24
   },
   {
     "player_id": 669358,
@@ -3144,6 +3144,28 @@
     "k9_percentile": 36,
     "bb9_percentile": 48,
     "whip_percentile": 33
+  },
+  {
+    "player_id": 681035,
+    "name": "Christian Scott",
+    "team": "NYM",
+    "team_name": "New York Mets",
+    "division": "National League East",
+    "era": 2.87,
+    "fip": 3.52,
+    "xfip": null,
+    "k_per_9": 10.86,
+    "bb_per_9": 3.92,
+    "whip": 1.22,
+    "innings_pitched": 59.7,
+    "strikeouts": 72,
+    "walks": 26,
+    "home_runs_allowed": 7,
+    "era_percentile": 79,
+    "fip_percentile": 66,
+    "k9_percentile": 89,
+    "bb9_percentile": 32,
+    "whip_percentile": 66
   },
   {
     "player_id": 669387,
@@ -3206,7 +3228,7 @@
     "walks": 13,
     "home_runs_allowed": 5,
     "era_percentile": 86,
-    "fip_percentile": 66,
+    "fip_percentile": 65,
     "k9_percentile": 64,
     "bb9_percentile": 68,
     "whip_percentile": 96
@@ -3384,7 +3406,7 @@
     "era_percentile": 60,
     "fip_percentile": 64,
     "k9_percentile": 71,
-    "bb9_percentile": 47,
+    "bb9_percentile": 48,
     "whip_percentile": 85
   },
   {
@@ -3469,7 +3491,7 @@
     "strikeouts": 44,
     "walks": 10,
     "home_runs_allowed": 6,
-    "era_percentile": 76,
+    "era_percentile": 75,
     "fip_percentile": 63,
     "k9_percentile": 80,
     "bb9_percentile": 83,
@@ -3537,8 +3559,8 @@
     "home_runs_allowed": 3,
     "era_percentile": 38,
     "fip_percentile": 63,
-    "k9_percentile": 49,
-    "bb9_percentile": 32,
+    "k9_percentile": 50,
+    "bb9_percentile": 31,
     "whip_percentile": 42
   },
   {
@@ -3580,7 +3602,7 @@
     "walks": 22,
     "home_runs_allowed": 9,
     "era_percentile": 69,
-    "fip_percentile": 62,
+    "fip_percentile": 61,
     "k9_percentile": 8,
     "bb9_percentile": 92,
     "whip_percentile": 89
@@ -3778,7 +3800,7 @@
     "walks": 13,
     "home_runs_allowed": 2,
     "era_percentile": 37,
-    "fip_percentile": 60,
+    "fip_percentile": 59,
     "k9_percentile": 85,
     "bb9_percentile": 9,
     "whip_percentile": 4
@@ -3866,7 +3888,7 @@
     "walks": 16,
     "home_runs_allowed": 5,
     "era_percentile": 68,
-    "fip_percentile": 59,
+    "fip_percentile": 58,
     "k9_percentile": 57,
     "bb9_percentile": 49,
     "whip_percentile": 51
@@ -3888,7 +3910,7 @@
     "walks": 9,
     "home_runs_allowed": 4,
     "era_percentile": 37,
-    "fip_percentile": 59,
+    "fip_percentile": 58,
     "k9_percentile": 57,
     "bb9_percentile": 74,
     "whip_percentile": 36
@@ -3954,7 +3976,7 @@
     "walks": 20,
     "home_runs_allowed": 4,
     "era_percentile": 44,
-    "fip_percentile": 58,
+    "fip_percentile": 57,
     "k9_percentile": 75,
     "bb9_percentile": 17,
     "whip_percentile": 47
@@ -3976,7 +3998,7 @@
     "walks": 14,
     "home_runs_allowed": 5,
     "era_percentile": 23,
-    "fip_percentile": 58,
+    "fip_percentile": 57,
     "k9_percentile": 72,
     "bb9_percentile": 49,
     "whip_percentile": 53
@@ -4066,7 +4088,7 @@
     "era_percentile": 81,
     "fip_percentile": 57,
     "k9_percentile": 88,
-    "bb9_percentile": 26,
+    "bb9_percentile": 25,
     "whip_percentile": 91
   },
   {
@@ -4087,7 +4109,7 @@
     "home_runs_allowed": 5,
     "era_percentile": 48,
     "fip_percentile": 57,
-    "k9_percentile": 72,
+    "k9_percentile": 73,
     "bb9_percentile": 35,
     "whip_percentile": 83
   },
@@ -4110,7 +4132,7 @@
     "era_percentile": 45,
     "fip_percentile": 56,
     "k9_percentile": 78,
-    "bb9_percentile": 80,
+    "bb9_percentile": 79,
     "whip_percentile": 61
   },
   {
@@ -4152,7 +4174,7 @@
     "walks": 8,
     "home_runs_allowed": 4,
     "era_percentile": 86,
-    "fip_percentile": 56,
+    "fip_percentile": 55,
     "k9_percentile": 3,
     "bb9_percentile": 97,
     "whip_percentile": 97
@@ -4174,32 +4196,10 @@
     "walks": 19,
     "home_runs_allowed": 11,
     "era_percentile": 85,
-    "fip_percentile": 56,
+    "fip_percentile": 55,
     "k9_percentile": 3,
     "bb9_percentile": 98,
     "whip_percentile": 77
-  },
-  {
-    "player_id": 681035,
-    "name": "Christian Scott",
-    "team": "NYM",
-    "team_name": "New York Mets",
-    "division": "National League East",
-    "era": 3.17,
-    "fip": 3.82,
-    "xfip": null,
-    "k_per_9": 10.83,
-    "bb_per_9": 4.33,
-    "whip": 1.3,
-    "innings_pitched": 54.0,
-    "strikeouts": 65,
-    "walks": 26,
-    "home_runs_allowed": 7,
-    "era_percentile": 72,
-    "fip_percentile": 56,
-    "k9_percentile": 88,
-    "bb9_percentile": 23,
-    "whip_percentile": 51
   },
   {
     "player_id": 664285,
@@ -4218,7 +4218,7 @@
     "walks": 36,
     "home_runs_allowed": 11,
     "era_percentile": 47,
-    "fip_percentile": 56,
+    "fip_percentile": 55,
     "k9_percentile": 26,
     "bb9_percentile": 61,
     "whip_percentile": 47
@@ -4240,7 +4240,7 @@
     "walks": 24,
     "home_runs_allowed": 10,
     "era_percentile": 35,
-    "fip_percentile": 56,
+    "fip_percentile": 55,
     "k9_percentile": 53,
     "bb9_percentile": 66,
     "whip_percentile": 47
@@ -4264,7 +4264,7 @@
     "era_percentile": 83,
     "fip_percentile": 54,
     "k9_percentile": 53,
-    "bb9_percentile": 89,
+    "bb9_percentile": 90,
     "whip_percentile": 88
   },
   {
@@ -4374,7 +4374,7 @@
     "era_percentile": 52,
     "fip_percentile": 54,
     "k9_percentile": 12,
-    "bb9_percentile": 79,
+    "bb9_percentile": 78,
     "whip_percentile": 51
   },
   {
@@ -4395,7 +4395,7 @@
     "home_runs_allowed": 19,
     "era_percentile": 49,
     "fip_percentile": 53,
-    "k9_percentile": 69,
+    "k9_percentile": 70,
     "bb9_percentile": 90,
     "whip_percentile": 70
   },
@@ -5012,7 +5012,7 @@
     "era_percentile": 49,
     "fip_percentile": 46,
     "k9_percentile": 51,
-    "bb9_percentile": 60,
+    "bb9_percentile": 61,
     "whip_percentile": 38
   },
   {
@@ -5232,7 +5232,7 @@
     "era_percentile": 39,
     "fip_percentile": 44,
     "k9_percentile": 31,
-    "bb9_percentile": 28,
+    "bb9_percentile": 27,
     "whip_percentile": 26
   },
   {
@@ -5452,7 +5452,7 @@
     "era_percentile": 49,
     "fip_percentile": 42,
     "k9_percentile": 61,
-    "bb9_percentile": 30,
+    "bb9_percentile": 29,
     "whip_percentile": 33
   },
   {
@@ -5493,7 +5493,7 @@
     "strikeouts": 66,
     "walks": 23,
     "home_runs_allowed": 13,
-    "era_percentile": 77,
+    "era_percentile": 76,
     "fip_percentile": 41,
     "k9_percentile": 6,
     "bb9_percentile": 91,
@@ -5515,7 +5515,7 @@
     "strikeouts": 93,
     "walks": 26,
     "home_runs_allowed": 15,
-    "era_percentile": 29,
+    "era_percentile": 28,
     "fip_percentile": 41,
     "k9_percentile": 79,
     "bb9_percentile": 67,
@@ -5540,7 +5540,7 @@
     "era_percentile": 6,
     "fip_percentile": 41,
     "k9_percentile": 58,
-    "bb9_percentile": 24,
+    "bb9_percentile": 23,
     "whip_percentile": 8
   },
   {
@@ -5584,7 +5584,7 @@
     "era_percentile": 2,
     "fip_percentile": 40,
     "k9_percentile": 40,
-    "bb9_percentile": 80,
+    "bb9_percentile": 79,
     "whip_percentile": 2
   },
   {
@@ -5606,7 +5606,7 @@
     "era_percentile": 39,
     "fip_percentile": 40,
     "k9_percentile": 36,
-    "bb9_percentile": 47,
+    "bb9_percentile": 48,
     "whip_percentile": 36
   },
   {
@@ -5716,7 +5716,7 @@
     "era_percentile": 93,
     "fip_percentile": 39,
     "k9_percentile": 22,
-    "bb9_percentile": 50,
+    "bb9_percentile": 51,
     "whip_percentile": 69
   },
   {
@@ -5760,7 +5760,7 @@
     "era_percentile": 42,
     "fip_percentile": 39,
     "k9_percentile": 76,
-    "bb9_percentile": 89,
+    "bb9_percentile": 90,
     "whip_percentile": 96
   },
   {
@@ -5826,7 +5826,7 @@
     "era_percentile": 21,
     "fip_percentile": 38,
     "k9_percentile": 16,
-    "bb9_percentile": 59,
+    "bb9_percentile": 60,
     "whip_percentile": 43
   },
   {
@@ -6263,7 +6263,7 @@
     "strikeouts": 28,
     "walks": 13,
     "home_runs_allowed": 6,
-    "era_percentile": 74,
+    "era_percentile": 73,
     "fip_percentile": 33,
     "k9_percentile": 4,
     "bb9_percentile": 78,
@@ -6333,7 +6333,7 @@
     "fip_percentile": 33,
     "k9_percentile": 39,
     "bb9_percentile": 10,
-    "whip_percentile": 23
+    "whip_percentile": 24
   },
   {
     "player_id": 641816,
@@ -6552,7 +6552,7 @@
     "era_percentile": 32,
     "fip_percentile": 30,
     "k9_percentile": 22,
-    "bb9_percentile": 50,
+    "bb9_percentile": 51,
     "whip_percentile": 47
   },
   {
@@ -6574,7 +6574,7 @@
     "era_percentile": 30,
     "fip_percentile": 30,
     "k9_percentile": 19,
-    "bb9_percentile": 60,
+    "bb9_percentile": 61,
     "whip_percentile": 47
   },
   {
@@ -6596,7 +6596,7 @@
     "era_percentile": 78,
     "fip_percentile": 29,
     "k9_percentile": 2,
-    "bb9_percentile": 28,
+    "bb9_percentile": 27,
     "whip_percentile": 85
   },
   {
@@ -6705,7 +6705,7 @@
     "home_runs_allowed": 5,
     "era_percentile": 2,
     "fip_percentile": 29,
-    "k9_percentile": 46,
+    "k9_percentile": 47,
     "bb9_percentile": 73,
     "whip_percentile": 9
   },
@@ -6728,7 +6728,7 @@
     "era_percentile": 96,
     "fip_percentile": 28,
     "k9_percentile": 17,
-    "bb9_percentile": 10,
+    "bb9_percentile": 9,
     "whip_percentile": 19
   },
   {
@@ -6864,28 +6864,6 @@
     "whip_percentile": 43
   },
   {
-    "player_id": 605400,
-    "name": "Aaron Nola",
-    "team": "PHI",
-    "team_name": "Philadelphia Phillies",
-    "division": "National League East",
-    "era": 5.75,
-    "fip": 4.64,
-    "xfip": null,
-    "k_per_9": 9.46,
-    "bb_per_9": 2.88,
-    "whip": 1.43,
-    "innings_pitched": 97.0,
-    "strikeouts": 102,
-    "walks": 31,
-    "home_runs_allowed": 20,
-    "era_percentile": 13,
-    "fip_percentile": 26,
-    "k9_percentile": 65,
-    "bb9_percentile": 66,
-    "whip_percentile": 26
-  },
-  {
     "player_id": 547179,
     "name": "Michael Lorenzen",
     "team": "COL",
@@ -6945,11 +6923,11 @@
     "strikeouts": 70,
     "walks": 36,
     "home_runs_allowed": 14,
-    "era_percentile": 30,
+    "era_percentile": 29,
     "fip_percentile": 26,
     "k9_percentile": 15,
     "bb9_percentile": 46,
-    "whip_percentile": 23
+    "whip_percentile": 24
   },
   {
     "player_id": 592662,
@@ -6968,7 +6946,7 @@
     "walks": 52,
     "home_runs_allowed": 15,
     "era_percentile": 68,
-    "fip_percentile": 25,
+    "fip_percentile": 26,
     "k9_percentile": 30,
     "bb9_percentile": 21,
     "whip_percentile": 57
@@ -7036,7 +7014,7 @@
     "era_percentile": 24,
     "fip_percentile": 25,
     "k9_percentile": 44,
-    "bb9_percentile": 44,
+    "bb9_percentile": 45,
     "whip_percentile": 20
   },
   {
@@ -7056,7 +7034,7 @@
     "walks": 11,
     "home_runs_allowed": 6,
     "era_percentile": 14,
-    "fip_percentile": 24,
+    "fip_percentile": 25,
     "k9_percentile": 76,
     "bb9_percentile": 45,
     "whip_percentile": 53
@@ -7078,7 +7056,7 @@
     "walks": 36,
     "home_runs_allowed": 7,
     "era_percentile": 9,
-    "fip_percentile": 24,
+    "fip_percentile": 25,
     "k9_percentile": 14,
     "bb9_percentile": 13,
     "whip_percentile": 11
@@ -7124,7 +7102,7 @@
     "era_percentile": 5,
     "fip_percentile": 24,
     "k9_percentile": 11,
-    "bb9_percentile": 61,
+    "bb9_percentile": 62,
     "whip_percentile": 6
   },
   {
@@ -7144,7 +7122,7 @@
     "walks": 34,
     "home_runs_allowed": 20,
     "era_percentile": 52,
-    "fip_percentile": 23,
+    "fip_percentile": 24,
     "k9_percentile": 20,
     "bb9_percentile": 74,
     "whip_percentile": 73
@@ -7166,8 +7144,8 @@
     "walks": 21,
     "home_runs_allowed": 6,
     "era_percentile": 31,
-    "fip_percentile": 23,
-    "k9_percentile": 70,
+    "fip_percentile": 24,
+    "k9_percentile": 71,
     "bb9_percentile": 11,
     "whip_percentile": 18
   },
@@ -7232,7 +7210,7 @@
     "walks": 19,
     "home_runs_allowed": 4,
     "era_percentile": 75,
-    "fip_percentile": 22,
+    "fip_percentile": 23,
     "k9_percentile": 29,
     "bb9_percentile": 10,
     "whip_percentile": 51
@@ -7254,7 +7232,7 @@
     "walks": 27,
     "home_runs_allowed": 14,
     "era_percentile": 30,
-    "fip_percentile": 22,
+    "fip_percentile": 23,
     "k9_percentile": 12,
     "bb9_percentile": 65,
     "whip_percentile": 18
@@ -7388,7 +7366,7 @@
     "era_percentile": 47,
     "fip_percentile": 21,
     "k9_percentile": 24,
-    "bb9_percentile": 28,
+    "bb9_percentile": 27,
     "whip_percentile": 27
   },
   {
@@ -7430,7 +7408,7 @@
     "walks": 21,
     "home_runs_allowed": 5,
     "era_percentile": 83,
-    "fip_percentile": 20,
+    "fip_percentile": 21,
     "k9_percentile": 67,
     "bb9_percentile": 6,
     "whip_percentile": 43
@@ -7452,7 +7430,7 @@
     "walks": 14,
     "home_runs_allowed": 6,
     "era_percentile": 65,
-    "fip_percentile": 20,
+    "fip_percentile": 21,
     "k9_percentile": 20,
     "bb9_percentile": 44,
     "whip_percentile": 47
@@ -7474,7 +7452,7 @@
     "walks": 12,
     "home_runs_allowed": 7,
     "era_percentile": 4,
-    "fip_percentile": 20,
+    "fip_percentile": 21,
     "k9_percentile": 95,
     "bb9_percentile": 36,
     "whip_percentile": 29
@@ -7518,7 +7496,7 @@
     "walks": 24,
     "home_runs_allowed": 11,
     "era_percentile": 11,
-    "fip_percentile": 19,
+    "fip_percentile": 20,
     "k9_percentile": 16,
     "bb9_percentile": 52,
     "whip_percentile": 11
@@ -7563,7 +7541,7 @@
     "home_runs_allowed": 7,
     "era_percentile": 4,
     "fip_percentile": 19,
-    "k9_percentile": 71,
+    "k9_percentile": 72,
     "bb9_percentile": 14,
     "whip_percentile": 15
   },
@@ -7606,7 +7584,7 @@
     "walks": 39,
     "home_runs_allowed": 15,
     "era_percentile": 58,
-    "fip_percentile": 18,
+    "fip_percentile": 19,
     "k9_percentile": 34,
     "bb9_percentile": 30,
     "whip_percentile": 47
@@ -7628,7 +7606,7 @@
     "walks": 14,
     "home_runs_allowed": 3,
     "era_percentile": 43,
-    "fip_percentile": 18,
+    "fip_percentile": 19,
     "k9_percentile": 8,
     "bb9_percentile": 15,
     "whip_percentile": 31
@@ -7650,10 +7628,32 @@
     "walks": 29,
     "home_runs_allowed": 8,
     "era_percentile": 15,
-    "fip_percentile": 18,
+    "fip_percentile": 19,
     "k9_percentile": 36,
     "bb9_percentile": 15,
     "whip_percentile": 38
+  },
+  {
+    "player_id": 605400,
+    "name": "Aaron Nola",
+    "team": "PHI",
+    "team_name": "Philadelphia Phillies",
+    "division": "National League East",
+    "era": 5.68,
+    "fip": 4.93,
+    "xfip": null,
+    "k_per_9": 9.44,
+    "bb_per_9": 3.06,
+    "whip": 1.45,
+    "innings_pitched": 103.0,
+    "strikeouts": 108,
+    "walks": 35,
+    "home_runs_allowed": 23,
+    "era_percentile": 13,
+    "fip_percentile": 19,
+    "k9_percentile": 65,
+    "bb9_percentile": 59,
+    "whip_percentile": 24
   },
   {
     "player_id": 680767,
@@ -7717,7 +7717,7 @@
     "home_runs_allowed": 3,
     "era_percentile": 16,
     "fip_percentile": 17,
-    "k9_percentile": 72,
+    "k9_percentile": 73,
     "bb9_percentile": 4,
     "whip_percentile": 5
   },
@@ -7937,7 +7937,7 @@
     "home_runs_allowed": 10,
     "era_percentile": 27,
     "fip_percentile": 15,
-    "k9_percentile": 45,
+    "k9_percentile": 46,
     "bb9_percentile": 83,
     "whip_percentile": 60
   },
@@ -8312,7 +8312,7 @@
     "era_percentile": 43,
     "fip_percentile": 11,
     "k9_percentile": 93,
-    "bb9_percentile": 26,
+    "bb9_percentile": 25,
     "whip_percentile": 51
   },
   {
@@ -8400,7 +8400,7 @@
     "era_percentile": 6,
     "fip_percentile": 10,
     "k9_percentile": 32,
-    "bb9_percentile": 62,
+    "bb9_percentile": 63,
     "whip_percentile": 19
   },
   {
@@ -8511,7 +8511,7 @@
     "fip_percentile": 9,
     "k9_percentile": 27,
     "bb9_percentile": 51,
-    "whip_percentile": 7
+    "whip_percentile": 6
   },
   {
     "player_id": 621383,
@@ -8532,7 +8532,7 @@
     "era_percentile": 3,
     "fip_percentile": 9,
     "k9_percentile": 73,
-    "bb9_percentile": 30,
+    "bb9_percentile": 29,
     "whip_percentile": 1
   },
   {
@@ -8642,7 +8642,7 @@
     "era_percentile": 11,
     "fip_percentile": 7,
     "k9_percentile": 22,
-    "bb9_percentile": 50,
+    "bb9_percentile": 51,
     "whip_percentile": 13
   },
   {
@@ -8903,7 +8903,7 @@
     "strikeouts": 47,
     "walks": 27,
     "home_runs_allowed": 18,
-    "era_percentile": 29,
+    "era_percentile": 28,
     "fip_percentile": 4,
     "k9_percentile": 4,
     "bb9_percentile": 56,
@@ -9192,7 +9192,7 @@
     "era_percentile": 16,
     "fip_percentile": 1,
     "k9_percentile": 4,
-    "bb9_percentile": 26,
+    "bb9_percentile": 25,
     "whip_percentile": 11
   },
   {
@@ -9235,7 +9235,7 @@
     "home_runs_allowed": 9,
     "era_percentile": 48,
     "fip_percentile": 1,
-    "k9_percentile": 70,
+    "k9_percentile": 71,
     "bb9_percentile": 98,
     "whip_percentile": 90
   },
