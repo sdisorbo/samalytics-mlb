@@ -204,8 +204,8 @@ async function fetchGameData(gamePk: number): Promise<ParsedGame> {
 // ── Baseball field SVG ────────────────────────────────────────────────────────
 
 const OUTCOME_DIST: Record<Outcome, number> = {
-  HR: 235, '3B': 192, '2B': 160, '1B': 115,
-  BB: 0, K: 0, OUT: 88, E: 100, SF: 155, DP: 70,
+  HR: 315, '3B': 268, '2B': 215, '1B': 158,
+  BB: 0, K: 0, OUT: 108, E: 138, SF: 208, DP: 80,
 }
 
 function hitEndpoint(spray: number, dist: number): [number, number] {
@@ -233,7 +233,7 @@ function BaseballField({ events, name, animKey, perspective }: {
         <line x1="200" y1="350" x2="372" y2="102" stroke={BLUE} strokeWidth="1.2" opacity="0.4" />
         <polygon points="200,350 295,255 200,160 105,255"
           fill="none" stroke={BLUE} strokeWidth="1.5" opacity="0.8" />
-        <circle cx="200" cy="232" r="7" fill="none" stroke={BLUE} strokeWidth="1" opacity="0.45" />
+        <circle cx="200" cy="260" r="7" fill="none" stroke={BLUE} strokeWidth="1" opacity="0.45" />
         {[{ cx: 295, cy: 255 }, { cx: 200, cy: 160 }, { cx: 105, cy: 255 }].map(({ cx, cy }, i) => (
           <rect key={i} x={cx - 4} y={cy - 4} width="8" height="8" fill={BLUE} opacity="0.3" rx="1" />
         ))}
