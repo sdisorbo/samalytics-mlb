@@ -188,7 +188,7 @@ def fetch_game_atbats(season, start_month=3, end_month=11):
             time.sleep(0.5)
 
         except requests.RequestException as e:
-            print(f"      Warning: month {month} failed ({e}), continuing.")
+            print(f"      Warning: {start}–{end} failed ({e}), continuing.")
             continue
 
     # Build output list sorted by team then game date
