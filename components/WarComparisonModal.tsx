@@ -322,14 +322,14 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
             </p>
           </div>
           <div className="flex items-center gap-1">
-            {(isPitcher || player.player_id != null) && (
+            {player.player_id != null && (
               <Link
-                href={isPitcher ? '/pitchers' : `/batters/${player.player_id}`}
-                className="text-538-muted hover:text-538-text transition-colors p-1 rounded"
-                title="View stats page"
+                href={isPitcher ? `/pitchers/${player.player_id}` : `/batters/${player.player_id}`}
+                className="flex items-center gap-1 text-xs font-semibold text-538-muted hover:text-538-text transition-colors px-2 py-1 rounded hover:bg-538-border/30"
                 onClick={onClose}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <span>Stats</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                   <polyline points="15 3 21 3 21 9" />
                   <line x1="10" y1="14" x2="21" y2="3" />
