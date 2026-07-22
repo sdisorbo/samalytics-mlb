@@ -271,10 +271,10 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
             {filtered.map((player, idx) => (
               <tr
                 key={`${player.bref_id}-${player.player_type}`}
-                onClick={() => player.player_type !== 'pitcher' && setSelected(player)}
-                className={`border-b border-538-border/40 transition-colors ${
-                  player.player_type !== 'pitcher' ? 'cursor-pointer hover:bg-538-orange/5' : ''
-                } ${idx % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''}`}
+                onClick={() => setSelected(player)}
+                className={`border-b border-538-border/40 transition-colors cursor-pointer hover:bg-538-orange/5 ${
+                  idx % 2 === 1 ? 'bg-black/[0.02] dark:bg-white/[0.02]' : ''
+                }`}
               >
                 <td className="py-2.5 px-3 text-538-muted text-xs font-bold sticky left-0 z-10 bg-surface">{idx + 1}</td>
                 <td className="py-2.5 px-3 sticky left-10 z-10 bg-surface">

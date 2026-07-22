@@ -277,14 +277,19 @@ interface Props {
 export default function WarComparisonModal({ player, legendWar, onClose }: Props) {
   const [metric, setMetric] = useState<WarMetric>('war')
 
-  const metricLabel  = metric === 'war' ? 'WAR' : metric === 'off_war' ? 'oWAR' : metric === 'def_war' ? 'dWAR' : ''
+  const isPitcher = player.player_type === 'pitcher'
+  const activeMetric = isPitcher && (metric === 'off_war' || metric === 'def_war') ? 'war' : metric
+
+  const metricLabel  = activeMetric === 'war' ? 'WAR' : activeMetric === 'off_war' ? 'oWAR' : activeMetric === 'def_war' ? 'dWAR' : ''
   const playerColor  = getTeamColor(player.team)
-  const isTableView  = metric === 'table'
+  const isTableView  = activeMetric === 'table'
 
   const metricOptions: { value: WarMetric; label: string }[] = [
     { value: 'war',     label: 'Total WAR' },
-    { value: 'off_war', label: 'Offense'   },
-    { value: 'def_war', label: 'Defense'   },
+    ...(!isPitcher ? [
+      { value: 'off_war' as WarMetric, label: 'Offense' },
+      { value: 'def_war' as WarMetric, label: 'Defense' },
+    ] : []),
     { value: 'table',   label: 'Table'     },
   ]
 
@@ -301,7 +306,13 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
           <div>
             <h2 className="text-lg sm:text-xl font-black text-538-text tracking-tight">{player.name}</h2>
             <p className="text-xs text-538-muted mt-0.5 flex flex-wrap gap-x-2">
-              <span>{player.team} · {player.g} G · {player.pa} PA</span>
+              <span>
+                {player.team} · {player.g} G
+                {isPitcher
+                  ? ` · ${player.ip?.toFixed(1) ?? '—'} IP`
+                  : ` · ${player.pa} PA`
+                }
+              </span>
               <span>
                 <span className="font-semibold" style={{ color: playerColor }}>{player.war.toFixed(1)} WAR</span>
                 {player.off_war != null && <>{' / '}<span style={{ color: playerColor }}>{player.off_war.toFixed(1)} oWAR</span></>}
@@ -329,9 +340,9 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
                 key={opt.value}
                 onClick={() => setMetric(opt.value)}
                 className={`px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-                  metric === opt.value ? 'text-white' : 'text-538-muted hover:text-538-text'
+                  activeMetric === opt.value ? 'text-white' : 'text-538-muted hover:text-538-text'
                 }`}
-                style={metric === opt.value ? { backgroundColor: playerColor } : {}}
+                style={activeMetric === opt.value ? { backgroundColor: playerColor } : {}}
               >
                 {opt.label}
               </button>
@@ -377,7 +388,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
                   playerName={player.name}
                   playerTeam={player.team}
                   playerCareer={player.career}
-                  metric={metric as 'war' | 'off_war' | 'def_war'}
+                  metric={activeMetric as 'war' | 'off_war' | 'def_war'}
                   metricLabel={metricLabel}
                 />
               ))}
