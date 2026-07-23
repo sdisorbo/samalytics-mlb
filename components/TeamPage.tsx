@@ -292,7 +292,9 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
       .sort((a, b) => a.dpw - b.dpw)
   }, [allPlayerWar])
 
-  const teamRank  = teamEfficiencies.findIndex(e => e.team === abbr) + 1
+  // WAR data uses bRef abbrs (KCR, ARI, …); derive from player data when available
+  const warAbbr   = teamPlayerWar[0]?.team ?? abbr
+  const teamRank  = teamEfficiencies.findIndex(e => e.team === abbr || e.team === warAbbr) + 1
   const rankTotal = teamEfficiencies.length
 
   // ── Scatter data & domains ───────────────────────────────────────────────────
@@ -601,8 +603,8 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
                   top:    Math.min(selBox.y1, selBox.y2),
                   width:  Math.abs(selBox.x2 - selBox.x1),
                   height: Math.abs(selBox.y2 - selBox.y1),
-                  border: '1.5px dashed rgba(255,255,255,0.55)',
-                  backgroundColor: 'rgba(255,255,255,0.06)',
+                  border: '1.5px dashed rgba(80,80,80,0.7)',
+                  backgroundColor: 'rgba(100,100,100,0.1)',
                   pointerEvents: 'none',
                 }}
               />
