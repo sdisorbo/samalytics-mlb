@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -32,6 +32,16 @@ interface ScatterPoint {
   player_type: string
 }
 
+type Domain = [number, number]
+
+// ── Chart layout constants (must match ScatterChart margin + YAxis width) ──────
+const CM = { left: 10, right: 20, top: 10, bottom: 34 } // chart margin
+const Y_AXIS_W = 54   // YAxis width prop
+const CHART_H  = 440  // container height
+// Plot area left offset from chart edge: CM.left + Y_AXIS_W
+const PLOT_LEFT = CM.left + Y_AXIS_W
+const PLOT_BOTTOM_H = CHART_H - CM.top - CM.bottom  // plot height in px
+
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
 const LEAGUE_MIN = 740_000
@@ -52,15 +62,6 @@ function median(arr: number[]): number {
   return s.length % 2 === 0 ? (s[mid - 1] + s[mid]) / 2 : s[mid]
 }
 
-function iqrBounds(arr: number[], factor = 1.5) {
-  if (arr.length < 4) return { lo: -Infinity, hi: Infinity }
-  const s = [...arr].sort((a, b) => a - b)
-  const q1 = s[Math.floor(s.length * 0.25)]
-  const q3 = s[Math.floor(s.length * 0.75)]
-  const iqr = q3 - q1
-  return { lo: q1 - factor * iqr, hi: q3 + factor * iqr }
-}
-
 // ── ELO chart data builder ─────────────────────────────────────────────────────
 
 type EloRow = { date: string; elo?: number; leagueHigh?: number; leagueLow?: number }
@@ -70,7 +71,6 @@ function buildEloData(abbr: string, teamHistory: RatingPoint[], allHistory: Team
   const year = parseInt(teamHistory[0].date.slice(0, 4)) || new Date().getFullYear()
   const seasonStart = `${year}-03-20`
 
-  // Weekly scaffold
   const scaffold: string[] = []
   const cur = new Date(seasonStart + 'T12:00:00Z')
   const end = new Date(`${year}-10-05T12:00:00Z`)
@@ -90,7 +90,6 @@ function buildEloData(abbr: string, teamHistory: RatingPoint[], allHistory: Team
       dateMap.get(d)![t] = rating
     }
   }
-  // Ensure this team's data is included even if allHistory keying differs
   for (const { date, rating } of teamHistory) {
     const d = dateRe.test(date) ? date : seasonStart
     if (!dateMap.has(d)) dateMap.set(d, {})
@@ -123,7 +122,7 @@ function buildEloData(abbr: string, teamHistory: RatingPoint[], allHistory: Team
       leagueLow:  allVals.length ? Math.min(...allVals) : undefined,
     })
   }
-  return rows
+  return rows.filter(r => r.elo != null || r.leagueHigh != null)
 }
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
@@ -138,7 +137,6 @@ function StatBox({ label, value, sub, color }: { label: string; value: string; s
   )
 }
 
-// League band between high/low ELO — same pattern as EloHistoryChart
 function LeagueBand(props: Record<string, unknown>) {
   try {
     const { xAxisMap, yAxisMap, data } = props as {
@@ -171,9 +169,8 @@ function LeagueBand(props: Record<string, unknown>) {
   } catch { return null }
 }
 
-// Market rate diagonal
-function MarketLine({ dpwM, maxWar }: { dpwM: number; maxWar: number }) {
-  return (props: Record<string, unknown>) => {
+function MarketDiagonal({ dpwM, xD, yD }: { dpwM: number; xD: Domain; yD: Domain }) {
+  return function Comp(props: Record<string, unknown>) {
     try {
       const { xAxisMap, yAxisMap } = props as {
         xAxisMap: Record<string, { scale: (v: number) => number }>
@@ -182,10 +179,14 @@ function MarketLine({ dpwM, maxWar }: { dpwM: number; maxWar: number }) {
       const xs = Object.values(xAxisMap)[0]?.scale
       const ys = Object.values(yAxisMap)[0]?.scale
       if (!xs || !ys) return null
+      // Clip line to current domain
+      const x1 = Math.max(xD[0], 0)
+      const x2 = xD[1]
       return (
         <line
-          x1={xs(0)} y1={ys(0)} x2={xs(maxWar)} y2={ys(maxWar * dpwM)}
-          stroke="rgba(255,255,255,0.25)"
+          x1={xs(x1)} y1={ys(x1 * dpwM)}
+          x2={xs(x2)} y2={ys(x2 * dpwM)}
+          stroke="rgba(255,255,255,0.22)"
           strokeWidth={1.5}
           strokeDasharray="6 4"
         />
@@ -197,29 +198,22 @@ function MarketLine({ dpwM, maxWar }: { dpwM: number; maxWar: number }) {
 function HeadshotDot({ teamPrimary }: { teamPrimary: string }) {
   return function Dot(props: Record<string, unknown>) {
     const { cx, cy, payload } = props as { cx: number; cy: number; payload: ScatterPoint }
-    const size = 28
-    const r = size / 2
+    const r = 13
     const id = `clip-${payload.bref_id}-${payload.player_type}`
     return (
       <g>
         <defs>
-          <clipPath id={id}>
-            <circle cx={cx} cy={cy} r={r - 1} />
-          </clipPath>
+          <clipPath id={id}><circle cx={cx} cy={cy} r={r - 1} /></clipPath>
         </defs>
-        {/* team color background ring */}
-        <circle cx={cx} cy={cy} r={r + 1} fill={teamPrimary} opacity={0.85} />
+        <circle cx={cx} cy={cy} r={r + 1} fill={teamPrimary} opacity={0.9} />
         {payload.player_id ? (
           <image
             href={`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${payload.player_id}/headshot/67/current`}
-            x={cx - r + 1}
-            y={cy - r + 1}
-            width={size - 2}
-            height={size - 2}
+            x={cx - r + 1} y={cy - r + 1} width={(r - 1) * 2} height={(r - 1) * 2}
             clipPath={`url(#${id})`}
           />
         ) : (
-          <circle cx={cx} cy={cy} r={r - 1} fill="#555" clipPath={`url(#${id})`} />
+          <circle cx={cx} cy={cy} r={r - 1} fill="#555" />
         )}
       </g>
     )
@@ -230,7 +224,7 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: Array
   if (!active || !payload?.length) return null
   const d = payload[0].payload
   return (
-    <div className="bg-538-card border border-538-border rounded px-3 py-2 text-xs shadow-lg">
+    <div className="bg-538-card border border-538-border rounded px-3 py-2 text-xs shadow-lg pointer-events-none">
       <div className="font-semibold text-538-text">{d.name}</div>
       <div className="text-538-muted">{d.player_type === 'pitcher' ? 'Pitcher' : 'Batter'}</div>
       <div className="mt-1 font-mono">WAR: <span className="font-semibold text-538-text">{d.war.toFixed(1)}</span></div>
@@ -240,14 +234,18 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: Array
   )
 }
 
-function EloTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ dataKey: string; value: number; color?: string }>; label?: string }) {
+function EloTooltip({ active, payload, label }: {
+  active?: boolean
+  payload?: Array<{ dataKey: string; value: number; color?: string }>
+  label?: string
+}) {
   if (!active || !payload?.length) return null
-  const eloEntry = payload.find(e => e.dataKey === 'elo')
-  if (!eloEntry?.value) return null
+  const entry = payload.find(e => e.dataKey === 'elo')
+  if (!entry?.value) return null
   return (
     <div className="bg-538-card border border-538-border rounded px-2 py-1.5 text-xs shadow">
       <div className="text-538-muted mb-0.5">{label}</div>
-      <div className="font-mono font-semibold" style={{ color: eloEntry.color }}>{Math.round(eloEntry.value)}</div>
+      <div className="font-mono font-semibold" style={{ color: entry.color }}>{Math.round(entry.value)}</div>
     </div>
   )
 }
@@ -255,34 +253,31 @@ function EloTooltip({ active, payload, label }: { active?: boolean; payload?: Ar
 // ── Main component ─────────────────────────────────────────────────────────────
 
 export default function TeamPage({ standing, teamHistory, allHistory, teamPlayerWar, allPlayerWar, teamLogs }: Props) {
-  const [clipOutliers, setClipOutliers] = useState(false)
   const abbr = standing.team_abbr
   const primary = teamColor(abbr)
   const logoUrl = teamLogoUrl(abbr)
 
-  // ── ELO chart ────────────────────────────────────────────────────────────────
+  // ── ELO ─────────────────────────────────────────────────────────────────────
   const eloData = useMemo(
     () => buildEloData(abbr, teamHistory, allHistory),
     [abbr, teamHistory, allHistory]
   )
 
-  // ── Payroll / WAR math ───────────────────────────────────────────────────────
+  // ── Payroll math ─────────────────────────────────────────────────────────────
   const hasSalaryData = allPlayerWar.some(p => p.salary && p.salary > LEAGUE_MIN)
+  const warPlayers    = teamPlayerWar.filter(p => p.salary && p.salary > 0)
+  const totalPayroll  = warPlayers.reduce((s, p) => s + (p.salary ?? 0), 0)
+  const totalWar      = teamPlayerWar.reduce((s, p) => s + p.war, 0)
 
-  const warPlayers = teamPlayerWar.filter(p => p.salary && p.salary > 0)
-  const totalPayroll = warPlayers.reduce((s, p) => s + (p.salary ?? 0), 0)
-  const totalWar = teamPlayerWar.reduce((s, p) => s + p.war, 0)
-
-  // League $/WAR from all players with meaningful salary (above league min)
   const leaguePairs = allPlayerWar
     .filter(p => p.war >= 0.5 && p.salary && p.salary > LEAGUE_MIN)
     .map(p => p.salary! / p.war)
   const leagueDpw = median(leaguePairs)
 
-  const teamDpw = totalWar >= 0.5 && totalPayroll > 0 ? totalPayroll / totalWar : null
+  const teamDpw  = totalWar >= 0.5 && totalPayroll > 0 ? totalPayroll / totalWar : null
   const efficiency = teamDpw && leagueDpw > 0 ? leagueDpw / teamDpw : null
 
-  // ── Efficiency ranking among all teams ───────────────────────────────────────
+  // Efficiency ranking
   const teamEfficiencies = useMemo(() => {
     const byTeam: Record<string, { pay: number; war: number }> = {}
     for (const p of allPlayerWar) {
@@ -297,36 +292,134 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
       .sort((a, b) => a.dpw - b.dpw)
   }, [allPlayerWar])
 
-  const teamRank = teamEfficiencies.findIndex(e => e.team === abbr) + 1
+  const teamRank  = teamEfficiencies.findIndex(e => e.team === abbr) + 1
   const rankTotal = teamEfficiencies.length
 
-  // ── Scatter plot ─────────────────────────────────────────────────────────────
-  const allScatterData: ScatterPoint[] = teamPlayerWar
-    .filter(p => p.salary && p.salary > 0)
-    .map(p => ({
-      war: p.war,
-      salary: p.salary!,
-      salaryM: p.salary! / 1_000_000,
-      name: p.name,
-      bref_id: p.bref_id,
-      player_id: p.player_id,
-      player_type: p.player_type,
-    }))
+  // ── Scatter data & domains ───────────────────────────────────────────────────
+  const allScatterData: ScatterPoint[] = useMemo(() =>
+    teamPlayerWar
+      .filter(p => p.salary && p.salary > 0)
+      .map(p => ({
+        war: p.war, salary: p.salary!, salaryM: p.salary! / 1_000_000,
+        name: p.name, bref_id: p.bref_id,
+        player_id: p.player_id, player_type: p.player_type,
+      })),
+    [teamPlayerWar]
+  )
 
-  const scatterData = useMemo(() => {
-    if (!clipOutliers || allScatterData.length < 4) return allScatterData
-    const warB  = iqrBounds(allScatterData.map(d => d.war))
-    const salB  = iqrBounds(allScatterData.map(d => d.salaryM))
-    return allScatterData.filter(d => d.war >= warB.lo && d.war <= warB.hi && d.salaryM >= salB.lo && d.salaryM <= salB.hi)
-  }, [allScatterData, clipOutliers])
+  const baseDomains = useMemo((): { x: Domain; y: Domain } => {
+    if (!allScatterData.length) return { x: [0, 5], y: [0, 5] }
+    const wars = allScatterData.map(d => d.war)
+    const sals = allScatterData.map(d => d.salaryM)
+    const wPad = Math.max((Math.max(...wars) - Math.min(...wars)) * 0.08, 0.5)
+    const sPad = Math.max(...sals) * 0.08
+    return {
+      x: [Math.min(...wars) - wPad, Math.max(...wars) + wPad],
+      y: [Math.max(0, Math.min(...sals) - sPad), Math.max(...sals) + sPad],
+    }
+  }, [allScatterData])
 
-  // Medians from unclipped data so lines don't jump when clipping
-  const medWar    = median(allScatterData.filter(d => d.war >= 0.5).map(d => d.war))
-  const medSalM   = median(allScatterData.map(d => d.salaryM))
-  const dpwM      = leagueDpw / 1_000_000
-  const maxWarVal = scatterData.length > 0 ? Math.max(...scatterData.map(d => d.war)) * 1.1 : 6
+  const [xZoom, setXZoom] = useState<Domain | null>(null)
+  const [yZoom, setYZoom] = useState<Domain | null>(null)
+  const xDomain = xZoom ?? baseDomains.x
+  const yDomain = yZoom ?? baseDomains.y
+  const isZoomed = xZoom != null || yZoom != null
 
-  const DotComponent = useMemo(() => HeadshotDot({ teamPrimary: primary }), [primary])
+  const visibleScatterData = useMemo(() =>
+    allScatterData.filter(d =>
+      d.war >= xDomain[0] && d.war <= xDomain[1] &&
+      d.salaryM >= yDomain[0] && d.salaryM <= yDomain[1]
+    ),
+    [allScatterData, xDomain, yDomain]
+  )
+
+  // League median lines (red dotted)
+  const lgMedianWar  = median(allPlayerWar.filter(p => p.war >= 0.5).map(p => p.war))
+  const lgMedianSalM = median(allPlayerWar.filter(p => p.salary && p.salary > LEAGUE_MIN).map(p => p.salary! / 1_000_000))
+  const dpwM = leagueDpw / 1_000_000
+
+  // ── Drag-to-zoom mouse handling ──────────────────────────────────────────────
+  const wrapperRef  = useRef<HTMLDivElement>(null)
+  const isSelecting = useRef(false)
+  const selStartPx  = useRef<{ x: number; y: number } | null>(null)
+  const [selBox, setSelBox] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null)
+  const [cursor, setCursor] = useState<'crosshair' | 'default'>('crosshair')
+
+  function getPlotRelative(clientX: number, clientY: number) {
+    if (!wrapperRef.current) return null
+    const rect = wrapperRef.current.getBoundingClientRect()
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+      plotW: rect.width - CM.left - Y_AXIS_W - CM.right,
+    }
+  }
+
+  function pxToData(px: { x: number; y: number; plotW: number }): { dataX: number; dataY: number } {
+    const xFrac = Math.max(0, Math.min(1, (px.x - PLOT_LEFT) / px.plotW))
+    const yFrac = Math.max(0, Math.min(1, (px.y - CM.top) / PLOT_BOTTOM_H))
+    return {
+      dataX: xDomain[0] + xFrac * (xDomain[1] - xDomain[0]),
+      dataY: yDomain[0] + (1 - yFrac) * (yDomain[1] - yDomain[0]),
+    }
+  }
+
+  function onMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    const rel = getPlotRelative(e.clientX, e.clientY)
+    if (!rel) return
+    // Only start if click is inside the plot area
+    if (rel.x < PLOT_LEFT || rel.x > PLOT_LEFT + rel.plotW) return
+    if (rel.y < CM.top   || rel.y > CM.top + PLOT_BOTTOM_H) return
+    isSelecting.current = true
+    selStartPx.current = { x: rel.x, y: rel.y }
+    setSelBox({ x1: rel.x, y1: rel.y, x2: rel.x, y2: rel.y })
+    setCursor('crosshair')
+    e.preventDefault()
+  }
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!isSelecting.current || !selStartPx.current || !wrapperRef.current) return
+    const rel = getPlotRelative(e.clientX, e.clientY)
+    if (!rel) return
+    const clampedX = Math.max(PLOT_LEFT, Math.min(PLOT_LEFT + rel.plotW, rel.x))
+    const clampedY = Math.max(CM.top,    Math.min(CM.top + PLOT_BOTTOM_H, rel.y))
+    setSelBox({ x1: selStartPx.current.x, y1: selStartPx.current.y, x2: clampedX, y2: clampedY })
+  }
+
+  function onMouseUp(e: React.MouseEvent<HTMLDivElement>) {
+    if (!isSelecting.current || !selBox) {
+      isSelecting.current = false
+      setSelBox(null)
+      return
+    }
+    isSelecting.current = false
+
+    const rel = getPlotRelative(e.clientX, e.clientY)
+    if (!rel) { setSelBox(null); return }
+
+    const minPx = { x: Math.min(selBox.x1, selBox.x2), y: Math.min(selBox.y1, selBox.y2), plotW: rel.plotW }
+    const maxPx = { x: Math.max(selBox.x1, selBox.x2), y: Math.max(selBox.y1, selBox.y2), plotW: rel.plotW }
+
+    // Only apply zoom if selection is meaningful (> 15px in both dims)
+    if (maxPx.x - minPx.x > 15 && maxPx.y - minPx.y > 15) {
+      const topLeft  = pxToData({ ...minPx, y: minPx.y, plotW: rel.plotW })
+      const botRight = pxToData({ ...maxPx, y: maxPx.y, plotW: rel.plotW })
+      setXZoom([topLeft.dataX, botRight.dataX])
+      setYZoom([botRight.dataY, topLeft.dataY]) // y is inverted
+    }
+    setSelBox(null)
+    setCursor('default')
+  }
+
+  function onMouseLeave() {
+    if (isSelecting.current) {
+      isSelecting.current = false
+      setSelBox(null)
+      setCursor('default')
+    }
+  }
+
+  const DotShape = useMemo(() => HeadshotDot({ teamPrimary: primary }), [primary])
 
   const eloChange = standing.elo_change_7d
   const eloChangeColor = eloChange > 0 ? '#3C999E' : eloChange < 0 ? '#9B405A' : '#888'
@@ -334,7 +427,6 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
   return (
     <div className="min-h-screen bg-538-bg text-538-text px-4 py-6 max-w-5xl mx-auto">
 
-      {/* Back nav */}
       <Link href="/standings" className="text-xs text-538-muted hover:text-538-text transition-colors flex items-center gap-1 mb-6">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="15 18 9 12 15 6" />
@@ -362,8 +454,8 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         <StatBox label="Playoff %" value={pct(standing.playoff_probability)} color={standing.playoff_probability > 0.5 ? '#3C999E' : undefined} />
         <StatBox label="Win Division" value={pct(standing.win_ds)} />
-        <StatBox label="Win Pennant" value={pct(standing.win_cs)} />
-        <StatBox label="Win WS" value={pct(standing.win_ws)} />
+        <StatBox label="Win Pennant"  value={pct(standing.win_cs)} />
+        <StatBox label="Win WS"       value={pct(standing.win_ws)} />
       </div>
 
       {/* ── ELO Trend ──────────────────────────────────────────────────────── */}
@@ -374,40 +466,23 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={eloData} margin={{ top: 8, right: 12, bottom: 4, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis
-                  dataKey="date"
-                  tick={{ fontSize: 10, fill: '#8A6248' }}
-                  tickFormatter={d => (d as string).slice(5)}
-                  interval="preserveStartEnd"
-                />
-                <YAxis
-                  domain={['auto', 'auto']}
-                  tick={{ fontSize: 10, fill: '#8A6248' }}
-                  width={40}
-                />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#8A6248' }} tickFormatter={d => (d as string).slice(5)} interval="preserveStartEnd" />
+                <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10, fill: '#8A6248' }} width={40} />
                 <Tooltip content={<EloTooltip />} />
-                <ReferenceLine y={1500} stroke="rgba(150,120,90,0.4)" strokeDasharray="4 3" label={{ value: '1500', position: 'insideTopLeft', fontSize: 9, fill: '#8A6248' }} />
-                {/* League high/low band */}
-                <Line dataKey="leagueHigh" stroke="transparent" dot={false} legendType="none" />
-                <Line dataKey="leagueLow"  stroke="transparent" dot={false} legendType="none" />
+                <ReferenceLine y={1500} stroke="rgba(150,120,90,0.4)" strokeDasharray="4 3"
+                  label={{ value: '1500', position: 'insideTopLeft', fontSize: 9, fill: '#8A6248' }} />
+                {/* Transparent lines force domain to include band values */}
+                <Line dataKey="leagueHigh" stroke="transparent" dot={false} legendType="none" activeDot={false} isAnimationActive={false} />
+                <Line dataKey="leagueLow"  stroke="transparent" dot={false} legendType="none" activeDot={false} isAnimationActive={false} />
                 <Customized component={LeagueBand as any} />
-                {/* Team line */}
-                <Line
-                  type="monotone"
-                  dataKey="elo"
-                  stroke={primary}
-                  strokeWidth={2.5}
-                  dot={false}
-                  activeDot={{ r: 4, fill: primary }}
-                  connectNulls={false}
-                />
+                <Line type="monotone" dataKey="elo" stroke={primary} strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: primary }} connectNulls={false} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           ) : (
             <div className="flex items-center justify-center h-full text-538-muted text-sm">No ELO history available</div>
           )}
         </div>
-        <p className="text-xs text-538-muted mt-1.5">Grey band = league high/low range. Dashed = 1500 avg.</p>
+        <p className="text-xs text-538-muted mt-1.5">Grey band = league high/low. Dashed = 1500 average.</p>
       </section>
 
       {/* ── Team Performance ───────────────────────────────────────────────── */}
@@ -427,7 +502,7 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
           <>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
               <StatBox label="Total Payroll" value={totalPayroll > 0 ? fmtSalary(totalPayroll) : '—'} />
-              <StatBox label="Total WAR" value={totalWar.toFixed(1)} />
+              <StatBox label="Total WAR"     value={totalWar.toFixed(1)} />
               <StatBox
                 label="Team $/WAR"
                 value={teamDpw ? fmtSalary(teamDpw) + '/W' : '—'}
@@ -437,21 +512,17 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
                 label="Value vs Market"
                 value={
                   efficiency == null ? '—'
-                    : efficiency >= 1 ? `${pct(efficiency - 1, 1)} under`
-                    : `${pct(1 - efficiency, 1)} over`
+                  : efficiency >= 1 ? `${pct(efficiency - 1, 1)} under`
+                  : `${pct(1 - efficiency, 1)} over`
                 }
                 color={efficiency != null ? (efficiency >= 1 ? '#3C999E' : '#9B405A') : undefined}
-                sub={
-                  efficiency == null ? undefined
-                    : teamRank > 0 ? `#${teamRank} of ${rankTotal} teams`
-                    : efficiency >= 1 ? 'underpaying (good)' : 'overpaying'
-                }
+                sub={teamRank > 0 ? `#${teamRank} of ${rankTotal} teams` : undefined}
               />
             </div>
             {teamRank > 0 && (
               <p className="text-xs text-538-muted">
-                Ranked <span className="font-semibold text-538-text">#{teamRank}</span> of {rankTotal} teams by $/WAR — lower rank = better value per win.
-                Market rate uses current-season data only (salary inflation makes multi-year averages inaccurate).
+                #<span className="font-semibold text-538-text">{teamRank}</span> of {rankTotal} teams by $/WAR (lower = better value per win).
+                Market rate uses current-season salary data only.
               </p>
             )}
           </>
@@ -463,65 +534,85 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
         <section className="mb-10">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-538-muted uppercase tracking-wide">WAR vs Salary</h2>
-            {allScatterData.length > 4 && (
+            {isZoomed && (
               <button
-                onClick={() => setClipOutliers(v => !v)}
-                className={`text-xs px-2.5 py-1 rounded border transition-colors ${
-                  clipOutliers
-                    ? 'bg-538-accent/20 border-538-accent text-538-accent'
-                    : 'border-538-border text-538-muted hover:text-538-text'
-                }`}
+                onClick={() => { setXZoom(null); setYZoom(null) }}
+                className="text-xs px-2.5 py-1 rounded border border-538-border text-538-muted hover:text-538-text transition-colors"
               >
-                {clipOutliers ? 'Show all' : 'Clip outliers'}
+                Reset zoom
               </button>
             )}
           </div>
-          <div className="bg-538-card border border-538-border rounded-xl p-4" style={{ height: 440 }}>
+
+          {/* Chart wrapper: captures mouse for drag-to-zoom */}
+          <div
+            ref={wrapperRef}
+            className="bg-538-card border border-538-border rounded-xl p-4 relative select-none"
+            style={{ height: CHART_H, cursor }}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseLeave}
+          >
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart margin={{ top: 10, right: 20, bottom: 34, left: 10 }}>
+              <ScatterChart margin={{ top: CM.top, right: CM.right, bottom: CM.bottom, left: CM.left }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                 <XAxis
-                  type="number"
-                  dataKey="war"
-                  name="WAR"
+                  type="number" dataKey="war" name="WAR"
+                  domain={xDomain}
                   label={{ value: 'WAR', position: 'insideBottom', offset: -20, style: { fill: '#888', fontSize: 11 } }}
                   tick={{ fontSize: 10, fill: '#888' }}
-                  domain={['auto', 'auto']}
                 />
                 <YAxis
-                  type="number"
-                  dataKey="salaryM"
-                  name="Salary"
+                  type="number" dataKey="salaryM" name="Salary"
+                  domain={yDomain}
                   tickFormatter={v => `$${(v as number).toFixed(0)}M`}
                   tick={{ fontSize: 10, fill: '#888' }}
-                  width={54}
+                  width={Y_AXIS_W}
                 />
                 <ZAxis range={[1, 1]} />
                 <Tooltip content={<ScatterTooltip />} />
 
-                {/* Team median crosshairs */}
-                {medWar > 0 && (
-                  <ReferenceLine x={medWar} stroke="rgba(255,255,255,0.22)" strokeDasharray="5 3"
-                    label={{ value: `med WAR ${medWar.toFixed(1)}`, position: 'insideTopRight', fontSize: 9, fill: 'rgba(255,255,255,0.4)' }} />
+                {/* League median lines — red dotted */}
+                {lgMedianWar > 0 && lgMedianWar >= xDomain[0] && lgMedianWar <= xDomain[1] && (
+                  <ReferenceLine x={lgMedianWar} stroke="#ef4444" strokeDasharray="5 3" strokeWidth={1.5}
+                    label={{ value: `lg ${lgMedianWar.toFixed(1)} WAR`, position: 'insideTopRight', fontSize: 9, fill: '#ef4444' }} />
                 )}
-                {medSalM > 0 && (
-                  <ReferenceLine y={medSalM} stroke="rgba(255,255,255,0.22)" strokeDasharray="5 3"
-                    label={{ value: `med ${fmtSalary(medSalM * 1_000_000)}`, position: 'insideTopLeft', fontSize: 9, fill: 'rgba(255,255,255,0.4)' }} />
+                {lgMedianSalM > 0 && lgMedianSalM >= yDomain[0] && lgMedianSalM <= yDomain[1] && (
+                  <ReferenceLine y={lgMedianSalM} stroke="#ef4444" strokeDasharray="5 3" strokeWidth={1.5}
+                    label={{ value: `lg ${fmtSalary(lgMedianSalM * 1_000_000)}`, position: 'insideTopLeft', fontSize: 9, fill: '#ef4444' }} />
                 )}
 
                 {/* Market rate diagonal */}
                 {leagueDpw > 0 && (
-                  <Customized component={MarketLine({ dpwM, maxWar: maxWarVal }) as any} />
+                  <Customized component={MarketDiagonal({ dpwM, xD: xDomain, yD: yDomain }) as any} />
                 )}
 
-                <Scatter data={scatterData} shape={DotComponent as any} name="Players" />
+                <Scatter data={visibleScatterData} shape={DotShape as any} name="Players" />
               </ScatterChart>
             </ResponsiveContainer>
+
+            {/* Drag selection overlay */}
+            {selBox && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left:   Math.min(selBox.x1, selBox.x2),
+                  top:    Math.min(selBox.y1, selBox.y2),
+                  width:  Math.abs(selBox.x2 - selBox.x1),
+                  height: Math.abs(selBox.y2 - selBox.y1),
+                  border: '1.5px dashed rgba(255,255,255,0.55)',
+                  backgroundColor: 'rgba(255,255,255,0.06)',
+                  pointerEvents: 'none',
+                }}
+              />
+            )}
           </div>
+
           <p className="text-xs text-538-muted mt-2">
-            {leagueDpw > 0 && <>Dashed line = league market rate (~{fmtSalary(leagueDpw)}/WAR). </>}
-            Crosshairs = team medians. Circles outlined in team color.
-            {clipOutliers && ' Outliers hidden (IQR ×1.5).'}
+            <span className="text-red-400">Red lines</span> = league medians.
+            {leagueDpw > 0 && <> Dashed diagonal = market rate (~{fmtSalary(leagueDpw)}/WAR).</>}
+            {' '}Drag to zoom — <span className="font-medium">Reset zoom</span> to restore.
           </p>
         </section>
       )}
