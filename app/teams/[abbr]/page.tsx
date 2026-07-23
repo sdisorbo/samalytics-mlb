@@ -20,6 +20,7 @@ export default function TeamsRoute({ params }: { params: { abbr: string } }) {
     <TeamPage
       standing={standing}
       teamHistory={teamHistory}
+      allHistory={history}
       teamPlayerWar={teamPlayerWar}
       allPlayerWar={allPlayerWar}
       teamLogs={teamLogs}
