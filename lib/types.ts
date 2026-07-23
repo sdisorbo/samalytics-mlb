@@ -215,6 +215,7 @@ export interface PlayerWar {
   off_war: number | null
   def_war: number | null
   player_type: 'batter' | 'pitcher'
+  salary?: number | null
   career: WarSeason[]
 }
 

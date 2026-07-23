@@ -69,7 +69,7 @@ function warColor(value: number, min: number, max: number): string {
     : multiStop(PINK, 1 - t * 2)
 }
 
-type SortKey = 'war' | 'off_war' | 'def_war' | 'g' | 'pa' | 'rar_per_g'
+type SortKey = 'war' | 'off_war' | 'def_war' | 'g' | 'pa' | 'rar_per_g' | 'salary' | 'dollar_per_war'
 
 function rarPerGame(p: PlayerWarWithPos): number {
   if (p.player_type === 'pitcher') {
@@ -79,13 +79,30 @@ function rarPerGame(p: PlayerWarWithPos): number {
   return p.g > 0 ? (p.war * 10) / p.g : 0
 }
 
+function dollarPerWar(p: PlayerWarWithPos): number {
+  if (!p.salary || p.war < 0.5) return Infinity
+  return p.salary / p.war
+}
+
+function fmtSalary(sal: number): string {
+  if (sal >= 1_000_000) return `$${(sal / 1_000_000).toFixed(1)}M`
+  return `$${Math.round(sal / 1_000)}K`
+}
+
+function fmtDollarPerWar(p: PlayerWarWithPos): string {
+  if (!p.salary || p.war < 0.5) return '—'
+  return fmtSalary(p.salary / p.war) + '/W'
+}
+
 function getVal(p: PlayerWarWithPos, key: SortKey): number {
-  if (key === 'war')       return p.war
-  if (key === 'off_war')   return p.off_war ?? 0
-  if (key === 'def_war')   return p.def_war ?? 0
-  if (key === 'g')         return p.g
-  if (key === 'pa')        return p.player_type === 'pitcher' ? (p.ip ?? 0) : p.pa
-  if (key === 'rar_per_g') return rarPerGame(p)
+  if (key === 'war')           return p.war
+  if (key === 'off_war')       return p.off_war ?? 0
+  if (key === 'def_war')       return p.def_war ?? 0
+  if (key === 'g')             return p.g
+  if (key === 'pa')            return p.player_type === 'pitcher' ? (p.ip ?? 0) : p.pa
+  if (key === 'rar_per_g')     return rarPerGame(p)
+  if (key === 'salary')        return p.salary ?? 0
+  if (key === 'dollar_per_war') return dollarPerWar(p)
   return 0
 }
 
@@ -169,14 +186,21 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
   const minRar   = rarVals.length ? Math.min(...rarVals) : 0
   const maxRar   = rarVals.length ? Math.max(...rarVals) : 0
 
+  // $/WAR: only include qualified (war >= 0.5 and salary present); lower = better value
+  const dpwVals  = filtered.filter(p => p.war >= 0.5 && p.salary).map(dollarPerWar)
+  const minDpw   = dpwVals.length ? Math.min(...dpwVals) : 0
+  const maxDpw   = dpwVals.length ? Math.max(...dpwVals) : 0
+
   const isPitcherView = playerType === 'Pitchers'
   const cols: { key: SortKey; label: string; title: string }[] = [
-    { key: 'g',        label: 'G',      title: 'Games played' },
-    { key: 'pa',       label: isPitcherView ? 'IP' : 'PA', title: isPitcherView ? 'Innings pitched' : 'Plate appearances' },
-    { key: 'rar_per_g', label: 'RAR/G', title: isPitcherView ? 'Runs Above Replacement per GS (WAR × 10 ÷ GS)' : 'Runs Above Replacement per Game (WAR × 10 ÷ G)' },
-    { key: 'off_war',  label: 'Off',    title: 'Offensive WAR' },
-    { key: 'def_war',  label: 'Def',    title: 'Defensive WAR' },
-    { key: 'war',      label: 'WAR',    title: 'Total Wins Above Replacement (bRef bWAR)' },
+    { key: 'g',             label: 'G',      title: 'Games played' },
+    { key: 'pa',            label: isPitcherView ? 'IP' : 'PA', title: isPitcherView ? 'Innings pitched' : 'Plate appearances' },
+    { key: 'rar_per_g',     label: 'RAR/G',  title: isPitcherView ? 'Runs Above Replacement per GS (WAR × 10 ÷ GS)' : 'Runs Above Replacement per Game (WAR × 10 ÷ G)' },
+    { key: 'off_war',       label: 'Off',    title: 'Offensive WAR' },
+    { key: 'def_war',       label: 'Def',    title: 'Defensive WAR' },
+    { key: 'war',           label: 'WAR',    title: 'Total Wins Above Replacement (bRef bWAR)' },
+    { key: 'salary',        label: 'Salary', title: '2026 salary (falls back to 2025 or league minimum for pre-arb players). Source: Baseball Reference.' },
+    { key: 'dollar_per_war', label: '$/WAR', title: 'Annual salary divided by WAR (shown for players with ≥0.5 WAR). Lower = better value.' },
   ]
 
   return (
@@ -263,7 +287,7 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={10} className="py-8 text-center text-538-muted text-sm">
+                <td colSpan={12} className="py-8 text-center text-538-muted text-sm">
                   No players match your filters.
                 </td>
               </tr>
@@ -314,6 +338,15 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                   }}
                 >
                   {(player.war > 0 ? '+' : '') + player.war.toFixed(1)}
+                </td>
+                <td className="py-2.5 px-3 text-right text-xs font-mono text-538-muted">
+                  {player.salary ? fmtSalary(player.salary) : '—'}
+                </td>
+                <td
+                  className="py-2.5 px-3 text-right text-xs font-mono font-semibold"
+                  style={{ color: player.war >= 0.5 && player.salary ? warColor(maxDpw - dollarPerWar(player) + minDpw, minDpw, maxDpw) : undefined }}
+                >
+                  {fmtDollarPerWar(player)}
                 </td>
               </tr>
             ))}

@@ -9,6 +9,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 RUNS_PER_WIN = 10.0
+LEAGUE_MINIMUM = 740_000  # 2026 MLB minimum salary (approximate)
 
 LEGEND_BREF_IDS = {
     "Barry Bonds":    "bondsba01",
@@ -55,6 +56,25 @@ def _batting_stats_from_row(r) -> dict:
     }
 
 
+def _build_salary_lookup(df, primary_year: int) -> dict:
+    """bref_id -> salary, preferring primary_year then latest available year."""
+    by_id: dict = {}
+    for _, r in df.iterrows():
+        yr = int(r.get("year_ID", 0) or 0)
+        sal = _safe_int(r.get("salary", 0))
+        if sal > 0:
+            bid = str(r.get("player_ID", ""))
+            if bid:
+                by_id.setdefault(bid, {})[yr] = sal
+    result = {}
+    for bid, yr_map in by_id.items():
+        if primary_year in yr_map:
+            result[bid] = yr_map[primary_year]
+        elif yr_map:
+            result[bid] = yr_map[max(yr_map.keys())]
+    return result
+
+
 def _fetch_bwar_bat() -> "pd.DataFrame":
     import io
     import pandas as pd
@@ -97,6 +117,8 @@ def fetch_current_war(season: int, bat_df=None) -> list[dict]:
         df = df[df["pitcher"] == "N"]
         df = df.dropna(subset=["WAR"])
 
+        sal_map = _build_salary_lookup(bat_df, season)
+
         rows = []
         for _, r in df.iterrows():
             def_r = _safe_float(r.get("runs_above_avg_def", 0)) or 0.0
@@ -105,10 +127,12 @@ def fetch_current_war(season: int, bat_df=None) -> list[dict]:
                 continue
             def_war = round(def_r / RUNS_PER_WIN, 2)
             off_war = round(total_war - def_war, 2)
+            bid = str(r.get("player_ID", ""))
+            salary = sal_map.get(bid, LEAGUE_MINIMUM)
 
             rows.append({
                 "player_id":   int(r["mlb_ID"]) if r.get("mlb_ID") else None,
-                "bref_id":     str(r.get("player_ID", "")),
+                "bref_id":     bid,
                 "name":        str(r.get("name_common", "")),
                 "team":        str(r.get("team_ID", "")),
                 "g":           _safe_int(r.get("G", 0)),
@@ -116,6 +140,7 @@ def fetch_current_war(season: int, bat_df=None) -> list[dict]:
                 "war":         total_war,
                 "off_war":     off_war,
                 "def_war":     def_war,
+                "salary":      salary,
                 "player_type": "batter",
             })
 
@@ -133,6 +158,11 @@ def fetch_current_war(season: int, bat_df=None) -> list[dict]:
                 m["team"]    = "2TM"
             else:
                 merged[bid] = dict(row)
+
+        # For traded players, keep the higher salary (same contract, just multiple rows)
+        for bid, m in merged.items():
+            if "salary" not in m:
+                m["salary"] = sal_map.get(bid, LEAGUE_MINIMUM)
 
         # Reuse the already-fetched full DataFrame for career data
         full_batters = bat_df[bat_df["pitcher"] == "N"]
@@ -184,6 +214,8 @@ def fetch_current_pitcher_war(season: int, pitch_df=None) -> list[dict]:
         df = season_df
         df = df.dropna(subset=["WAR"])
 
+        sal_map = _build_salary_lookup(pitch_df, season)
+
         rows = []
         for _, r in df.iterrows():
             total_war = _safe_float(r.get("WAR"))
@@ -193,10 +225,12 @@ def fetch_current_pitcher_war(season: int, pitch_df=None) -> list[dict]:
             ip = round(ip_outs / 3, 1)
             if ip < 10:
                 continue
+            bid = str(r.get("player_ID", ""))
+            salary = sal_map.get(bid, LEAGUE_MINIMUM)
 
             rows.append({
                 "player_id":   int(r["mlb_ID"]) if r.get("mlb_ID") else None,
-                "bref_id":     str(r.get("player_ID", "")),
+                "bref_id":     bid,
                 "name":        str(r.get("name_common", "")),
                 "team":        str(r.get("team_ID", "")),
                 "g":           _safe_int(r.get("G", 0)),
@@ -206,6 +240,7 @@ def fetch_current_pitcher_war(season: int, pitch_df=None) -> list[dict]:
                 "war":         total_war,
                 "off_war":     None,
                 "def_war":     None,
+                "salary":      salary,
                 "player_type": "pitcher",
             })
 
