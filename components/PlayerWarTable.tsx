@@ -198,9 +198,9 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
     { key: 'rar_per_g',     label: 'RAR/G',  title: isPitcherView ? 'Runs Above Replacement per GS (WAR × 10 ÷ GS)' : 'Runs Above Replacement per Game (WAR × 10 ÷ G)' },
     { key: 'off_war',       label: 'Off',    title: 'Offensive WAR' },
     { key: 'def_war',       label: 'Def',    title: 'Defensive WAR' },
-    { key: 'war',           label: 'WAR',    title: 'Total Wins Above Replacement (bRef bWAR)' },
     { key: 'salary',        label: 'Salary', title: '2026 salary (falls back to 2025 or league minimum for pre-arb players). Source: Baseball Reference.' },
     { key: 'dollar_per_war', label: '$/WAR', title: 'Annual salary divided by WAR (shown for players with ≥0.5 WAR). Lower = better value.' },
+    { key: 'war',           label: 'WAR',    title: 'Total Wins Above Replacement (bRef bWAR)' },
   ]
 
   return (
@@ -331,14 +331,6 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                 >
                   {player.def_war != null ? (player.def_war > 0 ? '+' : '') + player.def_war.toFixed(1) : '—'}
                 </td>
-                <td
-                  className="py-2.5 px-3 text-right text-xs font-mono font-bold"
-                  style={{
-                    backgroundColor: warColor(player.war, minWar, maxWar) + '55',
-                  }}
-                >
-                  {(player.war > 0 ? '+' : '') + player.war.toFixed(1)}
-                </td>
                 <td className="py-2.5 px-3 text-right text-xs font-mono text-538-muted">
                   {player.salary ? fmtSalary(player.salary) : '—'}
                 </td>
@@ -347,6 +339,14 @@ export default function PlayerWarTable({ players, legendWar }: Props) {
                   style={{ color: player.war >= 0.5 && player.salary ? warColor(maxDpw - dollarPerWar(player) + minDpw, minDpw, maxDpw) : undefined }}
                 >
                   {fmtDollarPerWar(player)}
+                </td>
+                <td
+                  className="py-2.5 px-3 text-right text-xs font-mono font-bold"
+                  style={{
+                    backgroundColor: warColor(player.war, minWar, maxWar) + '55',
+                  }}
+                >
+                  {(player.war > 0 ? '+' : '') + player.war.toFixed(1)}
                 </td>
               </tr>
             ))}

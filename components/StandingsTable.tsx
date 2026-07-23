@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo, Fragment } from 'react'
+import Link from 'next/link'
 import clsx from 'clsx'
 import type { TeamStanding } from '@/lib/types'
 import { teamColor, teamLogoUrl, DIVISION_ORDER, divisionColor, normalizeDivision } from '@/lib/teamColors'
@@ -296,7 +297,9 @@ function TeamRow({ row, colStats }: { row: TeamStanding; colStats: ColStats }) {
       <td className="text-left sticky left-0 z-10 bg-surface">
         <div className="flex items-center gap-2">
           <TeamBadge abbr={row.team_abbr} />
-          <span className="font-medium text-538-text">{row.team}</span>
+          <Link href={`/teams/${row.team_abbr}`} className="font-medium text-538-text hover:text-538-accent transition-colors">
+            {row.team}
+          </Link>
         </div>
       </td>
 
