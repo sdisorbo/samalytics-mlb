@@ -521,12 +521,14 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
                 sub={teamRank > 0 ? `#${teamRank} of ${rankTotal} teams` : undefined}
               />
             </div>
-            {teamRank > 0 && (
-              <p className="text-xs text-538-muted">
-                #<span className="font-semibold text-538-text">{teamRank}</span> of {rankTotal} teams by $/WAR (lower = better value per win).
-                Market rate uses current-season salary data only.
-              </p>
-            )}
+            <p className="text-xs text-538-muted mt-1">
+              {teamRank > 0 && <>
+                #<span className="font-semibold text-538-text">{teamRank}</span> of {rankTotal} teams by $/WAR (lower = better value per win).{' '}
+              </>}
+              <span className="italic">
+                ⚠ Salary source: Baseball Reference WAR CSVs. Coverage is incomplete — players missing from bRef salary data default to the league minimum (${(LEAGUE_MIN / 1_000_000).toFixed(2)}M). Payroll totals and $/WAR figures may be understated.
+              </span>
+            </p>
           </>
         )}
       </section>
