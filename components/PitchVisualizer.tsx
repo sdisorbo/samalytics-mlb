@@ -446,13 +446,13 @@ export default function PitchVisualizer({ ranked, arsenal, pitchers: _pitchers }
           onClick={() => setLeaderboardOpen((v) => !v)}
           className="px-3 py-1.5 text-xs font-bold rounded border-2 border-538-orange text-538-orange hover:bg-538-orange hover:text-white transition-colors"
         >
-          🏆 Daily Leaderboard {leaderboardOpen ? '▴' : '▾'}
+          Daily Leaderboard {leaderboardOpen ? '▴' : '▾'}
         </button>
         <button
           onClick={() => setGameMode(true)}
           className="px-3 py-1.5 text-xs font-bold rounded border-2 border-538-orange text-538-orange hover:bg-538-orange hover:text-white transition-colors"
         >
-          🎮 Game Mode · Try to Hit
+          Game Mode · Try to Hit
         </button>
         <button
           onClick={() => setTestMode(true)}

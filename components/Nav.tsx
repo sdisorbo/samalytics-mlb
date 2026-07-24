@@ -17,7 +17,6 @@ const LINKS = [
   { href: '/matchup',     label: 'Pitch Lab' },
   { href: '/matchup-lab', label: 'Games' },
   { href: '/pitch-vis',        label: 'Pitch Vis' },
-  { href: '/team-performance', label: 'Team Perf' },
 ]
 
 function ThemeToggle() {
