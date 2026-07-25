@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import GameTicker from './GameTicker'
+import SearchBar from './SearchBar'
 
 const LINKS = [
   { href: '/',         label: 'Home' },
@@ -17,7 +18,6 @@ const LINKS = [
   { href: '/matchup',     label: 'Pitch Lab' },
   { href: '/matchup-lab', label: 'Games' },
   { href: '/pitch-vis',        label: 'Pitch Vis' },
-  { href: '/team-performance', label: 'Team Perf' },
 ]
 
 function ThemeToggle() {
@@ -128,16 +128,19 @@ export default function Nav() {
           })}
         </nav>
 
-        {/* Hamburger — mobile only */}
-        <button
-          className="sm:hidden ml-auto w-9 h-9 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-538-bg transition-colors"
-          onClick={() => setMobileOpen(v => !v)}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-        >
-          <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && 'translate-y-2 rotate-45')} />
-          <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && 'opacity-0')} />
-          <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && '-translate-y-2 -rotate-45')} />
-        </button>
+        {/* Right actions: search icon + hamburger (mobile only) */}
+        <div className="flex items-center gap-1 ml-auto sm:ml-0">
+          <SearchBar />
+          <button
+            className="sm:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-538-bg transition-colors"
+            onClick={() => setMobileOpen(v => !v)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          >
+            <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && 'translate-y-2 rotate-45')} />
+            <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && 'opacity-0')} />
+            <span className={clsx('block h-0.5 w-5 bg-538-text transition-all duration-200', mobileOpen && '-translate-y-2 -rotate-45')} />
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu dropdown */}
