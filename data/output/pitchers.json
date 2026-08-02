@@ -499,9 +499,9 @@
     "strikeouts": 23,
     "walks": 10,
     "home_runs_allowed": 0,
-    "era_percentile": 49,
+    "era_percentile": 48,
     "fip_percentile": 95,
-    "k9_percentile": 79,
+    "k9_percentile": 78,
     "bb9_percentile": 21,
     "whip_percentile": 12
   },
@@ -567,7 +567,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 86,
     "fip_percentile": 95,
-    "k9_percentile": 85,
+    "k9_percentile": 86,
     "bb9_percentile": 55,
     "whip_percentile": 89
   },
@@ -1093,7 +1093,7 @@
     "strikeouts": 36,
     "walks": 12,
     "home_runs_allowed": 2,
-    "era_percentile": 50,
+    "era_percentile": 49,
     "fip_percentile": 90,
     "k9_percentile": 95,
     "bb9_percentile": 32,
@@ -2086,7 +2086,7 @@
     "era_percentile": 91,
     "fip_percentile": 79,
     "k9_percentile": 31,
-    "bb9_percentile": 60,
+    "bb9_percentile": 59,
     "whip_percentile": 82
   },
   {
@@ -2417,7 +2417,7 @@
     "fip_percentile": 76,
     "k9_percentile": 90,
     "bb9_percentile": 33,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 663855,
@@ -2481,7 +2481,7 @@
     "home_runs_allowed": 0,
     "era_percentile": 81,
     "fip_percentile": 75,
-    "k9_percentile": 77,
+    "k9_percentile": 76,
     "bb9_percentile": 1,
     "whip_percentile": 7
   },
@@ -3010,7 +3010,7 @@
     "era_percentile": 87,
     "fip_percentile": 70,
     "k9_percentile": 80,
-    "bb9_percentile": 58,
+    "bb9_percentile": 57,
     "whip_percentile": 60
   },
   {
@@ -3161,7 +3161,7 @@
     "strikeouts": 71,
     "walks": 32,
     "home_runs_allowed": 5,
-    "era_percentile": 55,
+    "era_percentile": 56,
     "fip_percentile": 69,
     "k9_percentile": 98,
     "bb9_percentile": 6,
@@ -3491,7 +3491,7 @@
     "strikeouts": 107,
     "walks": 25,
     "home_runs_allowed": 15,
-    "era_percentile": 49,
+    "era_percentile": 48,
     "fip_percentile": 65,
     "k9_percentile": 38,
     "bb9_percentile": 95,
@@ -4155,7 +4155,7 @@
     "fip_percentile": 59,
     "k9_percentile": 73,
     "bb9_percentile": 77,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 623454,
@@ -4551,7 +4551,7 @@
     "fip_percentile": 55,
     "k9_percentile": 81,
     "bb9_percentile": 18,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 573124,
@@ -4591,7 +4591,7 @@
     "strikeouts": 60,
     "walks": 21,
     "home_runs_allowed": 8,
-    "era_percentile": 98,
+    "era_percentile": 97,
     "fip_percentile": 54,
     "k9_percentile": 39,
     "bb9_percentile": 70,
@@ -4618,6 +4618,28 @@
     "k9_percentile": 49,
     "bb9_percentile": 31,
     "whip_percentile": 39
+  },
+  {
+    "player_id": 665622,
+    "name": "Luis Medina",
+    "team": "ATH",
+    "team_name": "Athletics",
+    "division": "American League West",
+    "era": 3.91,
+    "fip": 3.81,
+    "xfip": null,
+    "k_per_9": 10.66,
+    "bb_per_9": 4.62,
+    "whip": 1.52,
+    "innings_pitched": 50.7,
+    "strikeouts": 60,
+    "walks": 26,
+    "home_runs_allowed": 6,
+    "era_percentile": 51,
+    "fip_percentile": 54,
+    "k9_percentile": 85,
+    "bb9_percentile": 19,
+    "whip_percentile": 17
   },
   {
     "player_id": 608379,
@@ -4657,7 +4679,7 @@
     "strikeouts": 115,
     "walks": 39,
     "home_runs_allowed": 17,
-    "era_percentile": 54,
+    "era_percentile": 55,
     "fip_percentile": 54,
     "k9_percentile": 18,
     "bb9_percentile": 84,
@@ -4856,7 +4878,7 @@
     "walks": 20,
     "home_runs_allowed": 4,
     "era_percentile": 74,
-    "fip_percentile": 52,
+    "fip_percentile": 51,
     "k9_percentile": 10,
     "bb9_percentile": 47,
     "whip_percentile": 73
@@ -4878,7 +4900,7 @@
     "walks": 19,
     "home_runs_allowed": 6,
     "era_percentile": 39,
-    "fip_percentile": 52,
+    "fip_percentile": 51,
     "k9_percentile": 84,
     "bb9_percentile": 32,
     "whip_percentile": 28
@@ -4900,7 +4922,7 @@
     "walks": 11,
     "home_runs_allowed": 4,
     "era_percentile": 11,
-    "fip_percentile": 52,
+    "fip_percentile": 51,
     "k9_percentile": 61,
     "bb9_percentile": 53,
     "whip_percentile": 14
@@ -4972,28 +4994,6 @@
     "whip_percentile": 54
   },
   {
-    "player_id": 665622,
-    "name": "Luis Medina",
-    "team": "ATH",
-    "team_name": "Athletics",
-    "division": "American League West",
-    "era": 3.99,
-    "fip": 3.87,
-    "xfip": null,
-    "k_per_9": 10.69,
-    "bb_per_9": 4.71,
-    "whip": 1.51,
-    "innings_pitched": 49.7,
-    "strikeouts": 59,
-    "walks": 26,
-    "home_runs_allowed": 6,
-    "era_percentile": 48,
-    "fip_percentile": 51,
-    "k9_percentile": 86,
-    "bb9_percentile": 18,
-    "whip_percentile": 18
-  },
-  {
     "player_id": 693855,
     "name": "Ian Seymour",
     "team": "TB",
@@ -5034,7 +5034,7 @@
     "era_percentile": 69,
     "fip_percentile": 50,
     "k9_percentile": 27,
-    "bb9_percentile": 58,
+    "bb9_percentile": 57,
     "whip_percentile": 53
   },
   {
@@ -5779,7 +5779,7 @@
     "strikeouts": 41,
     "walks": 12,
     "home_runs_allowed": 7,
-    "era_percentile": 50,
+    "era_percentile": 49,
     "fip_percentile": 43,
     "k9_percentile": 46,
     "bb9_percentile": 80,
@@ -5937,7 +5937,7 @@
     "fip_percentile": 41,
     "k9_percentile": 62,
     "bb9_percentile": 26,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 683769,
@@ -6949,7 +6949,7 @@
     "fip_percentile": 31,
     "k9_percentile": 5,
     "bb9_percentile": 92,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 684974,
@@ -7035,9 +7035,9 @@
     "home_runs_allowed": 8,
     "era_percentile": 54,
     "fip_percentile": 30,
-    "k9_percentile": 8,
+    "k9_percentile": 7,
     "bb9_percentile": 71,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 666808,
@@ -7502,6 +7502,28 @@
     "whip_percentile": 11
   },
   {
+    "player_id": 621097,
+    "name": "Jacob Waguespack",
+    "team": "DET",
+    "team_name": "Detroit Tigers",
+    "division": "American League Central",
+    "era": 1.74,
+    "fip": 4.65,
+    "xfip": null,
+    "k_per_9": 6.1,
+    "bb_per_9": 3.05,
+    "whip": 0.82,
+    "innings_pitched": 20.7,
+    "strikeouts": 14,
+    "walks": 7,
+    "home_runs_allowed": 3,
+    "era_percentile": 98,
+    "fip_percentile": 25,
+    "k9_percentile": 9,
+    "bb9_percentile": 60,
+    "whip_percentile": 98
+  },
+  {
     "player_id": 682120,
     "name": "Tim Herrin",
     "team": "CLE",
@@ -7562,7 +7584,7 @@
     "walks": 40,
     "home_runs_allowed": 17,
     "era_percentile": 30,
-    "fip_percentile": 25,
+    "fip_percentile": 24,
     "k9_percentile": 16,
     "bb9_percentile": 55,
     "whip_percentile": 32
@@ -7584,7 +7606,7 @@
     "walks": 14,
     "home_runs_allowed": 8,
     "era_percentile": 6,
-    "fip_percentile": 25,
+    "fip_percentile": 24,
     "k9_percentile": 96,
     "bb9_percentile": 38,
     "whip_percentile": 43
@@ -7672,7 +7694,7 @@
     "walks": 15,
     "home_runs_allowed": 7,
     "era_percentile": 59,
-    "fip_percentile": 24,
+    "fip_percentile": 23,
     "k9_percentile": 15,
     "bb9_percentile": 60,
     "whip_percentile": 55
@@ -7694,7 +7716,7 @@
     "walks": 18,
     "home_runs_allowed": 12,
     "era_percentile": 56,
-    "fip_percentile": 24,
+    "fip_percentile": 23,
     "k9_percentile": 10,
     "bb9_percentile": 84,
     "whip_percentile": 75
@@ -7716,7 +7738,7 @@
     "walks": 36,
     "home_runs_allowed": 7,
     "era_percentile": 9,
-    "fip_percentile": 24,
+    "fip_percentile": 23,
     "k9_percentile": 16,
     "bb9_percentile": 15,
     "whip_percentile": 11
@@ -7832,28 +7854,6 @@
     "whip_percentile": 14
   },
   {
-    "player_id": 621097,
-    "name": "Jacob Waguespack",
-    "team": "DET",
-    "team_name": "Detroit Tigers",
-    "division": "American League Central",
-    "era": 1.8,
-    "fip": 4.8,
-    "xfip": null,
-    "k_per_9": 5.85,
-    "bb_per_9": 3.15,
-    "whip": 0.8,
-    "innings_pitched": 20.0,
-    "strikeouts": 13,
-    "walks": 7,
-    "home_runs_allowed": 3,
-    "era_percentile": 97,
-    "fip_percentile": 22,
-    "k9_percentile": 7,
-    "bb9_percentile": 57,
-    "whip_percentile": 99
-  },
-  {
     "player_id": 671096,
     "name": "Andrew Abbott",
     "team": "CIN",
@@ -7895,7 +7895,7 @@
     "fip_percentile": 22,
     "k9_percentile": 89,
     "bb9_percentile": 28,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 694360,
@@ -7918,6 +7918,28 @@
     "k9_percentile": 40,
     "bb9_percentile": 35,
     "whip_percentile": 11
+  },
+  {
+    "player_id": 445276,
+    "name": "Kenley Jansen",
+    "team": "DET",
+    "team_name": "Detroit Tigers",
+    "division": "American League Central",
+    "era": 3.94,
+    "fip": 4.82,
+    "xfip": null,
+    "k_per_9": 10.31,
+    "bb_per_9": 5.46,
+    "whip": 1.25,
+    "innings_pitched": 29.7,
+    "strikeouts": 34,
+    "walks": 18,
+    "home_runs_allowed": 5,
+    "era_percentile": 50,
+    "fip_percentile": 21,
+    "k9_percentile": 80,
+    "bb9_percentile": 8,
+    "whip_percentile": 60
   },
   {
     "player_id": 543056,
@@ -7982,7 +8004,7 @@
     "era_percentile": 6,
     "fip_percentile": 21,
     "k9_percentile": 73,
-    "bb9_percentile": 8,
+    "bb9_percentile": 7,
     "whip_percentile": 14
   },
   {
@@ -8068,7 +8090,7 @@
     "walks": 21,
     "home_runs_allowed": 4,
     "era_percentile": 84,
-    "fip_percentile": 20,
+    "fip_percentile": 19,
     "k9_percentile": 9,
     "bb9_percentile": 13,
     "whip_percentile": 49
@@ -8090,7 +8112,7 @@
     "walks": 39,
     "home_runs_allowed": 20,
     "era_percentile": 30,
-    "fip_percentile": 20,
+    "fip_percentile": 19,
     "k9_percentile": 60,
     "bb9_percentile": 42,
     "whip_percentile": 51
@@ -8156,7 +8178,7 @@
     "walks": 13,
     "home_runs_allowed": 6,
     "era_percentile": 24,
-    "fip_percentile": 19,
+    "fip_percentile": 18,
     "k9_percentile": 37,
     "bb9_percentile": 41,
     "whip_percentile": 36
@@ -8178,7 +8200,7 @@
     "walks": 8,
     "home_runs_allowed": 7,
     "era_percentile": 4,
-    "fip_percentile": 19,
+    "fip_percentile": 18,
     "k9_percentile": 32,
     "bb9_percentile": 87,
     "whip_percentile": 13
@@ -8382,28 +8404,6 @@
     "whip_percentile": 39
   },
   {
-    "player_id": 445276,
-    "name": "Kenley Jansen",
-    "team": "DET",
-    "team_name": "Detroit Tigers",
-    "division": "American League Central",
-    "era": 3.77,
-    "fip": 5.02,
-    "xfip": null,
-    "k_per_9": 10.05,
-    "bb_per_9": 5.65,
-    "whip": 1.22,
-    "innings_pitched": 28.7,
-    "strikeouts": 32,
-    "walks": 18,
-    "home_runs_allowed": 5,
-    "era_percentile": 56,
-    "fip_percentile": 16,
-    "k9_percentile": 76,
-    "bb9_percentile": 7,
-    "whip_percentile": 64
-  },
-  {
     "player_id": 665795,
     "name": "Edward Cabrera",
     "team": "CHC",
@@ -8444,7 +8444,7 @@
     "era_percentile": 15,
     "fip_percentile": 16,
     "k9_percentile": 60,
-    "bb9_percentile": 60,
+    "bb9_percentile": 59,
     "whip_percentile": 25
   },
   {
@@ -8639,7 +8639,7 @@
     "strikeouts": 30,
     "walks": 11,
     "home_runs_allowed": 8,
-    "era_percentile": 54,
+    "era_percentile": 55,
     "fip_percentile": 14,
     "k9_percentile": 24,
     "bb9_percentile": 74,
@@ -8753,7 +8753,7 @@
     "fip_percentile": 13,
     "k9_percentile": 17,
     "bb9_percentile": 83,
-    "whip_percentile": 61
+    "whip_percentile": 62
   },
   {
     "player_id": 650644,
@@ -9389,7 +9389,7 @@
     "home_runs_allowed": 12,
     "era_percentile": 7,
     "fip_percentile": 6,
-    "k9_percentile": 80,
+    "k9_percentile": 79,
     "bb9_percentile": 88,
     "whip_percentile": 77
   },
@@ -9453,7 +9453,7 @@
     "strikeouts": 8,
     "walks": 6,
     "home_runs_allowed": 4,
-    "era_percentile": 49,
+    "era_percentile": 48,
     "fip_percentile": 6,
     "k9_percentile": 0,
     "bb9_percentile": 73,
@@ -9807,7 +9807,7 @@
     "home_runs_allowed": 12,
     "era_percentile": 1,
     "fip_percentile": 2,
-    "k9_percentile": 85,
+    "k9_percentile": 86,
     "bb9_percentile": 3,
     "whip_percentile": 5
   },
