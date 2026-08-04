@@ -8,6 +8,7 @@ import {
   ZAxis, Customized,
 } from 'recharts'
 import TeamPerformance from './TeamPerformance'
+import ProspectsTable from './ProspectsTable'
 import { teamColor, teamLogoUrl } from '@/lib/teamColors'
 import type { TeamStanding, RatingPoint, PlayerWar, TeamGameLog, TeamRatingsHistory } from '@/lib/types'
 
@@ -620,6 +621,11 @@ export default function TeamPage({ standing, teamHistory, allHistory, teamPlayer
           </p>
         </section>
       )}
+
+      {/* ── Farm System ─────────────────────────────────────────────────────── */}
+      <section className="mt-10 pt-8 border-t border-538-border">
+        <ProspectsTable teamAbbr={abbr} />
+      </section>
     </div>
   )
 }
