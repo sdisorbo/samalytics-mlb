@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -268,9 +268,8 @@ export default function ProspectsTable({ teamAbbr }: { teamAbbr: string }) {
                 {sortedBatters().map((b, i) => {
                   const isOpen = expanded === b.playerId
                   return (
-                    <>
+                    <Fragment key={b.playerId}>
                       <tr
-                        key={b.playerId}
                         onClick={() => setExpanded(isOpen ? null : b.playerId)}
                         className={`border-b border-538-border/50 cursor-pointer transition-colors ${isOpen ? 'bg-538-bg' : i % 2 === 0 ? 'hover:bg-538-bg/50' : 'bg-538-bg/30 hover:bg-538-bg/50'}`}
                       >
@@ -295,13 +294,13 @@ export default function ProspectsTable({ teamAbbr }: { teamAbbr: string }) {
                         <td className="px-3 py-2.5 text-right text-538-text">{b.sb}</td>
                       </tr>
                       {isOpen && (
-                        <tr key={`${b.playerId}-career`}>
+                        <tr>
                           <td colSpan={12} className="p-0 border-b border-538-border">
                             <CareerRow playerId={b.playerId} group="hitting" />
                           </td>
                         </tr>
                       )}
-                    </>
+                    </Fragment>
                   )
                 })}
                 {!batters.length && (
@@ -336,9 +335,8 @@ export default function ProspectsTable({ teamAbbr }: { teamAbbr: string }) {
                 {sortedPitchers().map((p, i) => {
                   const isOpen = expanded === p.playerId
                   return (
-                    <>
+                    <Fragment key={p.playerId}>
                       <tr
-                        key={p.playerId}
                         onClick={() => setExpanded(isOpen ? null : p.playerId)}
                         className={`border-b border-538-border/50 cursor-pointer transition-colors ${isOpen ? 'bg-538-bg' : i % 2 === 0 ? 'hover:bg-538-bg/50' : 'bg-538-bg/30 hover:bg-538-bg/50'}`}
                       >
@@ -362,13 +360,13 @@ export default function ProspectsTable({ teamAbbr }: { teamAbbr: string }) {
                         <td className="px-3 py-2.5 text-right text-538-text">{p.wins}–{p.losses}</td>
                       </tr>
                       {isOpen && (
-                        <tr key={`${p.playerId}-career`}>
+                        <tr>
                           <td colSpan={11} className="p-0 border-b border-538-border">
                             <CareerRow playerId={p.playerId} group="pitching" />
                           </td>
                         </tr>
                       )}
-                    </>
+                    </Fragment>
                   )
                 })}
                 {!pitchers.length && (

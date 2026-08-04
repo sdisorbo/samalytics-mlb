@@ -1,7 +1,7 @@
 import { getPlayerWar } from '@/lib/data'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export function GET(req: NextRequest) {
   const url = new URL(req.url)
