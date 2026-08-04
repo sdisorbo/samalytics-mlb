@@ -22,12 +22,14 @@ interface SeasonZoneData {
   zones: ZoneCell[][]; totals: ZoneTotals; pitchTypes: PitchTypeEntry[]
 }
 
-interface WarSeason {
-  year: number; team?: string; g?: number; gs?: number; ip?: number
-  war: number; off_war: number | null; def_war: number | null
+interface CareerSeason {
+  year: string; level: string; team: string; teamAbbr: string
+  g: number | null; gs: number | null; ip: string | null
+  era: number | null; whip: number | null; k9: number | null; bb9: number | null
+  wins: number | null; losses: number | null; so: number | null
 }
 
-interface WarEntry { name: string; team: string; war: number; player_type: string; career: WarSeason[] }
+interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
 
 type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
@@ -177,49 +179,61 @@ function StatBox({ label, value, sub }: { label: string; value: string; sub?: st
 
 // ── Career Table ───────────────────────────────────────────────────────────────
 
-function warColor(war: number) {
-  if (war >= 4) return 'text-emerald-400'
-  if (war >= 2) return 'text-blue-400'
-  if (war >= 0) return 'text-538-text'
-  return 'text-red-400'
+const LEVEL_STYLE: Record<string, string> = {
+  MLB: 'bg-538-orange/20 text-538-orange border-538-orange/30',
+  AAA: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  AA:  'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  'A+':'bg-violet-500/20 text-violet-400 border-violet-500/30',
+  A:   'bg-orange-500/20 text-orange-400 border-orange-500/30',
+}
+function LevelBadge({ level }: { level: string }) {
+  return (
+    <span className={`inline-block text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${LEVEL_STYLE[level] ?? 'bg-gray-500/20 text-538-muted border-gray-500/30'}`}>
+      {level}
+    </span>
+  )
 }
 
-function PitcherCareerTable({ career, currentSeason }: { career: WarSeason[]; currentSeason: number }) {
-  const sorted = [...career].sort((a, b) => b.year - a.year)
-  const fmtIp = (ip: number | undefined) => ip == null ? '—' : ip.toFixed(1)
-
+function PitcherCareerTable({ seasons, currentYear }: { seasons: CareerSeason[]; currentYear: string }) {
+  const fmtF2 = (v: number | null) => v == null ? '—' : v.toFixed(2)
   return (
     <div className="overflow-x-auto rounded-xl border border-538-border">
       <table className="w-full text-xs tabular-nums">
         <thead>
-          <tr className="border-b border-538-border text-[10px] uppercase tracking-widest text-538-muted">
+          <tr className="border-b border-538-border text-[10px] uppercase tracking-widest text-538-muted bg-538-card">
             <th className="px-3 py-2 text-left font-bold sticky left-0 bg-538-card z-10">Year</th>
+            <th className="px-3 py-2 text-left font-bold">Lvl</th>
             <th className="px-3 py-2 text-left font-bold">Team</th>
             <th className="px-3 py-2 text-right font-bold">G</th>
             <th className="px-3 py-2 text-right font-bold">GS</th>
             <th className="px-3 py-2 text-right font-bold">IP</th>
-            <th className="px-3 py-2 text-right font-bold">WAR</th>
+            <th className="px-3 py-2 text-right font-bold">W-L</th>
+            <th className="px-3 py-2 text-right font-bold">ERA</th>
+            <th className="px-3 py-2 text-right font-bold">WHIP</th>
+            <th className="px-3 py-2 text-right font-bold">K/9</th>
+            <th className="px-3 py-2 text-right font-bold">BB/9</th>
+            <th className="px-3 py-2 text-right font-bold">SO</th>
           </tr>
         </thead>
         <tbody>
-          {sorted.map((s, i) => {
-            const isCurrent = s.year === currentSeason
+          {seasons.map((s, i) => {
+            const isCurrent = s.year === currentYear
             return (
-              <tr key={s.year} className={`border-b border-538-border/50 transition-colors hover:bg-538-bg/50 ${i % 2 === 0 ? '' : 'bg-538-bg/30'}`}>
-                <td className={`px-3 py-2 text-left sticky left-0 z-10 bg-538-card ${isCurrent ? 'text-538-orange font-bold' : 'text-538-text'}`}>
-                  {s.year}
-                </td>
-                <td className="px-3 py-2 text-left text-538-muted">
-                  {s.team ? (
-                    <Link href={`/teams/${s.team}`} className="hover:text-538-text transition-colors">{s.team}</Link>
-                  ) : '—'}
+              <tr key={`${s.year}-${s.team}`} className={`border-b border-538-border/50 hover:bg-538-bg/50 transition-colors ${i % 2 === 0 ? '' : 'bg-538-bg/30'}`}>
+                <td className={`px-3 py-2 text-left sticky left-0 bg-538-card z-10 font-${isCurrent ? 'bold' : 'normal'} ${isCurrent ? 'text-538-orange' : 'text-538-text'}`}>{s.year}</td>
+                <td className="px-3 py-2"><LevelBadge level={s.level} /></td>
+                <td className="px-3 py-2 text-left text-538-muted whitespace-nowrap">
+                  {s.teamAbbr ? <Link href={`/teams/${s.teamAbbr}`} className="hover:text-538-text transition-colors">{s.teamAbbr}</Link> : s.team || '—'}
                 </td>
                 <td className="px-3 py-2 text-right text-538-text">{s.g ?? '—'}</td>
                 <td className="px-3 py-2 text-right text-538-text">{s.gs ?? '—'}</td>
-                <td className="px-3 py-2 text-right text-538-text">{fmtIp(s.ip)}</td>
-                <td className={`px-3 py-2 text-right font-bold ${warColor(s.war)}`}>
-                  {s.war >= 0 ? '+' : ''}{s.war.toFixed(1)}
-                </td>
+                <td className="px-3 py-2 text-right text-538-text">{s.ip ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.wins ?? '—'}–{s.losses ?? '—'}</td>
+                <td className="px-3 py-2 text-right font-semibold text-538-text">{fmtF2(s.era)}</td>
+                <td className="px-3 py-2 text-right text-538-text">{fmtF2(s.whip)}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.k9?.toFixed(1) ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.bb9?.toFixed(1) ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.so ?? '—'}</td>
               </tr>
             )
           })}
@@ -237,6 +251,7 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
   const [season, setSeason] = useState(currentSeason)
   const [data, setData] = useState<SeasonZoneData | null>(null)
   const [warData, setWarData] = useState<WarEntry | null>(null)
+  const [careerSeasons, setCareerSeasons] = useState<CareerSeason[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -245,13 +260,15 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
     Promise.all([
       fetch(`/api/pitcher-season/zones?pitcherId=${pitcherId}&season=${season}`).then(r => r.ok ? r.json() : Promise.reject(r.statusText)),
       fetch(`/api/player-war-history?playerId=${pitcherId}`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`/api/prospect-career?playerId=${pitcherId}&group=pitching`).then(r => r.ok ? r.json() : []).catch(() => []),
     ])
-      .then(([zoneData, warEntries]) => {
+      .then(([zoneData, warEntries, careerData]) => {
         setData(zoneData as SeasonZoneData)
         if (Array.isArray(warEntries)) {
           const pitcherEntry = warEntries.find((e: WarEntry) => e.player_type === 'pitcher') ?? warEntries[0]
           setWarData(pitcherEntry ?? null)
         }
+        if (Array.isArray(careerData)) setCareerSeasons(careerData as CareerSeason[])
       })
       .catch(() => setError('Could not load pitcher data.'))
       .finally(() => setLoading(false))
@@ -292,10 +309,10 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
       {error && <div className="py-8 text-sm text-red-500">{error}</div>}
 
       {/* Career stats table */}
-      {warData && warData.career && warData.career.length > 0 && (
+      {careerSeasons.length > 0 && (
         <div>
-          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career Stats (bWAR)</div>
-          <PitcherCareerTable career={warData.career} currentSeason={currentSeason} />
+          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career Stats</div>
+          <PitcherCareerTable seasons={careerSeasons} currentYear={String(currentSeason)} />
         </div>
       )}
 

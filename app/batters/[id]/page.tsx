@@ -31,13 +31,14 @@ interface BatterZoneData {
   pitchTypes: PitchTypeEntry[]; sprayPoints: SprayPoint[]
 }
 
-interface WarSeason {
-  year: number; team?: string; g?: number; pa?: number | null
-  war: number; off_war: number | null; def_war: number | null
-  avg?: number | null; obp?: number | null; slg?: number | null; ops?: number | null
+interface CareerSeason {
+  year: string; level: string; team: string; teamAbbr: string
+  g: number | null; ab: number | null; h: number | null
+  avg: number | null; obp: number | null; slg: number | null; ops: number | null
+  hr: number | null; rbi: number | null; bb: number | null; k: number | null; sb: number | null
 }
 
-interface WarEntry { name: string; team: string; war: number; player_type: string; career: WarSeason[] }
+interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
 
 type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
@@ -206,63 +207,65 @@ function StatBox({ label, value, sub }: { label: string; value: string; sub?: st
 
 // ── Career Table ───────────────────────────────────────────────────────────────
 
-function warColor(war: number) {
-  if (war >= 4) return 'text-emerald-400'
-  if (war >= 2) return 'text-blue-400'
-  if (war >= 0) return 'text-538-text'
-  return 'text-red-400'
+const LEVEL_STYLE: Record<string, string> = {
+  MLB: 'bg-538-orange/20 text-538-orange border-538-orange/30',
+  AAA: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  AA:  'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  'A+':'bg-violet-500/20 text-violet-400 border-violet-500/30',
+  A:   'bg-orange-500/20 text-orange-400 border-orange-500/30',
+}
+function LevelBadge({ level }: { level: string }) {
+  return (
+    <span className={`inline-block text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${LEVEL_STYLE[level] ?? 'bg-gray-500/20 text-538-muted border-gray-500/30'}`}>
+      {level}
+    </span>
+  )
 }
 
-function BatterCareerTable({ career, currentSeason }: { career: WarSeason[]; currentSeason: number }) {
-  const sorted = [...career].sort((a, b) => b.year - a.year)
-  const hasAvg = sorted.some(s => s.avg != null)
-
+function BatterCareerTable({ seasons, currentYear }: { seasons: CareerSeason[]; currentYear: string }) {
+  const fmt3 = (v: number | null) => v == null ? '—' : v.toFixed(3).replace(/^0/, '')
   return (
     <div className="overflow-x-auto rounded-xl border border-538-border">
       <table className="w-full text-xs tabular-nums">
         <thead>
-          <tr className="border-b border-538-border text-[10px] uppercase tracking-widest text-538-muted">
+          <tr className="border-b border-538-border text-[10px] uppercase tracking-widest text-538-muted bg-538-card">
             <th className="px-3 py-2 text-left font-bold sticky left-0 bg-538-card z-10">Year</th>
+            <th className="px-3 py-2 text-left font-bold">Lvl</th>
             <th className="px-3 py-2 text-left font-bold">Team</th>
             <th className="px-3 py-2 text-right font-bold">G</th>
-            <th className="px-3 py-2 text-right font-bold">PA</th>
-            {hasAvg && <>
-              <th className="px-3 py-2 text-right font-bold">AVG</th>
-              <th className="px-3 py-2 text-right font-bold">OBP</th>
-              <th className="px-3 py-2 text-right font-bold">SLG</th>
-              <th className="px-3 py-2 text-right font-bold">OPS</th>
-            </>}
-            <th className="px-3 py-2 text-right font-bold">WAR</th>
+            <th className="px-3 py-2 text-right font-bold">AB</th>
+            <th className="px-3 py-2 text-right font-bold">H</th>
+            <th className="px-3 py-2 text-right font-bold">HR</th>
+            <th className="px-3 py-2 text-right font-bold">RBI</th>
+            <th className="px-3 py-2 text-right font-bold">BB</th>
+            <th className="px-3 py-2 text-right font-bold">K</th>
+            <th className="px-3 py-2 text-right font-bold">AVG</th>
+            <th className="px-3 py-2 text-right font-bold">OBP</th>
+            <th className="px-3 py-2 text-right font-bold">SLG</th>
+            <th className="px-3 py-2 text-right font-bold">OPS</th>
           </tr>
         </thead>
         <tbody>
-          {sorted.map((s, i) => {
-            const isCurrent = s.year === currentSeason
-            const fmt3 = (v: number | null | undefined) => v == null ? '—' : v.toFixed(3).replace(/^0/, '')
+          {seasons.map((s, i) => {
+            const isCurrent = s.year === currentYear
             return (
-              <tr
-                key={s.year}
-                className={`border-b border-538-border/50 transition-colors hover:bg-538-bg/50 ${i % 2 === 0 ? '' : 'bg-538-bg/30'} ${isCurrent ? 'font-semibold' : ''}`}
-              >
-                <td className={`px-3 py-2 text-left sticky left-0 z-10 ${i % 2 === 0 ? 'bg-538-card' : 'bg-538-card'} ${isCurrent ? 'text-538-orange font-bold' : 'text-538-text'}`}>
-                  {s.year}
-                </td>
-                <td className="px-3 py-2 text-left text-538-muted">
-                  {s.team ? (
-                    <Link href={`/teams/${s.team}`} className="hover:text-538-text transition-colors">{s.team}</Link>
-                  ) : '—'}
+              <tr key={`${s.year}-${s.team}`} className={`border-b border-538-border/50 hover:bg-538-bg/50 transition-colors ${i % 2 === 0 ? '' : 'bg-538-bg/30'}`}>
+                <td className={`px-3 py-2 text-left sticky left-0 bg-538-card z-10 font-${isCurrent ? 'bold' : 'normal'} ${isCurrent ? 'text-538-orange' : 'text-538-text'}`}>{s.year}</td>
+                <td className="px-3 py-2"><LevelBadge level={s.level} /></td>
+                <td className="px-3 py-2 text-left text-538-muted whitespace-nowrap">
+                  {s.teamAbbr ? <Link href={`/teams/${s.teamAbbr}`} className="hover:text-538-text transition-colors">{s.teamAbbr}</Link> : s.team || '—'}
                 </td>
                 <td className="px-3 py-2 text-right text-538-text">{s.g ?? '—'}</td>
-                <td className="px-3 py-2 text-right text-538-text">{s.pa ?? '—'}</td>
-                {hasAvg && <>
-                  <td className="px-3 py-2 text-right text-538-text">{fmt3(s.avg)}</td>
-                  <td className="px-3 py-2 text-right text-538-text">{fmt3(s.obp)}</td>
-                  <td className="px-3 py-2 text-right text-538-text">{fmt3(s.slg)}</td>
-                  <td className="px-3 py-2 text-right text-538-text">{fmt3(s.ops)}</td>
-                </>}
-                <td className={`px-3 py-2 text-right font-bold ${warColor(s.war)}`}>
-                  {s.war >= 0 ? '+' : ''}{s.war.toFixed(1)}
-                </td>
+                <td className="px-3 py-2 text-right text-538-text">{s.ab ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.h ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.hr ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.rbi ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.bb ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{s.k ?? '—'}</td>
+                <td className="px-3 py-2 text-right text-538-text">{fmt3(s.avg)}</td>
+                <td className="px-3 py-2 text-right text-538-text">{fmt3(s.obp)}</td>
+                <td className="px-3 py-2 text-right text-538-text">{fmt3(s.slg)}</td>
+                <td className="px-3 py-2 text-right font-semibold text-538-text">{fmt3(s.ops)}</td>
               </tr>
             )
           })}
@@ -292,6 +295,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
   const batterId = params.id
   const [data, setData] = useState<BatterZoneData | null>(null)
   const [warData, setWarData] = useState<WarEntry | null>(null)
+  const [careerSeasons, setCareerSeasons] = useState<CareerSeason[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [activeStat, setActiveStat] = useState<StatKey>('avg')
@@ -304,13 +308,15 @@ export default function BatterPage({ params }: { params: { id: string } }) {
     Promise.all([
       fetch(`/api/batter-season/zones?batterId=${batterId}&season=${currentSeason}`).then(r => { if (!r.ok) throw new Error('Failed to load batter data'); return r.json() as Promise<BatterZoneData> }),
       fetch(`/api/player-war-history?playerId=${batterId}`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`/api/prospect-career?playerId=${batterId}&group=hitting`).then(r => r.ok ? r.json() : []).catch(() => []),
     ])
-      .then(([zoneData, warEntries]) => {
+      .then(([zoneData, warEntries, career]) => {
         setData(zoneData)
         if (Array.isArray(warEntries)) {
           const batterEntry = warEntries.find((e: WarEntry) => e.player_type === 'batter') ?? warEntries[0]
           setWarData(batterEntry ?? null)
         }
+        if (Array.isArray(career)) setCareerSeasons(career as CareerSeason[])
       })
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
@@ -344,10 +350,10 @@ export default function BatterPage({ params }: { params: { id: string } }) {
       </div>
 
       {/* Career stats table */}
-      {warData && warData.career && warData.career.length > 0 && (
+      {careerSeasons.length > 0 && (
         <div>
-          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career Stats (bWAR)</div>
-          <BatterCareerTable career={warData.career} currentSeason={currentSeason} />
+          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career Stats</div>
+          <BatterCareerTable seasons={careerSeasons} currentYear={String(currentSeason)} />
         </div>
       )}
 

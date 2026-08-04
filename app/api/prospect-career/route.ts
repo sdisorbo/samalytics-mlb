@@ -40,12 +40,16 @@ export async function GET(req: NextRequest) {
       // hitting
       g: stat.gamesPlayed ?? null,
       pa: stat.plateAppearances ?? null,
+      ab: stat.atBats ?? null,
+      h: stat.hits ?? null,
       avg: pf(stat.avg),
       obp: pf(stat.obp),
       slg: pf(stat.slg),
       ops: pf(stat.ops),
       hr: stat.homeRuns ?? null,
       rbi: stat.rbi ?? null,
+      bb: stat.baseOnBalls ?? null,
+      k: stat.strikeOuts ?? null,
       sb: stat.stolenBases ?? null,
       // pitching
       gs: stat.gamesStarted ?? null,
@@ -53,6 +57,8 @@ export async function GET(req: NextRequest) {
       era: pf(stat.era),
       whip: pf(stat.whip),
       k9: pf(stat.strikeoutsPer9Inn),
+      bb9: pf(stat.walksPer9Inn),
+      so: stat.strikeOuts ?? null,
       wins: stat.wins ?? null,
       losses: stat.losses ?? null,
     }
