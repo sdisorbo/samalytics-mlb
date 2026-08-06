@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import type { TeamStanding } from '@/lib/types'
 import { teamColor, teamLogoUrl, DIVISION_ORDER, divisionColor, normalizeDivision } from '@/lib/teamColors'
 
-type StandingSortKey = keyof TeamStanding | 'team_war' | 'war_adj_elo'
+type StandingSortKey = keyof TeamStanding | 'team_war'
 type SortDir = 'asc' | 'desc'
 
 const SORT_DEFAULTS: Partial<Record<StandingSortKey, SortDir>> = {
@@ -20,7 +20,6 @@ const SORT_DEFAULTS: Partial<Record<StandingSortKey, SortDir>> = {
   elo_change_7d:       'desc',
   run_diff:            'desc',
   team_war:            'desc',
-  war_adj_elo:         'desc',
 }
 
 function pct(n: number) {
@@ -113,7 +112,6 @@ function TeamBadge({ abbr }: { abbr: string }) {
 
 interface EnrichedStanding extends TeamStanding {
   team_war: number
-  war_adj_elo: number
 }
 
 interface Props {
@@ -127,18 +125,9 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
   const [groupByDivision, setGroupByDivision] = useState(false)
   const [search, setSearch] = useState('')
 
-  // Enrich standings with WAR and WAR-adjusted ELO
+  // Enrich standings with team WAR
   const enriched: EnrichedStanding[] = useMemo(() => {
-    const wars = Object.values(teamWar)
-    const avgWar = wars.length > 0 ? wars.reduce((s, v) => s + v, 0) / wars.length : 0
-    return standings.map(s => {
-      const war = teamWar[s.team_abbr] ?? 0
-      // WAR-adj ELO: 65% game-result ELO + 35% WAR-based talent signal
-      // WAR signal: centre at 1500, scale by 15 pts per WAR above/below avg
-      const warElo = 1500 + (war - avgWar) * 15
-      const warAdjElo = Math.round(s.elo_rating * 0.65 + warElo * 0.35)
-      return { ...s, team_war: war, war_adj_elo: warAdjElo }
-    })
+    return standings.map(s => ({ ...s, team_war: teamWar[s.team_abbr] ?? 0 }))
   }, [standings, teamWar])
 
   function handleSort(key: StandingSortKey) {
@@ -226,10 +215,9 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
       return { median, max: sorted[sorted.length - 1] }
     }
     return {
-      ds:  medianAndMax(enriched.map(s => s.win_ds)),
-      cs:  medianAndMax(enriched.map(s => s.win_cs)),
-      ws:  medianAndMax(enriched.map(s => s.win_ws)),
-      war: medianAndMax(enriched.map(s => s.team_war)),
+      ds: medianAndMax(enriched.map(s => s.win_ds)),
+      cs: medianAndMax(enriched.map(s => s.win_cs)),
+      ws: medianAndMax(enriched.map(s => s.win_ws)),
     }
   }, [enriched])
 
@@ -269,9 +257,8 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
               <Th col="losses">L</Th>
               <th className="text-right text-538-muted text-2xs uppercase tracking-widest">PCT</th>
               <Th col="run_diff">Run Diff</Th>
-              <Th col="elo_rating">ELO</Th>
               <Th col="team_war">WAR</Th>
-              <Th col="war_adj_elo">WAR-Adj</Th>
+              <Th col="elo_rating">ELO</Th>
               <Th col="elo_change_7d">Δ7d</Th>
               <Th col="playoff_probability">Playoff%</Th>
               <Th col="win_ds" align="center" className="w-[3.2rem]">Win DS</Th>
@@ -285,7 +272,7 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
                   <Fragment key={division}>
                     <tr className="division-header">
                       <td
-                        colSpan={13}
+                        colSpan={12}
                         className="sticky left-0"
                         style={{ borderLeft: `3px solid ${divisionColor(division)}` }}
                       >
@@ -306,19 +293,15 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
 }
 
 interface ColStats {
-  ds:  { median: number; max: number }
-  cs:  { median: number; max: number }
-  ws:  { median: number; max: number }
-  war: { median: number; max: number }
+  ds: { median: number; max: number }
+  cs: { median: number; max: number }
+  ws: { median: number; max: number }
 }
 
 function TeamRow({ row, colStats }: { row: EnrichedStanding; colStats: ColStats }) {
   const total = row.wins + row.losses
   const pctVal = total > 0 ? (row.wins / total).toFixed(3) : '.000'
   const playoffProb = row.playoff_probability
-
-  // WAR color: above-median = turquoise, below = pink
-  const warStyle = winStageStyleSmooth(row.team_war, colStats.war.median, colStats.war.max)
 
   return (
     <tr>
@@ -351,16 +334,13 @@ function TeamRow({ row, colStats }: { row: EnrichedStanding; colStats: ColStats 
         {row.run_diff > 0 ? `+${row.run_diff}` : row.run_diff}
       </td>
 
-      {/* ELO */}
-      <td className="text-right font-semibold tabular">{Math.round(row.elo_rating)}</td>
-
       {/* WAR */}
-      <td className="text-right font-semibold tabular" style={{ padding: '5px 6px', ...warStyle }}>
-        {row.team_war.toFixed(1)}
+      <td className="text-right font-semibold tabular">
+        {row.team_war > 0 ? row.team_war.toFixed(1) : '—'}
       </td>
 
-      {/* WAR-Adj ELO */}
-      <td className="text-right font-semibold tabular text-538-accent">{row.war_adj_elo}</td>
+      {/* ELO */}
+      <td className="text-right font-semibold tabular">{Math.round(row.elo_rating)}</td>
 
       {/* Δ7d */}
       <td

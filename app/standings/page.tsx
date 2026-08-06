@@ -30,7 +30,6 @@ export default function StandingsPage() {
       <div className="mt-4 text-xs text-538-muted space-y-1 max-w-2xl">
         <p><strong>ELO</strong> — team strength rating based on game-by-game results. League average = 1500.</p>
         <p><strong>WAR</strong> — total Wins Above Replacement for current roster (bWAR via Baseball Reference). Reflects post-trade-deadline rosters.</p>
-        <p><strong>WAR-Adj ELO</strong> — blends ELO (65%) with a WAR-based talent rating (35%). Surfaces teams whose player talent diverges from their game results.</p>
         <p><strong>Δ7d</strong> — ELO change over the past 7 days.</p>
         <p><strong>Playoff%</strong> — probability of clinching any of the 12 playoff spots.</p>
         <p><strong>Win DS/CS/WS</strong> — fraction of {100} playoff simulations in which the team won that round.</p>

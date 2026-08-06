@@ -105,13 +105,20 @@ export function getLegendWar(): LegendWar {
   return readJson<LegendWar>('legend_war.json')
 }
 
+// bRef abbreviations → standings pipeline abbreviations
+const BREF_TO_STANDINGS: Record<string, string> = {
+  TBR: 'TB', WSN: 'WSH', SFG: 'SF', KCR: 'KC',
+  ARI: 'AZ', CHW: 'CWS', SDP: 'SD',
+}
+
 /** Sum current-season WAR by team from player_war.json (reflects post-trade-deadline rosters). */
 export function getTeamWar(): Record<string, number> {
   const players = getPlayerWar()
   const totals: Record<string, number> = {}
   for (const p of players) {
-    if (!p.team) continue
-    totals[p.team] = (totals[p.team] ?? 0) + p.war
+    if (!p.team || p.team === '2TM') continue
+    const abbr = BREF_TO_STANDINGS[p.team] ?? p.team
+    totals[abbr] = (totals[abbr] ?? 0) + p.war
   }
   return totals
 }
