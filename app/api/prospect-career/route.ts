@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getPlayerWar } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,10 +31,23 @@ export async function GET(req: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const splits: any[] = data?.stats?.[0]?.splits ?? []
 
+  // Build year → WAR map from bRef pipeline data (MLB seasons only)
+  const warByYear = new Map<string, number>()
+  try {
+    const allWar = getPlayerWar()
+    const entry = allWar.find(p => p.player_id === Number(playerId))
+    if (entry) {
+      for (const s of entry.career) {
+        warByYear.set(String(s.year), s.war)
+      }
+    }
+  } catch { /* war data unavailable — proceed without */ }
+
   const seasons = splits.map(split => {
     const stat = split.stat ?? {}
+    const year = split.season ?? ''
     return {
-      year: split.season ?? '',
+      year,
       level: SPORT_LEVEL[split.sport?.id] ?? split.sport?.name ?? '?',
       team: split.team?.name ?? '',
       teamAbbr: split.team?.abbreviation ?? '',
@@ -61,6 +75,8 @@ export async function GET(req: NextRequest) {
       so: stat.strikeOuts ?? null,
       wins: stat.wins ?? null,
       losses: stat.losses ?? null,
+      // bRef WAR for MLB seasons (null for minor league years)
+      war: warByYear.get(year) ?? null,
     }
   }).reverse() // most recent first
 

@@ -27,6 +27,7 @@ interface CareerSeason {
   g: number | null; gs: number | null; ip: string | null
   era: number | null; whip: number | null; k9: number | null; bb9: number | null
   wins: number | null; losses: number | null; so: number | null
+  war: number | null
 }
 
 interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
@@ -213,11 +214,13 @@ function PitcherCareerTable({ seasons, currentYear }: { seasons: CareerSeason[];
             <th className="px-3 py-2 text-right font-bold">K/9</th>
             <th className="px-3 py-2 text-right font-bold">BB/9</th>
             <th className="px-3 py-2 text-right font-bold">SO</th>
+            <th className="px-3 py-2 text-right font-bold">WAR</th>
           </tr>
         </thead>
         <tbody>
           {seasons.map((s, i) => {
             const isCurrent = s.year === currentYear
+            const warColor = s.war == null ? '' : s.war >= 4 ? 'text-emerald-400' : s.war >= 2 ? 'text-blue-400' : s.war >= 0 ? 'text-538-text' : 'text-red-400'
             return (
               <tr key={`${s.year}-${s.team}`} className={`border-b border-538-border/50 hover:bg-538-bg/50 transition-colors ${i % 2 === 0 ? '' : 'bg-538-bg/30'}`}>
                 <td className={`px-3 py-2 text-left sticky left-0 bg-538-card z-10 font-${isCurrent ? 'bold' : 'normal'} ${isCurrent ? 'text-538-orange' : 'text-538-text'}`}>{s.year}</td>
@@ -234,6 +237,9 @@ function PitcherCareerTable({ seasons, currentYear }: { seasons: CareerSeason[];
                 <td className="px-3 py-2 text-right text-538-text">{s.k9?.toFixed(1) ?? '—'}</td>
                 <td className="px-3 py-2 text-right text-538-text">{s.bb9?.toFixed(1) ?? '—'}</td>
                 <td className="px-3 py-2 text-right text-538-text">{s.so ?? '—'}</td>
+                <td className={`px-3 py-2 text-right font-bold ${warColor}`}>
+                  {s.war == null ? '—' : (s.war >= 0 ? '+' : '') + s.war.toFixed(1)}
+                </td>
               </tr>
             )
           })}

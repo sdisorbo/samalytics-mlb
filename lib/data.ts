@@ -104,3 +104,14 @@ export function getPlayerWar(): PlayerWar[] {
 export function getLegendWar(): LegendWar {
   return readJson<LegendWar>('legend_war.json')
 }
+
+/** Sum current-season WAR by team from player_war.json (reflects post-trade-deadline rosters). */
+export function getTeamWar(): Record<string, number> {
+  const players = getPlayerWar()
+  const totals: Record<string, number> = {}
+  for (const p of players) {
+    if (!p.team) continue
+    totals[p.team] = (totals[p.team] ?? 0) + p.war
+  }
+  return totals
+}

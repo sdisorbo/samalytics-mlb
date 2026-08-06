@@ -36,6 +36,7 @@ interface CareerSeason {
   g: number | null; ab: number | null; h: number | null
   avg: number | null; obp: number | null; slg: number | null; ops: number | null
   hr: number | null; rbi: number | null; bb: number | null; k: number | null; sb: number | null
+  war: number | null
 }
 
 interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
@@ -243,11 +244,13 @@ function BatterCareerTable({ seasons, currentYear }: { seasons: CareerSeason[]; 
             <th className="px-3 py-2 text-right font-bold">OBP</th>
             <th className="px-3 py-2 text-right font-bold">SLG</th>
             <th className="px-3 py-2 text-right font-bold">OPS</th>
+            <th className="px-3 py-2 text-right font-bold">WAR</th>
           </tr>
         </thead>
         <tbody>
           {seasons.map((s, i) => {
             const isCurrent = s.year === currentYear
+            const warColor = s.war == null ? '' : s.war >= 4 ? 'text-emerald-400' : s.war >= 2 ? 'text-blue-400' : s.war >= 0 ? 'text-538-text' : 'text-red-400'
             return (
               <tr key={`${s.year}-${s.team}`} className={`border-b border-538-border/50 hover:bg-538-bg/50 transition-colors ${i % 2 === 0 ? '' : 'bg-538-bg/30'}`}>
                 <td className={`px-3 py-2 text-left sticky left-0 bg-538-card z-10 font-${isCurrent ? 'bold' : 'normal'} ${isCurrent ? 'text-538-orange' : 'text-538-text'}`}>{s.year}</td>
@@ -266,6 +269,9 @@ function BatterCareerTable({ seasons, currentYear }: { seasons: CareerSeason[]; 
                 <td className="px-3 py-2 text-right text-538-text">{fmt3(s.obp)}</td>
                 <td className="px-3 py-2 text-right text-538-text">{fmt3(s.slg)}</td>
                 <td className="px-3 py-2 text-right font-semibold text-538-text">{fmt3(s.ops)}</td>
+                <td className={`px-3 py-2 text-right font-bold ${warColor}`}>
+                  {s.war == null ? '—' : (s.war >= 0 ? '+' : '') + s.war.toFixed(1)}
+                </td>
               </tr>
             )
           })}
