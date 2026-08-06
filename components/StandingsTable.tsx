@@ -257,6 +257,7 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
               <Th col="losses">L</Th>
               <th className="text-right text-538-muted text-2xs uppercase tracking-widest">PCT</th>
               <Th col="run_diff">Run Diff</Th>
+              {groupByDivision && <th className="text-right text-538-muted text-2xs uppercase tracking-widest">GB</th>}
               <Th col="team_war">WAR</Th>
               <Th col="elo_rating">ELO</Th>
               <Th col="elo_change_7d">Δ7d</Th>
@@ -268,23 +269,28 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
           </thead>
           <tbody>
             {groupByDivision && grouped
-              ? Array.from(grouped.entries()).map(([division, teams]) => (
-                  <Fragment key={division}>
-                    <tr className="division-header">
-                      <td
-                        colSpan={12}
-                        className="sticky left-0"
-                        style={{ borderLeft: `3px solid ${divisionColor(division)}` }}
-                      >
-                        {division}
-                      </td>
-                    </tr>
-                    {teams.map(row => (
-                      <TeamRow key={row.team_abbr} row={row} colStats={colStats} />
-                    ))}
-                  </Fragment>
-                ))
-              : rows!.map(row => <TeamRow key={row.team_abbr} row={row} colStats={colStats} />)}
+              ? Array.from(grouped.entries()).map(([division, teams]) => {
+                  const leader = teams[0]
+                  return (
+                    <Fragment key={division}>
+                      <tr className="division-header">
+                        <td
+                          colSpan={13}
+                          className="sticky left-0"
+                          style={{ borderLeft: `3px solid ${divisionColor(division)}` }}
+                        >
+                          {division}
+                        </td>
+                      </tr>
+                      {teams.map((row, i) => {
+                        const gb = i === 0 ? 0
+                          : ((leader.wins - row.wins) + (row.losses - leader.losses)) / 2
+                        return <TeamRow key={row.team_abbr} row={row} colStats={colStats} gb={gb} />
+                      })}
+                    </Fragment>
+                  )
+                })
+              : rows!.map(row => <TeamRow key={row.team_abbr} row={row} colStats={colStats} gb={null} />)}
           </tbody>
         </table>
       </div>
@@ -298,10 +304,11 @@ interface ColStats {
   ws: { median: number; max: number }
 }
 
-function TeamRow({ row, colStats }: { row: EnrichedStanding; colStats: ColStats }) {
+function TeamRow({ row, colStats, gb }: { row: EnrichedStanding; colStats: ColStats; gb: number | null }) {
   const total = row.wins + row.losses
   const pctVal = total > 0 ? (row.wins / total).toFixed(3) : '.000'
   const playoffProb = row.playoff_probability
+  const showGb = gb !== null
 
   return (
     <tr>
@@ -333,6 +340,13 @@ function TeamRow({ row, colStats }: { row: EnrichedStanding; colStats: ColStats 
       >
         {row.run_diff > 0 ? `+${row.run_diff}` : row.run_diff}
       </td>
+
+      {/* GB — division view only */}
+      {showGb && (
+        <td className="text-right text-538-muted tabular">
+          {gb === 0 ? '—' : gb % 1 === 0 ? gb.toFixed(0) : gb.toFixed(1)}
+        </td>
+      )}
 
       {/* WAR */}
       <td className="text-right font-semibold tabular">

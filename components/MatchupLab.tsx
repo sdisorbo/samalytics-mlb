@@ -165,10 +165,12 @@ interface ScheduleGame {
   awayScore: number | null
   homeScore: number | null
   gameStatus: string  // "Preview" | "Live" | "Final"
+  inning: number | null
+  inningHalf: string | null
 }
 
 async function fetchSchedule(date: string): Promise<ScheduleGame[]> {
-  const url = `${MLB_STATS_API}/schedule?sportId=1&date=${date}&hydrate=probablePitcher,team`
+  const url = `${MLB_STATS_API}/schedule?sportId=1&date=${date}&hydrate=probablePitcher,team,linescore`
   const res = await fetch(url, { cache: 'no-store' })
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const data = await res.json()
@@ -190,6 +192,8 @@ async function fetchSchedule(date: string): Promise<ScheduleGame[]> {
         awayScore: game.teams.away.score ?? null,
         homeScore: game.teams.home.score ?? null,
         gameStatus: status,
+        inning: game.linescore?.currentInning ?? null,
+        inningHalf: game.linescore?.inningHalf ?? null,
       })
     }
   }
@@ -226,6 +230,8 @@ interface GameState {
   awayScore: number | null
   homeScore: number | null
   gameStatus: string
+  inning: number | null
+  inningHalf: string | null
   breakdownOpen: boolean
 }
 
@@ -750,7 +756,9 @@ function MatchupCard({
                 <>
                   <div className="text-2xs uppercase tracking-wider mb-0.5 font-bold"
                     style={{ color: game.gameStatus === 'Live' ? '#16a34a' : '#888' }}>
-                    {game.gameStatus === 'Live' ? '● Live' : 'Final'}
+                    {game.gameStatus === 'Live'
+                      ? `● ${game.inningHalf === 'Top' ? '▲' : game.inningHalf === 'Bottom' ? '▼' : ''}${game.inning ?? ''} Live`
+                      : 'Final'}
                   </div>
                   <div className="text-xl font-black text-538-text">
                     {game.awayScore} – {game.homeScore}
@@ -1041,6 +1049,8 @@ export default function MatchupLab({
         awayScore: sg.awayScore,
         homeScore: sg.homeScore,
         gameStatus: sg.gameStatus ?? 'Preview',
+        inning: sg.inning ?? null,
+        inningHalf: sg.inningHalf ?? null,
         breakdownOpen: false,
       }
     },
@@ -1081,6 +1091,8 @@ export default function MatchupLab({
       awayScore: null,
       homeScore: null,
       gameStatus: 'Preview',
+      inning: null,
+      inningHalf: null,
     }
     setGames([buildGameState(sg)])
     setScheduleError(null)
