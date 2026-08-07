@@ -5,20 +5,20 @@
     "team": "SD",
     "team_name": "San Diego Padres",
     "division": "National League West",
-    "era": 0.76,
-    "fip": 0.4,
+    "era": 0.74,
+    "fip": 0.37,
     "xfip": null,
-    "k_per_9": 16.73,
-    "bb_per_9": 3.04,
-    "whip": 0.8,
-    "innings_pitched": 47.3,
-    "strikeouts": 88,
+    "k_per_9": 16.76,
+    "bb_per_9": 2.98,
+    "whip": 0.81,
+    "innings_pitched": 48.3,
+    "strikeouts": 90,
     "walks": 16,
     "home_runs_allowed": 0,
     "era_percentile": 100,
     "fip_percentile": 100,
     "k9_percentile": 100,
-    "bb9_percentile": 61,
+    "bb9_percentile": 62,
     "whip_percentile": 99
   },
   {
@@ -220,6 +220,28 @@
     "whip_percentile": 83
   },
   {
+    "player_id": 670970,
+    "name": "Adrian Morejon",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "era": 2.95,
+    "fip": 2.08,
+    "xfip": null,
+    "k_per_9": 10.77,
+    "bb_per_9": 2.21,
+    "whip": 1.07,
+    "innings_pitched": 61.0,
+    "strikeouts": 73,
+    "walks": 15,
+    "home_runs_allowed": 3,
+    "era_percentile": 79,
+    "fip_percentile": 98,
+    "k9_percentile": 87,
+    "bb9_percentile": 87,
+    "whip_percentile": 86
+  },
+  {
     "player_id": 594027,
     "name": "Tyron Guerrero",
     "team": "BOS",
@@ -258,7 +280,7 @@
     "walks": 18,
     "home_runs_allowed": 4,
     "era_percentile": 53,
-    "fip_percentile": 98,
+    "fip_percentile": 97,
     "k9_percentile": 99,
     "bb9_percentile": 52,
     "whip_percentile": 42
@@ -352,28 +374,6 @@
     "whip_percentile": 96
   },
   {
-    "player_id": 670970,
-    "name": "Adrian Morejon",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "era": 3.0,
-    "fip": 2.17,
-    "xfip": null,
-    "k_per_9": 10.5,
-    "bb_per_9": 2.25,
-    "whip": 1.07,
-    "innings_pitched": 60.0,
-    "strikeouts": 70,
-    "walks": 15,
-    "home_runs_allowed": 3,
-    "era_percentile": 78,
-    "fip_percentile": 97,
-    "k9_percentile": 82,
-    "bb9_percentile": 86,
-    "whip_percentile": 86
-  },
-  {
     "player_id": 519242,
     "name": "Chris Sale",
     "team": "ATL",
@@ -462,28 +462,6 @@
     "whip_percentile": 12
   },
   {
-    "player_id": 666661,
-    "name": "Juan Morillo",
-    "team": "AZ",
-    "team_name": "Arizona Diamondbacks",
-    "division": "National League West",
-    "era": 2.54,
-    "fip": 2.32,
-    "xfip": null,
-    "k_per_9": 10.76,
-    "bb_per_9": 3.13,
-    "whip": 1.0,
-    "innings_pitched": 46.0,
-    "strikeouts": 55,
-    "walks": 16,
-    "home_runs_allowed": 2,
-    "era_percentile": 88,
-    "fip_percentile": 95,
-    "k9_percentile": 87,
-    "bb9_percentile": 58,
-    "whip_percentile": 90
-  },
-  {
     "player_id": 664991,
     "name": "Grant Wolfram",
     "team": "BAL",
@@ -504,6 +482,28 @@
     "k9_percentile": 70,
     "bb9_percentile": 63,
     "whip_percentile": 48
+  },
+  {
+    "player_id": 666661,
+    "name": "Juan Morillo",
+    "team": "AZ",
+    "team_name": "Arizona Diamondbacks",
+    "division": "National League West",
+    "era": 2.49,
+    "fip": 2.33,
+    "xfip": null,
+    "k_per_9": 10.53,
+    "bb_per_9": 3.06,
+    "whip": 1.02,
+    "innings_pitched": 47.0,
+    "strikeouts": 55,
+    "walks": 16,
+    "home_runs_allowed": 2,
+    "era_percentile": 89,
+    "fip_percentile": 95,
+    "k9_percentile": 82,
+    "bb9_percentile": 59,
+    "whip_percentile": 89
   },
   {
     "player_id": 671922,
@@ -656,7 +656,7 @@
     "era_percentile": 98,
     "fip_percentile": 94,
     "k9_percentile": 49,
-    "bb9_percentile": 62,
+    "bb9_percentile": 61,
     "whip_percentile": 96
   },
   {
@@ -1427,7 +1427,7 @@
     "fip_percentile": 86,
     "k9_percentile": 59,
     "bb9_percentile": 66,
-    "whip_percentile": 89
+    "whip_percentile": 90
   },
   {
     "player_id": 686580,
@@ -1734,7 +1734,7 @@
     "era_percentile": 40,
     "fip_percentile": 83,
     "k9_percentile": 96,
-    "bb9_percentile": 17,
+    "bb9_percentile": 16,
     "whip_percentile": 10
   },
   {
@@ -1863,7 +1863,7 @@
     "strikeouts": 53,
     "walks": 22,
     "home_runs_allowed": 3,
-    "era_percentile": 56,
+    "era_percentile": 55,
     "fip_percentile": 82,
     "k9_percentile": 100,
     "bb9_percentile": 3,
@@ -2153,7 +2153,7 @@
     "fip_percentile": 79,
     "k9_percentile": 11,
     "bb9_percentile": 97,
-    "whip_percentile": 89
+    "whip_percentile": 90
   },
   {
     "player_id": 657277,
@@ -2614,7 +2614,7 @@
     "era_percentile": 65,
     "fip_percentile": 75,
     "k9_percentile": 36,
-    "bb9_percentile": 62,
+    "bb9_percentile": 61,
     "whip_percentile": 54
   },
   {
@@ -2860,6 +2860,28 @@
     "whip_percentile": 59
   },
   {
+    "player_id": 669093,
+    "name": "Jeremiah Estrada",
+    "team": "SD",
+    "team_name": "San Diego Padres",
+    "division": "National League West",
+    "era": 3.65,
+    "fip": 3.38,
+    "xfip": null,
+    "k_per_9": 10.58,
+    "bb_per_9": 4.74,
+    "whip": 1.14,
+    "innings_pitched": 24.7,
+    "strikeouts": 29,
+    "walks": 13,
+    "home_runs_allowed": 2,
+    "era_percentile": 60,
+    "fip_percentile": 72,
+    "k9_percentile": 83,
+    "bb9_percentile": 17,
+    "whip_percentile": 76
+  },
+  {
     "player_id": 694738,
     "name": "Landen Roupp",
     "team": "SF",
@@ -2920,7 +2942,7 @@
     "walks": 29,
     "home_runs_allowed": 15,
     "era_percentile": 83,
-    "fip_percentile": 72,
+    "fip_percentile": 71,
     "k9_percentile": 41,
     "bb9_percentile": 93,
     "whip_percentile": 96
@@ -3008,9 +3030,9 @@
     "walks": 17,
     "home_runs_allowed": 6,
     "era_percentile": 89,
-    "fip_percentile": 71,
+    "fip_percentile": 70,
     "k9_percentile": 75,
-    "bb9_percentile": 62,
+    "bb9_percentile": 61,
     "whip_percentile": 68
   },
   {
@@ -3030,7 +3052,7 @@
     "walks": 31,
     "home_runs_allowed": 7,
     "era_percentile": 74,
-    "fip_percentile": 71,
+    "fip_percentile": 70,
     "k9_percentile": 24,
     "bb9_percentile": 63,
     "whip_percentile": 50
@@ -3052,9 +3074,9 @@
     "walks": 8,
     "home_runs_allowed": 2,
     "era_percentile": 44,
-    "fip_percentile": 71,
+    "fip_percentile": 70,
     "k9_percentile": 38,
-    "bb9_percentile": 61,
+    "bb9_percentile": 60,
     "whip_percentile": 62
   },
   {
@@ -3143,28 +3165,6 @@
     "fip_percentile": 69,
     "k9_percentile": 98,
     "bb9_percentile": 9,
-    "whip_percentile": 71
-  },
-  {
-    "player_id": 669093,
-    "name": "Jeremiah Estrada",
-    "team": "SD",
-    "team_name": "San Diego Padres",
-    "division": "National League West",
-    "era": 3.8,
-    "fip": 3.48,
-    "xfip": null,
-    "k_per_9": 10.65,
-    "bb_per_9": 4.94,
-    "whip": 1.18,
-    "innings_pitched": 23.7,
-    "strikeouts": 28,
-    "walks": 13,
-    "home_runs_allowed": 2,
-    "era_percentile": 54,
-    "fip_percentile": 69,
-    "k9_percentile": 85,
-    "bb9_percentile": 15,
     "whip_percentile": 71
   },
   {
@@ -3645,7 +3645,7 @@
     "strikeouts": 132,
     "walks": 34,
     "home_runs_allowed": 17,
-    "era_percentile": 55,
+    "era_percentile": 54,
     "fip_percentile": 65,
     "k9_percentile": 72,
     "bb9_percentile": 80,
@@ -4000,7 +4000,7 @@
     "era_percentile": 71,
     "fip_percentile": 61,
     "k9_percentile": 44,
-    "bb9_percentile": 87,
+    "bb9_percentile": 86,
     "whip_percentile": 86
   },
   {
@@ -4153,7 +4153,7 @@
     "home_runs_allowed": 2,
     "era_percentile": 36,
     "fip_percentile": 60,
-    "k9_percentile": 84,
+    "k9_percentile": 85,
     "bb9_percentile": 10,
     "whip_percentile": 4
   },
@@ -4965,7 +4965,7 @@
     "strikeouts": 117,
     "walks": 54,
     "home_runs_allowed": 13,
-    "era_percentile": 55,
+    "era_percentile": 54,
     "fip_percentile": 52,
     "k9_percentile": 50,
     "bb9_percentile": 30,
@@ -6112,7 +6112,7 @@
     "era_percentile": 61,
     "fip_percentile": 40,
     "k9_percentile": 22,
-    "bb9_percentile": 61,
+    "bb9_percentile": 60,
     "whip_percentile": 42
   },
   {
@@ -6200,7 +6200,7 @@
     "era_percentile": 62,
     "fip_percentile": 40,
     "k9_percentile": 8,
-    "bb9_percentile": 87,
+    "bb9_percentile": 86,
     "whip_percentile": 68
   },
   {
@@ -7253,7 +7253,7 @@
     "strikeouts": 22,
     "walks": 8,
     "home_runs_allowed": 5,
-    "era_percentile": 89,
+    "era_percentile": 88,
     "fip_percentile": 29,
     "k9_percentile": 9,
     "bb9_percentile": 87,
@@ -9961,7 +9961,7 @@
     "home_runs_allowed": 12,
     "era_percentile": 1,
     "fip_percentile": 3,
-    "k9_percentile": 83,
+    "k9_percentile": 84,
     "bb9_percentile": 3,
     "whip_percentile": 5
   },
