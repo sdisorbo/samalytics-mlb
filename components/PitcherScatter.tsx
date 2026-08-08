@@ -20,7 +20,7 @@ import clsx from 'clsx'
 const DIVISION_TEAMS: Record<string, string[]> = {
   'AL East':    ['BAL', 'BOS', 'NYY', 'TB',  'TOR'],
   'AL Central': ['CWS', 'CLE', 'DET', 'KC',  'MIN'],
-  'AL West':    ['HOU', 'LAA', 'OAK', 'SEA', 'TEX'],
+  'AL West':    ['HOU', 'LAA', 'ATH', 'SEA', 'TEX'],
   'NL East':    ['ATL', 'MIA', 'NYM', 'PHI', 'WSH'],
   'NL Central': ['CHC', 'CIN', 'MIL', 'PIT', 'STL'],
   'NL West':    ['AZ',  'COL', 'LAD', 'SD',  'SF'],
