@@ -28,6 +28,7 @@ const RV_WEIGHTS: Record<string, number> = {
   walk: 0.33, intent_walk: 0.33, hit_by_pitch: 0.34,
   single: 0.47, double: 0.77, triple: 1.07, home_run: 1.40,
   strikeout: -0.30,
+  grounded_into_double_play: -0.54, double_play: -0.54, strikeout_double_play: -0.57,
 }
 function getRV(eventType: string): number {
   return RV_WEIGHTS[eventType] ?? -0.27
