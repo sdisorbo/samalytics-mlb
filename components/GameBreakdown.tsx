@@ -201,6 +201,35 @@ async function fetchGameData(gamePk: number): Promise<ParsedGame> {
   }
 }
 
+// ── Canvas export helpers ─────────────────────────────────────────────────────
+
+function loadImg(src: string): Promise<HTMLImageElement | null> {
+  return new Promise(resolve => {
+    const img = new Image(); img.crossOrigin = 'anonymous'
+    img.onload = () => resolve(img); img.onerror = () => resolve(null); img.src = src
+  })
+}
+
+function espnSlug(abbr: string): string {
+  const MAP: Record<string, string> = {
+    AZ: 'ari', ARI: 'ari', WSH: 'wsh', CWS: 'cws',
+    TB: 'tb', TBR: 'tb', KC: 'kc', KCR: 'kc',
+    SD: 'sd', SDP: 'sd', SF: 'sf', SFG: 'sf', ATH: 'oak',
+  }
+  return MAP[abbr] ?? abbr.toLowerCase()
+}
+
+interface SprayExportOpts {
+  playerId: number
+  playerName: string
+  perspective: 'batter' | 'pitcher'
+  teamAbbr: string
+  awayTeamAbbr: string
+  homeTeamAbbr: string
+  events: GameEvent[]
+  rar: number
+}
+
 // ── Baseball field SVG ────────────────────────────────────────────────────────
 
 const OUTCOME_DIST: Record<Outcome, number> = {
@@ -211,6 +240,153 @@ const OUTCOME_DIST: Record<Outcome, number> = {
 function hitEndpoint(spray: number, dist: number): [number, number] {
   const rad = (spray * Math.PI) / 180
   return [200 + dist * Math.sin(rad), 350 - dist * Math.cos(rad)]
+}
+
+async function exportSprayImage(opts: SprayExportOpts) {
+  const { playerId, playerName, perspective, teamAbbr, awayTeamAbbr, homeTeamAbbr, events, rar } = opts
+
+  const SCALE = 2, W = 360, PAD = 16
+  const IMG_SIZE = 48, HEADER_H = 84
+  const FW = W - 2 * PAD
+  const fs = FW / 400
+  const FH = Math.round(385 * fs)
+  const FOOTER_H = 24
+  const H = PAD + HEADER_H + 8 + FH + 8 + FOOTER_H + PAD
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const [headshotImg, teamLogoImg, siteLogoImg] = await Promise.all([
+    loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${playerId}/headshot/67/current`),
+    loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${espnSlug(teamAbbr)}.png`),
+    loadImg('/logo.png'),
+  ])
+
+  // Headshot circle
+  const hY = PAD + (HEADER_H - IMG_SIZE) / 2
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else         { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+
+  // Text
+  const textX = PAD + IMG_SIZE + 10
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 14px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText(playerName, textX, hY + 2)
+
+  const gameStr = `${awayTeamAbbr} @ ${homeTeamAbbr}`
+  const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '10px sans-serif'
+  ctx.fillText(`${gameStr} · ${dateStr}`, textX, hY + 20)
+
+  const rarStr = `${rar >= 0 ? '+' : ''}${rar.toFixed(2)} Runs Above Replacement`
+  ctx.fillStyle = rar >= 0 ? BLUE : '#ef4444'; ctx.font = 'bold 10px monospace'
+  ctx.fillText(rarStr, textX, hY + 35)
+
+  ctx.fillStyle = '#6B7280'; ctx.font = '9px sans-serif'
+  ctx.fillText(perspective === 'batter' ? 'Batter spray chart' : 'Pitcher spray chart', textX, hY + 51)
+
+  // Team logo (top right)
+  const LOGO_SIZE = 36
+  if (teamLogoImg) ctx.drawImage(teamLogoImg, W - PAD - LOGO_SIZE, PAD + (HEADER_H - LOGO_SIZE) / 2, LOGO_SIZE, LOGO_SIZE)
+
+  // Field
+  const ox = PAD, oy = PAD + HEADER_H + 8
+  const hitEvents = events.filter(e => OUTCOME_DIST[e.outcome] > 0)
+  const plateEvents = events.filter(e => OUTCOME_DIST[e.outcome] === 0)
+
+  ctx.strokeStyle = `${BLUE}66`; ctx.lineWidth = 1.5
+  ctx.beginPath(); ctx.moveTo(ox + 28 * fs, oy + 102 * fs)
+  ctx.quadraticCurveTo(ox + 200 * fs, oy + 8 * fs, ox + 372 * fs, oy + 102 * fs); ctx.stroke()
+
+  ctx.lineWidth = 1.2
+  ctx.beginPath(); ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + 28 * fs, oy + 102 * fs); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + 372 * fs, oy + 102 * fs); ctx.stroke()
+
+  ctx.strokeStyle = `${BLUE}CC`; ctx.lineWidth = 1.5
+  ctx.beginPath()
+  ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + 295 * fs, oy + 255 * fs)
+  ctx.lineTo(ox + 200 * fs, oy + 160 * fs); ctx.lineTo(ox + 105 * fs, oy + 255 * fs)
+  ctx.closePath(); ctx.stroke()
+
+  ctx.strokeStyle = `${BLUE}73`; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.arc(ox + 200 * fs, oy + 260 * fs, 7 * fs, 0, Math.PI * 2); ctx.stroke()
+
+  ctx.fillStyle = `${BLUE}4D`
+  for (const [bx, by] of [[295, 255], [200, 160], [105, 255]] as [number, number][]) {
+    ctx.fillRect(ox + (bx - 4) * fs, oy + (by - 4) * fs, 8 * fs, 8 * fs)
+  }
+
+  ctx.fillStyle = `${BLUE}73`
+  ctx.beginPath()
+  ctx.moveTo(ox + 200 * fs, oy + 353 * fs); ctx.lineTo(ox + 206 * fs, oy + 358 * fs)
+  ctx.lineTo(ox + 204 * fs, oy + 365 * fs); ctx.lineTo(ox + 196 * fs, oy + 365 * fs)
+  ctx.lineTo(ox + 194 * fs, oy + 358 * fs); ctx.closePath(); ctx.fill()
+
+  for (const e of hitEvents) {
+    const [tx, ty] = hitEndpoint(e.sprayAngle, OUTCOME_DIST[e.outcome])
+    const displayRv = perspective === 'pitcher' ? -e.rv : e.rv
+    const isPos = displayRv >= 0
+    const color = e.outcome === 'HR'
+      ? (perspective === 'pitcher' ? '#ef4444' : BLUE)
+      : isPos ? '#3b82f6' : '#ef4444'
+    ctx.strokeStyle = color; ctx.lineWidth = e.outcome === 'HR' ? 2 : 1.5
+    ctx.beginPath(); ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + tx * fs, oy + ty * fs); ctx.stroke()
+    ctx.fillStyle = color; ctx.beginPath()
+    ctx.arc(ox + tx * fs, oy + ty * fs, (e.outcome === 'HR' ? 4 : 3) * fs, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = color; ctx.font = `bold ${Math.round(9 * fs)}px monospace`
+    ctx.textAlign = tx > 205 ? 'left' : tx < 195 ? 'right' : 'center'
+    ctx.textBaseline = ty < 200 ? 'bottom' : 'top'
+    ctx.fillText(`${isPos ? '+' : ''}${displayRv.toFixed(2)}`, ox + (tx + (tx > 205 ? 7 : tx < 195 ? -7 : 0)) * fs, oy + (ty + (ty < 200 ? -6 : 8)) * fs)
+  }
+
+  for (let i = 0; i < plateEvents.length; i++) {
+    const e = plateEvents[i]
+    const displayRv = perspective === 'pitcher' ? -e.rv : e.rv
+    ctx.fillStyle = displayRv >= 0 ? BLUE : '#ef4444'
+    ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'
+    ctx.fillText(e.outcome, ox + (200 + (i - (plateEvents.length - 1) / 2) * 16) * fs, oy + 375 * fs)
+  }
+
+  // Footer watermark
+  const LOGO_H_F = 16
+  const LOGO_W_F = Math.round(LOGO_H_F * 989 / 623)
+  const footerY = PAD + HEADER_H + 8 + FH + 8
+  ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText("Catcher's view · samalytics.com", PAD, footerY + 4)
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, W - PAD - LOGO_W_F, footerY + 1, LOGO_W_F, LOGO_H_F)
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText('samalytics', W - PAD - LOGO_W_F - 4, footerY + 1 + LOGO_H_F / 2)
+  } else {
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top'
+    ctx.fillText('samalytics', W - PAD, footerY + 4)
+  }
+
+  canvas.toBlob(async blob => {
+    if (!blob) return
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+    } catch {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url
+      a.download = `${playerName.replace(/\s+/g, '_')}_spray.png`
+      a.click(); URL.revokeObjectURL(url)
+    }
+  })
 }
 
 function BaseballField({ events, name, animKey, perspective }: {
@@ -406,6 +582,8 @@ export default function GameBreakdown({
   const [error, setError] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [fieldKey, setFieldKey] = useState(0)
+  const [copying, setCopying] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const isPreview = gameStatus === 'Preview'
 
@@ -451,6 +629,23 @@ export default function GameBreakdown({
     if (selectedId === id) { setSelectedId(null); return }
     setSelectedId(id)
     setFieldKey(k => k + 1)
+  }
+
+  async function handleCopy() {
+    if (copying || !selectedEvents || !selectedName) return
+    const playerId = selectedBatter?.batterId ?? selectedPitcher?.pitcherId
+    if (!playerId) return
+    const isAway = selectedBatter?.isAway ?? selectedPitcher?.isAway ?? true
+    const teamAbbr = isAway ? awayTeamAbbr : homeTeamAbbr
+    const rar = selectedBatter?.rar ?? selectedPitcher?.rar ?? 0
+    setCopying(true)
+    await exportSprayImage({
+      playerId, playerName: selectedName, perspective,
+      teamAbbr, awayTeamAbbr, homeTeamAbbr,
+      events: selectedEvents, rar,
+    })
+    setCopied(true); setCopying(false)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const TABS: { id: TabId; label: string }[] = [
@@ -603,7 +798,15 @@ export default function GameBreakdown({
 
               {/* Mobile field — inline below list when player selected */}
               {selectedEvents && selectedName && (
-                <div className="sm:hidden border-t border-538-border overflow-y-auto flex-1 flex items-center justify-center py-2">
+                <div className="sm:hidden border-t border-538-border overflow-y-auto flex-1 flex flex-col items-center py-2">
+                  <div className="w-full flex justify-end px-3 pb-1">
+                    <button
+                      onClick={handleCopy}
+                      className={`text-[11px] font-semibold px-2.5 py-1 rounded border transition-colors ${copied ? 'border-emerald-500 text-emerald-500' : 'border-538-border text-538-muted hover:text-538-text hover:border-538-text'}`}
+                    >
+                      {copied ? '✓ Copied' : copying ? '…' : '⎘ Copy'}
+                    </button>
+                  </div>
                   <BaseballField
                     events={selectedEvents}
                     name={selectedName}
@@ -617,12 +820,22 @@ export default function GameBreakdown({
             {/* Desktop field panel — right side, always visible */}
             <div className="hidden sm:flex w-96 flex-shrink-0 flex-col items-center justify-center p-4 overflow-hidden">
               {selectedEvents && selectedName ? (
-                <BaseballField
-                  events={selectedEvents}
-                  name={selectedName}
-                  animKey={fieldKey}
-                  perspective={perspective}
-                />
+                <div className="w-full flex flex-col items-center">
+                  <div className="w-full flex justify-end mb-2">
+                    <button
+                      onClick={handleCopy}
+                      className={`text-[11px] font-semibold px-2.5 py-1 rounded border transition-colors ${copied ? 'border-emerald-500 text-emerald-500' : 'border-538-border text-538-muted hover:text-538-text hover:border-538-text'}`}
+                    >
+                      {copied ? '✓ Copied' : copying ? '…' : '⎘ Copy'}
+                    </button>
+                  </div>
+                  <BaseballField
+                    events={selectedEvents}
+                    name={selectedName}
+                    animKey={fieldKey}
+                    perspective={perspective}
+                  />
+                </div>
               ) : (
                 <div className="flex flex-col items-center text-center text-538-muted text-xs gap-3 opacity-35">
                   <svg viewBox="0 0 80 76" style={{ width: 64, height: 60 }}>
