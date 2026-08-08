@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import type { GameBreakdown } from '@/lib/pitcherGame'
 
@@ -329,6 +330,186 @@ function StatBox({ label, value, sub }: { label: string; value: string; sub?: st
   )
 }
 
+// ── Canvas export ─────────────────────────────────────────────────────────────
+
+function loadImgPB(src: string): Promise<HTMLImageElement | null> {
+  return new Promise(resolve => {
+    const img = new Image(); img.crossOrigin = 'anonymous'
+    img.onload = () => resolve(img); img.onerror = () => resolve(null); img.src = src
+  })
+}
+
+function espnSlugPB(abbr: string): string {
+  const MAP: Record<string, string> = {
+    AZ: 'ari', ARI: 'ari', WSH: 'wsh', CWS: 'cws',
+    TB: 'tb', TBR: 'tb', KC: 'kc', KCR: 'kc',
+    SD: 'sd', SDP: 'sd', SF: 'sf', SFG: 'sf', ATH: 'oak',
+  }
+  return MAP[abbr] ?? abbr.toLowerCase()
+}
+
+function pbRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+  ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+  ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+  ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath()
+}
+
+async function exportBreakdownImage(data: GameBreakdown) {
+  const SCALE = 2, W = 480, PAD = 16
+  const IMG_SIZE = 48, HEADER_H = 80
+  const STATS_H = 48
+  const MID_H = 144   // pitch mix + zone grid
+  const FOOTER_H = 24
+  const H = PAD + HEADER_H + 10 + STATS_H + 10 + MID_H + FOOTER_H + PAD
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const [headshotImg, teamLogoImg, siteLogoImg] = await Promise.all([
+    loadImgPB(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${data.playerId}/headshot/67/current`),
+    loadImgPB(`https://a.espncdn.com/i/teamlogos/mlb/500/${espnSlugPB(data.pitcherTeamAbbr)}.png`),
+    loadImgPB('/logo.png'),
+  ])
+
+  // ── Header ──
+  const hY = PAD + (HEADER_H - IMG_SIZE) / 2
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else         { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+  const textX = PAD + IMG_SIZE + 10
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText(data.pitcherName, textX, hY + 1)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '10px sans-serif'
+  ctx.fillText(`${data.pitcherTeamAbbr} vs ${data.opponentAbbr} · ${data.gameDate}`, textX, hY + 20)
+  ctx.fillText(data.gameResult, textX, hY + 34)
+  const pctColor = percentileColor(data.percentile)
+  ctx.fillStyle = pctColor; ctx.font = 'bold 10px sans-serif'
+  ctx.fillText(`Game Score ${data.gameScore}  ·  ${data.percentile}th percentile`, textX, hY + 48)
+  const LOGO_SIZE = 36
+  if (teamLogoImg) ctx.drawImage(teamLogoImg, W - PAD - LOGO_SIZE, PAD + (HEADER_H - LOGO_SIZE) / 2, LOGO_SIZE, LOGO_SIZE)
+
+  // ── Stats row ──
+  const statsY = PAD + HEADER_H + 10
+  const statItems = [
+    { label: 'IP',  value: data.ipDisplay, color: '#E6EDF3' },
+    { label: 'K',   value: String(data.ks), color: '#E6EDF3' },
+    { label: 'BB',  value: String(data.bbs), color: '#E6EDF3' },
+    { label: 'H',   value: String(data.hits), color: '#E6EDF3' },
+    { label: 'ER',  value: String(data.er), color: '#E6EDF3' },
+    { label: 'OPS', value: data.ops.toFixed(3), color: data.ops < 0.600 ? '#3C999E' : data.ops < 0.750 ? '#C9A22A' : '#9B405A' },
+  ]
+  const statW = (W - 2 * PAD) / statItems.length
+  for (let i = 0; i < statItems.length; i++) {
+    const s = statItems[i]
+    const sx = PAD + i * statW + statW / 2
+    ctx.fillStyle = '#1C2230'
+    pbRoundRect(ctx, PAD + i * statW + 2, statsY, statW - 4, STATS_H, 4); ctx.fill()
+    ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top'
+    ctx.fillText(s.label, sx, statsY + 6)
+    ctx.fillStyle = s.color; ctx.font = 'bold 16px monospace'
+    ctx.textBaseline = 'bottom'
+    ctx.fillText(s.value, sx, statsY + STATS_H - 6)
+  }
+
+  // ── Middle row: pitch mix (left) | zone grid (right) ──
+  const midY = statsY + STATS_H + 10
+  const MID_LEFT_W = Math.floor((W - 2 * PAD) * 0.55)
+  const MID_RIGHT_X = PAD + MID_LEFT_W + 12
+
+  // Pitch mix
+  ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText('PITCH MIX', PAD, midY)
+  const pitchY0 = midY + 14, pitchItemH = 22
+  for (let i = 0; i < Math.min(5, data.pitchMix.length); i++) {
+    const pm = data.pitchMix[i]
+    const py = pitchY0 + i * pitchItemH
+    const barMaxW = MID_LEFT_W - 84
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '9px sans-serif'
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+    ctx.fillText(pm.name.length > 15 ? pm.name.slice(0, 14) + '…' : pm.name, PAD, py + pitchItemH / 2)
+    const barX = PAD + 84
+    ctx.fillStyle = '#1C2230'; ctx.fillRect(barX, py + 7, barMaxW, 7)
+    ctx.fillStyle = pm.color; ctx.fillRect(barX, py + 7, barMaxW * pm.pct / 100, 7)
+    ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 9px monospace'
+    ctx.textAlign = 'right'
+    ctx.fillText(`${pm.pct}%`, PAD + MID_LEFT_W, py + pitchItemH / 2)
+    ctx.textAlign = 'left'
+  }
+
+  // Zone grid
+  ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText('STRIKE RATE BY ZONE', MID_RIGHT_X, midY)
+  const CELL = 36, zoneGridY = midY + 14
+  for (let i = 0; i < 9; i++) {
+    const col = i % 3, row = Math.floor(i / 3)
+    const { total, strikes, contact } = classifyZone(data.pitches, i)
+    const bg = zoneCellBg(strikes, contact, total)
+    const cx = MID_RIGHT_X + col * CELL, cy = zoneGridY + row * CELL
+    ctx.fillStyle = bg; ctx.fillRect(cx + 1, cy + 1, CELL - 2, CELL - 2)
+    if (total > 0) {
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 10px monospace'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText(`${Math.round((strikes / total) * 100)}%`, cx + CELL / 2, cy + CELL / 2 - 4)
+      ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '7px sans-serif'
+      ctx.fillText(`${total}p`, cx + CELL / 2, cy + CELL / 2 + 7)
+    } else {
+      ctx.fillStyle = '#4B5563'; ctx.font = '9px sans-serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText('—', cx + CELL / 2, cy + CELL / 2)
+    }
+  }
+  const lgY = zoneGridY + 3 * CELL + 4
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillStyle = TEAL_STRONG; ctx.fillRect(MID_RIGHT_X, lgY + 1, 8, 8)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '8px sans-serif'; ctx.fillText(' K', MID_RIGHT_X + 8, lgY)
+  ctx.fillStyle = PINK_STRONG; ctx.fillRect(MID_RIGHT_X + 28, lgY + 1, 8, 8)
+  ctx.fillText(' Hit', MID_RIGHT_X + 36, lgY)
+
+  // ── Footer watermark ──
+  const LOGO_H_F = 16, LOGO_W_F = Math.round(LOGO_H_F * 989 / 623)
+  const footerY = H - PAD - FOOTER_H + 4
+  ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText(`${data.totalPitches} pitches · samalytics.com`, PAD, footerY + 2)
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, W - PAD - LOGO_W_F, footerY, LOGO_W_F, LOGO_H_F)
+    ctx.fillStyle = '#4B5563'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText('samalytics', W - PAD - LOGO_W_F - 4, footerY + LOGO_H_F / 2)
+  } else {
+    ctx.fillStyle = '#4B5563'; ctx.textAlign = 'right'; ctx.textBaseline = 'top'
+    ctx.fillText('samalytics', W - PAD, footerY + 2)
+  }
+
+  canvas.toBlob(async blob => {
+    if (!blob) return
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+    } catch {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url
+      a.download = `${data.pitcherName.replace(/\s+/g, '_')}_breakdown.png`
+      a.click(); URL.revokeObjectURL(url)
+    }
+  })
+}
+
 // ── Main export ───────────────────────────────────────────────────────────────
 
 interface Props {
@@ -338,6 +519,8 @@ interface Props {
 }
 
 export default function PitcherBreakdown({ data, accentColor = '#3D405B', label = 'Pitcher Spotlight' }: Props) {
+  const [copying, setCopying] = useState(false)
+  const [copied, setCopied] = useState(false)
   const opsColor = data.ops < 0.600 ? '#3C999E' : data.ops < 0.750 ? '#C9A22A' : '#9B405A'
 
   return (
@@ -420,9 +603,23 @@ export default function PitcherBreakdown({ data, accentColor = '#3D405B', label 
         <div className="pt-2 border-t border-538-border space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[10px] text-538-muted tabular-nums">{data.totalPitches} pitches · Game Score {data.gameScore}</span>
-            <Link href={`/analysis/pitching/${data.pitcherTeamAbbr}`} className="text-xs font-semibold text-538-orange hover:underline">
-              {data.pitcherTeamAbbr} Pitching Analysis →
-            </Link>
+            <div className="flex items-center gap-3">
+              <button
+                className={`text-[11px] font-semibold px-2.5 py-1 rounded border transition-colors ${copied ? 'border-emerald-500 text-emerald-500' : 'border-538-border text-538-muted hover:text-538-text hover:border-538-text'}`}
+                onClick={async () => {
+                  if (copying) return
+                  setCopying(true)
+                  await exportBreakdownImage(data)
+                  setCopied(true); setCopying(false)
+                  setTimeout(() => setCopied(false), 2000)
+                }}
+              >
+                {copied ? '✓ Copied' : copying ? '…' : '⎘ Copy'}
+              </button>
+              <Link href={`/analysis/pitching/${data.pitcherTeamAbbr}`} className="text-xs font-semibold text-538-orange hover:underline">
+                {data.pitcherTeamAbbr} Pitching Analysis →
+              </Link>
+            </div>
           </div>
           <p className="text-[9px] text-538-muted leading-relaxed">
             <span className="font-semibold">Percentile</span> maps the Bill James Game Score to the historical distribution of MLB starting outings.{' '}
