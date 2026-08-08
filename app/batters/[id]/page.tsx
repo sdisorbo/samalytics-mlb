@@ -91,6 +91,170 @@ function computeWeightedMean(zones: ZoneCell[][], key: StatKey) {
   return sumPa > 0 ? sumVal / sumPa : null
 }
 
+// ── Canvas export helpers ──────────────────────────────────────────────────────
+
+const ESPN_ABBR_EXPORT: Record<string, string> = {
+  AZ: 'ari', ARI: 'ari', WSH: 'wsh', CWS: 'cws',
+  TB: 'tb', TBR: 'tb', KC: 'kc', KCR: 'kc',
+  SD: 'sd', SDP: 'sd', SF: 'sf', SFG: 'sf',
+}
+
+function loadImg(src: string): Promise<HTMLImageElement | null> {
+  return new Promise(resolve => {
+    const img = new Image(); img.crossOrigin = 'anonymous'
+    img.onload = () => resolve(img); img.onerror = () => resolve(null); img.src = src
+  })
+}
+
+function canvasRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+  ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+  ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+  ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath()
+}
+
+async function exportBatterZoneImage(opts: {
+  batterId: string; batterName: string; teamAbbr: string
+  activeStat: StatKey; selectedPitchType: string; pitchTypes: PitchTypeEntry[]
+  activeZones: ZoneCell[][]; colorMap: Map<string, string>; overall: number | null
+}) {
+  const { batterId, batterName, teamAbbr, activeStat, selectedPitchType, pitchTypes, activeZones, colorMap, overall } = opts
+
+  const SCALE = 2; const W = 360; const PAD = 16
+  const IMG_SIZE = 48; const HEADER_H = 72; const BADGE_H = 32
+  const GW = CELL_W * 5; const GH = CELL_H * 5
+  const H = PAD + HEADER_H + BADGE_H + GH + 56 + PAD
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const slug = ESPN_ABBR_EXPORT[teamAbbr] ?? teamAbbr.toLowerCase()
+  const [headshotImg, logoImg] = await Promise.all([
+    loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${batterId}/headshot/67/current`),
+    loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+  ])
+
+  // ── Header ──
+  const hY = PAD + (HEADER_H - IMG_SIZE) / 2
+
+  // Headshot — object-fit:cover (aspect ratio preserved)
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else          { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+
+  // Team logo
+  const lx = W - PAD - IMG_SIZE
+  if (logoImg) {
+    ctx.drawImage(logoImg, lx, hY, IMG_SIZE, IMG_SIZE)
+  } else {
+    ctx.fillStyle = '#374151'; canvasRoundRect(ctx, lx, hY, IMG_SIZE, IMG_SIZE, 6); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 11px sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    ctx.fillText(teamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
+  }
+
+  // Name + position
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillText(batterName, W / 2, PAD + HEADER_H / 2 - 9)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '11px sans-serif'
+  ctx.fillText(`${teamAbbr} · Batter`, W / 2, PAD + HEADER_H / 2 + 11)
+
+  // ── Badges ──
+  const badgeY = PAD + HEADER_H + 6
+  const pitchLabel = selectedPitchType === 'ALL' ? 'All Pitches' : (pitchTypes.find(p => p.code === selectedPitchType)?.name ?? selectedPitchType)
+  const statLabel = STAT_TABS.find(s => s.key === activeStat)?.label ?? activeStat
+
+  let bx = PAD
+  for (const label of [pitchLabel, statLabel]) {
+    ctx.font = 'bold 8px sans-serif'
+    const tw = ctx.measureText(label).width
+    const bw = tw + 12; const bh = 18
+    ctx.fillStyle = '#3D405B'; canvasRoundRect(ctx, bx, badgeY, bw, bh, 3); ctx.fill()
+    ctx.fillStyle = '#E6EDF3'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+    ctx.fillText(label, bx + 6, badgeY + 5)
+    bx += bw + 5
+  }
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+  ctx.fillText('Last 40 games', W - PAD, badgeY + 9)
+
+  // ── Zone Grid ──
+  const gridTop = PAD + HEADER_H + BADGE_H + 4
+  const gridLeft = (W - GW) / 2
+
+  for (const rowCells of activeZones) {
+    for (const cell of rowCells) {
+      const color = colorMap.get(`${cell.row}-${cell.col}`) ?? EMPTY_CELL
+      const cx = gridLeft + cell.col * CELL_W; const cy = gridTop + cell.row * CELL_H
+      ctx.fillStyle = color; canvasRoundRect(ctx, cx + 1, cy + 1, CELL_W - 2, CELL_H - 2, 2); ctx.fill()
+      const statVal = (cell as unknown as Record<string, number | null>)[activeStat] as number | null
+      if (statVal !== null) {
+        ctx.fillStyle = '#ffffff'; ctx.font = 'bold 9px monospace'
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+        ctx.fillText(formatZoneStat(statVal, activeStat), cx + CELL_W / 2, cy + CELL_H / 2)
+      }
+    }
+  }
+  ctx.strokeStyle = '#94A3B8'; ctx.lineWidth = 1.5
+  ctx.strokeRect(gridLeft + SZ_X, gridTop + SZ_Y, SZ_W, SZ_H)
+
+  // ── View avg + Legend ──
+  const afterGrid = gridTop + GH + 8
+  if (overall !== null) {
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '9px sans-serif'
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+    ctx.fillText('View avg: ', gridLeft, afterGrid)
+    const lw = ctx.measureText('View avg: ').width
+    ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 9px monospace'
+    ctx.fillText(formatZoneStat(overall, activeStat), gridLeft + lw, afterGrid)
+  }
+
+  const legendY = afterGrid + 16
+  const legendItems = [
+    { color: TEAL, label: activeStat === 'zone_pct' ? 'Less often thrown' : activeStat === 'avg_rv' ? 'More run value' : 'Better (higher)' },
+    { color: PINK, label: activeStat === 'zone_pct' ? 'More often thrown' : activeStat === 'avg_rv' ? 'Less run value' : 'Worse (lower)' },
+    { color: EMPTY_CELL, label: 'No data' },
+  ]
+  let llx = gridLeft
+  for (const { color, label } of legendItems) {
+    ctx.fillStyle = color; canvasRoundRect(ctx, llx, legendY, 10, 10, 2); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '8px sans-serif'
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+    ctx.fillText(label, llx + 13, legendY + 1)
+    llx += 13 + ctx.measureText(label).width + 10
+  }
+
+  ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top'
+  ctx.fillText("Catcher's view · inner box = strike zone · samalytics.com", W / 2, legendY + 16)
+
+  canvas.toBlob(async blob => {
+    if (!blob) return
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+    } catch {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url
+      a.download = `${batterName.replace(/\s+/g, '_')}_zone.png`; a.click()
+      URL.revokeObjectURL(url)
+    }
+  }, 'image/png')
+}
+
 // ── Zone Grid ──────────────────────────────────────────────────────────────────
 
 const CELL_W = 44; const CELL_H = 38
@@ -306,6 +470,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState('')
   const [activeStat, setActiveStat] = useState<StatKey>('avg')
   const [selectedPitchType, setSelectedPitchType] = useState<string>('ALL')
+  const [copying, setCopying] = useState(false)
 
   const currentSeason = new Date().getFullYear()
 
@@ -388,7 +553,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
 
       {/* Controls: stat tabs + pitch type toggles */}
       <div className="bg-surface border border-538-border rounded-xl p-4 space-y-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Zone Stat</span>
           <div className="flex gap-1 flex-wrap">
             {STAT_TABS.map(({ key, label }) => (
@@ -399,6 +564,22 @@ export default function BatterPage({ params }: { params: { id: string } }) {
               </button>
             ))}
           </div>
+          <button
+            onClick={async () => {
+              setCopying(true)
+              const activeZones = selectedPitchType === 'ALL' ? zones : (pitchTypes.find(pt => pt.code === selectedPitchType)?.zones ?? zones)
+              const colorMap = buildColorMap(activeZones.flat(), activeStat)
+              const overall = computeWeightedMean(activeZones, activeStat)
+              await exportBatterZoneImage({ batterId, batterName, teamAbbr, activeStat, selectedPitchType, pitchTypes, activeZones, colorMap, overall })
+              setCopying(false)
+              setTimeout(() => setCopying(false), 1500)
+            }}
+            disabled={copying}
+            className="ml-auto text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded border transition-colors"
+            style={copying ? { color: '#4ADE80', borderColor: '#4ADE80' } : { color: '#9CA3AF', borderColor: '#374151' }}
+          >
+            {copying ? '✓ Copied' : '⎘ Copy Image'}
+          </button>
         </div>
         <div className="flex items-center gap-1 flex-wrap">
           <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted mr-1">Pitch</span>

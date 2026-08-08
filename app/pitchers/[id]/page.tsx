@@ -138,11 +138,15 @@ async function exportZoneImage(opts: {
 
   // ── Header ──
   const hY = PAD + (HEADER_H - IMG_SIZE) / 2
-  // Headshot (clipped circle)
+  // Headshot (clipped circle, aspect-ratio preserved — object-fit:cover)
   if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else          { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
     ctx.save(); ctx.beginPath()
     ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
-    ctx.drawImage(headshotImg, PAD, hY, IMG_SIZE, IMG_SIZE); ctx.restore()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
   } else {
     ctx.fillStyle = '#3D405B'; ctx.beginPath()
     ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
