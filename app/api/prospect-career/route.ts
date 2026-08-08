@@ -9,6 +9,8 @@ const SPORT_LEVEL: Record<number, string> = {
   1: 'MLB', 11: 'AAA', 12: 'AA', 13: 'A+', 14: 'A', 15: 'A', 16: 'R',
 }
 
+function round2(n: number) { return Math.round(n * 100) / 100 }
+
 function pf(v: unknown): number | null {
   if (v == null || v === '') return null
   const n = parseFloat(String(v))
@@ -38,7 +40,8 @@ export async function GET(req: NextRequest) {
     const entry = allWar.find(p => p.player_id === Number(playerId))
     if (entry) {
       for (const s of entry.career) {
-        warByYear.set(String(s.year), s.war)
+        const k = String(s.year)
+        warByYear.set(k, round2((warByYear.get(k) ?? 0) + s.war))
       }
     }
   } catch { /* war data unavailable — proceed without */ }
