@@ -242,6 +242,60 @@ function hitEndpoint(spray: number, dist: number): [number, number] {
   return [200 + dist * Math.sin(rad), 350 - dist * Math.cos(rad)]
 }
 
+// ── Park-specific outfield walls ──────────────────────────────────────────────
+
+const WALL_SCALE = 0.78
+
+// [spray_angle_degrees, distance_feet] — LF pole to RF pole
+const PARK_WALLS: Record<string, [number, number][]> = {
+  AZ:  [[-45,330],[-22,376],[0,407],[22,376],[45,335]],
+  ATH: [[-45,330],[-22,385],[0,403],[22,385],[45,330]],
+  ATL: [[-45,335],[-22,380],[0,400],[22,375],[45,325]],
+  BAL: [[-45,333],[-22,364],[0,400],[22,373],[45,318]],
+  // Fenway: flat Green Monster (-45 to -33), then dramatic deepening to triangle (-5), short RF
+  BOS: [[-45,310],[-40,310],[-33,315],[-20,360],[-10,400],[-5,420],[0,390],[20,382],[45,302]],
+  CHC: [[-45,355],[-22,368],[0,400],[22,368],[45,353]],
+  CIN: [[-45,328],[-22,370],[0,404],[22,370],[45,325]],
+  CLE: [[-45,325],[-22,370],[0,405],[22,375],[45,325]],
+  // Coors: notoriously spacious; wide humidor-era CF
+  COL: [[-45,347],[-30,390],[0,415],[22,375],[45,350]],
+  CWS: [[-45,330],[-22,375],[0,400],[22,375],[45,335]],
+  // Comerica: very deep CF
+  DET: [[-45,345],[-30,395],[0,420],[22,379],[45,330]],
+  HOU: [[-45,315],[-22,362],[0,409],[22,373],[45,326]],
+  KC:  [[-45,330],[-22,387],[0,410],[22,387],[45,330]],
+  LAA: [[-45,330],[-22,387],[0,400],[22,370],[45,330]],
+  LAD: [[-45,330],[-22,375],[0,395],[22,375],[45,330]],
+  MIA: [[-45,344],[-22,386],[0,407],[22,392],[45,335]],
+  MIL: [[-45,344],[-22,371],[0,400],[22,374],[45,345]],
+  MIN: [[-45,339],[-22,377],[0,404],[22,367],[45,328]],
+  NYM: [[-45,335],[-22,379],[0,408],[22,383],[45,330]],
+  // Yankee Stadium: very deep power alleys, short corners
+  NYY: [[-45,318],[-30,399],[0,408],[22,385],[45,314]],
+  PHI: [[-45,329],[-22,374],[0,401],[22,369],[45,330]],
+  // PNC Park: deep LCF
+  PIT: [[-45,325],[-30,389],[0,399],[22,375],[45,320]],
+  // Petco: deep RC kink
+  SD:  [[-45,336],[-22,382],[0,396],[10,405],[22,411],[45,322]],
+  SEA: [[-45,331],[-22,378],[0,401],[22,381],[45,326]],
+  // Oracle Park: extreme deep RC, short RF (McCovey Cove)
+  SF:  [[-45,339],[-22,382],[0,399],[15,421],[22,421],[45,309]],
+  STL: [[-45,336],[-22,375],[0,400],[22,375],[45,335]],
+  TB:  [[-45,315],[-22,370],[0,404],[22,370],[45,322]],
+  TEX: [[-45,329],[-22,372],[0,407],[22,374],[45,326]],
+  TOR: [[-45,328],[-22,375],[0,400],[22,375],[45,328]],
+  WSH: [[-45,336],[-22,377],[0,402],[22,370],[45,335]],
+}
+const DEFAULT_WALL: [number, number][] = [[-45,330],[-22,380],[0,405],[22,380],[45,330]]
+
+function getWall(abbr: string): [number, number][] {
+  return PARK_WALLS[abbr] ?? PARK_WALLS[abbr.toUpperCase()] ?? DEFAULT_WALL
+}
+
+function wallPoints(abbr: string): [number, number][] {
+  return getWall(abbr).map(([spray, feet]) => hitEndpoint(spray, feet * WALL_SCALE))
+}
+
 async function exportSprayImage(opts: SprayExportOpts) {
   const { playerId, playerName, perspective, teamAbbr, awayTeamAbbr, homeTeamAbbr, events, rar } = opts
 
@@ -307,13 +361,18 @@ async function exportSprayImage(opts: SprayExportOpts) {
   const hitEvents = events.filter(e => OUTCOME_DIST[e.outcome] > 0)
   const plateEvents = events.filter(e => OUTCOME_DIST[e.outcome] === 0)
 
+  const wPts = wallPoints(homeTeamAbbr)
   ctx.strokeStyle = `${BLUE}66`; ctx.lineWidth = 1.5
-  ctx.beginPath(); ctx.moveTo(ox + 28 * fs, oy + 102 * fs)
-  ctx.quadraticCurveTo(ox + 200 * fs, oy + 8 * fs, ox + 372 * fs, oy + 102 * fs); ctx.stroke()
+  ctx.beginPath()
+  wPts.forEach(([tx, ty], i) => {
+    if (i === 0) ctx.moveTo(ox + tx * fs, oy + ty * fs)
+    else ctx.lineTo(ox + tx * fs, oy + ty * fs)
+  })
+  ctx.stroke()
 
   ctx.lineWidth = 1.2
-  ctx.beginPath(); ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + 28 * fs, oy + 102 * fs); ctx.stroke()
-  ctx.beginPath(); ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + 372 * fs, oy + 102 * fs); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + wPts[0][0] * fs, oy + wPts[0][1] * fs); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(ox + 200 * fs, oy + 350 * fs); ctx.lineTo(ox + wPts[wPts.length - 1][0] * fs, oy + wPts[wPts.length - 1][1] * fs); ctx.stroke()
 
   ctx.strokeStyle = `${BLUE}CC`; ctx.lineWidth = 1.5
   ctx.beginPath()
@@ -389,14 +448,19 @@ async function exportSprayImage(opts: SprayExportOpts) {
   })
 }
 
-function BaseballField({ events, name, animKey, perspective }: {
+function BaseballField({ events, name, animKey, perspective, homeTeamAbbr }: {
   events: GameEvent[]
   name: string
   animKey: number
   perspective: 'batter' | 'pitcher'
+  homeTeamAbbr?: string
 }) {
   const hitEvents = events.filter(e => OUTCOME_DIST[e.outcome] > 0)
   const plateEvents = events.filter(e => OUTCOME_DIST[e.outcome] === 0)
+  const wpts = wallPoints(homeTeamAbbr ?? '')
+  const [lfx, lfy] = wpts[0]
+  const [rfx, rfy] = wpts[wpts.length - 1]
+  const wallPath = wpts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`).join(' ')
 
   return (
     <div className="flex flex-col items-center">
@@ -404,9 +468,9 @@ function BaseballField({ events, name, animKey, perspective }: {
         {name}
       </div>
       <svg viewBox="0 0 400 385" style={{ width: '100%', maxWidth: 300, display: 'block' }}>
-        <path d="M 28 102 Q 200 8 372 102" fill="none" stroke={BLUE} strokeWidth="1.5" opacity="0.4" />
-        <line x1="200" y1="350" x2="28" y2="102" stroke={BLUE} strokeWidth="1.2" opacity="0.4" />
-        <line x1="200" y1="350" x2="372" y2="102" stroke={BLUE} strokeWidth="1.2" opacity="0.4" />
+        <path d={wallPath} fill="none" stroke={BLUE} strokeWidth="1.5" opacity="0.4" />
+        <line x1="200" y1="350" x2={lfx.toFixed(1)} y2={lfy.toFixed(1)} stroke={BLUE} strokeWidth="1.2" opacity="0.4" />
+        <line x1="200" y1="350" x2={rfx.toFixed(1)} y2={rfy.toFixed(1)} stroke={BLUE} strokeWidth="1.2" opacity="0.4" />
         <polygon points="200,350 295,255 200,160 105,255"
           fill="none" stroke={BLUE} strokeWidth="1.5" opacity="0.8" />
         <circle cx="200" cy="260" r="7" fill="none" stroke={BLUE} strokeWidth="1" opacity="0.45" />
@@ -812,6 +876,7 @@ export default function GameBreakdown({
                     name={selectedName}
                     animKey={fieldKey}
                     perspective={perspective}
+                    homeTeamAbbr={homeTeamAbbr}
                   />
                 </div>
               )}
@@ -834,6 +899,7 @@ export default function GameBreakdown({
                     name={selectedName}
                     animKey={fieldKey}
                     perspective={perspective}
+                    homeTeamAbbr={homeTeamAbbr}
                   />
                 </div>
               ) : (
