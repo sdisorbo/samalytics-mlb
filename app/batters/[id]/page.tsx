@@ -133,9 +133,10 @@ async function exportBatterZoneImage(opts: {
   ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
 
   const slug = ESPN_ABBR_EXPORT[teamAbbr] ?? teamAbbr.toLowerCase()
-  const [headshotImg, logoImg] = await Promise.all([
+  const [headshotImg, logoImg, siteLogoImg] = await Promise.all([
     loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${batterId}/headshot/67/current`),
     loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+    loadImg('/logo.png'),
   ])
 
   // ── Header ──
@@ -238,9 +239,21 @@ async function exportBatterZoneImage(opts: {
     llx += 13 + ctx.measureText(label).width + 10
   }
 
+  // Footer
+  const LOGO_H = 16
+  const LOGO_W = Math.round(LOGO_H * 989 / 623)
   ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
-  ctx.textAlign = 'center'; ctx.textBaseline = 'top'
-  ctx.fillText("Catcher's view · inner box = strike zone · samalytics.com", W / 2, legendY + 16)
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText("Catcher's view · inner box = strike zone", PAD, legendY + 16)
+  const wY = legendY + 14
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, W - PAD - LOGO_W, wY, LOGO_W, LOGO_H)
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText('samalytics', W - PAD - LOGO_W - 4, wY + LOGO_H / 2)
+  } else {
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top'
+    ctx.fillText('samalytics', W - PAD, legendY + 16)
+  }
 
   canvas.toBlob(async blob => {
     if (!blob) return
