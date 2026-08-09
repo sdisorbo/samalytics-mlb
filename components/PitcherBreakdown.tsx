@@ -452,35 +452,60 @@ async function exportBreakdownImage(data: GameBreakdown) {
     ctx.textAlign = 'left'
   }
 
-  // Zone grid
+  // Pitch scatter plot (right)
+  const PLOT_W = W - PAD - MID_RIGHT_X
+  const PLOT_H = MID_H - 14
+  const plotY = midY + 14
+
   ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px sans-serif'
   ctx.textAlign = 'left'; ctx.textBaseline = 'top'
-  ctx.fillText('STRIKE RATE BY ZONE', MID_RIGHT_X, midY)
-  const CELL = 36, zoneGridY = midY + 14
-  for (let i = 0; i < 9; i++) {
-    const col = i % 3, row = Math.floor(i / 3)
-    const { total, strikes, contact } = classifyZone(data.pitches, i)
-    const bg = zoneCellBg(strikes, contact, total)
-    const cx = MID_RIGHT_X + col * CELL, cy = zoneGridY + row * CELL
-    ctx.fillStyle = bg; ctx.fillRect(cx + 1, cy + 1, CELL - 2, CELL - 2)
-    if (total > 0) {
-      ctx.fillStyle = '#fff'; ctx.font = 'bold 10px monospace'
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-      ctx.fillText(`${Math.round((strikes / total) * 100)}%`, cx + CELL / 2, cy + CELL / 2 - 4)
-      ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '7px sans-serif'
-      ctx.fillText(`${total}p`, cx + CELL / 2, cy + CELL / 2 + 7)
-    } else {
-      ctx.fillStyle = '#4B5563'; ctx.font = '9px sans-serif'
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-      ctx.fillText('—', cx + CELL / 2, cy + CELL / 2)
+  ctx.fillText('PITCH LOCATION', MID_RIGHT_X, midY)
+
+  ctx.fillStyle = '#0F172A'
+  pbRoundRect(ctx, MID_RIGHT_X, plotY, PLOT_W, PLOT_H, 3); ctx.fill()
+
+  const mapPX = (pX: number) => MID_RIGHT_X + ((pX + 2) / 4) * PLOT_W
+  const mapPZ = (pZ: number) => plotY + PLOT_H * (1 - (pZ - 0.5) / 4.5)
+
+  const szL = mapPX(-0.83), szR = mapPX(0.83)
+  const szT = mapPZ(3.38),  szB = mapPZ(1.55)
+
+  ctx.strokeStyle = '#334155'; ctx.lineWidth = 0.5
+  for (let gi = 1; gi < 3; gi++) {
+    ctx.beginPath(); ctx.moveTo(szL + (szR - szL) * gi / 3, szT); ctx.lineTo(szL + (szR - szL) * gi / 3, szB); ctx.stroke()
+    ctx.beginPath(); ctx.moveTo(szL, szT + (szB - szT) * gi / 3); ctx.lineTo(szR, szT + (szB - szT) * gi / 3); ctx.stroke()
+  }
+
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.2
+  ctx.setLineDash([3, 2])
+  ctx.strokeRect(szL, szT, szR - szL, szB - szT)
+  ctx.setLineDash([])
+
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.2
+  ctx.beginPath(); ctx.moveTo(MID_RIGHT_X + PLOT_W / 2, plotY + PLOT_H - 5); ctx.lineTo(MID_RIGHT_X + PLOT_W / 2, plotY + PLOT_H - 1); ctx.stroke()
+
+  for (const layer of RESULT_LAYERS) {
+    for (const p of data.pitches.filter(p => p.result === layer)) {
+      const px = mapPX(p.x), py = mapPZ(p.z)
+      const isHit = layer === 'single' || layer === 'double' || layer === 'triple' || layer === 'home_run'
+      const isK   = layer === 'swinging_strike'
+      if (isHit) {
+        const r = 4
+        ctx.fillStyle = RESULT_COLOR[layer]
+        ctx.beginPath(); ctx.moveTo(px, py - r); ctx.lineTo(px + r, py); ctx.lineTo(px, py + r); ctx.lineTo(px - r, py); ctx.closePath(); ctx.fill()
+        ctx.strokeStyle = '#C9A22A'; ctx.lineWidth = 1; ctx.stroke()
+      } else {
+        ctx.globalAlpha = layer === 'ball' ? 0.28 : layer === 'foul' ? 0.45 : 0.88
+        ctx.fillStyle = p.color
+        ctx.beginPath(); ctx.arc(px, py, isK ? 3.2 : 2.5, 0, Math.PI * 2); ctx.fill()
+        ctx.globalAlpha = 1
+        if (isK) {
+          ctx.strokeStyle = '#C9A22A'; ctx.lineWidth = 1
+          ctx.beginPath(); ctx.arc(px, py, 3.2, 0, Math.PI * 2); ctx.stroke()
+        }
+      }
     }
   }
-  const lgY = zoneGridY + 3 * CELL + 4
-  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
-  ctx.fillStyle = TEAL_STRONG; ctx.fillRect(MID_RIGHT_X, lgY + 1, 8, 8)
-  ctx.fillStyle = '#9CA3AF'; ctx.font = '8px sans-serif'; ctx.fillText(' K', MID_RIGHT_X + 8, lgY)
-  ctx.fillStyle = PINK_STRONG; ctx.fillRect(MID_RIGHT_X + 28, lgY + 1, 8, 8)
-  ctx.fillText(' Hit', MID_RIGHT_X + 36, lgY)
 
   // ── Footer watermark ──
   const LOGO_H_F = 16, LOGO_W_F = Math.round(LOGO_H_F * 989 / 623)
