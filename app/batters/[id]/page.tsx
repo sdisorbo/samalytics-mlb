@@ -39,7 +39,9 @@ interface CareerSeason {
   war: number | null
 }
 
-interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
+interface WarEntry { name: string; team: string; war: number; player_type: string; career: WarSeason[] }
+interface WarSeason { year: number; war: number; off_war: number | null; def_war: number | null }
+interface GameRarEntry { date: string; gamePk: number; opp: string; pa: number; rv: number; cumRv: number }
 
 type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
@@ -268,6 +270,90 @@ async function exportBatterZoneImage(opts: {
   }, 'image/png')
 }
 
+// ── WAR / RAR Trend Charts ─────────────────────────────────────────────────────
+
+function CareerWarChart({ seasons }: { seasons: WarSeason[] }) {
+  if (!seasons.length) return null
+  const recent = seasons.slice(-8)
+  const maxWar = Math.max(1, ...recent.map(s => Math.abs(s.war)))
+  const W = 280; const H = 90; const BAR_W = Math.floor((W - 16) / recent.length) - 3
+  const barH = (w: number) => Math.min(H - 20, Math.abs(w) / maxWar * (H - 24))
+
+  return (
+    <div>
+      <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career WAR</div>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        {recent.map((s, i) => {
+          const bh = barH(s.war)
+          const x = 8 + i * (BAR_W + 3)
+          const isPos = s.war >= 0
+          const color = s.war >= 4 ? '#34D399' : s.war >= 2 ? '#60A5FA' : s.war >= 0 ? '#9CA3AF' : '#F87171'
+          const baselineY = H - 22
+          const y = isPos ? baselineY - bh : baselineY
+          return (
+            <g key={s.year}>
+              <rect x={x} y={y} width={BAR_W} height={Math.max(bh, 2)} fill={color} rx={1} opacity={0.85} />
+              <text x={x + BAR_W / 2} y={H - 8} textAnchor="middle" fontSize={7} fill="#6B7280" fontFamily="sans-serif">
+                {String(s.year).slice(2)}
+              </text>
+              <text x={x + BAR_W / 2} y={isPos ? y - 3 : y + Math.max(bh, 2) + 9} textAnchor="middle" fontSize={7} fill={color} fontFamily="monospace" fontWeight={700}>
+                {s.war >= 0 ? '+' : ''}{s.war.toFixed(1)}
+              </text>
+            </g>
+          )
+        })}
+        <line x1={8} y1={H - 22} x2={W - 8} y2={H - 22} stroke="#374151" strokeWidth={0.75} />
+      </svg>
+    </div>
+  )
+}
+
+function SeasonRvChart({ games, war }: { games: GameRarEntry[]; war: number | null | undefined }) {
+  if (!games.length) return null
+  const W = 280; const H = 100
+  const allVals = games.map(g => g.cumRv)
+  const minV = Math.min(0, ...allVals); const maxV = Math.max(0, ...allVals)
+  const range = maxV - minV || 1
+  const toY = (v: number) => H - 16 - ((v - minV) / range) * (H - 24)
+  const toX = (i: number) => 8 + (i / Math.max(games.length - 1, 1)) * (W - 16)
+  const baselineY = toY(0)
+
+  const pts = games.map((g, i) => `${toX(i).toFixed(1)},${toY(g.cumRv).toFixed(1)}`).join(' ')
+
+  return (
+    <div>
+      <div className="flex items-baseline gap-2 mb-2">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Season Run Value</span>
+        {war != null && <span className="text-[9px] text-538-muted">WAR: <span className="font-bold text-538-text">{war >= 0 ? '+' : ''}{war.toFixed(1)}</span></span>}
+      </div>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        {/* Zero baseline */}
+        <line x1={8} y1={baselineY} x2={W - 8} y2={baselineY} stroke="#374151" strokeWidth={0.75} strokeDasharray="3,3" />
+        {/* Area fill */}
+        <polygon
+          points={`${toX(0).toFixed(1)},${baselineY} ${pts} ${toX(games.length - 1).toFixed(1)},${baselineY}`}
+          fill={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'}
+          opacity={0.12}
+        />
+        {/* Line */}
+        <polyline points={pts} fill="none" stroke={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+        {/* Last point dot */}
+        {games.length > 0 && (
+          <circle cx={toX(games.length - 1).toFixed(1)} cy={toY(games[games.length - 1].cumRv).toFixed(1)} r={3}
+            fill={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'} />
+        )}
+        {/* Labels */}
+        <text x={8} y={H - 2} fontSize={7} fill="#6B7280" fontFamily="sans-serif">Game 1</text>
+        <text x={W - 8} y={H - 2} textAnchor="end" fontSize={7} fill="#6B7280" fontFamily="sans-serif">Game {games.length}</text>
+        <text x={W - 8} y={toY(allVals[allVals.length - 1]) - 5} textAnchor="end" fontSize={8} fill={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'} fontFamily="monospace" fontWeight={700}>
+          {allVals[allVals.length - 1] >= 0 ? '+' : ''}{allVals[allVals.length - 1].toFixed(1)}
+        </text>
+      </svg>
+      <p className="text-[8px] text-538-muted mt-1">Cumulative run value vs average across {games.length} games</p>
+    </div>
+  )
+}
+
 // ── Zone Grid ──────────────────────────────────────────────────────────────────
 
 const CELL_W = 44; const CELL_H = 38
@@ -331,33 +417,204 @@ function ZoneGrid({ zones, pitchTypes, selectedPitchType, activeStat }: {
 
 const EVENT_COLORS: Record<string, string> = { single: '#3B82F6', double: '#10B981', triple: '#F59E0B', home_run: '#EF4444' }
 const EVENT_LABELS: Record<string, string> = { single: '1B', double: '2B', triple: '3B', home_run: 'HR' }
+const HIT_VAL: Record<string, number> = { single: 1, double: 2, triple: 3, home_run: 4 }
+
+type SprayMode = 'scatter' | 'density' | 'value'
+const SPRAY_MODES: { key: SprayMode; label: string }[] = [
+  { key: 'scatter', label: 'Scatter' },
+  { key: 'density', label: 'Density' },
+  { key: 'value',   label: 'Hit Value' },
+]
+
+// Field coordinate constants (raw StatCast coordX/Y, scaled by SPRAY_SCALE to SVG)
+const SPRAY_SCALE = 1.2
+const HPX = 125 * SPRAY_SCALE  // home plate SVG x = 150
+const HPY = 204 * SPRAY_SCALE  // home plate SVG y = 244.8
+
+// Convert polar (distance from HP in SVG units, spray angle in degrees, 0=CF +RF -LF) → SVG point
+const spX = (r: number, deg: number) => HPX + r * Math.sin(deg * Math.PI / 180)
+const spY = (r: number, deg: number) => HPY - r * Math.cos(deg * Math.PI / 180)
+
+// Build SVG path for a sector arc (annular sector from r1..r2, angle a1..a2 degrees)
+function sectorPath(r1: number, r2: number, a1: number, a2: number): string {
+  const la = (a2 - a1) >= 180 ? 1 : 0
+  return [
+    `M ${spX(r1,a1).toFixed(1)} ${spY(r1,a1).toFixed(1)}`,
+    `L ${spX(r2,a1).toFixed(1)} ${spY(r2,a1).toFixed(1)}`,
+    `A ${r2} ${r2} 0 ${la} 1 ${spX(r2,a2).toFixed(1)} ${spY(r2,a2).toFixed(1)}`,
+    `L ${spX(r1,a2).toFixed(1)} ${spY(r1,a2).toFixed(1)}`,
+    `A ${r1} ${r1} 0 ${la} 0 ${spX(r1,a1).toFixed(1)} ${spY(r1,a1).toFixed(1)}`,
+    'Z',
+  ].join(' ')
+}
+
+// Wall arc path (quadratic bezier through LF, CF, RF)
+// LF pole: r=198, -45° | CF: r=240, 0° | RF: r=198, +45°
+const LF = [spX(198, -45), spY(198, -45)] as const
+const RF = [spX(198,  45), spY(198,  45)] as const
+const CF = [spX(240,   0), spY(240,   0)] as const
+// Bezier control point so curve passes through CF at t=0.5:
+// At t=0.5 for quadratic: (P0 + 2*P1 + P2)/4 = mid → P1 = 2*mid - (P0+P2)/2
+const WALL_CTX = 2 * CF[0] - (LF[0] + RF[0]) / 2
+const WALL_CTY = 2 * CF[1] - (LF[1] + RF[1]) / 2
+// Warning track (8 SVG units inside wall)
+const WT_LF = [spX(190, -45), spY(190, -45)] as const
+const WT_RF = [spX(190,  45), spY(190,  45)] as const
+const WT_CF = [spX(232,   0), spY(232,   0)] as const
+const WT_CTX = 2 * WT_CF[0] - (WT_LF[0] + WT_RF[0]) / 2
+const WT_CTY = 2 * WT_CF[1] - (WT_LF[1] + WT_RF[1]) / 2
+
+// Base positions in SVG space (90ft base paths; 1 SVG ≈ 1.67ft)
+const BASE_PX = 54  // 90ft in SVG units
+const B2 = [HPX,            HPY - BASE_PX * Math.SQRT2] as const  // 2B (straight toward CF)
+const B1 = [HPX + BASE_PX * Math.SQRT2 / 2, HPY - BASE_PX * Math.SQRT2 / 2] as const  // 1B
+const B3 = [HPX - BASE_PX * Math.SQRT2 / 2, HPY - BASE_PX * Math.SQRT2 / 2] as const  // 3B
+
+// Pitching mound (60.5ft from HP)
+const MOUND_Y = HPY - 60.5 / 90 * BASE_PX * Math.SQRT2
+
+// Sector grid: 9 angle bins (-45 to +45, 10° each), 3 distance bins
+const A_BINS = 9; const A_STEP = 10; const A_START = -45
+const D_BREAKS = [40, 110, 165, 205] as const  // SVG unit boundaries
+
+function computeHeatCells(points: SprayPoint[]): Map<string, { count: number; val: number }> {
+  const cells = new Map<string, { count: number; val: number }>()
+  for (const pt of points) {
+    const sx = pt.x * SPRAY_SCALE; const sy = pt.y * SPRAY_SCALE
+    const dx = sx - HPX; const dy = HPY - sy  // positive dy = toward CF
+    const dist = Math.sqrt(dx * dx + dy * dy)
+    const angleDeg = Math.atan2(dx, dy) * 180 / Math.PI
+    if (Math.abs(angleDeg) > 50 || dist < D_BREAKS[0]) continue
+    const aBin = Math.max(0, Math.min(A_BINS - 1, Math.floor((angleDeg - A_START) / A_STEP)))
+    const dBin = dist < D_BREAKS[1] ? 0 : dist < D_BREAKS[2] ? 1 : dist < D_BREAKS[3] ? 2 : -1
+    if (dBin < 0) continue
+    const key = `${aBin}-${dBin}`
+    const cur = cells.get(key) ?? { count: 0, val: 0 }
+    cur.count++; cur.val += HIT_VAL[pt.eventType] ?? 1
+    cells.set(key, cur)
+  }
+  return cells
+}
+
+function heatColor(t: number, alpha = 0.65): string {
+  if (t < 0.001) return 'transparent'
+  // cool (teal) → warm (orange/red)
+  const r = Math.round(lerp(56, 239, t))
+  const g = Math.round(lerp(189, 88, t))
+  const b = Math.round(lerp(158, 36, t))
+  return `rgba(${r},${g},${b},${alpha * Math.max(0.25, t)})`
+}
 
 function SprayChart({ sprayPoints, selectedPitchType }: { sprayPoints: SprayPoint[]; selectedPitchType: string }) {
+  const [mode, setMode] = useState<SprayMode>('scatter')
   const filteredPoints = selectedPitchType === 'ALL' ? sprayPoints : sprayPoints.filter(p => p.pitchType === selectedPitchType)
-  const SCALE = 1.2; const toSvgX = (x: number) => x * SCALE; const toSvgY = (y: number) => y * SCALE
-  const homePlateX = 125 * SCALE; const homePlateY = 204 * SCALE
-  const lineLen = 420
-  const lfX = homePlateX - lineLen * Math.cos(Math.PI/4); const lfY = homePlateY - lineLen * Math.sin(Math.PI/4)
-  const rfX = homePlateX + lineLen * Math.cos(Math.PI/4); const rfY = homePlateY - lineLen * Math.sin(Math.PI/4)
-  const arcR = 200
-  const arcStartX = homePlateX - arcR * Math.cos(Math.PI/4); const arcStartY = homePlateY - arcR * Math.sin(Math.PI/4)
-  const arcEndX   = homePlateX + arcR * Math.cos(Math.PI/4); const arcEndY   = homePlateY - arcR * Math.sin(Math.PI/4)
+
+  const heatCells = mode !== 'scatter' ? computeHeatCells(filteredPoints) : null
+  const maxCount = heatCells ? Math.max(1, ...Array.from(heatCells.values()).map(c => c.count)) : 1
+  const maxVal   = heatCells ? Math.max(1, ...Array.from(heatCells.values()).map(c => c.val / Math.max(c.count, 1))) : 4
+
+  // Fair territory clip polygon: home plate → LF pole → wall arc → RF pole → home plate
+  const fairClip = `${HPX},${HPY} ${LF[0].toFixed(1)},${LF[1].toFixed(1)} ${RF[0].toFixed(1)},${RF[1].toFixed(1)}`
 
   return (
     <div className="flex flex-col gap-2">
-      <svg width={300} height={300} viewBox="0 0 300 300" style={{ display: 'block', backgroundColor: '#1F2937', borderRadius: '8px' }}>
-        <defs><clipPath id="fair-territory"><polygon points="150,245 0,95 0,0 300,0 300,95" /></clipPath></defs>
-        <circle cx={homePlateX} cy={homePlateY-70} r={42} fill="none" stroke="#374151" strokeWidth={0.5} opacity={0.5} />
-        <line x1={homePlateX} y1={homePlateY} x2={lfX} y2={lfY} stroke="#4B5563" strokeWidth={1} />
-        <line x1={homePlateX} y1={homePlateY} x2={rfX} y2={rfY} stroke="#4B5563" strokeWidth={1} />
-        <path d={`M ${arcStartX} ${arcStartY} A ${arcR} ${arcR} 0 0 0 ${arcEndX} ${arcEndY}`} fill="none" stroke="#4B5563" strokeWidth={1} />
-        <circle cx={homePlateX} cy={homePlateY} r={3} fill="#6B7280" opacity={0.7} />
-        <g clipPath="url(#fair-territory)">
+      {/* Mode toggle */}
+      <div className="flex gap-1">
+        {SPRAY_MODES.map(({ key, label }) => (
+          <button key={key} onClick={() => setMode(key)}
+            className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded transition-colors"
+            style={mode === key ? { backgroundColor: '#3D405B', color: '#fff' } : { backgroundColor: 'transparent', color: '#9CA3AF', border: '1px solid #374151' }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <svg width={300} height={265} viewBox="0 0 300 265" style={{ display: 'block', borderRadius: '8px', overflow: 'hidden' }}>
+        <defs>
+          {/* Fair territory: home → LF arc → RF, clipped by straight lines */}
+          <clipPath id="spray-fair">
+            <path d={`M ${HPX} ${HPY} L ${LF[0].toFixed(1)} ${LF[1].toFixed(1)} Q ${WALL_CTX.toFixed(1)} ${WALL_CTY.toFixed(1)} ${RF[0].toFixed(1)} ${RF[1].toFixed(1)} Z`} />
+          </clipPath>
+        </defs>
+
+        {/* Background */}
+        <rect width={300} height={265} fill="#1F2937" />
+
+        {/* Outfield grass */}
+        <path
+          d={`M ${HPX} ${HPY} L ${LF[0].toFixed(1)} ${LF[1].toFixed(1)} Q ${WALL_CTX.toFixed(1)} ${WALL_CTY.toFixed(1)} ${RF[0].toFixed(1)} ${RF[1].toFixed(1)} Z`}
+          fill="#1a3a1a"
+        />
+
+        {/* Warning track */}
+        <path
+          d={`M ${HPX} ${HPY} L ${WT_LF[0].toFixed(1)} ${WT_LF[1].toFixed(1)} Q ${WT_CTX.toFixed(1)} ${WT_CTY.toFixed(1)} ${WT_RF[0].toFixed(1)} ${WT_RF[1].toFixed(1)} Z`}
+          fill="#2a5a2a"
+        />
+
+        {/* Infield dirt circle */}
+        <circle cx={HPX.toFixed(1)} cy={(HPY - 36).toFixed(1)} r={62} fill="#5a3a22" />
+
+        {/* Diamond grass */}
+        <polygon points={`${HPX},${HPY} ${B1[0].toFixed(1)},${B1[1].toFixed(1)} ${B2[0].toFixed(1)},${B2[1].toFixed(1)} ${B3[0].toFixed(1)},${B3[1].toFixed(1)}`} fill="#2d5c2d" />
+
+        {/* Foul lines */}
+        <line x1={HPX} y1={HPY} x2={LF[0].toFixed(1)} y2={LF[1].toFixed(1)} stroke="#5a7a5a" strokeWidth={1} />
+        <line x1={HPX} y1={HPY} x2={RF[0].toFixed(1)} y2={RF[1].toFixed(1)} stroke="#5a7a5a" strokeWidth={1} />
+
+        {/* Outfield wall */}
+        <path d={`M ${LF[0].toFixed(1)} ${LF[1].toFixed(1)} Q ${WALL_CTX.toFixed(1)} ${WALL_CTY.toFixed(1)} ${RF[0].toFixed(1)} ${RF[1].toFixed(1)}`} fill="none" stroke="#6b7280" strokeWidth={1.5} />
+
+        {/* Base paths */}
+        <line x1={HPX} y1={HPY} x2={B1[0].toFixed(1)} y2={B1[1].toFixed(1)} stroke="#8b6a44" strokeWidth={3} />
+        <line x1={B1[0].toFixed(1)} y1={B1[1].toFixed(1)} x2={B2[0].toFixed(1)} y2={B2[1].toFixed(1)} stroke="#8b6a44" strokeWidth={3} />
+        <line x1={B2[0].toFixed(1)} y1={B2[1].toFixed(1)} x2={B3[0].toFixed(1)} y2={B3[1].toFixed(1)} stroke="#8b6a44" strokeWidth={3} />
+        <line x1={B3[0].toFixed(1)} y1={B3[1].toFixed(1)} x2={HPX} y2={HPY} stroke="#8b6a44" strokeWidth={3} />
+
+        {/* Pitcher mound */}
+        <circle cx={HPX.toFixed(1)} cy={MOUND_Y.toFixed(1)} r={7} fill="#6b4a2a" />
+
+        {/* Bases */}
+        {[B1, B2, B3].map(([bx, by], i) => (
+          <rect key={i} x={bx - 4} y={by - 4} width={8} height={8} transform={`rotate(45 ${bx} ${by})`} fill="#E5E7EB" rx={0.5} />
+        ))}
+
+        {/* Home plate pentagon */}
+        <polygon points={`${HPX - 5},${HPY - 3} ${HPX + 5},${HPY - 3} ${HPX + 5},${HPY + 2} ${HPX},${HPY + 6} ${HPX - 5},${HPY + 2}`} fill="#D1D5DB" />
+
+        {/* Heat map sectors */}
+        {mode !== 'scatter' && heatCells && Array.from({ length: A_BINS }, (_, aBin) =>
+          [0, 1, 2].map(dBin => {
+            const key = `${aBin}-${dBin}`
+            const cell = heatCells.get(key)
+            if (!cell) return null
+            const a1 = A_START + aBin * A_STEP
+            const a2 = a1 + A_STEP
+            const r1 = D_BREAKS[dBin]; const r2 = D_BREAKS[dBin + 1]
+            const t = mode === 'density'
+              ? cell.count / maxCount
+              : (cell.val / cell.count) / maxVal
+            const fill = heatColor(t)
+            return <path key={key} d={sectorPath(r1, r2, a1, a2)} fill={fill} />
+          })
+        )}
+
+        {/* Scatter dots (always shown in scatter mode, faint overlay in heat modes) */}
+        <g clipPath="url(#spray-fair)">
           {filteredPoints.map((pt, i) => (
-            <circle key={i} cx={toSvgX(pt.x)} cy={toSvgY(pt.y)} r={4} fill={EVENT_COLORS[pt.eventType] ?? '#6B7280'} opacity={0.75} />
+            <circle
+              key={i}
+              cx={(pt.x * SPRAY_SCALE).toFixed(1)}
+              cy={(pt.y * SPRAY_SCALE).toFixed(1)}
+              r={mode === 'scatter' ? 4 : 2.5}
+              fill={EVENT_COLORS[pt.eventType] ?? '#6B7280'}
+              opacity={mode === 'scatter' ? 0.80 : 0.45}
+            />
           ))}
         </g>
       </svg>
+
+      {/* Legend */}
       <div className="flex items-center gap-3 flex-wrap text-[9px] text-538-muted">
         {Object.entries(EVENT_LABELS).map(([evt, label]) => (
           <div key={evt} className="flex items-center gap-1">
@@ -366,7 +623,19 @@ function SprayChart({ sprayPoints, selectedPitchType }: { sprayPoints: SprayPoin
           </div>
         ))}
       </div>
-      <p className="text-[8px] text-538-muted">{filteredPoints.length} batted ball{filteredPoints.length!==1?'s':''}</p>
+      {mode !== 'scatter' && (
+        <div className="flex items-center gap-1.5 text-[9px] text-538-muted">
+          <span>Low</span>
+          <div className="flex gap-px">
+            {[0.1, 0.3, 0.5, 0.7, 0.9].map(t => (
+              <div key={t} className="w-5 h-2.5 rounded-sm" style={{ backgroundColor: heatColor(t, 0.65) }} />
+            ))}
+          </div>
+          <span>High</span>
+          <span className="ml-1">({mode === 'density' ? '# hits' : 'bases/hit'})</span>
+        </div>
+      )}
+      <p className="text-[8px] text-538-muted">{filteredPoints.length} hit{filteredPoints.length !== 1 ? 's' : ''}</p>
     </div>
   )
 }
@@ -484,6 +753,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
   const [activeStat, setActiveStat] = useState<StatKey>('avg')
   const [selectedPitchType, setSelectedPitchType] = useState<string>('ALL')
   const [copying, setCopying] = useState(false)
+  const [gameRarData, setGameRarData] = useState<GameRarEntry[]>([])
 
   const currentSeason = new Date().getFullYear()
 
@@ -493,14 +763,16 @@ export default function BatterPage({ params }: { params: { id: string } }) {
       fetch(`/api/batter-season/zones?batterId=${batterId}&season=${currentSeason}`).then(r => { if (!r.ok) throw new Error('Failed to load batter data'); return r.json() as Promise<BatterZoneData> }),
       fetch(`/api/player-war-history?playerId=${batterId}`).then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(`/api/prospect-career?playerId=${batterId}&group=hitting`).then(r => r.ok ? r.json() : []).catch(() => []),
+      fetch(`/api/player-game-rar?playerId=${batterId}`).then(r => r.ok ? r.json() : null).catch(() => null),
     ])
-      .then(([zoneData, warEntries, career]) => {
+      .then(([zoneData, warEntries, career, rarData]) => {
         setData(zoneData)
         if (Array.isArray(warEntries)) {
           const batterEntry = warEntries.find((e: WarEntry) => e.player_type === 'batter') ?? warEntries[0]
           setWarData(batterEntry ?? null)
         }
         if (Array.isArray(career)) setCareerSeasons(career as CareerSeason[])
+        if (rarData?.games) setGameRarData(rarData.games as GameRarEntry[])
       })
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
@@ -563,6 +835,14 @@ export default function BatterPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
+
+      {/* WAR / RAR trend charts */}
+      {(warData?.career?.length || gameRarData.length > 0) && (
+        <div className="bg-surface border border-538-border rounded-xl p-4 flex flex-col sm:flex-row gap-6">
+          {warData?.career && warData.career.length > 0 && <CareerWarChart seasons={warData.career} />}
+          {gameRarData.length > 0 && <SeasonRvChart games={gameRarData} war={currentWar} />}
+        </div>
+      )}
 
       {/* Controls: stat tabs + pitch type toggles */}
       <div className="bg-surface border border-538-border rounded-xl p-4 space-y-3">

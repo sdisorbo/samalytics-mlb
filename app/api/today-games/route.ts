@@ -168,6 +168,12 @@ export async function GET() {
           state,
           inning:     game.linescore?.currentInning    ?? null,
           inningHalf: game.linescore?.inningHalf        ?? null,
+          outs:       isLive ? (game.linescore?.outs ?? null) : null,
+          bases: isLive ? {
+            first:  !!game.linescore?.offense?.first,
+            second: !!game.linescore?.offense?.second,
+            third:  !!game.linescore?.offense?.third,
+          } : null,
           away: {
             abbr:    awayAbbr,
             score:   isLive || isFinal ? (away?.score ?? null) : null,

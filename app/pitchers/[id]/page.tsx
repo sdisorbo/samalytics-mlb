@@ -30,7 +30,8 @@ interface CareerSeason {
   war: number | null
 }
 
-interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
+interface WarSeason { year: number; war: number; off_war: number | null; def_war: number | null }
+interface WarEntry { name: string; team: string; war: number; player_type: string; career: WarSeason[] }
 
 type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
@@ -362,6 +363,44 @@ function ZoneGrid({ zones, pitchTypes, pitcherId, pitcherName, teamAbbr }: {
   )
 }
 
+// ── WAR Chart ─────────────────────────────────────────────────────────────────
+
+function CareerWarChart({ seasons }: { seasons: WarSeason[] }) {
+  if (!seasons.length) return null
+  const recent = seasons.slice(-8)
+  const maxWar = Math.max(1, ...recent.map(s => Math.abs(s.war)))
+  const W = 280; const H = 90; const BAR_W = Math.floor((W - 16) / recent.length) - 3
+  const barH = (w: number) => Math.min(H - 20, Math.abs(w) / maxWar * (H - 24))
+
+  return (
+    <div>
+      <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career WAR</div>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        {recent.map((s, i) => {
+          const bh = barH(s.war)
+          const x = 8 + i * (BAR_W + 3)
+          const isPos = s.war >= 0
+          const color = s.war >= 4 ? '#34D399' : s.war >= 2 ? '#60A5FA' : s.war >= 0 ? '#9CA3AF' : '#F87171'
+          const baselineY = H - 22
+          const y = isPos ? baselineY - bh : baselineY
+          return (
+            <g key={s.year}>
+              <rect x={x} y={y} width={BAR_W} height={Math.max(bh, 2)} fill={color} rx={1} opacity={0.85} />
+              <text x={x + BAR_W / 2} y={H - 8} textAnchor="middle" fontSize={7} fill="#6B7280" fontFamily="sans-serif">
+                {String(s.year).slice(2)}
+              </text>
+              <text x={x + BAR_W / 2} y={isPos ? y - 3 : y + Math.max(bh, 2) + 9} textAnchor="middle" fontSize={7} fill={color} fontFamily="monospace" fontWeight={700}>
+                {s.war >= 0 ? '+' : ''}{s.war.toFixed(1)}
+              </text>
+            </g>
+          )
+        })}
+        <line x1={8} y1={H - 22} x2={W - 8} y2={H - 22} stroke="#374151" strokeWidth={0.75} />
+      </svg>
+    </div>
+  )
+}
+
 // ── Stat Box ───────────────────────────────────────────────────────────────────
 
 function StatBox({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -515,6 +554,13 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
         <div>
           <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career Stats</div>
           <PitcherCareerTable seasons={careerSeasons} currentYear={String(currentSeason)} />
+        </div>
+      )}
+
+      {/* WAR trend chart */}
+      {warData?.career && warData.career.length > 0 && (
+        <div className="bg-surface border border-538-border rounded-xl p-4">
+          <CareerWarChart seasons={warData.career} />
         </div>
       )}
 

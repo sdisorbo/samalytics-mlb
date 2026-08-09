@@ -8,12 +8,20 @@ interface TeamSlot {
   winProb: number
 }
 
+interface Bases {
+  first: boolean
+  second: boolean
+  third: boolean
+}
+
 interface Game {
   gamePk: number
   gameTime: string   // ISO
   state: 'Preview' | 'Live' | 'Final' | string
   inning: number | null
   inningHalf: string | null
+  outs: number | null
+  bases: Bases | null
   away: TeamSlot
   home: TeamSlot
 }
@@ -105,6 +113,7 @@ export default function GameTicker() {
                       {g.inningHalf === 'Top' ? '▲' : '▼'}{g.inning}
                     </span>
                     <span className="text-538-muted leading-none mt-0.5" style={{ fontSize: '0.55rem' }}>LIVE</span>
+                    {g.bases && <BaseDiamond bases={g.bases} outs={g.outs ?? 0} />}
                   </>
                 ) : isFinal ? (
                   <span className="text-538-muted font-semibold" style={{ fontSize: '0.6rem' }}>FINAL</span>
@@ -120,6 +129,36 @@ export default function GameTicker() {
             </div>
           )
         })}
+      </div>
+    </div>
+  )
+}
+
+function BaseDiamond({ bases, outs }: { bases: Bases; outs: number }) {
+  const filled = '#E5E7EB'
+  const empty  = 'transparent'
+  const sq = (cx: number, cy: number, on: boolean) => (
+    <rect
+      x={cx - 2.5} y={cy - 2.5} width={5} height={5}
+      transform={`rotate(45 ${cx} ${cy})`}
+      fill={on ? filled : empty}
+      stroke="#6B7280"
+      strokeWidth={0.75}
+    />
+  )
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <svg width={20} height={17} viewBox="0 0 20 17">
+        <polyline points="10,1 18,8 10,15 2,8 10,1" fill="none" stroke="#374151" strokeWidth={0.6} />
+        {sq(10, 1,  bases.second)}
+        {sq(18, 8,  bases.first)}
+        {sq(10, 15, false)}
+        {sq(2,  8,  bases.third)}
+      </svg>
+      <div className="flex gap-0.5">
+        {[0, 1, 2].map(i => (
+          <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: i < outs ? '#F97316' : '#374151' }} />
+        ))}
       </div>
     </div>
   )
