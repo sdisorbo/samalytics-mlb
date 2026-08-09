@@ -357,10 +357,10 @@ function pbRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: num
 }
 
 async function exportBreakdownImage(data: GameBreakdown) {
-  const SCALE = 2, W = 480, PAD = 16
+  const SCALE = 2, W = 580, PAD = 16
   const IMG_SIZE = 48, HEADER_H = 80
   const STATS_H = 48
-  const MID_H = 144   // pitch mix + zone grid
+  const MID_H = 220   // pitch mix | scatter | legend
   const FOOTER_H = 24
   const H = PAD + HEADER_H + 10 + STATS_H + 10 + MID_H + FOOTER_H + PAD
 
@@ -428,7 +428,7 @@ async function exportBreakdownImage(data: GameBreakdown) {
 
   // ── Middle row: pitch mix (left) | zone grid (right) ──
   const midY = statsY + STATS_H + 10
-  const MID_LEFT_W = Math.floor((W - 2 * PAD) * 0.55)
+  const MID_LEFT_W = 170
   const MID_RIGHT_X = PAD + MID_LEFT_W + 12
 
   // Pitch mix
@@ -442,7 +442,7 @@ async function exportBreakdownImage(data: GameBreakdown) {
     const barMaxW = MID_LEFT_W - 84
     ctx.fillStyle = '#9CA3AF'; ctx.font = '9px sans-serif'
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
-    ctx.fillText(pm.name.length > 15 ? pm.name.slice(0, 14) + '…' : pm.name, PAD, py + pitchItemH / 2)
+    ctx.fillText(pm.name.length > 12 ? pm.name.slice(0, 11) + '…' : pm.name, PAD, py + pitchItemH / 2)
     const barX = PAD + 84
     ctx.fillStyle = '#1C2230'; ctx.fillRect(barX, py + 7, barMaxW, 7)
     ctx.fillStyle = pm.color; ctx.fillRect(barX, py + 7, barMaxW * pm.pct / 100, 7)
@@ -452,19 +452,20 @@ async function exportBreakdownImage(data: GameBreakdown) {
     ctx.textAlign = 'left'
   }
 
-  // Pitch scatter plot (right)
-  const PLOT_W = W - PAD - MID_RIGHT_X
+  // Pitch scatter (center) + legend (right)
+  const SCATTER_W = 210
   const PLOT_H = MID_H - 14
   const plotY = midY + 14
+  const LEGEND_X = MID_RIGHT_X + SCATTER_W + 14
 
   ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px sans-serif'
   ctx.textAlign = 'left'; ctx.textBaseline = 'top'
   ctx.fillText('PITCH LOCATION', MID_RIGHT_X, midY)
 
   ctx.fillStyle = '#0F172A'
-  pbRoundRect(ctx, MID_RIGHT_X, plotY, PLOT_W, PLOT_H, 3); ctx.fill()
+  pbRoundRect(ctx, MID_RIGHT_X, plotY, SCATTER_W, PLOT_H, 3); ctx.fill()
 
-  const mapPX = (pX: number) => MID_RIGHT_X + ((pX + 2) / 4) * PLOT_W
+  const mapPX = (pX: number) => MID_RIGHT_X + ((pX + 2) / 4) * SCATTER_W
   const mapPZ = (pZ: number) => plotY + PLOT_H * (1 - (pZ - 0.5) / 4.5)
 
   const szL = mapPX(-0.83), szR = mapPX(0.83)
@@ -482,7 +483,7 @@ async function exportBreakdownImage(data: GameBreakdown) {
   ctx.setLineDash([])
 
   ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.2
-  ctx.beginPath(); ctx.moveTo(MID_RIGHT_X + PLOT_W / 2, plotY + PLOT_H - 5); ctx.lineTo(MID_RIGHT_X + PLOT_W / 2, plotY + PLOT_H - 1); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(MID_RIGHT_X + SCATTER_W / 2, plotY + PLOT_H - 5); ctx.lineTo(MID_RIGHT_X + SCATTER_W / 2, plotY + PLOT_H - 1); ctx.stroke()
 
   for (const layer of RESULT_LAYERS) {
     for (const p of data.pitches.filter(p => p.result === layer)) {
@@ -505,6 +506,53 @@ async function exportBreakdownImage(data: GameBreakdown) {
         }
       }
     }
+  }
+
+  // Legend (right of scatter)
+  let lgY = midY
+  ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText('PITCH TYPE', LEGEND_X, lgY)
+  lgY += 13
+  for (const pm of data.pitchMix.slice(0, 6)) {
+    ctx.fillStyle = pm.color
+    ctx.beginPath(); ctx.arc(LEGEND_X + 5, lgY + 5, 4, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '9px sans-serif'; ctx.textBaseline = 'middle'
+    ctx.fillText(pm.name.length > 13 ? pm.name.slice(0, 12) + '…' : pm.name, LEGEND_X + 14, lgY + 5)
+    lgY += 14
+  }
+  lgY += 6
+  ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px sans-serif'; ctx.textBaseline = 'top'
+  ctx.fillText('RESULT', LEGEND_X, lgY)
+  lgY += 13
+  const lgItems: { label: string; result: PitchResult; ring?: boolean; diamond?: boolean }[] = [
+    { label: 'Swinging K', result: 'swinging_strike', ring: true },
+    { label: 'Called K',   result: 'called_strike' },
+    { label: 'Out',        result: 'out' },
+    { label: 'Foul',       result: 'foul' },
+    { label: 'Ball',       result: 'ball' },
+    { label: 'Hit',        result: 'single', diamond: true },
+  ]
+  for (const item of lgItems) {
+    const cx = LEGEND_X + 5, cy = lgY + 5
+    if (item.diamond) {
+      const r = 4
+      ctx.fillStyle = RESULT_COLOR[item.result]
+      ctx.beginPath(); ctx.moveTo(cx, cy - r); ctx.lineTo(cx + r, cy); ctx.lineTo(cx, cy + r); ctx.lineTo(cx - r, cy); ctx.closePath(); ctx.fill()
+      ctx.strokeStyle = '#C9A22A'; ctx.lineWidth = 1; ctx.stroke()
+    } else {
+      ctx.globalAlpha = item.result === 'ball' ? 0.4 : 1
+      ctx.fillStyle = RESULT_COLOR[item.result]
+      ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.fill()
+      ctx.globalAlpha = 1
+      if (item.ring) {
+        ctx.strokeStyle = '#C9A22A'; ctx.lineWidth = 1
+        ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.stroke()
+      }
+    }
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '9px sans-serif'; ctx.textBaseline = 'middle'
+    ctx.fillText(item.label, LEGEND_X + 14, cy)
+    lgY += 14
   }
 
   // ── Footer watermark ──
