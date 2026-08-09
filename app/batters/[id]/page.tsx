@@ -270,86 +270,248 @@ async function exportBatterZoneImage(opts: {
   }, 'image/png')
 }
 
-// ── WAR / RAR Trend Charts ─────────────────────────────────────────────────────
+// ── RAR Chart + canvas export ──────────────────────────────────────────────────
 
-function CareerWarChart({ seasons }: { seasons: WarSeason[] }) {
-  if (!seasons.length) return null
-  const recent = seasons.slice(-8)
-  const maxWar = Math.max(1, ...recent.map(s => Math.abs(s.war)))
-  const W = 280; const H = 90; const BAR_W = Math.floor((W - 16) / recent.length) - 3
-  const barH = (w: number) => Math.min(H - 20, Math.abs(w) / maxWar * (H - 24))
+async function exportRarImage(opts: {
+  batterId: string; batterName: string; teamAbbr: string
+  games: GameRarEntry[]; war: number | null | undefined
+}) {
+  const { batterId, batterName, teamAbbr, games, war } = opts
+  const SCALE = 2, W = 520, PAD = 16
+  const IMG_SIZE = 48, HEADER_H = 72
+  const CHART_H = 150, FOOTER_H = 24
+  const H = PAD + HEADER_H + CHART_H + FOOTER_H + PAD
 
-  return (
-    <div>
-      <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">Career WAR</div>
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
-        {recent.map((s, i) => {
-          const bh = barH(s.war)
-          const x = 8 + i * (BAR_W + 3)
-          const isPos = s.war >= 0
-          const color = s.war >= 4 ? '#34D399' : s.war >= 2 ? '#60A5FA' : s.war >= 0 ? '#9CA3AF' : '#F87171'
-          const baselineY = H - 22
-          const y = isPos ? baselineY - bh : baselineY
-          return (
-            <g key={s.year}>
-              <rect x={x} y={y} width={BAR_W} height={Math.max(bh, 2)} fill={color} rx={1} opacity={0.85} />
-              <text x={x + BAR_W / 2} y={H - 8} textAnchor="middle" fontSize={7} fill="#6B7280" fontFamily="sans-serif">
-                {String(s.year).slice(2)}
-              </text>
-              <text x={x + BAR_W / 2} y={isPos ? y - 3 : y + Math.max(bh, 2) + 9} textAnchor="middle" fontSize={7} fill={color} fontFamily="monospace" fontWeight={700}>
-                {s.war >= 0 ? '+' : ''}{s.war.toFixed(1)}
-              </text>
-            </g>
-          )
-        })}
-        <line x1={8} y1={H - 22} x2={W - 8} y2={H - 22} stroke="#374151" strokeWidth={0.75} />
-      </svg>
-    </div>
-  )
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const slug = ESPN_ABBR_EXPORT[teamAbbr] ?? teamAbbr.toLowerCase()
+  const [headshotImg, logoImg, siteLogoImg] = await Promise.all([
+    loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${batterId}/headshot/67/current`),
+    loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+    loadImg('/logo.png'),
+  ])
+
+  const hY = PAD + (HEADER_H - IMG_SIZE) / 2
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+
+  const lx = W - PAD - IMG_SIZE
+  if (logoImg) { ctx.drawImage(logoImg, lx, hY, IMG_SIZE, IMG_SIZE) }
+  else {
+    ctx.fillStyle = '#374151'; ctx.fillRect(lx, hY, IMG_SIZE, IMG_SIZE)
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 11px sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    ctx.fillText(teamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
+  }
+
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillText(batterName, W / 2, PAD + HEADER_H / 2 - 10)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '11px sans-serif'
+  ctx.fillText('Season Run Value', W / 2, PAD + HEADER_H / 2 + 8)
+  if (war != null) {
+    ctx.font = 'bold 11px monospace'
+    ctx.fillStyle = war >= 0 ? '#34D399' : '#F87171'
+    ctx.fillText(`WAR: ${war >= 0 ? '+' : ''}${war.toFixed(1)}`, W / 2, PAD + HEADER_H / 2 + 24)
+  }
+
+  // Chart area
+  const cX = PAD + 4, cY = PAD + HEADER_H + 14
+  const cW = W - 2 * PAD - 8, cH = CHART_H - 20
+
+  const allVals = games.map(g => g.cumRv)
+  const minV = Math.min(0, ...allVals), maxV = Math.max(0, ...allVals)
+  const range = maxV - minV || 1
+  const paddedMin = minV - range * 0.12, paddedMax = maxV + range * 0.12
+  const paddedRange = paddedMax - paddedMin
+  const tX = (i: number) => cX + (i / Math.max(games.length - 1, 1)) * cW
+  const tY = (v: number) => cY + cH * (1 - (v - paddedMin) / paddedRange)
+  const blY = tY(0)
+
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.75; ctx.setLineDash([3, 3])
+  ctx.beginPath(); ctx.moveTo(cX, blY); ctx.lineTo(cX + cW, blY); ctx.stroke()
+  ctx.setLineDash([])
+
+  const polyPts: [number, number][] = games.map((g, i) => [tX(i), tY(g.cumRv)])
+
+  function drawPoly() {
+    ctx.beginPath()
+    ctx.moveTo(tX(0), blY)
+    for (const [px, py] of polyPts) ctx.lineTo(px, py)
+    ctx.lineTo(tX(games.length - 1), blY)
+    ctx.closePath()
+  }
+  function drawLine() {
+    ctx.beginPath()
+    polyPts.forEach(([px, py], i) => (i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)))
+  }
+
+  // Green area above zero
+  ctx.save(); ctx.beginPath(); ctx.rect(cX, cY, cW, blY - cY); ctx.clip()
+  ctx.fillStyle = '#34D399'; ctx.globalAlpha = 0.15; drawPoly(); ctx.fill(); ctx.restore()
+  // Red area below zero
+  ctx.save(); ctx.beginPath(); ctx.rect(cX, blY, cW, cY + cH - blY); ctx.clip()
+  ctx.fillStyle = '#F87171'; ctx.globalAlpha = 0.15; drawPoly(); ctx.fill(); ctx.restore()
+  // Green line above zero
+  ctx.save(); ctx.beginPath(); ctx.rect(cX, cY, cW, blY - cY); ctx.clip()
+  ctx.strokeStyle = '#34D399'; ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.lineCap = 'round'
+  drawLine(); ctx.stroke(); ctx.restore()
+  // Red line below zero
+  ctx.save(); ctx.beginPath(); ctx.rect(cX, blY, cW, cY + cH - blY); ctx.clip()
+  ctx.strokeStyle = '#F87171'; ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.lineCap = 'round'
+  drawLine(); ctx.stroke(); ctx.restore()
+
+  const lastVal = allVals[allVals.length - 1]
+  const lastX = tX(games.length - 1), lastY = tY(lastVal)
+  const dotColor = lastVal >= 0 ? '#34D399' : '#F87171'
+  ctx.fillStyle = dotColor; ctx.beginPath(); ctx.arc(lastX, lastY, 3, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = dotColor; ctx.font = 'bold 9px monospace'
+  ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'
+  ctx.fillText(`${lastVal >= 0 ? '+' : ''}${lastVal.toFixed(1)}`, lastX, lastY - 4)
+
+  ctx.fillStyle = '#6B7280'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText('Game 1', cX, cY + cH + 4)
+  ctx.textAlign = 'right'
+  ctx.fillText(`Game ${games.length}`, cX + cW, cY + cH + 4)
+
+  const LOGO_H = 16, LOGO_W = Math.round(LOGO_H * 989 / 623)
+  const footerY = H - FOOTER_H + 4
+  ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, W - PAD - LOGO_W, footerY, LOGO_W, LOGO_H)
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText('samalytics', W - PAD - LOGO_W - 4, footerY + LOGO_H / 2)
+  } else {
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top'
+    ctx.fillText('samalytics', W - PAD, footerY)
+  }
+
+  canvas.toBlob(async blob => {
+    if (!blob) return
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+    } catch {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url
+      a.download = `${batterName.replace(/\s+/g, '_')}_rar.png`; a.click()
+      URL.revokeObjectURL(url)
+    }
+  }, 'image/png')
 }
 
-function SeasonRvChart({ games, war }: { games: GameRarEntry[]; war: number | null | undefined }) {
+function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
+  games: GameRarEntry[]
+  war?: number | null
+  batterId?: string
+  batterName?: string
+  teamAbbr?: string
+}) {
+  const [copying, setCopying] = useState(false)
   if (!games.length) return null
-  const W = 280; const H = 100
+
+  const W = 460, H = 155
+  const PAD_TOP = 24, PAD_BOT = 18, PAD_X = 6
+
   const allVals = games.map(g => g.cumRv)
-  const minV = Math.min(0, ...allVals); const maxV = Math.max(0, ...allVals)
+  const minV = Math.min(0, ...allVals), maxV = Math.max(0, ...allVals)
   const range = maxV - minV || 1
-  const toY = (v: number) => H - 16 - ((v - minV) / range) * (H - 24)
-  const toX = (i: number) => 8 + (i / Math.max(games.length - 1, 1)) * (W - 16)
+  const paddedMin = minV - range * 0.13, paddedMax = maxV + range * 0.13
+  const paddedRange = paddedMax - paddedMin
+
+  const chartH = H - PAD_TOP - PAD_BOT
+  const toX = (i: number) => PAD_X + (i / Math.max(games.length - 1, 1)) * (W - 2 * PAD_X)
+  const toY = (v: number) => PAD_TOP + chartH * (1 - (v - paddedMin) / paddedRange)
   const baselineY = toY(0)
 
   const pts = games.map((g, i) => `${toX(i).toFixed(1)},${toY(g.cumRv).toFixed(1)}`).join(' ')
+  const polyPts = `${toX(0).toFixed(1)},${baselineY.toFixed(1)} ${pts} ${toX(games.length - 1).toFixed(1)},${baselineY.toFixed(1)}`
+
+  const lastVal = allVals[allVals.length - 1]
+  const lastX = toX(games.length - 1), lastY = toY(lastVal)
+  const lastColor = lastVal >= 0 ? '#34D399' : '#F87171'
 
   return (
-    <div>
-      <div className="flex items-baseline gap-2 mb-2">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Season Run Value</span>
-        {war != null && <span className="text-[9px] text-538-muted">WAR: <span className="font-bold text-538-text">{war >= 0 ? '+' : ''}{war.toFixed(1)}</span></span>}
-      </div>
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
-        {/* Zero baseline */}
-        <line x1={8} y1={baselineY} x2={W - 8} y2={baselineY} stroke="#374151" strokeWidth={0.75} strokeDasharray="3,3" />
-        {/* Area fill */}
-        <polygon
-          points={`${toX(0).toFixed(1)},${baselineY} ${pts} ${toX(games.length - 1).toFixed(1)},${baselineY}`}
-          fill={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'}
-          opacity={0.12}
-        />
-        {/* Line */}
-        <polyline points={pts} fill="none" stroke={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-        {/* Last point dot */}
-        {games.length > 0 && (
-          <circle cx={toX(games.length - 1).toFixed(1)} cy={toY(games[games.length - 1].cumRv).toFixed(1)} r={3}
-            fill={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'} />
+    <div className="w-full">
+      <div className="flex items-baseline justify-between mb-2">
+        <div className="flex items-baseline gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Season Run Value</span>
+          {war != null && <span className="text-[9px] text-538-muted">WAR: <span className="font-bold text-538-text">{war >= 0 ? '+' : ''}{war.toFixed(1)}</span></span>}
+        </div>
+        {batterId && batterName && teamAbbr && (
+          <button
+            onClick={async () => {
+              setCopying(true)
+              await exportRarImage({ batterId, batterName, teamAbbr, games, war })
+              setCopying(false)
+            }}
+            disabled={copying}
+            className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border transition-colors"
+            style={copying ? { color: '#4ADE80', borderColor: '#4ADE80' } : { color: '#9CA3AF', borderColor: '#374151' }}
+          >
+            {copying ? '✓ Copied' : '⎘ Copy'}
+          </button>
         )}
-        {/* Labels */}
-        <text x={8} y={H - 2} fontSize={7} fill="#6B7280" fontFamily="sans-serif">Game 1</text>
-        <text x={W - 8} y={H - 2} textAnchor="end" fontSize={7} fill="#6B7280" fontFamily="sans-serif">Game {games.length}</text>
-        <text x={W - 8} y={toY(allVals[allVals.length - 1]) - 5} textAnchor="end" fontSize={8} fill={allVals[allVals.length - 1] >= 0 ? '#34D399' : '#F87171'} fontFamily="monospace" fontWeight={700}>
-          {allVals[allVals.length - 1] >= 0 ? '+' : ''}{allVals[allVals.length - 1].toFixed(1)}
+      </div>
+
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        <defs>
+          <clipPath id="rar-above-zero">
+            <rect x={0} y={0} width={W} height={baselineY} />
+          </clipPath>
+          <clipPath id="rar-below-zero">
+            <rect x={0} y={baselineY} width={W} height={H - baselineY} />
+          </clipPath>
+        </defs>
+
+        {/* Zero baseline */}
+        <line x1={PAD_X} y1={baselineY} x2={W - PAD_X} y2={baselineY}
+          stroke="#374151" strokeWidth={0.75} strokeDasharray="3,3" />
+
+        {/* Green fill above zero */}
+        <polygon points={polyPts} clipPath="url(#rar-above-zero)" fill="#34D399" opacity={0.13} />
+        {/* Red fill below zero */}
+        <polygon points={polyPts} clipPath="url(#rar-below-zero)" fill="#F87171" opacity={0.13} />
+
+        {/* Green line above zero */}
+        <polyline points={pts} clipPath="url(#rar-above-zero)"
+          fill="none" stroke="#34D399" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+        {/* Red line below zero */}
+        <polyline points={pts} clipPath="url(#rar-below-zero)"
+          fill="none" stroke="#F87171" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+
+        {/* Last point dot */}
+        <circle cx={lastX.toFixed(1)} cy={lastY.toFixed(1)} r={3.5} fill={lastColor} />
+
+        {/* Value label — anchored to end, never clips */}
+        <text x={lastX} y={lastY - 7} textAnchor="end" fontSize={8.5}
+          fill={lastColor} fontFamily="monospace" fontWeight={700}>
+          {lastVal >= 0 ? '+' : ''}{lastVal.toFixed(1)}
+        </text>
+
+        {/* Axis labels */}
+        <text x={PAD_X} y={H - 2} fontSize={7} fill="#6B7280" fontFamily="sans-serif">Game 1</text>
+        <text x={W - PAD_X} y={H - 2} textAnchor="end" fontSize={7} fill="#6B7280" fontFamily="sans-serif">
+          Game {games.length}
         </text>
       </svg>
-      <p className="text-[8px] text-538-muted mt-1">Cumulative run value vs average across {games.length} games</p>
+
+      <p className="text-[8px] text-538-muted mt-1">
+        Cumulative run value vs average across {games.length} games
+      </p>
     </div>
   )
 }
@@ -836,11 +998,13 @@ export default function BatterPage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      {/* WAR / RAR trend charts */}
-      {(warData?.career?.length || gameRarData.length > 0) && (
-        <div className="bg-surface border border-538-border rounded-xl p-4 flex flex-col sm:flex-row gap-6">
-          {warData?.career && warData.career.length > 0 && <CareerWarChart seasons={warData.career} />}
-          {gameRarData.length > 0 && <SeasonRvChart games={gameRarData} war={currentWar} />}
+      {/* Season RAR trendline */}
+      {gameRarData.length > 0 && (
+        <div className="bg-surface border border-538-border rounded-xl p-4">
+          <SeasonRvChart
+            games={gameRarData} war={currentWar}
+            batterId={batterId} batterName={batterName} teamAbbr={teamAbbr}
+          />
         </div>
       )}
 
