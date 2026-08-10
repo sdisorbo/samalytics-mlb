@@ -317,16 +317,16 @@ async function exportRarImage(opts: {
     ctx.fillText(teamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
   }
 
+  const lastRarVal = games[games.length - 1]?.cumRv ?? 0
   ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-  ctx.fillText(batterName, W / 2, PAD + HEADER_H / 2 - 10)
-  ctx.fillStyle = '#9CA3AF'; ctx.font = '11px sans-serif'
-  ctx.fillText('Season Run Value', W / 2, PAD + HEADER_H / 2 + 8)
-  if (war != null) {
-    ctx.font = 'bold 11px monospace'
-    ctx.fillStyle = war >= 0 ? '#34D399' : '#F87171'
-    ctx.fillText(`WAR: ${war >= 0 ? '+' : ''}${war.toFixed(1)}`, W / 2, PAD + HEADER_H / 2 + 24)
-  }
+  ctx.fillText(batterName, W / 2, PAD + HEADER_H / 2 - 14)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '10px sans-serif'
+  ctx.fillText('Season Run Value · Cumulative', W / 2, PAD + HEADER_H / 2 + 5)
+  const rarStr = `RAR: ${lastRarVal >= 0 ? '+' : ''}${lastRarVal.toFixed(1)} (Runs Above Expected)${war != null ? `  ·  WAR: ${war >= 0 ? '+' : ''}${war.toFixed(1)}` : ''}`
+  ctx.font = 'bold 10px monospace'
+  ctx.fillStyle = lastRarVal >= 0 ? '#34D399' : '#F87171'
+  ctx.fillText(rarStr, W / 2, PAD + HEADER_H / 2 + 22)
 
   // Chart area
   const cX = PAD + 4, cY = PAD + HEADER_H + 14
@@ -413,6 +413,182 @@ async function exportRarImage(opts: {
   }, 'image/png')
 }
 
+async function exportSprayImage(opts: {
+  batterId: string; batterName: string; teamAbbr: string
+  filteredPoints: SprayPoint[]; mode: SprayMode
+  heatCells: Map<string, { count: number; val: number }> | null
+  maxCount: number; maxVal: number
+}) {
+  const { batterId, batterName, teamAbbr, filteredPoints, mode, heatCells, maxCount, maxVal } = opts
+  const SCALE = 2
+  const FIELD_X = 20, FIELD_W_C = 300, FIELD_H_C = 265
+  const PAD = 14, IMG_SIZE = 48, HEADER_H = 72, FOOTER_H = 22
+  const W = FIELD_X + FIELD_W_C + FIELD_X
+  const FIELD_Y_OFF = PAD + HEADER_H + 4
+  const H = FIELD_Y_OFF + FIELD_H_C + FOOTER_H + PAD
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const slug = ESPN_ABBR_EXPORT[teamAbbr] ?? teamAbbr.toLowerCase()
+  const [headshotImg, logoImg, siteLogoImg] = await Promise.all([
+    loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${batterId}/headshot/67/current`),
+    loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+    loadImg('/logo.png'),
+  ])
+
+  // ── Header ──
+  const hY = PAD + (HEADER_H - IMG_SIZE) / 2
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else          { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+  const lx = W - PAD - IMG_SIZE
+  if (logoImg) { ctx.drawImage(logoImg, lx, hY, IMG_SIZE, IMG_SIZE) }
+  else {
+    ctx.fillStyle = '#374151'; canvasRoundRect(ctx, lx, hY, IMG_SIZE, IMG_SIZE, 6); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 11px sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    ctx.fillText(teamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
+  }
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillText(batterName, W / 2, PAD + HEADER_H / 2 - 9)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '11px sans-serif'
+  const modeLabel = mode === 'scatter' ? 'Scatter' : mode === 'density' ? 'Density' : 'Hit Value'
+  ctx.fillText(`${teamAbbr} · Spray Chart · ${modeLabel}`, W / 2, PAD + HEADER_H / 2 + 11)
+
+  // ── Field ──
+  const fx = (x: number) => x + FIELD_X
+  const fy = (y: number) => y + FIELD_Y_OFF
+
+  ctx.fillStyle = '#1F2937'
+  ctx.fillRect(fx(0), fy(0), FIELD_W_C, FIELD_H_C)
+
+  // Outfield grass
+  ctx.fillStyle = '#1a3a1a'; ctx.beginPath()
+  ctx.moveTo(fx(HPX), fy(HPY)); ctx.lineTo(fx(LF[0]), fy(LF[1]))
+  ctx.quadraticCurveTo(fx(WALL_CTX), fy(WALL_CTY), fx(RF[0]), fy(RF[1])); ctx.closePath(); ctx.fill()
+
+  // Warning track
+  ctx.fillStyle = '#2a5a2a'; ctx.beginPath()
+  ctx.moveTo(fx(HPX), fy(HPY)); ctx.lineTo(fx(WT_LF[0]), fy(WT_LF[1]))
+  ctx.quadraticCurveTo(fx(WT_CTX), fy(WT_CTY), fx(WT_RF[0]), fy(WT_RF[1])); ctx.closePath(); ctx.fill()
+
+  // Infield dirt
+  ctx.fillStyle = '#5a3a22'; ctx.beginPath()
+  ctx.arc(fx(HPX), fy(HPY - 36), 62, 0, Math.PI * 2); ctx.fill()
+
+  // Diamond grass
+  ctx.fillStyle = '#2d5c2d'; ctx.beginPath()
+  ctx.moveTo(fx(HPX), fy(HPY)); ctx.lineTo(fx(B1[0]), fy(B1[1]))
+  ctx.lineTo(fx(B2[0]), fy(B2[1])); ctx.lineTo(fx(B3[0]), fy(B3[1])); ctx.closePath(); ctx.fill()
+
+  // Foul lines
+  ctx.strokeStyle = '#5a7a5a'; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(fx(HPX), fy(HPY)); ctx.lineTo(fx(LF[0]), fy(LF[1])); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(fx(HPX), fy(HPY)); ctx.lineTo(fx(RF[0]), fy(RF[1])); ctx.stroke()
+
+  // Outfield wall
+  ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5; ctx.beginPath()
+  ctx.moveTo(fx(LF[0]), fy(LF[1]))
+  ctx.quadraticCurveTo(fx(WALL_CTX), fy(WALL_CTY), fx(RF[0]), fy(RF[1])); ctx.stroke()
+
+  // Base paths
+  ctx.strokeStyle = '#8b6a44'; ctx.lineWidth = 3; ctx.setLineDash([])
+  const bPos: [number, number][] = [[HPX, HPY], [B1[0], B1[1]], [B2[0], B2[1]], [B3[0], B3[1]]]
+  for (let i = 0; i < 4; i++) {
+    const [ax, ay] = bPos[i], [bx2, by2] = bPos[(i + 1) % 4]
+    ctx.beginPath(); ctx.moveTo(fx(ax), fy(ay)); ctx.lineTo(fx(bx2), fy(by2)); ctx.stroke()
+  }
+
+  // Pitcher mound
+  ctx.fillStyle = '#6b4a2a'; ctx.beginPath()
+  ctx.arc(fx(HPX), fy(MOUND_Y), 7, 0, Math.PI * 2); ctx.fill()
+
+  // Bases (rotated squares)
+  for (const [bx2, by2] of [B1, B2, B3]) {
+    ctx.save(); ctx.translate(fx(bx2), fy(by2)); ctx.rotate(Math.PI / 4)
+    ctx.fillStyle = '#E5E7EB'; ctx.fillRect(-4, -4, 8, 8); ctx.restore()
+  }
+
+  // Home plate
+  ctx.fillStyle = '#D1D5DB'; ctx.beginPath()
+  ctx.moveTo(fx(HPX - 5), fy(HPY - 3)); ctx.lineTo(fx(HPX + 5), fy(HPY - 3))
+  ctx.lineTo(fx(HPX + 5), fy(HPY + 2)); ctx.lineTo(fx(HPX), fy(HPY + 6))
+  ctx.lineTo(fx(HPX - 5), fy(HPY + 2)); ctx.closePath(); ctx.fill()
+
+  // Heat sectors (density / value modes)
+  if (mode !== 'scatter' && heatCells) {
+    for (let aBin = 0; aBin < A_BINS; aBin++) {
+      for (let dBin = 0; dBin < 3; dBin++) {
+        const cell = heatCells.get(`${aBin}-${dBin}`)
+        if (!cell) continue
+        const a1 = A_START + aBin * A_STEP, a2 = a1 + A_STEP
+        const r1 = D_BREAKS[dBin], r2 = D_BREAKS[dBin + 1]
+        const t = mode === 'density' ? cell.count / maxCount : (cell.val / Math.max(cell.count, 1)) / maxVal
+        const fill = heatColor(t, 0.65)
+        if (fill === 'transparent') continue
+        const N = 12
+        ctx.beginPath()
+        ctx.moveTo(fx(spX(r1, a1)), fy(spY(r1, a1)))
+        ctx.lineTo(fx(spX(r2, a1)), fy(spY(r2, a1)))
+        for (let k = 1; k <= N; k++) { const a = a1 + (a2 - a1) * k / N; ctx.lineTo(fx(spX(r2, a)), fy(spY(r2, a))) }
+        ctx.lineTo(fx(spX(r1, a2)), fy(spY(r1, a2)))
+        for (let k = N - 1; k >= 0; k--) { const a = a1 + (a2 - a1) * k / N; ctx.lineTo(fx(spX(r1, a)), fy(spY(r1, a))) }
+        ctx.closePath(); ctx.fillStyle = fill; ctx.fill()
+      }
+    }
+  }
+
+  // Scatter dots (clipped to fair territory)
+  ctx.save(); ctx.beginPath()
+  ctx.moveTo(fx(HPX), fy(HPY)); ctx.lineTo(fx(LF[0]), fy(LF[1]))
+  ctx.quadraticCurveTo(fx(WALL_CTX), fy(WALL_CTY), fx(RF[0]), fy(RF[1])); ctx.closePath(); ctx.clip()
+  for (const pt of filteredPoints) {
+    ctx.fillStyle = EVENT_COLORS[pt.eventType] ?? '#6B7280'
+    ctx.globalAlpha = mode === 'scatter' ? 0.8 : 0.45
+    ctx.beginPath(); ctx.arc(fx(pt.x * SPRAY_SCALE), fy(pt.y * SPRAY_SCALE), mode === 'scatter' ? 4 : 2.5, 0, Math.PI * 2); ctx.fill()
+  }
+  ctx.globalAlpha = 1; ctx.restore()
+
+  // ── Footer ──
+  const footerY = H - FOOTER_H + 4
+  const LOGO_H = 16, LOGO_W = Math.round(LOGO_H * 989 / 623)
+  ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+  ctx.fillText(`${filteredPoints.length} hit${filteredPoints.length !== 1 ? 's' : ''}`, FIELD_X, footerY + LOGO_H / 2)
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, W - PAD - LOGO_W, footerY, LOGO_W, LOGO_H)
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText('samalytics', W - PAD - LOGO_W - 4, footerY + LOGO_H / 2)
+  } else {
+    ctx.textAlign = 'right'; ctx.fillText('samalytics', W - PAD, footerY + LOGO_H / 2)
+  }
+
+  canvas.toBlob(async blob => {
+    if (!blob) return
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+    } catch {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url
+      a.download = `${batterName.replace(/\s+/g, '_')}_spray.png`; a.click()
+      URL.revokeObjectURL(url)
+    }
+  }, 'image/png')
+}
+
 function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
   games: GameRarEntry[]
   war?: number | null
@@ -447,9 +623,12 @@ function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
   return (
     <div className="w-full">
       <div className="flex items-baseline justify-between mb-2">
-        <div className="flex items-baseline gap-2">
+        <div className="flex items-baseline gap-2 flex-wrap">
           <span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Season Run Value</span>
-          {war != null && <span className="text-[9px] text-538-muted">WAR: <span className="font-bold text-538-text">{war >= 0 ? '+' : ''}{war.toFixed(1)}</span></span>}
+          <span className="text-[9px] text-538-muted">
+            RAR: <span style={{ color: lastVal >= 0 ? '#34D399' : '#F87171', fontWeight: 700 }}>{lastVal >= 0 ? '+' : ''}{lastVal.toFixed(1)}</span>
+            {war != null && <> {' · '} WAR: <span style={{ color: war >= 0 ? '#34D399' : '#F87171', fontWeight: 700 }}>{war >= 0 ? '+' : ''}{war.toFixed(1)}</span></>}
+          </span>
         </div>
         {batterId && batterName && teamAbbr && (
           <button
@@ -510,7 +689,7 @@ function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
       </svg>
 
       <p className="text-[8px] text-538-muted mt-1">
-        Cumulative run value vs average across {games.length} games
+        Cumulative RAR (Runs Above Expected) · {games.length} games
       </p>
     </div>
   )
@@ -667,8 +846,15 @@ function heatColor(t: number, alpha = 0.65): string {
   return `rgba(${r},${g},${b},${alpha * Math.max(0.25, t)})`
 }
 
-function SprayChart({ sprayPoints, selectedPitchType }: { sprayPoints: SprayPoint[]; selectedPitchType: string }) {
+function SprayChart({
+  sprayPoints, selectedPitchType,
+  batterId, batterName, teamAbbr,
+}: {
+  sprayPoints: SprayPoint[]; selectedPitchType: string
+  batterId?: string; batterName?: string; teamAbbr?: string
+}) {
   const [mode, setMode] = useState<SprayMode>('scatter')
+  const [copyingSpray, setCopyingSpray] = useState(false)
   const filteredPoints = selectedPitchType === 'ALL' ? sprayPoints : sprayPoints.filter(p => p.pitchType === selectedPitchType)
 
   const heatCells = mode !== 'scatter' ? computeHeatCells(filteredPoints) : null
@@ -680,15 +866,30 @@ function SprayChart({ sprayPoints, selectedPitchType }: { sprayPoints: SprayPoin
 
   return (
     <div className="flex flex-col gap-2">
-      {/* Mode toggle */}
-      <div className="flex gap-1">
-        {SPRAY_MODES.map(({ key, label }) => (
-          <button key={key} onClick={() => setMode(key)}
-            className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded transition-colors"
-            style={mode === key ? { backgroundColor: '#3D405B', color: '#fff' } : { backgroundColor: 'transparent', color: '#9CA3AF', border: '1px solid #374151' }}>
-            {label}
+      {/* Mode toggle + copy */}
+      <div className="flex items-center justify-between gap-1">
+        <div className="flex gap-1">
+          {SPRAY_MODES.map(({ key, label }) => (
+            <button key={key} onClick={() => setMode(key)}
+              className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded transition-colors"
+              style={mode === key ? { backgroundColor: '#3D405B', color: '#fff' } : { backgroundColor: 'transparent', color: '#9CA3AF', border: '1px solid #374151' }}>
+              {label}
+            </button>
+          ))}
+        </div>
+        {batterId && batterName && teamAbbr && (
+          <button
+            onClick={async () => {
+              setCopyingSpray(true)
+              await exportSprayImage({ batterId, batterName, teamAbbr, filteredPoints, mode, heatCells, maxCount, maxVal })
+              setCopyingSpray(false)
+            }}
+            disabled={copyingSpray}
+            className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border transition-colors"
+            style={copyingSpray ? { color: '#4ADE80', borderColor: '#4ADE80' } : { color: '#9CA3AF', borderColor: '#374151' }}>
+            {copyingSpray ? '✓ Copied' : '⎘ Copy'}
           </button>
-        ))}
+        )}
       </div>
 
       <svg width={300} height={265} viewBox="0 0 300 265" style={{ display: 'block', borderRadius: '8px', overflow: 'hidden' }}>
@@ -920,22 +1121,24 @@ export default function BatterPage({ params }: { params: { id: string } }) {
   const currentSeason = new Date().getFullYear()
 
   useEffect(() => {
-    setLoading(true); setError('')
+    setLoading(true); setError(''); setGameRarData([])
     Promise.all([
       fetch(`/api/batter-season/zones?batterId=${batterId}&season=${currentSeason}`).then(r => { if (!r.ok) throw new Error('Failed to load batter data'); return r.json() as Promise<BatterZoneData> }),
       fetch(`/api/player-war-history?playerId=${batterId}`).then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(`/api/prospect-career?playerId=${batterId}&group=hitting`).then(r => r.ok ? r.json() : []).catch(() => []),
-      fetch(`/api/player-game-rar?playerId=${batterId}`).then(r => r.ok ? r.json() : null).catch(() => null),
     ])
-      .then(([zoneData, warEntries, career, rarData]) => {
+      .then(([zoneData, warEntries, career]) => {
         setData(zoneData)
         if (Array.isArray(warEntries)) {
           const batterEntry = warEntries.find((e: WarEntry) => e.player_type === 'batter') ?? warEntries[0]
           setWarData(batterEntry ?? null)
         }
         if (Array.isArray(career)) setCareerSeasons(career as CareerSeason[])
-        if (rarData?.games) setGameRarData(rarData.games as GameRarEntry[])
+        // Chain RAR fetch after zones so we have the canonical player name
+        return fetch(`/api/player-game-rar?playerName=${encodeURIComponent(zoneData.batterName)}`)
+          .then(r => r.ok ? r.json() : null).catch(() => null)
       })
+      .then(rarData => { if (rarData?.games) setGameRarData(rarData.games as GameRarEntry[]) })
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
   }, [batterId, currentSeason])
@@ -1063,7 +1266,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
         </div>
         <div className="bg-surface border border-538-border rounded-xl p-4">
           <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-3">Spray Chart</div>
-          {sprayPoints.length === 0 ? <p className="text-xs text-538-muted">No batted ball data available.</p> : <SprayChart sprayPoints={sprayPoints} selectedPitchType={selectedPitchType} />}
+          {sprayPoints.length === 0 ? <p className="text-xs text-538-muted">No batted ball data available.</p> : <SprayChart sprayPoints={sprayPoints} selectedPitchType={selectedPitchType} batterId={batterId} batterName={batterName} teamAbbr={teamAbbr} />}
         </div>
       </div>
 
