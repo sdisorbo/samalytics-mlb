@@ -149,6 +149,31 @@ function buildLineup(abbr: string, players: Player[]): SimBatter[] {
   return lineup
 }
 
+// ── Base diamond (live game) ──────────────────────────────────────────────────
+
+function BaseDiamond({ bases, outs }: { bases: { first: boolean; second: boolean; third: boolean }; outs: number }) {
+  const sq = (cx: number, cy: number, on: boolean) => (
+    <rect x={cx - 4} y={cy - 4} width={8} height={8} transform={`rotate(45 ${cx} ${cy})`}
+      fill={on ? '#E5E7EB' : 'transparent'} stroke="#6B7280" strokeWidth={1} rx={0.5} />
+  )
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <svg width={32} height={28} viewBox="0 0 32 28">
+        <polyline points="16,2 28,13 16,24 4,13 16,2" fill="none" stroke="#374151" strokeWidth={1} />
+        {sq(16, 2,  bases.second)}
+        {sq(28, 13, bases.first)}
+        {sq(16, 24, false)}
+        {sq(4,  13, bases.third)}
+      </svg>
+      <div className="flex gap-1">
+        {[0, 1, 2].map(i => (
+          <div key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: i < outs ? '#F97316' : '#374151' }} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── API helpers ───────────────────────────────────────────────────────────────
 
 interface ScheduleGame {
@@ -167,6 +192,8 @@ interface ScheduleGame {
   gameStatus: string  // "Preview" | "Live" | "Final"
   inning: number | null
   inningHalf: string | null
+  outs: number | null
+  bases: { first: boolean; second: boolean; third: boolean } | null
 }
 
 async function fetchSchedule(date: string): Promise<ScheduleGame[]> {
@@ -194,6 +221,12 @@ async function fetchSchedule(date: string): Promise<ScheduleGame[]> {
         gameStatus: status,
         inning: game.linescore?.currentInning ?? null,
         inningHalf: game.linescore?.inningHalf ?? null,
+        outs: status === 'Live' ? (game.linescore?.outs ?? null) : null,
+        bases: status === 'Live' ? {
+          first:  !!game.linescore?.offense?.first,
+          second: !!game.linescore?.offense?.second,
+          third:  !!game.linescore?.offense?.third,
+        } : null,
       })
     }
   }
@@ -232,6 +265,8 @@ interface GameState {
   gameStatus: string
   inning: number | null
   inningHalf: string | null
+  outs: number | null
+  bases: { first: boolean; second: boolean; third: boolean } | null
   breakdownOpen: boolean
 }
 
@@ -763,6 +798,11 @@ function MatchupCard({
                   <div className="text-xl font-black text-538-text">
                     {game.awayScore} – {game.homeScore}
                   </div>
+                  {game.gameStatus === 'Live' && game.bases && (
+                    <div className="flex justify-center mt-1">
+                      <BaseDiamond bases={game.bases} outs={game.outs ?? 0} />
+                    </div>
+                  )}
                   <div className="text-2xs text-538-muted mt-0.5">
                     proj. {sr.avgAwayRuns.toFixed(1)} – {sr.avgHomeRuns.toFixed(1)}
                   </div>
@@ -1051,6 +1091,8 @@ export default function MatchupLab({
         gameStatus: sg.gameStatus ?? 'Preview',
         inning: sg.inning ?? null,
         inningHalf: sg.inningHalf ?? null,
+        outs: sg.outs ?? null,
+        bases: sg.bases ?? null,
         breakdownOpen: false,
       }
     },
@@ -1093,6 +1135,8 @@ export default function MatchupLab({
       gameStatus: 'Preview',
       inning: null,
       inningHalf: null,
+      outs: null,
+      bases: null,
     }
     setGames([buildGameState(sg)])
     setScheduleError(null)
