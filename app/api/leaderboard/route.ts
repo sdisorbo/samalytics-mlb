@@ -1,0 +1,170 @@
+import { NextResponse } from 'next/server'
+import { Redis } from '@upstash/redis'
+import {
+  compareEntries,
+  emptyDaily,
+  isCleanName,
+  utcDateString,
+  type DailyData,
+  type LeaderboardEntry,
+  MAX_ENTRIES,
+  MIN_AB,
+  TTL_SECONDS,
+} from '../../../lib/leaderboardCore'
+
+export const dynamic = 'force-dynamic'
+
+const STORAGE_KEY_PREFIX = 'gameLeaderboard:'
+
+function storageKey(date: string) {
+  return STORAGE_KEY_PREFIX + date
+}
+
+// Lazily build the Redis client and swallow any constructor/env errors so
+// a missing-or-malformed URL doesn't 500 the whole route.
+function getRedis(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) return null
+  try {
+    return new Redis({ url, token })
+  } catch (err) {
+    console.warn('[leaderboard] Redis constructor failed:', err)
+    return null
+  }
+}
+
+async function loadToday(): Promise<DailyData> {
+  const date = utcDateString()
+  const key = storageKey(date)
+  const redis = getRedis()
+  if (!redis) return emptyDaily(date)
+  try {
+    const data = (await redis.get<DailyData>(key)) ?? null
+    if (!data || data.date !== date) return emptyDaily(date)
+    return data
+  } catch (err) {
+    console.warn('[leaderboard] redis.get failed:', err)
+    return emptyDaily(date)
+  }
+}
+
+async function saveToday(next: DailyData): Promise<{ ok: boolean; error?: string }> {
+  const redis = getRedis()
+  if (!redis) {
+    return { ok: false, error: 'Leaderboard storage is not configured.' }
+  }
+  try {
+    await redis.set(storageKey(next.date), next, { ex: TTL_SECONDS })
+    return { ok: true }
+  } catch (err) {
+    console.warn('[leaderboard] redis.set failed:', err)
+    return { ok: false, error: `Could not persist: ${String(err)}` }
+  }
+}
+
+export async function GET() {
+  try {
+    const data = await loadToday()
+    return NextResponse.json(data, {
+      headers: { 'Cache-Control': 'no-store' },
+    })
+  } catch (err) {
+    // Absolute last-ditch — should not happen because loadToday catches its
+    // own errors, but if anything else upstream throws, return an empty
+    // board so the UI keeps rendering instead of erroring out.
+    console.error('[leaderboard] GET handler error:', err)
+    return NextResponse.json(emptyDaily(utcDateString()), {
+      headers: { 'Cache-Control': 'no-store' },
+    })
+  }
+}
+
+interface SubmitBody {
+  action: 'recordPlay' | 'submit'
+  entry?: Omit<LeaderboardEntry, 'ts'>
+}
+
+export async function POST(req: Request) {
+  try {
+    let body: SubmitBody
+    try {
+      body = (await req.json()) as SubmitBody
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    }
+
+    if (body.action === 'recordPlay') {
+      const current = await loadToday()
+      const next: DailyData = { ...current, plays: current.plays + 1 }
+      const saved = await saveToday(next)
+      if (!saved.ok) {
+        return NextResponse.json(
+          { ...current, error: saved.error },
+          { status: 500, headers: { 'Cache-Control': 'no-store' } },
+        )
+      }
+      return NextResponse.json(next, { headers: { 'Cache-Control': 'no-store' } })
+    }
+
+    if (body.action === 'submit') {
+      const e = body.entry
+      if (!e) return NextResponse.json({ error: 'Missing entry' }, { status: 400 })
+      if (e.ab < MIN_AB) {
+        const current = await loadToday()
+        return NextResponse.json(
+          { admitted: false, rank: null, error: `Need at least ${MIN_AB} ABs`, data: current },
+          { status: 400 },
+        )
+      }
+      const nameCheck = isCleanName(e.name)
+      if (!nameCheck.ok) {
+        const current = await loadToday()
+        return NextResponse.json(
+          { admitted: false, rank: null, error: nameCheck.reason, data: current },
+          { status: 400 },
+        )
+      }
+
+      const current = await loadToday()
+      const ts = Date.now()
+      const candidate: LeaderboardEntry = { ...e, ts }
+      const all = [...current.entries, candidate]
+        .sort(compareEntries)
+        .slice(0, MAX_ENTRIES)
+      const rank = all.findIndex((x) => x.ts === ts && x.name === candidate.name) + 1
+      const next: DailyData = { ...current, entries: all }
+      const saved = await saveToday(next)
+      if (!saved.ok) {
+        // Don't claim victory if we couldn't persist — the user would see
+        // their rank, then refresh and find no record of it.
+        return NextResponse.json(
+          {
+            admitted: false,
+            rank: null,
+            error: saved.error || 'Could not save to leaderboard.',
+            data: current,
+          },
+          { status: 500, headers: { 'Cache-Control': 'no-store' } },
+        )
+      }
+      return NextResponse.json(
+        { admitted: rank > 0, rank: rank > 0 ? rank : null, data: next },
+        { headers: { 'Cache-Control': 'no-store' } },
+      )
+    }
+
+    return NextResponse.json({ error: 'Unknown action' }, { status: 400 })
+  } catch (err) {
+    console.error('[leaderboard] POST handler error:', err)
+    return NextResponse.json(
+      {
+        admitted: false,
+        rank: null,
+        error: 'Leaderboard service crashed; check server logs.',
+        data: emptyDaily(utcDateString()),
+      },
+      { status: 500 },
+    )
+  }
+}
