@@ -685,7 +685,8 @@ function PitchMixLineChart({
     const xs = (i: number) => PL + (i / Math.max(xKeys.length - 1, 1)) * pw
     const ys = (v: number) => PT + ph - (v / yMax) * ph
     const pts = xKeys.map((k, i) => eraVals[i] !== null ? `${xs(i).toFixed(1)},${ys(eraVals[i]!).toFixed(1)}` : null)
-    const lastIdx = eraVals.reduce((acc, v, i) => v !== null ? i : acc, -1)
+    let lastIdx = -1
+    eraVals.forEach((v, i) => { if (v !== null) lastIdx = i })
     return (
       <div>
         <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
