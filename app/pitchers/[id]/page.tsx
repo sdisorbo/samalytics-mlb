@@ -42,13 +42,14 @@ interface ArsenalPitch {
 }
 interface ArsenalData { pitches: ArsenalPitch[] }
 
-type MixMetric = 'usage' | 'whiff' | 'strike'
+type MixMetric = 'usage' | 'whiff' | 'strike' | 'era'
 interface PitchBucket { count: number; whiffs: number; strikes: number }
 interface PitchMixData {
   byAbPitch: Record<string, Record<string, PitchBucket>>
   byInning: Record<string, Record<string, PitchBucket>>
   byGamePitch: Record<string, Record<string, PitchBucket>>
   pitchTypes: Array<{ type: string; name: string; color: string; count: number }>
+  eraByInning: Record<string, { runs: number; appearances: number }>
 }
 
 type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
@@ -565,7 +566,7 @@ function PitcherSeasonRvChart({ games, war, pitcherId, pitcherName, teamAbbr }: 
         )}
       </div>
 
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
         <defs>
           <clipPath id="rpaa-above-zero"><rect x={0} y={0} width={W} height={baselineY} /></clipPath>
           <clipPath id="rpaa-below-zero"><rect x={0} y={baselineY} width={W} height={H - baselineY} /></clipPath>
@@ -594,11 +595,11 @@ function PitcherSeasonRvChart({ games, war, pitcherId, pitcherName, teamAbbr }: 
 // ── Pitch colors (client-side, mirrors lib/pitcherGame) ───────────────────────
 
 const PITCH_COLOR_MAP: Record<string, string> = {
-  FF: '#EF4444', SI: '#F97316', FC: '#F59E0B', FT: '#FB923C',
-  SL: '#3B82F6', ST: '#6366F1', SV: '#7C3AED', SW: '#A855F7',
-  CU: '#1D4ED8', KC: '#1E3A8A',
-  CH: '#10B981', FS: '#059669', FO: '#047857', SC: '#065F46',
-  KN: '#64748B', EP: '#94A3B8',
+  FF: '#C62828', SI: '#E64A19', FC: '#F57C00', FT: '#D84315',
+  SL: '#1565C0', ST: '#6A1B9A', SV: '#7B1FA2', SW: '#4527A0',
+  CU: '#283593', KC: '#37474F',
+  CH: '#2E7D32', FS: '#00695C', FO: '#00796B', SC: '#0277BD',
+  KN: '#546E7A', EP: '#78909C',
 }
 
 // ── Arsenal table ──────────────────────────────────────────────────────────────
@@ -657,18 +658,65 @@ const AB_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8+']
 const INNING_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 const GAME_KEYS = ['1-15', '16-30', '31-45', '46-60', '61-75', '76-90', '91+']
 
-function PitchMixBarChart({
-  data, xKeys, pitchTypes, metric, xAxisLabel,
+function PitchMixLineChart({
+  data, xKeys, pitchTypes, metric, xAxisLabel, eraByInning,
 }: {
   data: Record<string, Record<string, PitchBucket>>
   xKeys: string[]
   pitchTypes: Array<{ type: string; name: string; color: string }>
   metric: MixMetric
   xAxisLabel: string
+  eraByInning?: Record<string, { runs: number; appearances: number }>
 }) {
-  const W = 560, H = 175, PL = 36, PR = 10, PT = 14, PB = 28
+  const W = 560, H = 170, PL = 36, PR = 80, PT = 16, PB = 24
   const pw = W - PL - PR, ph = H - PT - PB
-  const stacked = metric === 'usage'
+
+  // ERA mode — single line, no per-pitch breakdown
+  if (metric === 'era') {
+    if (!eraByInning) return <p className="text-[10px] text-538-muted py-4 text-center">ERA available in Inning view only</p>
+    const eraVals: (number | null)[] = xKeys.map(k => {
+      const d = eraByInning[k]
+      if (!d || d.appearances < 3) return null
+      return (d.runs / d.appearances) * 9
+    })
+    const nonNull = eraVals.filter((v): v is number => v !== null)
+    if (!nonNull.length) return <p className="text-[10px] text-538-muted py-4 text-center">Not enough ERA data</p>
+    const yMax = Math.max(6, ...nonNull) * 1.15
+    const xs = (i: number) => PL + (i / Math.max(xKeys.length - 1, 1)) * pw
+    const ys = (v: number) => PT + ph - (v / yMax) * ph
+    const pts = xKeys.map((k, i) => eraVals[i] !== null ? `${xs(i).toFixed(1)},${ys(eraVals[i]!).toFixed(1)}` : null)
+    const lastIdx = eraVals.reduce((acc, v, i) => v !== null ? i : acc, -1)
+    return (
+      <div>
+        <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+          {[1, 3, 5].filter(v => v <= yMax).map(v => (
+            <g key={v}>
+              <line x1={PL} y1={ys(v).toFixed(1)} x2={W - PR} y2={ys(v).toFixed(1)} stroke="#374151" strokeWidth={0.5} strokeDasharray="2,3" />
+              <text x={PL - 3} y={(ys(v) + 3).toFixed(1)} textAnchor="end" fontSize={6} fill="#6B7280" fontFamily="monospace">{v}</text>
+            </g>
+          ))}
+          <line x1={PL} y1={PT + ph} x2={W - PR} y2={PT + ph} stroke="#374151" strokeWidth={0.5} />
+          <polyline
+            points={pts.filter(Boolean).join(' ')}
+            fill="none" stroke="#94A3B8" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"
+          />
+          {xKeys.map((k, i) => eraVals[i] !== null && (
+            <circle key={k} cx={xs(i).toFixed(1)} cy={ys(eraVals[i]!).toFixed(1)} r={2.5} fill="#94A3B8" />
+          ))}
+          {lastIdx >= 0 && eraVals[lastIdx] !== null && (
+            <text x={(xs(lastIdx) + 5).toFixed(1)} y={(ys(eraVals[lastIdx]!) + 3).toFixed(1)}
+              fontSize={7} fill="#94A3B8" fontFamily="monospace" fontWeight={700}>
+              {eraVals[lastIdx]!.toFixed(2)}
+            </text>
+          )}
+          {xKeys.map((k, i) => (
+            <text key={k} x={xs(i).toFixed(1)} y={H - 3} textAnchor="middle" fontSize={6.5} fill="#6B7280" fontFamily="monospace">{k}</text>
+          ))}
+        </svg>
+        <p className="text-center text-[7px] text-538-muted mt-0.5">{xAxisLabel} · R/9 per inning pitched (min 3 starts)</p>
+      </div>
+    )
+  }
 
   const series = pitchTypes.map(pt => {
     const vals: (number | null)[] = xKeys.map(xk => {
@@ -686,74 +734,90 @@ function PitchMixBarChart({
   if (series.length === 0) return <p className="text-[10px] text-538-muted py-4 text-center">No data</p>
 
   const allVals = series.flatMap(s => s.vals).filter((v): v is number => v !== null)
-  const yMax = stacked ? 100 : Math.max(60, ...allVals) + 5
-  const grids = stacked ? [25, 50, 75] : [20, 40, 60]
-  const groupW = pw / xKeys.length
-  const nP = series.length
+  const yMax = metric === 'usage' ? 100 : Math.max(60, ...allVals) + 5
+  const grids = metric === 'usage' ? [25, 50, 75] : [20, 40, 60]
 
-  // grouped: bars side by side; stacked: bars on top of each other
-  const barW = stacked ? groupW * 0.72 : Math.max(3, (groupW * 0.85) / nP)
-  const groupPad = stacked ? (groupW - barW) / 2 : (groupW - barW * nP) / 2
+  const xs = (i: number) => PL + (i / Math.max(xKeys.length - 1, 1)) * pw
+  const ys = (v: number) => PT + ph - (v / yMax) * ph
+
+  // Overall average line (weighted by pitch count) for whiff/strike
+  const avgVals: (number | null)[] = metric === 'usage' ? [] : xKeys.map(xk => {
+    const bkt = data[xk]
+    if (!bkt) return null
+    const totCount = Object.values(bkt).reduce((s, b) => s + b.count, 0)
+    if (totCount < 5) return null
+    if (metric === 'whiff') return Object.values(bkt).reduce((s, b) => s + b.whiffs, 0) / totCount * 100
+    return Object.values(bkt).reduce((s, b) => s + b.strikes, 0) / totCount * 100
+  })
 
   return (
     <div>
       <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
-        {grids.map(v => {
-          const gy = PT + ph * (1 - v / yMax)
+        {grids.map(v => (
+          <g key={v}>
+            <line x1={PL} y1={ys(v).toFixed(1)} x2={W - PR} y2={ys(v).toFixed(1)} stroke="#374151" strokeWidth={0.5} strokeDasharray="2,3" />
+            <text x={PL - 3} y={(ys(v) + 3).toFixed(1)} textAnchor="end" fontSize={6} fill="#6B7280" fontFamily="monospace">{v}%</text>
+          </g>
+        ))}
+        <line x1={PL} y1={PT + ph} x2={W - PR} y2={PT + ph} stroke="#374151" strokeWidth={0.5} />
+
+        {/* Average trend line */}
+        {avgVals.length > 0 && (() => {
+          const avgPts = avgVals.map((v, i) => v !== null ? `${xs(i).toFixed(1)},${ys(v).toFixed(1)}` : null).filter(Boolean)
+          const lastAvgIdx = avgVals.reduce((acc, v, i) => v !== null ? i : acc, -1)
           return (
-            <g key={v}>
-              <line x1={PL} y1={gy.toFixed(1)} x2={W - PR} y2={gy.toFixed(1)} stroke="#374151" strokeWidth={0.5} strokeDasharray="2,3" />
-              <text x={PL - 3} y={(gy + 3).toFixed(1)} textAnchor="end" fontSize={6} fill="#6B7280" fontFamily="monospace">{v}%</text>
+            <>
+              <polyline points={avgPts.join(' ')} fill="none" stroke="#6B7280" strokeWidth={1} strokeDasharray="4,2" strokeLinecap="round" />
+              {lastAvgIdx >= 0 && avgVals[lastAvgIdx] !== null && (
+                <text x={(xs(lastAvgIdx) + 5).toFixed(1)} y={(ys(avgVals[lastAvgIdx]!) + 3).toFixed(1)}
+                  fontSize={6.5} fill="#6B7280" fontFamily="monospace">Avg</text>
+              )}
+            </>
+          )
+        })()}
+
+        {/* Per-pitch lines */}
+        {series.flatMap(s => {
+          const segs: string[][] = []
+          let cur: string[] = []
+          s.vals.forEach((v, i) => {
+            if (v === null) { if (cur.length) { segs.push(cur); cur = [] } }
+            else cur.push(`${xs(i).toFixed(1)},${ys(v).toFixed(1)}`)
+          })
+          if (cur.length) segs.push(cur)
+          return segs.map((seg, si) => (
+            <polyline key={`${s.type}-${si}`} points={seg.join(' ')} fill="none"
+              stroke={s.color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+          ))
+        })}
+
+        {/* Dots */}
+        {series.flatMap(s =>
+          s.vals.flatMap((v, i) => v === null ? [] : [
+            <circle key={`${s.type}-${i}`} cx={xs(i).toFixed(1)} cy={ys(v).toFixed(1)} r={2.5} fill={s.color} />
+          ])
+        )}
+
+        {/* End-of-line labels: pitch code + value */}
+        {series.map(s => {
+          const lastIdx = s.vals.reduce((acc, v, i) => v !== null ? i : acc, -1)
+          if (lastIdx < 0 || s.vals[lastIdx] === null) return null
+          const v = s.vals[lastIdx]!
+          const lx = xs(lastIdx) + 5
+          const ly = ys(v)
+          return (
+            <g key={`lbl-${s.type}`}>
+              <text x={lx.toFixed(1)} y={(ly - 2).toFixed(1)} fontSize={6.5} fill={s.color} fontFamily="monospace" fontWeight={700}>{s.type}</text>
+              <text x={lx.toFixed(1)} y={(ly + 6).toFixed(1)} fontSize={5.5} fill={s.color} fontFamily="monospace">{v.toFixed(0)}%</text>
             </g>
           )
         })}
-        <line x1={PL} y1={PT + ph} x2={W - PR} y2={PT + ph} stroke="#374151" strokeWidth={0.5} />
-
-        {xKeys.map((xk, xi) => {
-          const gx = PL + xi * groupW + groupPad
-          if (stacked) {
-            let yOff = 0
-            return series.map(s => {
-              const v = s.vals[xi] ?? 0
-              const bh = (v / yMax) * ph
-              const by = PT + ph - yOff - bh
-              yOff += bh
-              return v > 0 ? (
-                <rect key={`${xk}-${s.type}`} x={gx.toFixed(1)} y={by.toFixed(1)}
-                  width={barW} height={Math.max(0, bh).toFixed(1)}
-                  fill={s.color} rx={xi === 0 ? 0 : 0} />
-              ) : null
-            })
-          } else {
-            return series.map((s, si) => {
-              const v = s.vals[xi]
-              if (v === null) return null
-              const bh = (v / yMax) * ph
-              const by = PT + ph - bh
-              const bx = gx + si * barW
-              return (
-                <rect key={`${xk}-${s.type}`} x={bx.toFixed(1)} y={by.toFixed(1)}
-                  width={Math.max(1, barW - 1).toFixed(1)} height={Math.max(0, bh).toFixed(1)}
-                  fill={s.color} rx={1} />
-              )
-            })
-          }
-        })}
 
         {xKeys.map((k, i) => (
-          <text key={k} x={(PL + (i + 0.5) * groupW).toFixed(1)} y={H - 5}
-            textAnchor="middle" fontSize={6.5} fill="#6B7280" fontFamily="monospace">{k}</text>
+          <text key={k} x={xs(i).toFixed(1)} y={H - 3} textAnchor="middle" fontSize={6.5} fill="#6B7280" fontFamily="monospace">{k}</text>
         ))}
       </svg>
       <p className="text-center text-[7px] text-538-muted mt-0.5">{xAxisLabel}</p>
-      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 justify-center">
-        {series.map(s => (
-          <div key={s.type} className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-sm shrink-0" style={{ backgroundColor: s.color }} />
-            <span className="text-[9px] text-538-muted">{s.name}</span>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }
@@ -1056,7 +1120,7 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
                     ))}
                   </div>
                 </div>
-                <PitchMixBarChart
+                <PitchMixLineChart
                   data={pitchMixData.byAbPitch} xKeys={AB_KEYS}
                   pitchTypes={pitchMixData.pitchTypes} metric={abMetric}
                   xAxisLabel="Pitch number in at-bat"
@@ -1084,20 +1148,21 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
                       ))}
                     </div>
                     <div className="inline-flex rounded border border-538-border overflow-hidden text-[9px]">
-                      {(['usage','whiff','strike'] as MixMetric[]).map(m => (
+                      {(['usage','whiff','strike','era'] as MixMetric[]).map(m => (
                         <button key={m} onClick={() => setGameMetric(m)}
                           className={`px-2 py-1 font-semibold transition-colors ${gameMetric === m ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
-                          {m === 'usage' ? 'Usage %' : m === 'whiff' ? 'Whiff %' : 'Strike %'}
+                          {m === 'usage' ? 'Usage %' : m === 'whiff' ? 'Whiff %' : m === 'strike' ? 'Strike %' : 'ERA'}
                         </button>
                       ))}
                     </div>
                   </div>
                 </div>
-                <PitchMixBarChart
+                <PitchMixLineChart
                   data={gameView === 'game' ? pitchMixData.byGamePitch : pitchMixData.byInning}
                   xKeys={gameView === 'game' ? GAME_KEYS : INNING_KEYS}
                   pitchTypes={pitchMixData.pitchTypes} metric={gameMetric}
                   xAxisLabel={gameView === 'game' ? 'Pitch number in game' : 'Inning'}
+                  eraByInning={gameView === 'inning' ? pitchMixData.eraByInning : undefined}
                 />
               </div>
 

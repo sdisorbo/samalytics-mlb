@@ -646,7 +646,7 @@ function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
         )}
       </div>
 
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
         <defs>
           <clipPath id="rar-above-zero">
             <rect x={0} y={0} width={W} height={baselineY} />

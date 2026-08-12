@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { PITCH_COLORS } from '../../../lib/pitchColors'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,15 +10,7 @@ const PITCH_NAMES: Record<string, string> = {
   CH: 'Changeup', FS: 'Splitter', FO: 'Forkball', SC: 'Screwball',
   KN: 'Knuckleball', EP: 'Eephus',
 }
-const PITCH_COLORS: Record<string, string> = {
-  FF: '#EF4444', SI: '#F97316', FC: '#F59E0B', FT: '#FB923C',
-  SL: '#3B82F6', ST: '#6366F1', SV: '#7C3AED', SW: '#A855F7',
-  CU: '#1D4ED8', KC: '#1E3A8A',
-  CH: '#10B981', FS: '#059669', FO: '#047857', SC: '#065F46',
-  KN: '#64748B', EP: '#94A3B8',
-}
 
-// MLB result codes → outcome category
 const WHIFF_CODES  = new Set(['S', 'W', 'T', 'M', 'O', 'Q', 'R'])
 const STRIKE_CODES = new Set(['S', 'W', 'T', 'C', 'F', 'L', 'M', 'O', 'Q', 'R', 'U'])
 
@@ -50,33 +43,30 @@ export async function GET(req: NextRequest) {
   const season = url.searchParams.get('season') ?? new Date().getFullYear()
   if (!pitcherId) return NextResponse.json({ error: 'Missing pitcherId' }, { status: 400 })
 
-  // Step 1: get list of gamePks from season game log
   const logRes = await fetch(
     `https://statsapi.mlb.com/api/v1/people/${pitcherId}/stats?stats=gameLog&group=pitching&season=${season}&sportId=1`,
     { next: { revalidate: 3600 } }
   )
-  if (!logRes.ok) return NextResponse.json({ byAbPitch: {}, byInning: {}, byGamePitch: {}, pitchTypes: [] })
+  if (!logRes.ok) return NextResponse.json({ byAbPitch: {}, byInning: {}, byGamePitch: {}, pitchTypes: [], eraByInning: {} })
 
   const logData = await logRes.json()
   const splits = (logData.stats?.[0]?.splits ?? []) as Array<{ game?: { gamePk?: number } }>
   const gamePks = splits.map(s => s.game?.gamePk).filter((pk): pk is number => !!pk)
 
-  if (gamePks.length === 0) return NextResponse.json({ byAbPitch: {}, byInning: {}, byGamePitch: {}, pitchTypes: [] })
+  if (gamePks.length === 0) return NextResponse.json({ byAbPitch: {}, byInning: {}, byGamePitch: {}, pitchTypes: [], eraByInning: {} })
 
   const byAbPitch: AggMap = {}
   const byInning: AggMap = {}
   const byGamePitch: AggMap = {}
   const pitchTypeTotals: Record<string, number> = {}
+  // ERA tracking: runs allowed + games appearing in each inning
+  const eraByInning: Record<string, { runs: number; appearances: number }> = {}
 
-  // Step 2: fetch each game's live feed in parallel (past games cached 30 days)
-  const recentCutoff = Date.now() - 7 * 86400 * 1000
   await Promise.all(gamePks.map(async gamePk => {
     try {
-      // Determine revalidate based on whether game is recent
-      const revalidate = recentCutoff > 0 ? 86400 * 30 : 3600
       const feedRes = await fetch(
         `https://statsapi.mlb.com/api/v1.1/game/${gamePk}/feed/live`,
-        { next: { revalidate } }
+        { next: { revalidate: 86400 * 30 } }
       )
       if (!feedRes.ok) return
 
@@ -84,6 +74,9 @@ export async function GET(req: NextRequest) {
       const allPlays = (feed.liveData?.plays?.allPlays ?? []) as Record<string, unknown>[]
 
       const gamePitches: RawPitch[] = []
+      // ERA tracking for this game
+      const inningsThisGame = new Set<number>()
+      const runsThisGame: Record<number, number> = {}
 
       for (const play of allPlays) {
         const matchup = play.matchup as Record<string, unknown> | undefined
@@ -93,6 +86,13 @@ export async function GET(req: NextRequest) {
         const about = play.about as Record<string, unknown> | undefined
         const inning = (about?.inning as number) ?? 0
         const abNum = (about?.atBatIndex as number) ?? 0
+
+        inningsThisGame.add(inning)
+
+        // Count runs scored on this play
+        const runners = (play.runners as Array<{ details?: { isScoringEvent?: boolean } }>) ?? []
+        const scored = runners.filter(r => r.details?.isScoringEvent === true).length
+        if (scored > 0) runsThisGame[inning] = (runsThisGame[inning] ?? 0) + scored
 
         for (const event of (play.playEvents as Record<string, unknown>[]) ?? []) {
           if (!event.isPitch) continue
@@ -116,17 +116,29 @@ export async function GET(req: NextRequest) {
         }
       }
 
-      // Sort by (atBatIndex, pitchNumber) → sequential game pitch number
       gamePitches.sort((a, b) => a.abNum - b.abNum || a.pitchNum - b.pitchNum)
       gamePitches.forEach((p, idx) => {
         add(byGamePitch, gamePitchBucket(idx + 1), p.pt, p.isWhiff, p.isStrike)
       })
-    } catch { /* skip failed game */ }
+
+      // Aggregate ERA data for this game
+      for (const inning of inningsThisGame) {
+        const key = String(inning)
+        eraByInning[key] ??= { runs: 0, appearances: 0 }
+        eraByInning[key].runs += runsThisGame[inning] ?? 0
+        eraByInning[key].appearances++
+      }
+    } catch { /* skip */ }
   }))
 
   const pitchTypes = Object.entries(pitchTypeTotals)
     .sort((a, b) => b[1] - a[1])
-    .map(([type, count]) => ({ type, name: PITCH_NAMES[type] ?? type, color: PITCH_COLORS[type] ?? '#6B7280', count }))
+    .map(([type, count]) => ({
+      type,
+      name: PITCH_NAMES[type] ?? type,
+      color: PITCH_COLORS[type] ?? '#78909C',
+      count,
+    }))
 
-  return NextResponse.json({ byAbPitch, byInning, byGamePitch, pitchTypes })
+  return NextResponse.json({ byAbPitch, byInning, byGamePitch, pitchTypes, eraByInning })
 }
