@@ -647,7 +647,7 @@ function PitchMixLineChart({
         {xKeys.map((k, i) => (
           <text key={k} x={xs(i).toFixed(1)} y={H - 5} textAnchor="middle" fontSize={6.5} fill="#6B7280" fontFamily="monospace">{k}</text>
         ))}
-        {series.map(s => {
+        {series.flatMap(s => {
           const segs: string[][] = []
           let cur: string[] = []
           s.vals.forEach((v, i) => {
@@ -659,10 +659,10 @@ function PitchMixLineChart({
             <polyline key={`${s.type}-${si}`} points={seg.join(' ')} fill="none" stroke={s.color} strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
           ))
         })}
-        {series.map(s =>
-          s.vals.map((v, i) => v === null ? null : (
-            <circle key={i} cx={xs(i).toFixed(1)} cy={ys(v).toFixed(1)} r={2.5} fill={s.color} />
-          ))
+        {series.flatMap(s =>
+          s.vals.flatMap((v, i) => v === null ? [] : [
+            <circle key={`${s.type}-${i}`} cx={xs(i).toFixed(1)} cy={ys(v).toFixed(1)} r={2.5} fill={s.color} />
+          ])
         )}
       </svg>
       <p className="text-center text-[7px] text-538-muted mt-0.5">{xAxisLabel}</p>
@@ -729,7 +729,7 @@ function PitchContactProfile({
         )
       })}
       <div className="flex gap-4 text-[8px] text-538-muted mt-1 flex-wrap">
-        {[['#34D399','GB — Ground Ball'],['#F59E0B','LD — Line Drive'],['#3B82F6','FB — Fly Ball'],['#6B7280','PU — Popup']].map(([c,l]) => (
+        {([['#34D399','GB — Ground Ball'],['#F59E0B','LD — Line Drive'],['#3B82F6','FB — Fly Ball'],['#6B7280','PU — Popup']] as [string,string][]).map(([c,l]) => (
           <span key={l} className="flex items-center gap-1">
             <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: c }} />{l}
           </span>
@@ -835,15 +835,23 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState('')
   const [gameRarData, setGameRarData] = useState<GameRarEntry[]>([])
   const [pitchMixData, setPitchMixData] = useState<PitchMixData | null>(null)
+  const [pitchMixLoading, setPitchMixLoading] = useState(false)
   const [abMetric, setAbMetric] = useState<MixMetric>('usage')
   const [gameView, setGameView] = useState<'game' | 'inning'>('game')
   const [gameMetric, setGameMetric] = useState<MixMetric>('usage')
 
   useEffect(() => {
     setPitchMixData(null)
-    fetch(`/api/pitcher-pitch-mix?pitcherId=${pitcherId}&season=${season}`)
-      .then(r => r.ok ? r.json() : null).catch(() => null)
-      .then((d: PitchMixData | null) => { if (d?.pitchTypes?.length) setPitchMixData(d) })
+    setPitchMixLoading(true)
+    const doFetch = async () => {
+      try {
+        const r = await fetch(`/api/pitcher-pitch-mix?pitcherId=${pitcherId}&season=${season}`)
+        if (!r.ok) return
+        const d = await r.json() as PitchMixData
+        if (d?.pitchTypes?.length) setPitchMixData(d)
+      } catch { /* ignore */ } finally { setPitchMixLoading(false) }
+    }
+    doFetch()
   }, [pitcherId, season])
 
   useEffect(() => {
@@ -939,6 +947,9 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
           )}
 
           {/* Pitch sequencing — By Count in At-Bat */}
+          {pitchMixLoading && !pitchMixData && (
+            <p className="text-[10px] text-538-muted">Loading pitch mix data from Statcast…</p>
+          )}
           {pitchMixData && (
             <div className="space-y-4">
               {/* Chart 1: By AB pitch count */}
