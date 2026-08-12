@@ -33,6 +33,15 @@ interface CareerSeason {
 interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
 interface GameRarEntry { date: string; gamePk: number; opp: string; ip: string; er: number; k: number; rv: number; cumRv: number }
 
+interface ArsenalPitch {
+  pitch_type: string; pitch_name: string
+  usage_pct: number | null; whiff_pct: number | null
+  woba_against: number | null; xwoba_against: number | null
+  hard_hit_pct: number | null; run_value_per_100: number | null
+  avg_speed: number | null
+}
+interface ArsenalData { pitches: ArsenalPitch[] }
+
 type MixMetric = 'usage' | 'whiff' | 'rv'
 interface PitchBucket { count: number; whiffs: number; rvSum: number }
 interface PitchMixData {
@@ -583,6 +592,66 @@ function PitcherSeasonRvChart({ games, war, pitcherId, pitcherName, teamAbbr }: 
   )
 }
 
+// ── Pitch colors (client-side, mirrors lib/pitcherGame) ───────────────────────
+
+const PITCH_COLOR_MAP: Record<string, string> = {
+  FF: '#EF4444', SI: '#F97316', FC: '#F59E0B', FT: '#FB923C',
+  SL: '#3B82F6', ST: '#6366F1', SV: '#7C3AED', SW: '#A855F7',
+  CU: '#1D4ED8', KC: '#1E3A8A',
+  CH: '#10B981', FS: '#059669', FO: '#047857', SC: '#065F46',
+  KN: '#64748B', EP: '#94A3B8',
+}
+
+// ── Arsenal table ──────────────────────────────────────────────────────────────
+
+function PitchArsenalTable({ pitches }: { pitches: ArsenalPitch[] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-xs">
+        <thead>
+          <tr className="text-[9px] uppercase tracking-widest text-538-muted border-b border-538-border">
+            <th className="pb-1.5 text-left font-bold pr-4">Pitch</th>
+            <th className="pb-1.5 text-right font-bold px-2">Usage</th>
+            <th className="pb-1.5 text-right font-bold px-2">Velo</th>
+            <th className="pb-1.5 text-right font-bold px-2">Whiff%</th>
+            <th className="pb-1.5 text-right font-bold px-2">HH%</th>
+            <th className="pb-1.5 text-right font-bold px-2">wOBA</th>
+            <th className="pb-1.5 text-right font-bold px-2">xwOBA</th>
+            <th className="pb-1.5 text-right font-bold px-2">RV/100</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pitches.map(p => {
+            const color = PITCH_COLOR_MAP[p.pitch_type] ?? '#6B7280'
+            const rv = p.run_value_per_100
+            const rvColor = rv == null ? 'text-538-muted' : rv >= 1.5 ? 'text-emerald-400' : rv >= 0 ? 'text-blue-400' : rv >= -1 ? 'text-orange-400' : 'text-red-400'
+            return (
+              <tr key={p.pitch_type} className="border-b border-538-border/30 hover:bg-538-bg/40 transition-colors">
+                <td className="py-1.5 pr-4">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                    <span className="text-538-text font-medium">{p.pitch_name}</span>
+                    <span className="text-[9px] text-538-muted font-mono">{p.pitch_type}</span>
+                  </div>
+                </td>
+                <td className="py-1.5 text-right tabular-nums px-2 font-semibold text-538-text">{p.usage_pct?.toFixed(1) ?? '—'}%</td>
+                <td className="py-1.5 text-right tabular-nums px-2 text-538-muted">{p.avg_speed?.toFixed(1) ?? '—'}</td>
+                <td className="py-1.5 text-right tabular-nums px-2 text-538-text">{p.whiff_pct?.toFixed(1) ?? '—'}%</td>
+                <td className="py-1.5 text-right tabular-nums px-2 text-538-text">{p.hard_hit_pct?.toFixed(1) ?? '—'}%</td>
+                <td className="py-1.5 text-right tabular-nums px-2 text-538-text">{p.woba_against?.toFixed(3) ?? '—'}</td>
+                <td className="py-1.5 text-right tabular-nums px-2 text-538-text">{p.xwoba_against?.toFixed(3) ?? '—'}</td>
+                <td className={`py-1.5 text-right tabular-nums px-2 font-bold ${rvColor}`}>
+                  {rv == null ? '—' : (rv >= 0 ? '+' : '') + rv.toFixed(1)}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 // ── Pitch Mix Charts ───────────────────────────────────────────────────────────
 
 const AB_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8+']
@@ -834,6 +903,7 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [gameRarData, setGameRarData] = useState<GameRarEntry[]>([])
+  const [arsenalData, setArsenalData] = useState<ArsenalData | null>(null)
   const [pitchMixData, setPitchMixData] = useState<PitchMixData | null>(null)
   const [pitchMixLoading, setPitchMixLoading] = useState(false)
   const [abMetric, setAbMetric] = useState<MixMetric>('usage')
@@ -855,14 +925,15 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
   }, [pitcherId, season])
 
   useEffect(() => {
-    setLoading(true); setError(''); setData(null); setGameRarData([])
+    setLoading(true); setError(''); setData(null); setGameRarData([]); setArsenalData(null)
     Promise.all([
       fetch(`/api/pitcher-season/zones?pitcherId=${pitcherId}&season=${season}`).then(r => r.ok ? r.json() : Promise.reject(r.statusText)),
       fetch(`/api/player-war-history?playerId=${pitcherId}`).then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(`/api/prospect-career?playerId=${pitcherId}&group=pitching`).then(r => r.ok ? r.json() : []).catch(() => []),
       fetch(`/api/pitcher-game-rar?pitcherId=${pitcherId}&season=${season}`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`/api/pitcher-arsenal?pitcherId=${pitcherId}`).then(r => r.ok ? r.json() : null).catch(() => null),
     ])
-      .then(([zoneData, warEntries, careerData, rarData]) => {
+      .then(([zoneData, warEntries, careerData, rarData, arsenalResult]) => {
         setData(zoneData as SeasonZoneData)
         if (Array.isArray(warEntries)) {
           const pitcherEntry = warEntries.find((e: WarEntry) => e.player_type === 'pitcher') ?? warEntries[0]
@@ -870,6 +941,7 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
         }
         if (Array.isArray(careerData)) setCareerSeasons(careerData as CareerSeason[])
         if (rarData?.games) setGameRarData(rarData.games as GameRarEntry[])
+        if ((arsenalResult as ArsenalData | null)?.pitches?.length) setArsenalData(arsenalResult as ArsenalData)
       })
       .catch(() => setError('Could not load pitcher data.'))
       .finally(() => setLoading(false))
@@ -946,11 +1018,16 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
             </div>
           )}
 
-          {/* Pitch sequencing — By Count in At-Bat */}
-          {pitchMixLoading && !pitchMixData && (
-            <p className="text-[10px] text-538-muted">Loading pitch mix data from Statcast…</p>
+          {/* Pitch Arsenal — always shown when arsenal data loads (local, fast) */}
+          {arsenalData && arsenalData.pitches.length > 0 && (
+            <div className="bg-surface border border-538-border rounded-xl p-4">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-3">Pitch Arsenal · {season}</div>
+              <PitchArsenalTable pitches={arsenalData.pitches} />
+            </div>
           )}
-          {pitchMixData && (
+
+          {/* Pitch Sequencing — loads from Statcast (may take a moment) */}
+          {pitchMixData ? (
             <div className="space-y-4">
               {/* Chart 1: By AB pitch count */}
               <div className="bg-surface border border-538-border rounded-xl p-4">
@@ -1013,15 +1090,17 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
                 />
               </div>
 
-              {/* Chart 3: Per-pitch contact profile */}
+              {/* Chart 3: Per-pitch contact profile (GB/FB/LD breakdown) */}
               <div className="bg-surface border border-538-border rounded-xl p-4">
                 <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-3">
-                  Pitch Contact Profile · Season
+                  Batted Ball Profile · Season
                 </div>
                 <PitchContactProfile pitchTypes={pitchMixData.pitchTypes} byPitchType={pitchMixData.byPitchType} />
               </div>
             </div>
-          )}
+          ) : pitchMixLoading ? (
+            <p className="text-[9px] text-538-muted">Loading pitch sequencing data from Statcast…</p>
+          ) : null}
 
           {/* Zone grid + totals */}
           <div className="bg-surface border border-538-border rounded-xl p-5">
