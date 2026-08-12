@@ -33,6 +33,16 @@ interface CareerSeason {
 interface WarEntry { name: string; team: string; war: number; player_type: string; career: unknown[] }
 interface GameRarEntry { date: string; gamePk: number; opp: string; ip: string; er: number; k: number; rv: number; cumRv: number }
 
+type MixMetric = 'usage' | 'whiff' | 'rv'
+interface PitchBucket { count: number; whiffs: number; rvSum: number }
+interface PitchMixData {
+  byAbPitch: Record<string, Record<string, PitchBucket>>
+  byInning: Record<string, Record<string, PitchBucket>>
+  byGamePitch: Record<string, Record<string, PitchBucket>>
+  byPitchType: Record<string, { count: number; gb: number; fb: number; ld: number; popup: number; whiffs: number; rvSum: number }>
+  pitchTypes: Array<{ type: string; name: string; color: string; count: number }>
+}
+
 type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
@@ -573,6 +583,162 @@ function PitcherSeasonRvChart({ games, war, pitcherId, pitcherName, teamAbbr }: 
   )
 }
 
+// ── Pitch Mix Charts ───────────────────────────────────────────────────────────
+
+const AB_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8+']
+const INNING_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+const GAME_KEYS = ['1-15', '16-30', '31-45', '46-60', '61-75', '76-90', '91+']
+
+function PitchMixLineChart({
+  data, xKeys, pitchTypes, metric, xAxisLabel,
+}: {
+  data: Record<string, Record<string, PitchBucket>>
+  xKeys: string[]
+  pitchTypes: Array<{ type: string; name: string; color: string }>
+  metric: MixMetric
+  xAxisLabel: string
+}) {
+  const W = 560, H = 170, PL = 36, PR = 10, PT = 14, PB = 26
+  const pw = W - PL - PR, ph = H - PT - PB
+
+  const series = pitchTypes.map(pt => {
+    const vals: (number | null)[] = xKeys.map(xk => {
+      const bkt = data[xk]
+      if (!bkt?.[pt.type]) return null
+      const { count, whiffs, rvSum } = bkt[pt.type]
+      const total = Object.values(bkt).reduce((s, b) => s + b.count, 0)
+      if (metric === 'usage') return total > 0 ? (count / total) * 100 : null
+      if (metric === 'whiff') return count >= 5 ? (whiffs / count) * 100 : null
+      return count >= 5 ? rvSum / count : null
+    })
+    return { ...pt, vals }
+  }).filter(s => s.vals.some(v => v !== null))
+
+  if (series.length === 0) return <p className="text-[10px] text-538-muted py-4 text-center">No data</p>
+
+  const allVals = series.flatMap(s => s.vals).filter((v): v is number => v !== null)
+  let yMin: number, yMax: number
+  if (metric === 'usage') { yMin = 0; yMax = 100 }
+  else if (metric === 'whiff') { yMin = 0; yMax = Math.max(60, ...allVals) + 5 }
+  else {
+    const mn = Math.min(...allVals, 0), mx = Math.max(...allVals, 0)
+    const range = Math.max(mx - mn, 0.05)
+    yMin = mn - range * 0.2; yMax = mx + range * 0.2
+  }
+
+  const xs = (i: number) => PL + (i / Math.max(xKeys.length - 1, 1)) * pw
+  const ys = (v: number) => PT + ph - ((v - yMin) / (yMax - yMin)) * ph
+  const grids = metric === 'usage' ? [25, 50, 75] : metric === 'whiff' ? [20, 40] : [0]
+  const fmtG = (v: number) => metric === 'rv' ? (v >= 0 ? '+' : '') + v.toFixed(2) : v + '%'
+
+  return (
+    <div>
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        {grids.map(v => (
+          <g key={v}>
+            <line x1={PL} y1={ys(v).toFixed(1)} x2={W - PR} y2={ys(v).toFixed(1)} stroke="#374151" strokeWidth={0.5} strokeDasharray="2,3" />
+            <text x={PL - 3} y={(ys(v) + 3).toFixed(1)} textAnchor="end" fontSize={6} fill="#6B7280" fontFamily="monospace">{fmtG(v)}</text>
+          </g>
+        ))}
+        {metric === 'rv' && (
+          <line x1={PL} y1={ys(0).toFixed(1)} x2={W - PR} y2={ys(0).toFixed(1)} stroke="#4B5563" strokeWidth={0.75} strokeDasharray="3,2" />
+        )}
+        <line x1={PL} y1={PT + ph} x2={W - PR} y2={PT + ph} stroke="#374151" strokeWidth={0.5} />
+        {xKeys.map((k, i) => (
+          <text key={k} x={xs(i).toFixed(1)} y={H - 5} textAnchor="middle" fontSize={6.5} fill="#6B7280" fontFamily="monospace">{k}</text>
+        ))}
+        {series.map(s => {
+          const segs: string[][] = []
+          let cur: string[] = []
+          s.vals.forEach((v, i) => {
+            if (v === null) { if (cur.length) { segs.push(cur); cur = [] } }
+            else cur.push(`${xs(i).toFixed(1)},${ys(v).toFixed(1)}`)
+          })
+          if (cur.length) segs.push(cur)
+          return segs.map((seg, si) => (
+            <polyline key={`${s.type}-${si}`} points={seg.join(' ')} fill="none" stroke={s.color} strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+          ))
+        })}
+        {series.map(s =>
+          s.vals.map((v, i) => v === null ? null : (
+            <circle key={i} cx={xs(i).toFixed(1)} cy={ys(v).toFixed(1)} r={2.5} fill={s.color} />
+          ))
+        )}
+      </svg>
+      <p className="text-center text-[7px] text-538-muted mt-0.5">{xAxisLabel}</p>
+      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 justify-center">
+        {series.map(s => (
+          <div key={s.type} className="flex items-center gap-1">
+            <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
+            <span className="text-[9px] text-538-muted">{s.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PitchContactProfile({
+  pitchTypes, byPitchType,
+}: {
+  pitchTypes: Array<{ type: string; name: string; color: string; count: number }>
+  byPitchType: Record<string, { count: number; gb: number; fb: number; ld: number; popup: number; whiffs: number; rvSum: number }>
+}) {
+  const total = pitchTypes.reduce((s, p) => s + p.count, 0)
+  const shown = pitchTypes.filter(pt => (byPitchType[pt.type]?.count ?? 0) >= 10)
+  if (shown.length === 0) return <p className="text-[10px] text-538-muted py-4 text-center">No contact data</p>
+
+  return (
+    <div className="space-y-3">
+      {shown.map(pt => {
+        const d = byPitchType[pt.type]
+        const contact = d.gb + d.fb + d.ld + d.popup
+        const usagePct = total > 0 ? (d.count / total * 100) : 0
+        const whiffPct = d.count > 0 ? (d.whiffs / d.count * 100) : 0
+        const avgRv = d.count > 0 ? d.rvSum / d.count : 0
+        const gbPct = contact > 0 ? d.gb / contact * 100 : 0
+        const fbPct = contact > 0 ? d.fb / contact * 100 : 0
+        const ldPct = contact > 0 ? d.ld / contact * 100 : 0
+        const puPct = contact > 0 ? d.popup / contact * 100 : 0
+        return (
+          <div key={pt.type} className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 justify-between flex-wrap">
+              <div className="flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: pt.color }} />
+                <span className="text-[10px] font-semibold text-538-text">{pt.name}</span>
+              </div>
+              <div className="flex gap-3 text-[9px] text-538-muted font-mono">
+                <span>Usage&nbsp;<span className="text-538-text font-bold">{usagePct.toFixed(0)}%</span></span>
+                <span>Whiff&nbsp;<span className="text-538-text font-bold">{whiffPct.toFixed(0)}%</span></span>
+                <span>Avg RV&nbsp;<span style={{ color: avgRv >= 0 ? '#34D399' : '#F87171' }} className="font-bold">{avgRv >= 0 ? '+' : ''}{avgRv.toFixed(3)}</span></span>
+              </div>
+            </div>
+            {contact > 0 ? (
+              <div className="flex rounded overflow-hidden h-4 w-full text-[8px]">
+                {gbPct > 0 && <div title={`GB ${gbPct.toFixed(0)}%`} style={{ width: gbPct + '%', backgroundColor: '#34D399' }} className="flex items-center justify-center text-black font-bold overflow-hidden">{gbPct >= 12 ? `${gbPct.toFixed(0)}%` : ''}</div>}
+                {ldPct > 0 && <div title={`LD ${ldPct.toFixed(0)}%`} style={{ width: ldPct + '%', backgroundColor: '#F59E0B' }} className="flex items-center justify-center text-black font-bold overflow-hidden">{ldPct >= 12 ? `${ldPct.toFixed(0)}%` : ''}</div>}
+                {fbPct > 0 && <div title={`FB ${fbPct.toFixed(0)}%`} style={{ width: fbPct + '%', backgroundColor: '#3B82F6' }} className="flex items-center justify-center text-white font-bold overflow-hidden">{fbPct >= 12 ? `${fbPct.toFixed(0)}%` : ''}</div>}
+                {puPct > 0 && <div title={`PU ${puPct.toFixed(0)}%`} style={{ width: puPct + '%', backgroundColor: '#6B7280' }} className="flex items-center justify-center text-white font-bold overflow-hidden">{puPct >= 12 ? `${puPct.toFixed(0)}%` : ''}</div>}
+              </div>
+            ) : (
+              <div className="h-4 rounded bg-538-border/30 flex items-center px-2">
+                <span className="text-[8px] text-538-muted">No batted ball data</span>
+              </div>
+            )}
+          </div>
+        )
+      })}
+      <div className="flex gap-4 text-[8px] text-538-muted mt-1 flex-wrap">
+        {[['#34D399','GB — Ground Ball'],['#F59E0B','LD — Line Drive'],['#3B82F6','FB — Fly Ball'],['#6B7280','PU — Popup']].map(([c,l]) => (
+          <span key={l} className="flex items-center gap-1">
+            <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: c }} />{l}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Stat Box ───────────────────────────────────────────────────────────────────
 
 function StatBox({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -668,6 +834,17 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [gameRarData, setGameRarData] = useState<GameRarEntry[]>([])
+  const [pitchMixData, setPitchMixData] = useState<PitchMixData | null>(null)
+  const [abMetric, setAbMetric] = useState<MixMetric>('usage')
+  const [gameView, setGameView] = useState<'game' | 'inning'>('game')
+  const [gameMetric, setGameMetric] = useState<MixMetric>('usage')
+
+  useEffect(() => {
+    setPitchMixData(null)
+    fetch(`/api/pitcher-pitch-mix?pitcherId=${pitcherId}&season=${season}`)
+      .then(r => r.ok ? r.json() : null).catch(() => null)
+      .then((d: PitchMixData | null) => { if (d?.pitchTypes?.length) setPitchMixData(d) })
+  }, [pitcherId, season])
 
   useEffect(() => {
     setLoading(true); setError(''); setData(null); setGameRarData([])
@@ -758,6 +935,80 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
                 games={gameRarData} war={warData?.war}
                 pitcherId={pitcherId} pitcherName={data.pitcherName} teamAbbr={data.teamAbbr ?? ''}
               />
+            </div>
+          )}
+
+          {/* Pitch sequencing — By Count in At-Bat */}
+          {pitchMixData && (
+            <div className="space-y-4">
+              {/* Chart 1: By AB pitch count */}
+              <div className="bg-surface border border-538-border rounded-xl p-4">
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Pitch Mix · By Count in At-Bat</div>
+                    <div className="text-[9px] text-538-muted mt-0.5">Avg pitch selection at each point in the AB · season</div>
+                  </div>
+                  <div className="inline-flex rounded border border-538-border overflow-hidden text-[9px]">
+                    {(['usage','whiff','rv'] as MixMetric[]).map(m => (
+                      <button key={m} onClick={() => setAbMetric(m)}
+                        className={`px-2 py-1 font-semibold transition-colors ${abMetric === m ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
+                        {m === 'usage' ? 'Usage %' : m === 'whiff' ? 'Whiff %' : 'Avg RV'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <PitchMixLineChart
+                  data={pitchMixData.byAbPitch} xKeys={AB_KEYS}
+                  pitchTypes={pitchMixData.pitchTypes} metric={abMetric}
+                  xAxisLabel="Pitch number in at-bat"
+                />
+              </div>
+
+              {/* Chart 2: By game pitch count / inning */}
+              <div className="bg-surface border border-538-border rounded-xl p-4">
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted">
+                      Pitch Mix · By {gameView === 'game' ? 'Game Pitch Count' : 'Inning'}
+                    </div>
+                    <div className="text-[9px] text-538-muted mt-0.5">
+                      How pitch selection evolves {gameView === 'game' ? 'through the game' : 'inning by inning'} · season avg
+                    </div>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    <div className="inline-flex rounded border border-538-border overflow-hidden text-[9px]">
+                      {(['game','inning'] as const).map(v => (
+                        <button key={v} onClick={() => setGameView(v)}
+                          className={`px-2 py-1 font-semibold transition-colors ${gameView === v ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
+                          {v === 'game' ? 'By Pitch #' : 'By Inning'}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="inline-flex rounded border border-538-border overflow-hidden text-[9px]">
+                      {(['usage','whiff','rv'] as MixMetric[]).map(m => (
+                        <button key={m} onClick={() => setGameMetric(m)}
+                          className={`px-2 py-1 font-semibold transition-colors ${gameMetric === m ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
+                          {m === 'usage' ? 'Usage %' : m === 'whiff' ? 'Whiff %' : 'Avg RV'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <PitchMixLineChart
+                  data={gameView === 'game' ? pitchMixData.byGamePitch : pitchMixData.byInning}
+                  xKeys={gameView === 'game' ? GAME_KEYS : INNING_KEYS}
+                  pitchTypes={pitchMixData.pitchTypes} metric={gameMetric}
+                  xAxisLabel={gameView === 'game' ? 'Pitch number in game' : 'Inning'}
+                />
+              </div>
+
+              {/* Chart 3: Per-pitch contact profile */}
+              <div className="bg-surface border border-538-border rounded-xl p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-3">
+                  Pitch Contact Profile · Season
+                </div>
+                <PitchContactProfile pitchTypes={pitchMixData.pitchTypes} byPitchType={pitchMixData.byPitchType} />
+              </div>
             </div>
           )}
 
