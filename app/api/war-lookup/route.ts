@@ -11,17 +11,49 @@ const HEADERS = {
   'Accept-Encoding': 'identity',   // force uncompressed so text() works reliably
 }
 
+// ── HTML entity decoder ───────────────────────────────────────────────────────
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
+  // Uppercase accents
+  Agrave: 'À', Aacute: 'Á', Acirc: 'Â', Atilde: 'Ã', Auml: 'Ä', Aring: 'Å', AElig: 'Æ',
+  Ccedil: 'Ç',
+  Egrave: 'È', Eacute: 'É', Ecirc: 'Ê', Euml: 'Ë',
+  Igrave: 'Ì', Iacute: 'Í', Icirc: 'Î', Iuml: 'Ï',
+  Ntilde: 'Ñ',
+  Ograve: 'Ò', Oacute: 'Ó', Ocirc: 'Ô', Otilde: 'Õ', Ouml: 'Ö',
+  Ugrave: 'Ù', Uacute: 'Ú', Ucirc: 'Û', Uuml: 'Ü',
+  Yacute: 'Ý',
+  // Lowercase accents
+  agrave: 'à', aacute: 'á', acirc: 'â', atilde: 'ã', auml: 'ä', aring: 'å', aelig: 'æ',
+  ccedil: 'ç',
+  egrave: 'è', eacute: 'é', ecirc: 'ê', euml: 'ë',
+  igrave: 'ì', iacute: 'í', icirc: 'î', iuml: 'ï',
+  ntilde: 'ñ',
+  ograve: 'ò', oacute: 'ó', ocirc: 'ô', otilde: 'õ', ouml: 'ö',
+  ugrave: 'ù', uacute: 'ú', ucirc: 'û', uuml: 'ü',
+  yacute: 'ý', yuml: 'ÿ',
+  szlig: 'ß',
+}
+
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&([a-zA-Z]+);/g, (_, name) => NAMED_ENTITIES[name] ?? _)
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)))
+}
+
 // ── Name extraction ───────────────────────────────────────────────────────────
 function extractPlayerName(html: string): string {
   const m = html.match(/<title[^>]*>([^<]+)<\/title>/i)
   if (!m) return 'Unknown'
-  return m[1]
-    .replace(/\s*Stats.*$/i, '')      // "Stats, Height, Weight…"
-    .replace(/\s*Statistics.*$/i, '') // older pages
-    .replace(/\s*\|.*$/i, '')         // "| Baseball-Reference.com"
-    .replace(/\s*-\s*Baseball.*$/i, '')
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .trim()
+  return decodeEntities(
+    m[1]
+      .replace(/\s*Stats.*$/i, '')      // "Stats, Height, Weight…"
+      .replace(/\s*Statistics.*$/i, '') // older pages
+      .replace(/\s*\|.*$/i, '')         // "| Baseball-Reference.com"
+      .replace(/\s*-\s*Baseball.*$/i, '')
+      .trim()
+  )
 }
 
 // ── Comment-aware HTML flattener ──────────────────────────────────────────────
@@ -82,7 +114,7 @@ function getStat(row: string, ...names: string[]): string {
       if (cellOpen === -1) continue
       const cellClose = row.indexOf('</t', cellOpen)
       const cell = cellClose === -1 ? row.slice(cellOpen) : row.slice(cellOpen, cellClose)
-      const text = cell.replace(/<[^>]*>/g, '').trim()
+      const text = decodeEntities(cell.replace(/<[^>]*>/g, '').trim())
       if (text) return text
     }
   }
