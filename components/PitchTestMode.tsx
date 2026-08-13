@@ -8,11 +8,11 @@ import type { SelectedPitch } from './PitchVisualizer'
 const PitchAnimation3D = dynamic(() => import('./PitchAnimation3D'), { ssr: false })
 
 const PITCH_COLORS: Record<string, string> = {
-  FF: '#C62828', SI: '#E64A19', FC: '#F57C00',
-  SL: '#1565C0', ST: '#6A1B9A', SV: '#7B1FA2',
-  CU: '#283593', KC: '#37474F',
-  CH: '#2E7D32', FS: '#00695C',
-  KN: '#546E7A', EP: '#78909C',
+  FF: '#e63946', SI: '#c1121f', FC: '#f4a0a9', FT: '#ec9a9a',
+  SL: '#457b9d', ST: '#6096ba', SV: '#2b4d6f', SW: '#264653',
+  CU: '#1d3557', KC: '#2a6f97',
+  CH: '#a8dadc', FS: '#74c0c3', FO: '#5aacb0', SC: '#3a8fa3',
+  KN: '#7094a8', EP: '#b8c8d4',
 }
 const pitchColor = (pt: string) => PITCH_COLORS[pt] ?? '#888'
 
