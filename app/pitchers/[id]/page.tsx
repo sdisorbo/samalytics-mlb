@@ -566,6 +566,7 @@ function PitcherSeasonRvChart({ games, war, pitcherId, pitcherName, teamAbbr }: 
         )}
       </div>
 
+      <div style={{ maxWidth: W }}>
       <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
         <defs>
           <clipPath id="rpaa-above-zero"><rect x={0} y={0} width={W} height={baselineY} /></clipPath>
@@ -584,6 +585,7 @@ function PitcherSeasonRvChart({ games, war, pitcherId, pitcherName, teamAbbr }: 
         <text x={PAD_X} y={H - 2} fontSize={7} fill="#6B7280" fontFamily="sans-serif">App. 1</text>
         <text x={W - PAD_X} y={H - 2} textAnchor="end" fontSize={7} fill="#6B7280" fontFamily="sans-serif">App. {games.length}</text>
       </svg>
+      </div>
 
       <p className="text-[8px] text-538-muted mt-1">
         Cumulative RPAA (Runs Prevented Above Average) · {games.length} appearances
@@ -719,7 +721,14 @@ function PitchMixLineChart({
     )
   }
 
-  const series = pitchTypes.map(pt => {
+  const [hiddenPitches, setHiddenPitches] = useState(new Set<string>())
+  const togglePitch = (type: string) => setHiddenPitches(prev => {
+    const next = new Set(prev)
+    next.has(type) ? next.delete(type) : next.add(type)
+    return next
+  })
+
+  const allSeries = pitchTypes.map(pt => {
     const vals: (number | null)[] = xKeys.map(xk => {
       const bkt = data[xk]
       if (!bkt?.[pt.type]) return null
@@ -732,27 +741,45 @@ function PitchMixLineChart({
     return { ...pt, vals }
   }).filter(s => s.vals.some(v => v !== null))
 
-  if (series.length === 0) return <p className="text-[10px] text-538-muted py-4 text-center">No data</p>
+  if (allSeries.length === 0) return <p className="text-[10px] text-538-muted py-4 text-center">No data</p>
+
+  const series = allSeries.filter(s => !hiddenPitches.has(s.type))
 
   const allVals = series.flatMap(s => s.vals).filter((v): v is number => v !== null)
-  const yMax = metric === 'usage' ? 100 : Math.max(60, ...allVals) + 5
-  const grids = metric === 'usage' ? [25, 50, 75] : [20, 40, 60]
+  const dataMax = allVals.length ? Math.max(...allVals) : 10
+  const yMax = metric === 'usage'
+    ? Math.ceil((dataMax * 1.25) / 5) * 5
+    : Math.ceil((dataMax * 1.2 + 2) / 5) * 5
+  const grids = Array.from({ length: Math.floor(yMax / 5) }, (_, i) => (i + 1) * 5).filter(v => v < yMax)
 
   const xs = (i: number) => PL + (i / Math.max(xKeys.length - 1, 1)) * pw
   const ys = (v: number) => PT + ph - (v / yMax) * ph
 
-  // Overall average line (weighted by pitch count) for whiff/strike
-  const avgVals: (number | null)[] = metric === 'usage' ? [] : xKeys.map(xk => {
-    const bkt = data[xk]
-    if (!bkt) return null
-    const totCount = Object.values(bkt).reduce((s, b) => s + b.count, 0)
-    if (totCount < 5) return null
-    if (metric === 'whiff') return Object.values(bkt).reduce((s, b) => s + b.whiffs, 0) / totCount * 100
-    return Object.values(bkt).reduce((s, b) => s + b.strikes, 0) / totCount * 100
-  })
-
   return (
     <div>
+      {/* Pitch type toggles */}
+      <div className="flex flex-wrap gap-1.5 mb-2">
+        {allSeries.map(s => {
+          const hidden = hiddenPitches.has(s.type)
+          return (
+            <button
+              key={s.type}
+              onClick={() => togglePitch(s.type)}
+              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold border transition-opacity"
+              style={{
+                borderColor: s.color,
+                color: hidden ? '#6B7280' : s.color,
+                opacity: hidden ? 0.4 : 1,
+                background: 'transparent',
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: hidden ? '#6B7280' : s.color, display: 'inline-block' }} />
+              {s.type}
+            </button>
+          )
+        })}
+      </div>
+
       <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
         {grids.map(v => (
           <g key={v}>
@@ -761,22 +788,6 @@ function PitchMixLineChart({
           </g>
         ))}
         <line x1={PL} y1={PT + ph} x2={W - PR} y2={PT + ph} stroke="#374151" strokeWidth={0.5} />
-
-        {/* Average trend line */}
-        {avgVals.length > 0 && (() => {
-          const avgPts = avgVals.map((v, i) => v !== null ? `${xs(i).toFixed(1)},${ys(v).toFixed(1)}` : null).filter(Boolean)
-          let lastAvgIdx = -1
-          avgVals.forEach((v, i) => { if (v !== null) lastAvgIdx = i })
-          return (
-            <>
-              <polyline points={avgPts.join(' ')} fill="none" stroke="#6B7280" strokeWidth={1} strokeDasharray="4,2" strokeLinecap="round" />
-              {lastAvgIdx >= 0 && avgVals[lastAvgIdx] !== null && (
-                <text x={(xs(lastAvgIdx) + 5).toFixed(1)} y={(ys(avgVals[lastAvgIdx]!) + 3).toFixed(1)}
-                  fontSize={6.5} fill="#6B7280" fontFamily="monospace">Avg</text>
-              )}
-            </>
-          )
-        })()}
 
         {/* Per-pitch lines */}
         {series.flatMap(s => {

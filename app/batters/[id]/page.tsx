@@ -646,6 +646,7 @@ function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
         )}
       </div>
 
+      <div style={{ maxWidth: W }}>
       <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
         <defs>
           <clipPath id="rar-above-zero">
@@ -687,6 +688,7 @@ function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
           Game {games.length}
         </text>
       </svg>
+      </div>
 
       <p className="text-[8px] text-538-muted mt-1">
         Cumulative RAR (Runs Above Expected) · {games.length} games
