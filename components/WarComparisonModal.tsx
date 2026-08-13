@@ -195,11 +195,13 @@ function CustomPickCard({
   metric: 'war' | 'off_war' | 'def_war'
   metricLabel: string
 }) {
-  const [query, setQuery]       = useState('')
-  const [results, setResults]   = useState<WarSearchResult[]>([])
-  const [loading, setLoading]   = useState(false)
-  const [picked, setPicked]     = useState<WarSearchResult | null>(null)
-  const [open, setOpen]         = useState(false)
+  const [query, setQuery]         = useState('')
+  const [results, setResults]     = useState<WarSearchResult[]>([])
+  const [loading, setLoading]     = useState(false)
+  const [lookupLoading, setLookupLoading] = useState(false)
+  const [lookupError, setLookupError]     = useState<string | null>(null)
+  const [picked, setPicked]       = useState<WarSearchResult | null>(null)
+  const [open, setOpen]           = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -214,7 +216,7 @@ function CustomPickCard({
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  // Debounced search
+  // Debounced local search
   useEffect(() => {
     if (query.length < 2) { setResults([]); setOpen(false); return }
     const t = setTimeout(async () => {
@@ -230,6 +232,36 @@ function CustomPickCard({
     }, 280)
     return () => clearTimeout(t)
   }, [query])
+
+  // Enter key → Baseball Reference lookup for historical players
+  async function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== 'Enter') return
+    if (query.trim().length < 2) return
+    // If a local result is highlighted, pick it instead
+    if (results.length > 0) {
+      setPicked(results[0])
+      setQuery(results[0].name)
+      setOpen(false)
+      return
+    }
+    setOpen(false)
+    setLookupError(null)
+    setLookupLoading(true)
+    try {
+      const res = await fetch(`/api/war-lookup?name=${encodeURIComponent(query.trim())}`)
+      const data = await res.json()
+      if (!res.ok) {
+        setLookupError(data.error ?? 'Player not found')
+      } else {
+        setPicked({ name: data.name, career: data.career })
+        setQuery(data.name)
+      }
+    } catch {
+      setLookupError('Could not reach Baseball Reference')
+    } finally {
+      setLookupLoading(false)
+    }
+  }
 
   const playerColor = getTeamColor(playerTeam)
   const compColor   = picked?.team ? getTeamColor(picked.team) : LEGEND_GRAY
@@ -313,20 +345,21 @@ function CustomPickCard({
             <input
               ref={inputRef}
               value={query}
-              onChange={(e) => { setQuery(e.target.value); if (picked) setPicked(null) }}
+              onChange={(e) => { setQuery(e.target.value); if (picked) setPicked(null); setLookupError(null) }}
               onFocus={() => results.length > 0 && setOpen(true)}
-              placeholder="Search any player, past or present…"
+              onKeyDown={handleKeyDown}
+              placeholder="Search current players or press Enter for any…"
               className="flex-1 text-xs bg-transparent border border-538-border rounded px-2 py-1.5 text-538-text placeholder:text-538-muted focus:outline-none focus:border-538-text transition-colors"
             />
             {(query || picked) && (
               <button
-                onClick={() => { setQuery(''); setPicked(null); setResults([]); setOpen(false); inputRef.current?.focus() }}
+                onClick={() => { setQuery(''); setPicked(null); setResults([]); setOpen(false); setLookupError(null); inputRef.current?.focus() }}
                 className="text-538-muted hover:text-538-text transition-colors text-xs px-1"
               >✕</button>
             )}
           </div>
 
-          {/* Dropdown */}
+          {/* Local search dropdown */}
           {open && results.length > 0 && (
             <div className="absolute top-full left-0 right-0 z-20 mt-0.5 bg-surface border border-538-border rounded shadow-lg overflow-hidden">
               {results.map((r, i) => (
@@ -348,12 +381,22 @@ function CustomPickCard({
               Searching…
             </div>
           )}
-          {open && !loading && results.length === 0 && query.length >= 2 && (
+          {open && !loading && results.length === 0 && query.length >= 2 && !lookupLoading && (
             <div className="absolute top-full left-0 right-0 z-20 mt-0.5 bg-surface border border-538-border rounded shadow px-3 py-2 text-xs text-538-muted">
-              No players found
+              No local results — press <kbd className="font-mono bg-538-border/40 px-1 rounded">↵ Enter</kbd> to look up on Baseball Reference
             </div>
           )}
         </div>
+
+        {/* BBREF lookup states */}
+        {lookupLoading && (
+          <p className="text-[10px] text-538-muted mt-1.5 animate-pulse">
+            Looking up &ldquo;{query}&rdquo; on Baseball Reference…
+          </p>
+        )}
+        {lookupError && (
+          <p className="text-[10px] text-red-400 mt-1.5">{lookupError}</p>
+        )}
       </div>
 
       {picked ? (
