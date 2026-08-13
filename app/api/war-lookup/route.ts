@@ -6,102 +6,139 @@ export const dynamic = 'force-dynamic'
 const BBREF = 'https://www.baseball-reference.com'
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-  'Accept': 'text/html,application/xhtml+xml',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   'Accept-Language': 'en-US,en;q=0.9',
+  'Accept-Encoding': 'identity',   // force uncompressed so text() works reliably
 }
 
-// Extract text content of a data-stat cell from a row's HTML
-function getStat(rowHtml: string, stat: string): string {
-  const idx = rowHtml.indexOf(`data-stat="${stat}"`)
-  if (idx === -1) return ''
-  // Find the opening <td or <th tag before this attribute
-  const cellOpen = rowHtml.lastIndexOf('<t', idx)
-  if (cellOpen === -1) return ''
-  const cellClose = rowHtml.indexOf('</t', cellOpen)
-  const cell = cellClose === -1 ? rowHtml.slice(cellOpen) : rowHtml.slice(cellOpen, cellClose)
-  // Strip all HTML tags to get text content
-  return cell.replace(/<[^>]*>/g, '').trim()
+// ── Name extraction ───────────────────────────────────────────────────────────
+function extractPlayerName(html: string): string {
+  const m = html.match(/<title[^>]*>([^<]+)<\/title>/i)
+  if (!m) return 'Unknown'
+  return m[1]
+    .replace(/\s*Stats.*$/i, '')      // "Stats, Height, Weight…"
+    .replace(/\s*Statistics.*$/i, '') // older pages
+    .replace(/\s*\|.*$/i, '')         // "| Baseball-Reference.com"
+    .replace(/\s*-\s*Baseball.*$/i, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .trim()
 }
 
-// Parse a BBREF batting_value or batting_standard table HTML into WarSeason[]
+// ── Comment-aware HTML flattener ──────────────────────────────────────────────
+// BBREF hides advanced tables inside <!-- --> comments as an anti-scraping
+// measure. This exposes them so we can search by id= regardless of location.
+function uncomment(html: string): string {
+  let out = ''
+  let i = 0
+  while (i < html.length) {
+    const s = html.indexOf('<!--', i)
+    if (s === -1) { out += html.slice(i); break }
+    out += html.slice(i, s)           // text before comment → keep
+    const e = html.indexOf('-->', s + 4)
+    if (e === -1) { out += html.slice(s + 4); break }
+    out += html.slice(s + 4, e)       // comment body → expose (strip <!-- -->)
+    i = e + 3
+  }
+  return out
+}
+
+// ── Table extractor with nesting depth counter ────────────────────────────────
+// The naive indexOf('</table>') grabs the FIRST closing tag, which can be a
+// nested inner table's close. Count open/close tags to find the real end.
+function extractTable(flat: string, tableId: string): string | null {
+  const start = flat.indexOf(`id="${tableId}"`)
+  if (start === -1) return null
+
+  const tableOpen = flat.lastIndexOf('<table', start)
+  if (tableOpen === -1) return null
+
+  let depth = 0
+  let i = tableOpen
+  while (i < flat.length) {
+    const nextOpen  = flat.indexOf('<table', i)
+    const nextClose = flat.indexOf('</table>', i)
+    if (nextClose === -1) return null
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++
+      i = nextOpen + 6
+    } else {
+      depth--
+      const end = nextClose + 8
+      if (depth === 0) return flat.slice(tableOpen, end)
+      i = end
+    }
+  }
+  return null
+}
+
+// ── Per-row stat extractor ────────────────────────────────────────────────────
+// Handles both `data-stat="WAR"` and `data-stat="war"` (BBREF varies).
+function getStat(row: string, ...names: string[]): string {
+  for (const name of names) {
+    for (const attr of [`data-stat="${name}"`, `data-stat="${name.toLowerCase()}"`, `data-stat="${name.toUpperCase()}"`]) {
+      const idx = row.indexOf(attr)
+      if (idx === -1) continue
+      const cellOpen  = row.lastIndexOf('<t', idx)
+      if (cellOpen === -1) continue
+      const cellClose = row.indexOf('</t', cellOpen)
+      const cell = cellClose === -1 ? row.slice(cellOpen) : row.slice(cellOpen, cellClose)
+      const text = cell.replace(/<[^>]*>/g, '').trim()
+      if (text) return text
+    }
+  }
+  return ''
+}
+
+// ── Table → WarSeason[] ───────────────────────────────────────────────────────
 function parseWarTable(tableHtml: string): WarSeason[] {
-  // Split into rows — only care about <tr> with data-stat content
-  const rowChunks = tableHtml.split(/<tr\b/)
   const seasons: WarSeason[] = []
+  const seen = new Set<string>()
 
-  for (const chunk of rowChunks) {
+  for (const chunk of tableHtml.split(/<tr\b/)) {
     const yearStr = getStat(chunk, 'year_ID')
-    const year = parseInt(yearStr, 10)
+    const year    = parseInt(yearStr, 10)
     if (!year || year < 1871 || year > 2030) continue
 
-    // Skip multi-team aggregate rows (TOT, 2TM, etc.)
     const team = getStat(chunk, 'team_ID')
-    if (!team || /^\d?T[A-Z]$/.test(team) || team === 'TOT') continue
+    // Skip multi-team aggregate rows (2TM, 3TM, TOT)
+    if (!team || /^\d+T[A-Z]$/.test(team) || team === 'TOT') continue
 
-    const warRaw = getStat(chunk, 'WAR')
-    const war = parseFloat(warRaw)
+    const warStr = getStat(chunk, 'WAR', 'war')
+    const war    = parseFloat(warStr)
     if (isNaN(war)) continue
 
-    const offRaw = getStat(chunk, 'oWAR')
-    const defRaw = getStat(chunk, 'dWAR')
+    const key = `${year}:${team}`
+    if (seen.has(key)) continue
+    seen.add(key)
 
+    const offRaw = parseFloat(getStat(chunk, 'oWAR', 'off_war'))
+    const defRaw = parseFloat(getStat(chunk, 'dWAR', 'def_war'))
     const g   = parseInt(getStat(chunk, 'G'), 10)
     const pa  = parseInt(getStat(chunk, 'PA'), 10)
     const ip  = parseFloat(getStat(chunk, 'IP'))
 
     seasons.push({
-      year,
-      team,
-      g:       isNaN(g)  ? undefined : g,
-      pa:      isNaN(pa) ? null : pa,
-      ip:      isNaN(ip) ? undefined : ip,
+      year, team,
+      g:       isNaN(g)   ? undefined : g,
+      pa:      isNaN(pa)  ? null : pa,
+      ip:      isNaN(ip)  ? undefined : ip,
       war,
-      off_war: isNaN(parseFloat(offRaw)) ? null : parseFloat(offRaw),
-      def_war: isNaN(parseFloat(defRaw)) ? null : parseFloat(defRaw),
+      off_war: isNaN(offRaw) ? null : offRaw,
+      def_war: isNaN(defRaw) ? null : defRaw,
     })
   }
 
-  // Deduplicate by year+team (keep first occurrence) and sort chronologically
-  const seen = new Set<string>()
-  return seasons
-    .filter((s) => { const k = `${s.year}:${s.team}`; if (seen.has(k)) return false; seen.add(k); return true })
-    .sort((a, b) => a.year - b.year)
+  return seasons.sort((a, b) => a.year - b.year)
 }
 
-// Extract a named table from HTML — also checks inside HTML comments (BBREF hides some tables there)
-function extractTable(html: string, tableId: string): string | null {
-  // Try regular HTML first
-  let start = html.indexOf(`id="${tableId}"`)
-  let source = html
-  if (start === -1) {
-    // Try inside HTML comments (BBREF anti-scraping measure for advanced tables)
-    const stripped = html.replace(/<!--([\s\S]*?)-->/g, (_, inner) =>
-      inner.includes(tableId) ? inner : ''
-    )
-    start = stripped.indexOf(`id="${tableId}"`)
-    if (start === -1) return null
-    source = stripped
-  }
-  const tableOpen = source.lastIndexOf('<table', start)
-  if (tableOpen === -1) return null
-  const tableClose = source.indexOf('</table>', tableOpen)
-  return tableClose === -1 ? null : source.slice(tableOpen, tableClose + 8)
-}
-
-// Derive player name from the page's <title> element
-function extractPlayerName(html: string): string {
-  const m = html.match(/<title[^>]*>([^<]+)<\/title>/i)
-  if (!m) return 'Unknown'
-  return m[1].replace(/\s*Statistics.*$/i, '').replace(/\s*-\s*Baseball.*$/i, '').trim()
-}
-
+// ── Main handler ──────────────────────────────────────────────────────────────
 export async function GET(req: NextRequest) {
   const name = req.nextUrl.searchParams.get('name')?.trim()
   if (!name || name.length < 2) {
     return NextResponse.json({ error: 'Missing name' }, { status: 400 })
   }
 
-  // 1. Hit BBREF search — follows redirects automatically
+  // 1. Search BBREF (follows redirects; single-match searches redirect to player page)
   let playerHtml: string
   let resolvedName = name
 
@@ -112,23 +149,18 @@ export async function GET(req: NextRequest) {
       redirect: 'follow',
       next: { revalidate: 86400 * 30 },
     })
-
     if (!searchRes.ok) {
       return NextResponse.json({ error: `Baseball Reference returned ${searchRes.status}` }, { status: 502 })
     }
 
-    const finalUrl = searchRes.url
-
-    if (finalUrl.includes('/players/')) {
-      // Single match — redirected straight to the player page
+    if (searchRes.url.includes('/players/')) {
       playerHtml = await searchRes.text()
       resolvedName = extractPlayerName(playerHtml)
     } else {
-      // Multiple matches — parse the search results page for the first player link
       const searchHtml = await searchRes.text()
-      const linkMatch = searchHtml.match(/href="(\/players\/[a-z]\/[a-zA-Z0-9]+\.shtml)"/)
+      const linkMatch  = searchHtml.match(/href="(\/players\/[a-z]\/[a-zA-Z0-9]+\.shtml)"/)
       if (!linkMatch) {
-        return NextResponse.json({ error: `No player found matching "${name}"` }, { status: 404 })
+        return NextResponse.json({ error: `No player found matching "${name}" — check the spelling` }, { status: 404 })
       }
       const playerRes = await fetch(`${BBREF}${linkMatch[1]}`, {
         headers: HEADERS,
@@ -141,25 +173,28 @@ export async function GET(req: NextRequest) {
       resolvedName = extractPlayerName(playerHtml)
     }
   } catch (err) {
-    return NextResponse.json({ error: `Fetch failed: ${String(err)}` }, { status: 502 })
+    return NextResponse.json({ error: `Network error: ${String(err)}` }, { status: 502 })
   }
 
-  // 2. Try batting_value → pitching_value → batting_standard → pitching_standard
+  // 2. Flatten HTML (expose any comment-hidden tables)
+  const flat = uncomment(playerHtml)
+
+  // 3. Try tables in order of preference
   const tableIds = ['batting_value', 'pitching_value', 'batting_standard', 'pitching_standard']
   let seasons: WarSeason[] = []
 
-  for (const tableId of tableIds) {
-    const tableHtml = extractTable(playerHtml, tableId)
+  for (const id of tableIds) {
+    const tableHtml = extractTable(flat, id)
     if (!tableHtml) continue
     const parsed = parseWarTable(tableHtml)
-    if (parsed.length > 0) {
-      seasons = parsed
-      break
-    }
+    if (parsed.length > 0) { seasons = parsed; break }
   }
 
   if (seasons.length === 0) {
-    return NextResponse.json({ error: `Found "${resolvedName}" but could not parse career WAR stats` }, { status: 422 })
+    return NextResponse.json(
+      { error: `Found "${resolvedName}" but could not parse career WAR data — BBREF may have changed their page format` },
+      { status: 422 }
+    )
   }
 
   return NextResponse.json({ name: resolvedName, career: seasons })
