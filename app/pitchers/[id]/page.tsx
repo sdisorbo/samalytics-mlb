@@ -656,12 +656,167 @@ function PitchArsenalTable({ pitches }: { pitches: ArsenalPitch[] }) {
 
 // ── Pitch Mix Charts ───────────────────────────────────────────────────────────
 
+async function exportPitchMixImage(opts: {
+  pitcherId: string; pitcherName: string; teamAbbr: string
+  chartTitle: string; xAxisLabel: string; metric: MixMetric
+  xKeys: string[]; series: Array<{ type: string; name: string; color: string; vals: (number | null)[] }>
+  yMax: number
+}) {
+  const { pitcherId, pitcherName, teamAbbr, chartTitle, xAxisLabel, metric, xKeys, series, yMax } = opts
+  const SCALE = 2, W = 560, PAD = 16
+  const IMG_SIZE = 48, HEADER_H = 72
+  const CW = W - 2 * PAD, PL = 36, PR = 80, PT = 12, PB = 24
+  const CHART_H = 160, LEGEND_H = 20, FOOTER_H = 22
+  const H = PAD + HEADER_H + CHART_H + LEGEND_H + FOOTER_H + PAD
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const slug = ESPN_ABBR_EXPORT[teamAbbr] ?? teamAbbr.toLowerCase()
+  const [headshotImg, logoImg, siteLogoImg] = await Promise.all([
+    loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${pitcherId}/headshot/67/current`),
+    loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+    loadImg('/logo.png'),
+  ])
+
+  // Header
+  const hY = PAD + (HEADER_H - IMG_SIZE) / 2
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+  const lx = W - PAD - IMG_SIZE
+  if (logoImg) { ctx.drawImage(logoImg, lx, hY, IMG_SIZE, IMG_SIZE) }
+  else {
+    ctx.fillStyle = '#374151'; canvasRoundRect(ctx, lx, hY, IMG_SIZE, IMG_SIZE, 6); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 11px sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    ctx.fillText(teamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
+  }
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillText(pitcherName, W / 2, PAD + HEADER_H / 2 - 9)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '11px sans-serif'
+  ctx.fillText(chartTitle, W / 2, PAD + HEADER_H / 2 + 11)
+
+  // Chart area
+  const chartTop = PAD + HEADER_H
+  const pw = CW - PL - PR, ph = CHART_H - PT - PB
+  const xs = (i: number) => PAD + PL + (i / Math.max(xKeys.length - 1, 1)) * pw
+  const ys = (v: number) => chartTop + PT + ph - (v / yMax) * ph
+
+  // Grid lines
+  const grids = Array.from({ length: Math.floor(yMax / 5) }, (_, i) => (i + 1) * 5).filter(v => v < yMax)
+  ctx.setLineDash([3, 4])
+  grids.forEach(v => {
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.5
+    ctx.beginPath(); ctx.moveTo(PAD + PL, ys(v)); ctx.lineTo(PAD + PL + pw, ys(v)); ctx.stroke()
+    ctx.fillStyle = '#6B7280'; ctx.font = '8px monospace'
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText(`${v}%`, PAD + PL - 3, ys(v))
+  })
+  ctx.setLineDash([])
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.5
+  ctx.beginPath(); ctx.moveTo(PAD + PL, chartTop + PT + ph); ctx.lineTo(PAD + PL + pw, chartTop + PT + ph); ctx.stroke()
+
+  // Lines + dots
+  series.forEach(s => {
+    const segs: [number, number][][] = []
+    let cur: [number, number][] = []
+    s.vals.forEach((v, i) => {
+      if (v === null) { if (cur.length) { segs.push(cur); cur = [] } }
+      else cur.push([xs(i), ys(v)])
+    })
+    if (cur.length) segs.push(cur)
+    segs.forEach(seg => {
+      ctx.beginPath(); ctx.moveTo(seg[0][0], seg[0][1])
+      seg.slice(1).forEach(([px, py]) => ctx.lineTo(px, py))
+      ctx.strokeStyle = s.color; ctx.lineWidth = 1.5
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke()
+    })
+    s.vals.forEach((v, i) => {
+      if (v === null) return
+      ctx.beginPath(); ctx.arc(xs(i), ys(v), 2.5, 0, Math.PI * 2)
+      ctx.fillStyle = s.color; ctx.fill()
+    })
+    // End label
+    let lastIdx = -1
+    s.vals.forEach((v, i) => { if (v !== null) lastIdx = i })
+    if (lastIdx >= 0 && s.vals[lastIdx] !== null) {
+      const v = s.vals[lastIdx]!
+      ctx.fillStyle = s.color; ctx.font = 'bold 8px monospace'
+      ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
+      ctx.fillText(s.type, xs(lastIdx) + 5, ys(v))
+      ctx.font = '7px monospace'; ctx.textBaseline = 'top'
+      ctx.fillText(`${v.toFixed(0)}%`, xs(lastIdx) + 5, ys(v))
+    }
+  })
+
+  // X-axis labels
+  xKeys.forEach((k, i) => {
+    ctx.fillStyle = '#6B7280'; ctx.font = '8px monospace'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top'
+    ctx.fillText(k, xs(i), chartTop + PT + ph + 4)
+  })
+
+  // Legend
+  const legendTop = chartTop + CHART_H + 4
+  let llx = PAD + PL
+  series.forEach(s => {
+    ctx.fillStyle = s.color
+    ctx.beginPath(); ctx.arc(llx + 4, legendTop + 5, 4, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '8px sans-serif'
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+    const label = s.name || s.type
+    ctx.fillText(label, llx + 12, legendTop + 5)
+    llx += 12 + ctx.measureText(label).width + 10
+  })
+
+  // Footer
+  const footerY = legendTop + LEGEND_H + 2
+  ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText(xAxisLabel, PAD, footerY)
+  const LOGO_H = 16, LOGO_W = Math.round(LOGO_H * 989 / 623)
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, W - PAD - LOGO_W, footerY, LOGO_W, LOGO_H)
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText('samalytics', W - PAD - LOGO_W - 4, footerY + LOGO_H / 2)
+  } else {
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top'
+    ctx.fillText('samalytics', W - PAD, footerY)
+  }
+
+  canvas.toBlob(async blob => {
+    if (!blob) return
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+    } catch {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url
+      a.download = `${pitcherName.replace(/\s+/g, '_')}_pitch_mix.png`; a.click()
+      URL.revokeObjectURL(url)
+    }
+  }, 'image/png')
+}
+
 const AB_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8+']
 const INNING_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 const GAME_KEYS = ['1-15', '16-30', '31-45', '46-60', '61-75', '76-90', '91+']
 
 function PitchMixLineChart({
   data, xKeys, pitchTypes, metric, xAxisLabel, eraByInning,
+  pitcherId, pitcherName, teamAbbr, chartTitle,
 }: {
   data: Record<string, Record<string, PitchBucket>>
   xKeys: string[]
@@ -669,6 +824,7 @@ function PitchMixLineChart({
   metric: MixMetric
   xAxisLabel: string
   eraByInning?: Record<string, { runs: number; appearances: number }>
+  pitcherId: string; pitcherName: string; teamAbbr: string; chartTitle: string
 }) {
   const W = 560, H = 170, PL = 36, PR = 80, PT = 16, PB = 24
   const pw = W - PL - PR, ph = H - PT - PB
@@ -722,6 +878,7 @@ function PitchMixLineChart({
   }
 
   const [hiddenPitches, setHiddenPitches] = useState(new Set<string>())
+  const [copying, setCopying] = useState(false)
   const togglePitch = (type: string) => setHiddenPitches(prev => {
     const next = new Set(prev)
     next.has(type) ? next.delete(type) : next.add(type)
@@ -757,8 +914,8 @@ function PitchMixLineChart({
 
   return (
     <div>
-      {/* Pitch type toggles */}
-      <div className="flex flex-wrap gap-1.5 mb-2">
+      {/* Pitch type toggles + copy button */}
+      <div className="flex flex-wrap items-center gap-1.5 mb-2">
         {allSeries.map(s => {
           const hidden = hiddenPitches.has(s.type)
           return (
@@ -778,6 +935,18 @@ function PitchMixLineChart({
             </button>
           )
         })}
+        <button
+          onClick={async () => {
+            setCopying(true)
+            await exportPitchMixImage({ pitcherId, pitcherName, teamAbbr, chartTitle, xAxisLabel, metric, xKeys, series, yMax })
+            setTimeout(() => setCopying(false), 1500)
+          }}
+          disabled={copying}
+          className="ml-auto text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded border transition-colors"
+          style={copying ? { color: '#4ADE80', borderColor: '#4ADE80' } : { color: '#9CA3AF', borderColor: '#374151' }}
+        >
+          {copying ? '✓ Copied' : '⎘ Copy Image'}
+        </button>
       </div>
 
       <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
@@ -1138,6 +1307,8 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
                   data={pitchMixData.byAbPitch} xKeys={AB_KEYS}
                   pitchTypes={pitchMixData.pitchTypes} metric={abMetric}
                   xAxisLabel="Pitch number in at-bat"
+                  pitcherId={pitcherId} pitcherName={data.pitcherName} teamAbbr={data.teamAbbr ?? ''}
+                  chartTitle="Pitch Mix · By Count in At-Bat"
                 />
               </div>
 
@@ -1177,6 +1348,8 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
                   pitchTypes={pitchMixData.pitchTypes} metric={gameMetric}
                   xAxisLabel={gameView === 'game' ? 'Pitch number in game' : 'Inning'}
                   eraByInning={gameView === 'inning' ? pitchMixData.eraByInning : undefined}
+                  pitcherId={pitcherId} pitcherName={data.pitcherName} teamAbbr={data.teamAbbr ?? ''}
+                  chartTitle={`Pitch Mix · By ${gameView === 'game' ? 'Game Pitch Count' : 'Inning'}`}
                 />
               </div>
 
