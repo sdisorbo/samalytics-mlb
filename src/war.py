@@ -82,7 +82,7 @@ def _fetch_bwar_bat() -> "pd.DataFrame":
     url = "https://www.baseball-reference.com/data/war_daily_bat.txt"
     resp = requests.get(url, timeout=60)
     resp.raise_for_status()
-    return pd.read_csv(io.StringIO(resp.text), low_memory=False)
+    return pd.read_csv(io.BytesIO(resp.content), encoding='utf-8', low_memory=False)
 
 
 def _fetch_bwar_pitch() -> "pd.DataFrame":
@@ -92,7 +92,7 @@ def _fetch_bwar_pitch() -> "pd.DataFrame":
     url = "https://www.baseball-reference.com/data/war_daily_pitch.txt"
     resp = requests.get(url, timeout=60)
     resp.raise_for_status()
-    return pd.read_csv(io.StringIO(resp.text), low_memory=False)
+    return pd.read_csv(io.BytesIO(resp.content), encoding='utf-8', low_memory=False)
 
 
 def fetch_current_war(season: int, bat_df=None) -> list[dict]:
