@@ -5,6 +5,7 @@ import { getPitchers } from './data'
 const MLB_API = 'https://statsapi.mlb.com/api/v1'
 
 export { PITCH_COLORS } from './pitchColors'
+import { PITCH_COLORS } from './pitchColors'
 
 export const PITCH_NAMES: Record<string, string> = {
   FF: '4-Seam Fastball', SI: 'Sinker', FC: 'Cutter', FT: '2-Seam',
