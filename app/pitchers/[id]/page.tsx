@@ -802,7 +802,8 @@ function PitchMixLineChart({
 
         {/* End-of-line labels: pitch code + value */}
         {series.map(s => {
-          const lastIdx = s.vals.reduce((acc, v, i) => v !== null ? i : acc, -1)
+          let lastIdx = -1
+          s.vals.forEach((v, i) => { if (v !== null) lastIdx = i })
           if (lastIdx < 0 || s.vals[lastIdx] === null) return null
           const v = s.vals[lastIdx]!
           const lx = xs(lastIdx) + 5
