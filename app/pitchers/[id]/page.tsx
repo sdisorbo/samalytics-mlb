@@ -765,7 +765,8 @@ function PitchMixLineChart({
         {/* Average trend line */}
         {avgVals.length > 0 && (() => {
           const avgPts = avgVals.map((v, i) => v !== null ? `${xs(i).toFixed(1)},${ys(v).toFixed(1)}` : null).filter(Boolean)
-          const lastAvgIdx = avgVals.reduce((acc, v, i) => v !== null ? i : acc, -1)
+          let lastAvgIdx = -1
+          avgVals.forEach((v, i) => { if (v !== null) lastAvgIdx = i })
           return (
             <>
               <polyline points={avgPts.join(' ')} fill="none" stroke="#6B7280" strokeWidth={1} strokeDasharray="4,2" strokeLinecap="round" />
