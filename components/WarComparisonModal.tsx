@@ -1,33 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ReferenceLine, ResponsiveContainer,
+  ReferenceLine, ResponsiveContainer, Customized,
 } from 'recharts'
 import type { PlayerWar, LegendWar, WarSeason } from '../lib/types'
+import type { WarSearchResult } from '../app/api/war-search/route'
 
 type WarMetric = 'war' | 'off_war' | 'def_war' | 'table'
 
 const LEGEND_GRAY = '#CCCCCC'
 
-// Renders a filled circle only at the last data point of a line.
-// Must return a ReactElement (not null) to satisfy Recharts' LineDot type.
 function endDot(color: string, lastIndex: number) {
   return (props: any) => {
     const { cx, cy, index } = props as { cx?: number; cy?: number; index?: number }
     if (index !== lastIndex || !cx || !cy) return <g key={`skip-${index}`} />
     return (
-      <circle
-        key={`dot-${index}`}
-        cx={cx}
-        cy={cy}
-        r={4}
-        fill={color}
-        stroke="var(--color-surface, #fff)"
-        strokeWidth={1.5}
-      />
+      <circle key={`dot-${index}`} cx={cx} cy={cy} r={4} fill={color}
+        stroke="var(--color-surface, #fff)" strokeWidth={1.5} />
     )
   }
 }
@@ -49,13 +41,13 @@ export function getTeamColor(team: string): string {
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────
 function ChartTooltip({
-  active, payload, label, metricLabel, legendName, playerName,
+  active, payload, label, metricLabel, compName, playerName,
 }: {
   active?: boolean
   payload?: Array<{ name: string; value: number; color: string }>
   label?: number
   metricLabel: string
-  legendName: string
+  compName: string
   playerName: string
 }) {
   if (!active || !payload?.length) return null
@@ -64,7 +56,7 @@ function ChartTooltip({
       <p className="font-bold text-538-muted mb-1">Career Year {label}</p>
       {payload.map((p) => (
         <p key={p.name} style={{ color: p.color }}>
-          {p.name === 'legend' ? legendName : playerName}:{' '}
+          {p.name === 'legend' ? compName : playerName}:{' '}
           <span className="font-semibold">
             {p.value > 0 ? '+' : ''}{p.value.toFixed(1)} {metricLabel}
           </span>
@@ -74,18 +66,41 @@ function ChartTooltip({
   )
 }
 
-// ── One card: player career arc vs a single legend's career arc ───────────────
-function ComparisonCard({
-  legendName,
-  legendSeasons,
-  playerName,
-  playerTeam,
-  playerCareer,
-  metric,
-  metricLabel,
+// ── Between-lines grey fill (Recharts Customized) ─────────────────────────────
+interface ChartPoint {
+  careerYear: number
+  legend: number | null
+  player: number | null
+}
+
+function BetweenFill({
+  chartData,
+  xAxisMap,
+  yAxisMap,
 }: {
-  legendName: string
-  legendSeasons: WarSeason[]
+  chartData: ChartPoint[]
+  xAxisMap?: Record<number, { scale: (v: number) => number }>
+  yAxisMap?: Record<number, { scale: (v: number) => number }>
+}) {
+  const xScale = xAxisMap?.[0]?.scale
+  const yScale = yAxisMap?.[0]?.scale
+  if (!xScale || !yScale) return null
+
+  const valid = chartData.filter((d) => d.player != null && d.legend != null)
+  if (valid.length < 2) return null
+
+  const top = valid.map((d) => `${xScale(d.careerYear).toFixed(1)},${Math.min(yScale(d.player!), yScale(d.legend!)).toFixed(1)}`)
+  const bot = [...valid].reverse().map((d) => `${xScale(d.careerYear).toFixed(1)},${Math.max(yScale(d.player!), yScale(d.legend!)).toFixed(1)}`)
+
+  return <polygon points={[...top, ...bot].join(' ')} fill="rgba(156,163,175,0.2)" />
+}
+
+// ── Comparison card ───────────────────────────────────────────────────────────
+function ComparisonCard({
+  compName, compCareer, playerName, playerTeam, playerCareer, metric, metricLabel,
+}: {
+  compName: string
+  compCareer: WarSeason[]
   playerName: string
   playerTeam: string
   playerCareer: WarSeason[]
@@ -93,22 +108,20 @@ function ComparisonCard({
   metricLabel: string
 }) {
   const playerColor = getTeamColor(playerTeam)
-  const maxYears    = Math.max(legendSeasons.length, playerCareer.length)
+  const maxYears = Math.max(compCareer.length, playerCareer.length)
 
-  // Merge both careers onto a shared career-year x-axis
-  const data = Array.from({ length: maxYears }, (_, i) => ({
+  const data: ChartPoint[] = Array.from({ length: maxYears }, (_, i) => ({
     careerYear: i + 1,
-    legend: i < legendSeasons.length ? parseFloat((legendSeasons[i][metric] ?? 0).toFixed(2)) : null,
-    player: i < playerCareer.length  ? parseFloat((playerCareer[i][metric]  ?? 0).toFixed(2)) : null,
+    legend: i < compCareer.length  ? parseFloat((compCareer[i][metric]  ?? 0).toFixed(2)) : null,
+    player: i < playerCareer.length ? parseFloat((playerCareer[i][metric] ?? 0).toFixed(2)) : null,
   }))
 
-  const legendVals = legendSeasons.map((s) => s[metric] ?? 0)
-  const playerVals = playerCareer.map((s)  => s[metric] ?? 0)
-  const allVals    = [...legendVals, ...playerVals].filter((v) => v != null) as number[]
-  const legendPeak = Math.max(...legendVals)
+  const compVals   = compCareer.map((s)   => s[metric] ?? 0)
+  const playerVals = playerCareer.map((s) => s[metric] ?? 0)
+  const allVals    = [...compVals, ...playerVals].filter((v) => v != null) as number[]
+  const compPeak   = Math.max(...compVals)
   const yMin = Math.floor(Math.min(...allVals) - 0.5)
-  const yMax = Math.ceil(Math.max(...allVals)  + 0.5)
-
+  const yMax = Math.ceil(Math.max(...allVals) + 0.5)
   const playerPeak    = playerVals.length ? Math.max(...playerVals) : 0
   const playerCurrent = playerVals.length ? playerVals[playerVals.length - 1] : 0
 
@@ -116,13 +129,12 @@ function ComparisonCard({
     <div className="border border-538-border rounded-lg p-4 bg-surface">
       <div className="mb-2">
         <p className="text-xs font-bold text-538-muted uppercase tracking-wide">vs.</p>
-        <h3 className="text-base font-black text-538-text leading-tight">{legendName}</h3>
-        {legendName === 'Justin Verlander' && (
+        <h3 className="text-base font-black text-538-text leading-tight">{compName}</h3>
+        {compName === 'Justin Verlander' && (
           <span className="text-[10px] text-538-muted">(pitcher bWAR)</span>
         )}
       </div>
 
-      {/* Callout */}
       <div className="flex justify-between text-xs mb-3">
         <div>
           <span className="font-bold" style={{ color: playerColor }}>{playerName}</span>
@@ -137,9 +149,9 @@ function ComparisonCard({
           )}
         </div>
         <div className="text-right">
-          <span className="font-bold text-538-muted">{legendName.split(' ').pop()}</span>
+          <span className="font-bold text-538-muted">{compName.split(' ').pop()}</span>
           <p className="font-mono font-black text-538-muted">
-            {legendPeak > 0 ? '+' : ''}{legendPeak.toFixed(1)}{' '}
+            {compPeak > 0 ? '+' : ''}{compPeak.toFixed(1)}{' '}
             <span className="font-normal">career peak</span>
           </p>
         </div>
@@ -147,64 +159,215 @@ function ComparisonCard({
 
       <ResponsiveContainer width="100%" height={150}>
         <LineChart data={data} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
-          <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="var(--color-border, #e5e5e5)"
-            vertical={false}
-          />
-          <XAxis
-            dataKey="careerYear"
-            tick={{ fontSize: 9, fill: 'var(--color-muted, #888)' }}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(v) => `Yr ${v}`}
-            interval="preserveStartEnd"
-          />
-          <YAxis
-            domain={[yMin, yMax]}
-            tick={{ fontSize: 9, fill: 'var(--color-muted, #888)' }}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(v) => (v > 0 ? `+${v}` : String(v))}
-          />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border, #e5e5e5)" vertical={false} />
+          <XAxis dataKey="careerYear" tick={{ fontSize: 9, fill: 'var(--color-muted, #888)' }}
+            tickLine={false} axisLine={false} tickFormatter={(v) => `Yr ${v}`} interval="preserveStartEnd" />
+          <YAxis domain={[yMin, yMax]} tick={{ fontSize: 9, fill: 'var(--color-muted, #888)' }}
+            tickLine={false} axisLine={false} tickFormatter={(v) => (v > 0 ? `+${v}` : String(v))} />
           <ReferenceLine y={0} stroke="var(--color-border, #e5e5e5)" strokeWidth={1} />
-          <Tooltip
-            content={
-              <ChartTooltip
-                metricLabel={metricLabel}
-                legendName={legendName}
-                playerName={playerName}
-              />
-            }
-          />
-          {/* Legend career — gray */}
-          <Line
-            type="monotone"
-            dataKey="legend"
-            stroke={LEGEND_GRAY}
-            strokeWidth={2}
-            dot={endDot(LEGEND_GRAY, legendSeasons.length - 1)}
-            activeDot={{ r: 3, stroke: LEGEND_GRAY }}
-            connectNulls={false}
-          />
-          {/* Player career — team color */}
-          <Line
-            type="monotone"
-            dataKey="player"
-            stroke={playerColor}
-            strokeWidth={2.5}
+          <Tooltip content={
+            <ChartTooltip metricLabel={metricLabel} compName={compName} playerName={playerName} />
+          } />
+          {/* Grey fill between lines */}
+          <Customized component={<BetweenFill chartData={data} />} />
+          {/* Comparison line — dashed grey */}
+          <Line type="monotone" dataKey="legend" stroke={LEGEND_GRAY} strokeWidth={1.5}
+            strokeDasharray="5 3"
+            dot={endDot(LEGEND_GRAY, compCareer.length - 1)}
+            activeDot={{ r: 3, stroke: LEGEND_GRAY }} connectNulls={false} />
+          {/* Player line — solid team color */}
+          <Line type="monotone" dataKey="player" stroke={playerColor} strokeWidth={2.5}
             dot={endDot(playerColor, playerCareer.length - 1)}
-            activeDot={{ r: 3, stroke: playerColor }}
-            connectNulls={false}
-          />
+            activeDot={{ r: 3, stroke: playerColor }} connectNulls={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
   )
 }
 
-// ── Career stats table ────────────────────────────────────────────────────────
+// ── Custom pick card ──────────────────────────────────────────────────────────
+function CustomPickCard({
+  playerName, playerTeam, playerCareer, metric, metricLabel,
+}: {
+  playerName: string
+  playerTeam: string
+  playerCareer: WarSeason[]
+  metric: 'war' | 'off_war' | 'def_war'
+  metricLabel: string
+}) {
+  const [query, setQuery]       = useState('')
+  const [results, setResults]   = useState<WarSearchResult[]>([])
+  const [loading, setLoading]   = useState(false)
+  const [picked, setPicked]     = useState<WarSearchResult | null>(null)
+  const [open, setOpen]         = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  // Debounced search
+  useEffect(() => {
+    if (query.length < 2) { setResults([]); setOpen(false); return }
+    const t = setTimeout(async () => {
+      setLoading(true)
+      try {
+        const res = await fetch(`/api/war-search?q=${encodeURIComponent(query)}`)
+        const data = await res.json()
+        setResults(data)
+        setOpen(true)
+      } finally {
+        setLoading(false)
+      }
+    }, 280)
+    return () => clearTimeout(t)
+  }, [query])
+
+  const playerColor = getTeamColor(playerTeam)
+  const compColor   = picked?.team ? getTeamColor(picked.team) : LEGEND_GRAY
+
+  // Build chart data when a player is picked
+  let chartEl: React.ReactNode = null
+  if (picked) {
+    const maxYears = Math.max(picked.career.length, playerCareer.length)
+    const data: ChartPoint[] = Array.from({ length: maxYears }, (_, i) => ({
+      careerYear: i + 1,
+      legend: i < picked.career.length  ? parseFloat((picked.career[i][metric]  ?? 0).toFixed(2)) : null,
+      player: i < playerCareer.length    ? parseFloat((playerCareer[i][metric]   ?? 0).toFixed(2)) : null,
+    }))
+    const compVals   = picked.career.map((s)  => s[metric] ?? 0)
+    const playerVals = playerCareer.map((s)   => s[metric] ?? 0)
+    const allVals    = [...compVals, ...playerVals].filter((v) => v != null) as number[]
+    const yMin = Math.floor(Math.min(...allVals) - 0.5)
+    const yMax = Math.ceil(Math.max(...allVals) + 0.5)
+    const compPeak   = compVals.length   ? Math.max(...compVals) : 0
+    const playerPeak = playerVals.length ? Math.max(...playerVals) : 0
+    const playerCurrent = playerVals.length ? playerVals[playerVals.length - 1] : 0
+
+    chartEl = (
+      <>
+        <div className="flex justify-between text-xs mb-3">
+          <div>
+            <span className="font-bold" style={{ color: playerColor }}>{playerName}</span>
+            <p className="font-mono font-black" style={{ color: playerColor }}>
+              {playerCurrent > 0 ? '+' : ''}{playerCurrent.toFixed(1)}{' '}
+              <span className="font-normal text-538-muted">this season</span>
+            </p>
+            {playerPeak !== playerCurrent && (
+              <p className="font-mono text-[10px]" style={{ color: playerColor, opacity: 0.7 }}>
+                {playerPeak > 0 ? '+' : ''}{playerPeak.toFixed(1)} career peak
+              </p>
+            )}
+          </div>
+          <div className="text-right">
+            <span className="font-bold" style={{ color: compColor }}>{picked.name.split(' ').pop()}</span>
+            <p className="font-mono font-black" style={{ color: compColor }}>
+              {compPeak > 0 ? '+' : ''}{compPeak.toFixed(1)}{' '}
+              <span className="font-normal text-538-muted">career peak</span>
+            </p>
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height={150}>
+          <LineChart data={data} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border, #e5e5e5)" vertical={false} />
+            <XAxis dataKey="careerYear" tick={{ fontSize: 9, fill: 'var(--color-muted, #888)' }}
+              tickLine={false} axisLine={false} tickFormatter={(v) => `Yr ${v}`} interval="preserveStartEnd" />
+            <YAxis domain={[yMin, yMax]} tick={{ fontSize: 9, fill: 'var(--color-muted, #888)' }}
+              tickLine={false} axisLine={false} tickFormatter={(v) => (v > 0 ? `+${v}` : String(v))} />
+            <ReferenceLine y={0} stroke="var(--color-border, #e5e5e5)" strokeWidth={1} />
+            <Tooltip content={
+              <ChartTooltip metricLabel={metricLabel} compName={picked.name} playerName={playerName} />
+            } />
+            <Customized component={<BetweenFill chartData={data} />} />
+            {/* Custom pick line — dashed */}
+            <Line type="monotone" dataKey="legend" stroke={compColor} strokeWidth={1.5}
+              strokeDasharray="5 3"
+              dot={endDot(compColor, picked.career.length - 1)}
+              activeDot={{ r: 3, stroke: compColor }} connectNulls={false} />
+            {/* Player line — solid */}
+            <Line type="monotone" dataKey="player" stroke={playerColor} strokeWidth={2.5}
+              dot={endDot(playerColor, playerCareer.length - 1)}
+              activeDot={{ r: 3, stroke: playerColor }} connectNulls={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      </>
+    )
+  }
+
+  return (
+    <div className="border border-538-border rounded-lg p-4 bg-surface">
+      <div className="mb-3">
+        <p className="text-xs font-bold text-538-muted uppercase tracking-wide mb-1">Pick your own</p>
+
+        <div ref={containerRef} className="relative">
+          <div className="flex items-center gap-1.5">
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); if (picked) setPicked(null) }}
+              onFocus={() => results.length > 0 && setOpen(true)}
+              placeholder="Search any player, past or present…"
+              className="flex-1 text-xs bg-transparent border border-538-border rounded px-2 py-1.5 text-538-text placeholder:text-538-muted focus:outline-none focus:border-538-text transition-colors"
+            />
+            {(query || picked) && (
+              <button
+                onClick={() => { setQuery(''); setPicked(null); setResults([]); setOpen(false); inputRef.current?.focus() }}
+                className="text-538-muted hover:text-538-text transition-colors text-xs px-1"
+              >✕</button>
+            )}
+          </div>
+
+          {/* Dropdown */}
+          {open && results.length > 0 && (
+            <div className="absolute top-full left-0 right-0 z-20 mt-0.5 bg-surface border border-538-border rounded shadow-lg overflow-hidden">
+              {results.map((r, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setPicked(r); setQuery(r.name); setOpen(false) }}
+                  className="w-full text-left px-3 py-2 text-xs hover:bg-538-border/30 transition-colors flex items-center justify-between gap-2"
+                >
+                  <span className="font-semibold text-538-text">{r.name}</span>
+                  <span className="text-538-muted shrink-0">
+                    {r.team ? `${r.team} · ` : ''}{r.player_type ?? 'Legend'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+          {open && loading && (
+            <div className="absolute top-full left-0 right-0 z-20 mt-0.5 bg-surface border border-538-border rounded shadow px-3 py-2 text-xs text-538-muted">
+              Searching…
+            </div>
+          )}
+          {open && !loading && results.length === 0 && query.length >= 2 && (
+            <div className="absolute top-full left-0 right-0 z-20 mt-0.5 bg-surface border border-538-border rounded shadow px-3 py-2 text-xs text-538-muted">
+              No players found
+            </div>
+          )}
+        </div>
+      </div>
+
+      {picked ? (
+        chartEl
+      ) : (
+        <div className="flex items-center justify-center h-[168px] text-538-muted text-xs text-center px-4">
+          Search above to compare {playerName} against any player in MLB history
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Career stats table ────────────────────────────────────────────────────────
 function fmt3(v: number | null | undefined) {
   if (v == null) return '—'
   return v.toFixed(3).replace(/^0/, '')
@@ -267,7 +430,6 @@ function CareerTable({ career, playerColor }: { career: WarSeason[]; playerColor
   )
 }
 
-
 // ── Modal ─────────────────────────────────────────────────────────────────────
 interface Props {
   player: PlayerWar
@@ -281,9 +443,9 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
   const isPitcher = player.player_type === 'pitcher'
   const activeMetric = isPitcher && (metric === 'off_war' || metric === 'def_war') ? 'war' : metric
 
-  const metricLabel  = activeMetric === 'war' ? 'WAR' : activeMetric === 'off_war' ? 'oWAR' : activeMetric === 'def_war' ? 'dWAR' : ''
-  const playerColor  = getTeamColor(player.team)
-  const isTableView  = activeMetric === 'table'
+  const metricLabel = activeMetric === 'war' ? 'WAR' : activeMetric === 'off_war' ? 'oWAR' : activeMetric === 'def_war' ? 'dWAR' : ''
+  const playerColor = getTeamColor(player.team)
+  const isTableView = activeMetric === 'table'
 
   const metricOptions: { value: WarMetric; label: string }[] = [
     { value: 'war',     label: 'Total WAR' },
@@ -291,7 +453,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
       { value: 'off_war' as WarMetric, label: 'Offense' },
       { value: 'def_war' as WarMetric, label: 'Defense' },
     ] : []),
-    { value: 'table',   label: 'Table'     },
+    { value: 'table', label: 'Table' },
   ]
 
   return (
@@ -309,10 +471,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
             <p className="text-xs text-538-muted mt-0.5 flex flex-wrap gap-x-2">
               <span>
                 {player.team} · {player.g} G
-                {isPitcher
-                  ? ` · ${player.ip?.toFixed(1) ?? '—'} IP`
-                  : ` · ${player.pa} PA`
-                }
+                {isPitcher ? ` · ${player.ip?.toFixed(1) ?? '—'} IP` : ` · ${player.pa} PA`}
               </span>
               <span>
                 <span className="font-semibold" style={{ color: playerColor }}>{player.war.toFixed(1)} WAR</span>
@@ -336,11 +495,7 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
                 </svg>
               </Link>
             )}
-            <button
-              onClick={onClose}
-              className="text-538-muted hover:text-538-text transition-colors p-1"
-              aria-label="Close"
-            >
+            <button onClick={onClose} className="text-538-muted hover:text-538-text transition-colors p-1" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
@@ -368,12 +523,12 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
           {!isTableView && (
             <span className="text-xs text-538-muted flex items-center gap-2 flex-wrap">
               <span className="flex items-center gap-1">
-                <span className="inline-block w-5 border-b-2 border-dashed" style={{ borderColor: LEGEND_GRAY }} />
-                Legend
-              </span>
-              <span className="flex items-center gap-1">
                 <span className="inline-block w-5 border-b-2" style={{ borderColor: playerColor }} />
                 {player.name}
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-5 border-b-2 border-dashed" style={{ borderColor: LEGEND_GRAY }} />
+                Comparison
               </span>
             </span>
           )}
@@ -389,19 +544,27 @@ export default function WarComparisonModal({ player, legendWar, onClose }: Props
             <CareerTable career={player.career} playerColor={playerColor} />
           </div>
         ) : (
-          /* Chart cards */
           <div className="px-4 sm:px-6 py-5">
             <p className="text-xs text-538-muted mb-5">
-              X-axis = career year (Year 1 = MLB debut). {' '}
+              X-axis = career year (Year 1 = MLB debut).{' '}
               <span style={{ color: playerColor }} className="font-semibold">{player.name}</span>
-              {' '}career arc vs. each legend&apos;s full career.
+              {' '}career arc vs. each comparison&apos;s full career.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Custom pick card always first */}
+              <CustomPickCard
+                playerName={player.name}
+                playerTeam={player.team}
+                playerCareer={player.career}
+                metric={activeMetric as 'war' | 'off_war' | 'def_war'}
+                metricLabel={metricLabel}
+              />
+              {/* Pre-set legend cards */}
               {Object.entries(legendWar).map(([name, seasons]) => (
                 <ComparisonCard
                   key={name}
-                  legendName={name}
-                  legendSeasons={seasons}
+                  compName={name}
+                  compCareer={seasons as unknown as WarSeason[]}
                   playerName={player.name}
                   playerTeam={player.team}
                   playerCareer={player.career}
