@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -49,6 +49,15 @@ type AbSeqMetric = 'swing' | 'hardcontact'
 interface BatterSeqBucket { count: number; swings: number; contact: number; hardContact: number }
 interface BatterAbSeqData {
   byAbPitch: Record<string, Record<string, BatterSeqBucket>>
+  pitchTypes: Array<{ type: string; name: string; color: string; count: number }>
+}
+
+interface ScenarioBucket {
+  count: number; swings: number; whiffs: number; contact: number; hardContact: number
+  rv_sum: number; pa: number; h: number; bb: number; ab: number; tb: number
+}
+interface BatterScenarioData {
+  byPT: Record<string, Record<string, Record<string, ScenarioBucket>>>
   pitchTypes: Array<{ type: string; name: string; color: string; count: number }>
 }
 
@@ -1298,6 +1307,143 @@ function BatterAbSequenceChart({
   )
 }
 
+// ── Scenario Builder ───────────────────────────────────────────────────────────
+
+const COUNT_GRID = [
+  ['0-0', '0-1', '0-2'],
+  ['1-0', '1-1', '1-2'],
+  ['2-0', '2-1', '2-2'],
+  ['3-0', '3-1', '3-2'],
+]
+
+interface BarItem { type: string; color: string; value: number | null; fmt: string }
+
+function BarColumn({ title, items, isRv }: { title: string; items: BarItem[]; isRv?: boolean }) {
+  const valid = items.filter(i => i.value !== null)
+  if (!valid.length) return null
+  const absMax = Math.max(...valid.map(i => Math.abs(i.value!)), 0.01)
+  const sorted = [...valid].sort((a, b) => b.value! - a.value!)
+  return (
+    <div style={{ flex: '1 1 105px', minWidth: 105 }}>
+      <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted mb-1.5">{title}</div>
+      {sorted.map(item => {
+        const pct = Math.min(100, (Math.abs(item.value!) / absMax) * 100)
+        const neg = (item.value ?? 0) < 0
+        const barColor = isRv ? (neg ? '#F87171' : '#34D399') : item.color
+        return (
+          <div key={item.type} className="flex items-center gap-1 mb-1">
+            <span className="text-[7px] font-bold font-mono w-5 text-right shrink-0" style={{ color: item.color }}>{item.type}</span>
+            <div className="bg-538-border/20 rounded-sm overflow-hidden h-2.5" style={{ flex: 1 }}>
+              <div className="h-full rounded-sm" style={{ width: `${pct}%`, backgroundColor: barColor }} />
+            </div>
+            <span className={`text-[7px] font-mono w-9 text-right shrink-0 ${isRv ? (neg ? 'text-red-400' : 'text-green-400') : 'text-538-muted'}`}>{item.fmt}</span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function BatterScenarioCharts({ data }: { data: BatterScenarioData }) {
+  const [hand, setHand] = useState<'all' | 'L' | 'R'>('all')
+  const [count, setCount] = useState('all')
+
+  const metrics = useMemo(() => {
+    return data.pitchTypes.map(pt => {
+      const handMap = data.byPT[pt.type]
+      if (!handMap) return null
+      const hands = hand === 'all' ? ['L', 'R'] : [hand]
+      const agg = { count: 0, swings: 0, whiffs: 0, contact: 0, hardContact: 0, rv_sum: 0, pa: 0, h: 0, bb: 0, ab: 0, tb: 0 }
+      for (const h of hands) {
+        const countMap = handMap[h]
+        if (!countMap) continue
+        const buckets = count === 'all'
+          ? Object.values(countMap)
+          : [countMap[count]].filter((b): b is ScenarioBucket => !!b)
+        for (const b of buckets) {
+          agg.count += b.count; agg.swings += b.swings; agg.whiffs += b.whiffs
+          agg.contact += b.contact; agg.hardContact += b.hardContact
+          agg.rv_sum += b.rv_sum; agg.pa += b.pa
+          agg.h += b.h; agg.bb += b.bb; agg.ab += b.ab; agg.tb += b.tb
+        }
+      }
+      if (agg.count < 5) return null
+      const obp = agg.pa >= 5 ? (agg.h + agg.bb) / agg.pa : null
+      const slg = agg.ab >= 5 ? agg.tb / agg.ab : null
+      return {
+        type: pt.type, name: pt.name, color: pt.color,
+        swing: (agg.swings / agg.count) * 100,
+        whiff: agg.swings >= 3 ? (agg.whiffs / agg.swings) * 100 : null,
+        hc:    agg.contact >= 3 ? (agg.hardContact / agg.contact) * 100 : null,
+        ops:   obp !== null && slg !== null ? obp + slg : null,
+        rv:    agg.pa >= 5 ? (agg.rv_sum / agg.pa) * 100 : null,
+      }
+    }).filter((m): m is NonNullable<typeof m> => !!m)
+  }, [data, hand, count])
+
+  const toFmt = (v: number | null, decimals: number, suffix = '') =>
+    v !== null ? `${v.toFixed(decimals)}${suffix}` : ''
+  const toRvFmt = (v: number | null) =>
+    v !== null ? (v >= 0 ? '+' : '') + v.toFixed(1) : ''
+
+  return (
+    <div className="space-y-4">
+      {/* Filters */}
+      <div className="flex flex-wrap gap-5 items-start">
+        <div>
+          <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted mb-1">vs Pitcher</div>
+          <div className="inline-flex border border-538-border rounded overflow-hidden">
+            {(['all', 'L', 'R'] as const).map(h => (
+              <button key={h} onClick={() => setHand(h)}
+                className={`px-2 py-0.5 text-[8px] font-bold transition-colors ${hand === h ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
+                {h === 'all' ? 'Both' : h === 'L' ? 'LHP' : 'RHP'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted mb-1">
+            Count <span className="font-normal normal-case opacity-70">(balls-strikes)</span>
+          </div>
+          <div className="flex flex-col gap-0.5">
+            <button onClick={() => setCount('all')}
+              className={`text-[7.5px] font-bold px-2 py-0.5 rounded transition-colors ${count === 'all' ? 'bg-538-orange text-white' : 'border border-538-border text-538-muted hover:text-538-text'}`}>
+              All Counts
+            </button>
+            <div className="grid grid-cols-3 gap-0.5">
+              {COUNT_GRID.flat().map(ck => (
+                <button key={ck} onClick={() => setCount(ck)}
+                  className={`text-[7.5px] font-bold font-mono py-0.5 rounded transition-colors ${count === ck ? 'bg-538-orange text-white' : 'border border-538-border text-538-muted hover:text-538-text'}`}>
+                  {ck}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mini bar charts */}
+      {metrics.length > 0 ? (
+        <>
+          <div className="flex gap-3 flex-wrap">
+            <BarColumn title="Swing %" items={metrics.map(m => ({ type: m.type, color: m.color, value: m.swing, fmt: toFmt(m.swing, 0, '%') }))} />
+            <BarColumn title="Whiff %" items={metrics.map(m => ({ type: m.type, color: m.color, value: m.whiff, fmt: toFmt(m.whiff, 0, '%') }))} />
+            <BarColumn title="HC %" items={metrics.map(m => ({ type: m.type, color: m.color, value: m.hc, fmt: toFmt(m.hc, 0, '%') }))} />
+            <BarColumn title="OPS" items={metrics.map(m => ({ type: m.type, color: m.color, value: m.ops, fmt: toFmt(m.ops, 3) }))} />
+            <BarColumn title="RV/100 PA" items={metrics.map(m => ({ type: m.type, color: m.color, value: m.rv, fmt: toRvFmt(m.rv) }))} isRv />
+          </div>
+          <p className="text-[7.5px] text-538-muted leading-relaxed">
+            HC% = hard contact (EV ≥ 95) as % of contact · Whiff% = whiffs per swing · RV/100 = run value on outcome pitches
+          </p>
+        </>
+      ) : (
+        <p className="text-[9px] text-538-muted py-2">No data for selected scenario (try a less specific filter)</p>
+      )}
+    </div>
+  )
+}
+
 // ── Stat Box ───────────────────────────────────────────────────────────────────
 
 function StatBox({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -1414,6 +1560,8 @@ export default function BatterPage({ params }: { params: { id: string } }) {
   const [gameRarData, setGameRarData] = useState<GameRarEntry[]>([])
   const [abSeqData, setAbSeqData] = useState<BatterAbSeqData | null>(null)
   const [abSeqLoading, setAbSeqLoading] = useState(false)
+  const [scenarioData, setScenarioData] = useState<BatterScenarioData | null>(null)
+  const [scenarioLoading, setScenarioLoading] = useState(false)
 
   const currentSeason = new Date().getFullYear()
 
@@ -1439,12 +1587,18 @@ export default function BatterPage({ params }: { params: { id: string } }) {
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
 
-    // Lazy-load AB sequence data (uses same game feeds, but separate endpoint)
+    // Lazy-load AB sequence + scenario data (separate endpoints, same game feed source)
     setAbSeqData(null); setAbSeqLoading(true)
+    setScenarioData(null); setScenarioLoading(true)
     fetch(`/api/batter-ab-sequence?batterId=${batterId}&season=${currentSeason}`)
       .then(r => r.ok ? r.json() as Promise<BatterAbSeqData> : null)
       .then(d => { if (d) setAbSeqData(d) })
       .finally(() => setAbSeqLoading(false))
+    fetch(`/api/batter-scenario?batterId=${batterId}&season=${currentSeason}`)
+      .then(r => r.ok ? r.json() as Promise<BatterScenarioData> : null)
+      .then(d => { if (d) setScenarioData(d) })
+      .catch(() => null)
+      .finally(() => setScenarioLoading(false))
   }, [batterId, currentSeason])
 
   if (loading) return <PageSkeleton />
@@ -1527,6 +1681,21 @@ export default function BatterPage({ params }: { params: { id: string } }) {
           <p className="text-[9px] text-538-muted">Loading pitch sequence data…</p>
         ) : (
           <p className="text-[9px] text-538-muted">No pitch sequence data available.</p>
+        )}
+      </div>
+
+      {/* Scenario builder */}
+      <div className="bg-surface border border-538-border rounded-xl p-4">
+        <div className="flex items-baseline gap-2 mb-3">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Pitch Breakdown · Scenario Builder</div>
+          <div className="text-[9px] text-538-muted">· Last 40 games</div>
+        </div>
+        {scenarioData && scenarioData.pitchTypes.length > 0 ? (
+          <BatterScenarioCharts data={scenarioData} />
+        ) : scenarioLoading ? (
+          <p className="text-[9px] text-538-muted">Loading scenario data…</p>
+        ) : (
+          <p className="text-[9px] text-538-muted">No scenario data available.</p>
         )}
       </div>
 
