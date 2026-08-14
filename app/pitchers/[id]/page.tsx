@@ -703,11 +703,12 @@ async function exportPitchMixImage(opts: {
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
     ctx.fillText(teamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
   }
+  const metricLabel = metric === 'usage' ? 'Usage %' : metric === 'whiff' ? 'Whiff %' : metric === 'strike' ? 'Strike %' : 'ERA'
   ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
   ctx.fillText(pitcherName, W / 2, PAD + HEADER_H / 2 - 9)
   ctx.fillStyle = '#9CA3AF'; ctx.font = '11px sans-serif'
-  ctx.fillText(chartTitle, W / 2, PAD + HEADER_H / 2 + 11)
+  ctx.fillText(`${chartTitle} · ${metricLabel}`, W / 2, PAD + HEADER_H / 2 + 11)
 
   // Chart area
   const chartTop = PAD + HEADER_H

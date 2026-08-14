@@ -44,6 +44,13 @@ interface WarSeason { year: number; war: number; off_war: number | null; def_war
 interface GameRarEntry { date: string; gamePk: number; opp: string; pa: number; rv: number; cumRv: number }
 
 type StatKey = 'avg' | 'obp' | 'slg' | 'ops' | 'zone_pct' | 'avg_rv'
+type AbSeqMetric = 'swing' | 'hardcontact'
+
+interface BatterSeqBucket { count: number; swings: number; contact: number; hardContact: number }
+interface BatterAbSeqData {
+  byAbPitch: Record<string, Record<string, BatterSeqBucket>>
+  pitchTypes: Array<{ type: string; name: string; color: string; count: number }>
+}
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
 
@@ -1005,6 +1012,292 @@ function SprayChart({
   )
 }
 
+// ── Batter AB Sequence Chart ──────────────────────────────────────────────────
+
+const BATTER_AB_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8+']
+
+async function exportBatterSeqImage(opts: {
+  batterId: string; batterName: string; teamAbbr: string
+  metric: AbSeqMetric; chartTitle: string
+  xKeys: string[]
+  series: Array<{ type: string; name: string; color: string; vals: (number | null)[] }>
+  yMax: number
+}) {
+  const { batterId, batterName, teamAbbr, metric, chartTitle, xKeys, series, yMax } = opts
+  const SCALE = 2, W = 560, PAD = 16
+  const IMG_SIZE = 48, HEADER_H = 72
+  const CW = W - 2 * PAD, PL = 36, PR = 80, PT = 12, PB = 24
+  const CHART_H = 160, LEGEND_H = 20, FOOTER_H = 22
+  const H = PAD + HEADER_H + CHART_H + LEGEND_H + FOOTER_H + PAD
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const slug = ESPN_ABBR_EXPORT[teamAbbr] ?? teamAbbr.toLowerCase()
+  const [headshotImg, logoImg, siteLogoImg] = await Promise.all([
+    loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${batterId}/headshot/67/current`),
+    loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+    loadImg('/logo.png'),
+  ])
+
+  const hY = PAD + (HEADER_H - IMG_SIZE) / 2
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw, dh, dx, dy
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+    else { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+  const lx = W - PAD - IMG_SIZE
+  if (logoImg) { ctx.drawImage(logoImg, lx, hY, IMG_SIZE, IMG_SIZE) }
+  else {
+    ctx.fillStyle = '#374151'; canvasRoundRect(ctx, lx, hY, IMG_SIZE, IMG_SIZE, 6); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 11px sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    ctx.fillText(teamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
+  }
+  const metricLabel = metric === 'swing' ? 'Swing %' : 'Hard Contact %'
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px sans-serif'
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillText(batterName, W / 2, PAD + HEADER_H / 2 - 9)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '11px sans-serif'
+  ctx.fillText(`${chartTitle} · ${metricLabel}`, W / 2, PAD + HEADER_H / 2 + 11)
+
+  const chartTop = PAD + HEADER_H
+  const pw = CW - PL - PR, ph = CHART_H - PT - PB
+  const xs = (i: number) => PAD + PL + (i / Math.max(xKeys.length - 1, 1)) * pw
+  const ys = (v: number) => chartTop + PT + ph - (v / yMax) * ph
+
+  const grids = Array.from({ length: Math.floor(yMax / 5) }, (_, i) => (i + 1) * 5).filter(v => v < yMax)
+  ctx.setLineDash([3, 4])
+  grids.forEach(v => {
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.5
+    ctx.beginPath(); ctx.moveTo(PAD + PL, ys(v)); ctx.lineTo(PAD + PL + pw, ys(v)); ctx.stroke()
+    ctx.fillStyle = '#6B7280'; ctx.font = '8px monospace'
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText(`${v}%`, PAD + PL - 3, ys(v))
+  })
+  ctx.setLineDash([])
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.5
+  ctx.beginPath(); ctx.moveTo(PAD + PL, chartTop + PT + ph); ctx.lineTo(PAD + PL + pw, chartTop + PT + ph); ctx.stroke()
+
+  series.forEach(s => {
+    const segs: [number, number][][] = []
+    let cur: [number, number][] = []
+    s.vals.forEach((v, i) => {
+      if (v === null) { if (cur.length) { segs.push(cur); cur = [] } }
+      else cur.push([xs(i), ys(v)])
+    })
+    if (cur.length) segs.push(cur)
+    segs.forEach(seg => {
+      ctx.beginPath(); ctx.moveTo(seg[0][0], seg[0][1])
+      seg.slice(1).forEach(([px, py]) => ctx.lineTo(px, py))
+      ctx.strokeStyle = s.color; ctx.lineWidth = 1.5
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke()
+    })
+    s.vals.forEach((v, i) => {
+      if (v === null) return
+      ctx.beginPath(); ctx.arc(xs(i), ys(v), 2.5, 0, Math.PI * 2)
+      ctx.fillStyle = s.color; ctx.fill()
+    })
+    let lastIdx = -1
+    s.vals.forEach((v, i) => { if (v !== null) lastIdx = i })
+    if (lastIdx >= 0 && s.vals[lastIdx] !== null) {
+      const v = s.vals[lastIdx]!
+      ctx.fillStyle = s.color; ctx.font = 'bold 8px monospace'
+      ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
+      ctx.fillText(s.type, xs(lastIdx) + 5, ys(v))
+      ctx.font = '7px monospace'; ctx.textBaseline = 'top'
+      ctx.fillText(`${v.toFixed(0)}%`, xs(lastIdx) + 5, ys(v))
+    }
+  })
+
+  xKeys.forEach((k, i) => {
+    ctx.fillStyle = '#6B7280'; ctx.font = '8px monospace'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top'
+    ctx.fillText(k, xs(i), chartTop + PT + ph + 4)
+  })
+
+  const legendTop = chartTop + CHART_H + 4
+  let llx = PAD + PL
+  series.forEach(s => {
+    ctx.fillStyle = s.color
+    ctx.beginPath(); ctx.arc(llx + 4, legendTop + 5, 4, 0, Math.PI * 2); ctx.fill()
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '8px sans-serif'
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+    const label = s.name || s.type
+    ctx.fillText(label, llx + 12, legendTop + 5)
+    llx += 12 + ctx.measureText(label).width + 10
+  })
+
+  const footerY = legendTop + LEGEND_H + 2
+  ctx.fillStyle = '#4B5563'; ctx.font = '8px sans-serif'
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+  ctx.fillText('Pitch number in at-bat · Last 40 games', PAD, footerY)
+  const LOGO_H = 16, LOGO_W = Math.round(LOGO_H * 989 / 623)
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, W - PAD - LOGO_W, footerY, LOGO_W, LOGO_H)
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+    ctx.fillText('samalytics', W - PAD - LOGO_W - 4, footerY + LOGO_H / 2)
+  } else {
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top'
+    ctx.fillText('samalytics', W - PAD, footerY)
+  }
+
+  canvas.toBlob(async blob => {
+    if (!blob) return
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+    } catch {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url
+      a.download = `${batterName.replace(/\s+/g, '_')}_ab_sequence.png`; a.click()
+      URL.revokeObjectURL(url)
+    }
+  }, 'image/png')
+}
+
+function BatterAbSequenceChart({
+  seqData, batterId, batterName, teamAbbr,
+}: {
+  seqData: BatterAbSeqData
+  batterId: string; batterName: string; teamAbbr: string
+}) {
+  const [metric, setMetric] = useState<AbSeqMetric>('swing')
+  const [hiddenPitches, setHiddenPitches] = useState(new Set<string>())
+  const [copying, setCopying] = useState(false)
+
+  const togglePitch = (type: string) => setHiddenPitches(prev => {
+    const next = new Set(prev)
+    next.has(type) ? next.delete(type) : next.add(type)
+    return next
+  })
+
+  const { byAbPitch, pitchTypes } = seqData
+
+  const allSeries = pitchTypes.map(pt => {
+    const vals: (number | null)[] = BATTER_AB_KEYS.map(k => {
+      const bucket = byAbPitch[k]?.[pt.type]
+      if (!bucket || bucket.count < 5) return null
+      if (metric === 'swing') return (bucket.swings / bucket.count) * 100
+      // Hard contact: % of balls in play that were hard
+      if (bucket.contact < 3) return null
+      return (bucket.hardContact / bucket.contact) * 100
+    })
+    return { ...pt, vals }
+  }).filter(s => s.vals.some(v => v !== null))
+
+  if (allSeries.length === 0) return <p className="text-[10px] text-538-muted py-4 text-center">No pitch sequence data</p>
+
+  const series = allSeries.filter(s => !hiddenPitches.has(s.type))
+
+  const allVals = series.flatMap(s => s.vals).filter((v): v is number => v !== null)
+  const dataMax = allVals.length ? Math.max(...allVals) : 10
+  const yMax = Math.ceil((dataMax * 1.2 + 2) / 5) * 5
+  const grids = Array.from({ length: Math.floor(yMax / 5) }, (_, i) => (i + 1) * 5).filter(v => v < yMax)
+
+  const W = 560, H = 170, PL = 36, PR = 80, PT = 16, PB = 24
+  const pw = W - PL - PR, ph = H - PT - PB
+  const xs = (i: number) => PL + (i / Math.max(BATTER_AB_KEYS.length - 1, 1)) * pw
+  const ys = (v: number) => PT + ph - (v / yMax) * ph
+
+  const metricLabel = metric === 'swing' ? 'Swing % by pitch type' : 'Hard Contact % (EV ≥ 95) by pitch type'
+
+  return (
+    <div>
+      {/* Metric toggle + pitch toggles + copy */}
+      <div className="flex flex-wrap items-center gap-1.5 mb-2">
+        <div className="inline-flex rounded border border-538-border overflow-hidden text-[9px] mr-1">
+          {([['swing', 'Swing %'], ['hardcontact', 'Hard Contact %']] as const).map(([key, label]) => (
+            <button key={key} onClick={() => setMetric(key)}
+              className={`px-2 py-1 font-semibold transition-colors ${metric === key ? 'bg-538-orange text-white' : 'text-538-muted hover:text-538-text'}`}>
+              {label}
+            </button>
+          ))}
+        </div>
+        {allSeries.map(s => {
+          const hidden = hiddenPitches.has(s.type)
+          return (
+            <button key={s.type} onClick={() => togglePitch(s.type)}
+              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold border transition-opacity"
+              style={{ borderColor: s.color, color: hidden ? '#6B7280' : s.color, opacity: hidden ? 0.4 : 1, background: 'transparent' }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: hidden ? '#6B7280' : s.color, display: 'inline-block' }} />
+              {s.type}
+            </button>
+          )
+        })}
+        <button
+          onClick={async () => {
+            setCopying(true)
+            await exportBatterSeqImage({ batterId, batterName, teamAbbr, metric, chartTitle: 'Pitch Mix · By Count in At-Bat', xKeys: BATTER_AB_KEYS, series, yMax })
+            setTimeout(() => setCopying(false), 1500)
+          }}
+          disabled={copying}
+          className="ml-auto text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded border transition-colors"
+          style={copying ? { color: '#4ADE80', borderColor: '#4ADE80' } : { color: '#9CA3AF', borderColor: '#374151' }}
+        >
+          {copying ? '✓ Copied' : '⎘ Copy Image'}
+        </button>
+      </div>
+
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        {grids.map(v => (
+          <g key={v}>
+            <line x1={PL} y1={ys(v).toFixed(1)} x2={W - PR} y2={ys(v).toFixed(1)} stroke="#374151" strokeWidth={0.5} strokeDasharray="2,3" />
+            <text x={PL - 3} y={(ys(v) + 3).toFixed(1)} textAnchor="end" fontSize={6} fill="#6B7280" fontFamily="monospace">{v}%</text>
+          </g>
+        ))}
+        <line x1={PL} y1={PT + ph} x2={W - PR} y2={PT + ph} stroke="#374151" strokeWidth={0.5} />
+
+        {series.flatMap(s => {
+          const segs: string[][] = []
+          let cur: string[] = []
+          s.vals.forEach((v, i) => {
+            if (v === null) { if (cur.length) { segs.push(cur); cur = [] } }
+            else cur.push(`${xs(i).toFixed(1)},${ys(v).toFixed(1)}`)
+          })
+          if (cur.length) segs.push(cur)
+          return segs.map((seg, si) => (
+            <polyline key={`${s.type}-${si}`} points={seg.join(' ')} fill="none"
+              stroke={s.color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+          ))
+        })}
+
+        {series.flatMap(s =>
+          s.vals.flatMap((v, i) => v === null ? [] : [
+            <circle key={`${s.type}-${i}`} cx={xs(i).toFixed(1)} cy={ys(v).toFixed(1)} r={2.5} fill={s.color} />
+          ])
+        )}
+
+        {series.map(s => {
+          let lastIdx = -1
+          s.vals.forEach((v, i) => { if (v !== null) lastIdx = i })
+          if (lastIdx < 0 || s.vals[lastIdx] === null) return null
+          const v = s.vals[lastIdx]!
+          return (
+            <g key={`lbl-${s.type}`}>
+              <text x={(xs(lastIdx) + 5).toFixed(1)} y={(ys(v) - 2).toFixed(1)} fontSize={6.5} fill={s.color} fontFamily="monospace" fontWeight={700}>{s.type}</text>
+              <text x={(xs(lastIdx) + 5).toFixed(1)} y={(ys(v) + 6).toFixed(1)} fontSize={5.5} fill={s.color} fontFamily="monospace">{v.toFixed(0)}%</text>
+            </g>
+          )
+        })}
+
+        {BATTER_AB_KEYS.map((k, i) => (
+          <text key={k} x={xs(i).toFixed(1)} y={H - 3} textAnchor="middle" fontSize={6.5} fill="#6B7280" fontFamily="monospace">{k}</text>
+        ))}
+      </svg>
+      <p className="text-center text-[7px] text-538-muted mt-0.5">Pitch # in at-bat · {metricLabel}</p>
+    </div>
+  )
+}
+
 // ── Stat Box ───────────────────────────────────────────────────────────────────
 
 function StatBox({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -1119,6 +1412,8 @@ export default function BatterPage({ params }: { params: { id: string } }) {
   const [selectedPitchType, setSelectedPitchType] = useState<string>('ALL')
   const [copying, setCopying] = useState(false)
   const [gameRarData, setGameRarData] = useState<GameRarEntry[]>([])
+  const [abSeqData, setAbSeqData] = useState<BatterAbSeqData | null>(null)
+  const [abSeqLoading, setAbSeqLoading] = useState(false)
 
   const currentSeason = new Date().getFullYear()
 
@@ -1143,6 +1438,13 @@ export default function BatterPage({ params }: { params: { id: string } }) {
       .then(rarData => { if (rarData?.games) setGameRarData(rarData.games as GameRarEntry[]) })
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
+
+    // Lazy-load AB sequence data (uses same game feeds, but separate endpoint)
+    setAbSeqData(null); setAbSeqLoading(true)
+    fetch(`/api/batter-ab-sequence?batterId=${batterId}&season=${currentSeason}`)
+      .then(r => r.ok ? r.json() as Promise<BatterAbSeqData> : null)
+      .then(d => { if (d) setAbSeqData(d) })
+      .finally(() => setAbSeqLoading(false))
   }, [batterId, currentSeason])
 
   if (loading) return <PageSkeleton />
@@ -1212,6 +1514,21 @@ export default function BatterPage({ params }: { params: { id: string } }) {
           />
         </div>
       )}
+
+      {/* AB Sequence charts */}
+      <div className="bg-surface border border-538-border rounded-xl p-4">
+        <div className="flex items-baseline gap-2 mb-3">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Pitch Sequencing · By Count in At-Bat</div>
+          <div className="text-[9px] text-538-muted">· Last 40 games</div>
+        </div>
+        {abSeqData && abSeqData.pitchTypes.length > 0 ? (
+          <BatterAbSequenceChart seqData={abSeqData} batterId={batterId} batterName={batterName} teamAbbr={teamAbbr} />
+        ) : abSeqLoading ? (
+          <p className="text-[9px] text-538-muted">Loading pitch sequence data…</p>
+        ) : (
+          <p className="text-[9px] text-538-muted">No pitch sequence data available.</p>
+        )}
+      </div>
 
       {/* Controls: stat tabs + pitch type toggles */}
       <div className="bg-surface border border-538-border rounded-xl p-4 space-y-3">
