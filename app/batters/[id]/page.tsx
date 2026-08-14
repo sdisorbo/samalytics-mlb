@@ -1324,19 +1324,19 @@ function BarColumn({ title, items, isRv }: { title: string; items: BarItem[]; is
   const absMax = Math.max(...valid.map(i => Math.abs(i.value!)), 0.01)
   const sorted = [...valid].sort((a, b) => b.value! - a.value!)
   return (
-    <div style={{ flex: '1 1 105px', minWidth: 105 }}>
-      <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted mb-1.5">{title}</div>
+    <div style={{ flex: '1 1 140px', minWidth: 140 }}>
+      <div className="text-[9px] font-bold uppercase tracking-widest text-538-muted mb-2">{title}</div>
       {sorted.map(item => {
         const pct = Math.min(100, (Math.abs(item.value!) / absMax) * 100)
         const neg = (item.value ?? 0) < 0
         const barColor = isRv ? (neg ? '#F87171' : '#34D399') : item.color
         return (
-          <div key={item.type} className="flex items-center gap-1 mb-1">
-            <span className="text-[7px] font-bold font-mono w-5 text-right shrink-0" style={{ color: item.color }}>{item.type}</span>
-            <div className="bg-538-border/20 rounded-sm overflow-hidden h-2.5" style={{ flex: 1 }}>
-              <div className="h-full rounded-sm" style={{ width: `${pct}%`, backgroundColor: barColor }} />
+          <div key={item.type} className="flex items-center gap-1.5 mb-1.5">
+            <span className="text-[9px] font-bold font-mono w-6 text-right shrink-0" style={{ color: item.color }}>{item.type}</span>
+            <div className="bg-538-border/20 rounded overflow-hidden h-3.5" style={{ flex: 1 }}>
+              <div className="h-full rounded" style={{ width: `${pct}%`, backgroundColor: barColor }} />
             </div>
-            <span className={`text-[7px] font-mono w-9 text-right shrink-0 ${isRv ? (neg ? 'text-red-400' : 'text-green-400') : 'text-538-muted'}`}>{item.fmt}</span>
+            <span className={`text-[9px] font-mono w-10 text-right shrink-0 ${isRv ? (neg ? 'text-red-400' : 'text-green-400') : 'text-538-muted'}`}>{item.fmt}</span>
           </div>
         )
       })}
