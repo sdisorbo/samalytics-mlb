@@ -17,6 +17,7 @@ import {
   type GameSetup,
 } from '../lib/mlbSimulator'
 import { LogicBreakdown, Code } from './LogicBreakdown'
+import { PITCH_COLORS } from '../lib/pitchColors'
 const GameBreakdown = dynamic(() => import('./GameBreakdown'), { ssr: false })
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -307,15 +308,10 @@ interface MiniZoneData {
 interface PitchMixEntry { type: string; name: string; color: string; pct: number; whiffPct: number | null; strikePct: number | null }
 interface BatterPitchStat { type: string; whiff: number | null; ops: number | null; rv: number | null; count: number }
 
-const PITCH_COLORS_LIVE: Record<string, string> = {
-  FF:'#EF4444',SI:'#F97316',FC:'#F59E0B',FT:'#F97316',
-  SL:'#8B5CF6',ST:'#A78BFA',SV:'#7C3AED',
-  CU:'#3B82F6',KC:'#60A5FA',SW:'#93C5FD',
-  CH:'#10B981',FS:'#34D399',FO:'#6EE7B7',
-  KN:'#94A3B8',EP:'#CBD5E1',
-}
+// Use the shared palette from lib/pitchColors (same as pitcher pages)
+const PITCH_COLORS_LIVE = PITCH_COLORS
 const LIVE_RESULT_COLOR: Record<string, string> = {
-  B:'#3B82F6',S:'#F87171',C:'#F87171',F:'#FCD34D',X:'#34D399',
+  B:'#60a5fa',S:'#f87171',C:'#f87171',F:'#fcd34d',X:'#4ade80',
 }
 const FB_TYPES = new Set(['FF','SI','FT','FC'])
 
@@ -351,13 +347,14 @@ function rvHeatColor(val: number | null, absMax: number): string {
 }
 
 // Savant-style smooth heatmap using SVG blur filter
+// Strike zone is a vertical rectangle (~1.45:1 H:W ratio like real zone)
 function SavantHeatmap({ zones, pitchLabel }: { zones: MiniZoneCell[][]; pitchLabel?: string }) {
-  const CW = 32, CH = 28, COLS = 5, ROWS = 5
+  const CW = 30, CH = 44, COLS = 5, ROWS = 5
   const W = CW * COLS, H = CH * ROWS
   const vals = zones.flat().map(c => c.avg_rv).filter((v): v is number => v != null)
   if (!vals.length) return (
     <div style={{width: W, height: H}} className="flex items-center justify-center bg-538-border/10 rounded">
-      <span className="text-[9px] text-538-muted">No data</span>
+      <span className="text-xs text-538-muted">No data</span>
     </div>
   )
   const absMax = Math.max(Math.abs(Math.min(...vals)), Math.abs(Math.max(...vals)), 0.01)
@@ -367,7 +364,7 @@ function SavantHeatmap({ zones, pitchLabel }: { zones: MiniZoneCell[][]; pitchLa
       <svg width={W} height={H} style={{ display: 'block', borderRadius: 4 }}>
         <defs>
           <filter id={filterId} x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
           </filter>
         </defs>
         {/* Blurred color layer */}
@@ -378,16 +375,16 @@ function SavantHeatmap({ zones, pitchLabel }: { zones: MiniZoneCell[][]; pitchLa
               fill={rvHeatColor(cell.avg_rv, absMax)} />
           )))}
         </g>
-        {/* Strike zone overlay — sharp */}
+        {/* Strike zone overlay — sharp, inner 3×3 cells */}
         <rect x={CW} y={CH} width={CW * 3} height={CH * 3}
-          fill="none" stroke="rgba(148,163,184,0.8)" strokeWidth={1.5} />
-        {/* Plate marker */}
-        <line x1={CW * 2.5} y1={CH * 4 + 2} x2={CW * 2.5} y2={H}
-          stroke="rgba(100,116,139,0.5)" strokeWidth={0.8} strokeDasharray="3,2" />
+          fill="none" stroke="rgba(148,163,184,0.85)" strokeWidth={2} />
+        {/* Plate center line */}
+        <line x1={CW * 2.5} y1={CH * 4 + 3} x2={CW * 2.5} y2={H}
+          stroke="rgba(100,116,139,0.4)" strokeWidth={1} strokeDasharray="3,3" />
       </svg>
       {pitchLabel && (
-        <div className="absolute top-1 left-1 text-[7px] font-bold px-1 rounded"
-          style={{ background: 'rgba(15,23,42,0.7)', color: '#94A3B8' }}>
+        <div className="absolute top-1.5 left-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded"
+          style={{ background: 'rgba(15,23,42,0.75)', color: '#94A3B8' }}>
           {pitchLabel}
         </div>
       )}
@@ -399,12 +396,12 @@ function LivePitchDot({ pitch, idx }: { pitch: AbPitch; idx: number }) {
   const ptColor = PITCH_COLORS_LIVE[pitch.type] ?? '#78909C'
   const resColor = LIVE_RESULT_COLOR[pitch.code] ?? '#9CA3AF'
   return (
-    <div className="flex items-center gap-1.5 py-0.5">
-      <span className="text-[8px] font-mono text-538-muted w-3 text-right">{idx + 1}</span>
-      <span className="text-[8px] font-bold w-6" style={{ color: ptColor }}>{pitch.type || '??'}</span>
-      {pitch.speed && <span className="text-[8px] font-mono text-538-muted">{pitch.speed}</span>}
-      <span className="text-[8px] font-mono" style={{ color: resColor }}>{pitch.result || pitch.code}</span>
-      <span className="text-[8px] font-mono text-538-muted ml-auto">{pitch.balls}-{pitch.strikes}</span>
+    <div className="flex items-center gap-2 py-0.5">
+      <span className="text-xs font-mono text-538-muted w-4 text-right shrink-0">{idx + 1}</span>
+      <span className="text-xs font-bold w-8 shrink-0" style={{ color: ptColor }}>{pitch.type || '??'}</span>
+      {pitch.speed && <span className="text-xs font-mono text-538-muted w-8 shrink-0">{pitch.speed}</span>}
+      <span className="text-xs font-mono flex-1" style={{ color: resColor }}>{pitch.result || pitch.code}</span>
+      <span className="text-xs font-mono text-538-muted shrink-0">{pitch.balls}-{pitch.strikes}</span>
     </div>
   )
 }
@@ -413,85 +410,84 @@ function MatchupTable({ pitchMix, batterStats }: {
   pitchMix: PitchMixEntry[]
   batterStats: BatterPitchStat[] | null
 }) {
-  const headerCls = "text-[7.5px] font-bold uppercase tracking-wider text-538-muted pb-1 text-right"
-  const cellCls   = "text-[8px] font-mono text-right py-0.5"
+  const headerCls = "text-xs font-bold uppercase tracking-wider text-538-muted pb-2 text-right px-2"
+  const cellCls   = "text-xs font-mono text-right py-1 px-2"
   const batMap = new Map(batterStats?.map(b => [b.type, b]) ?? [])
 
   return (
-    <div className="overflow-x-auto">
-      <table style={{ borderCollapse: 'collapse', fontSize: 8, minWidth: 380 }}>
+    <div className="overflow-x-auto w-full">
+      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr>
-            <th className="text-left pb-1 text-[7.5px] font-bold uppercase tracking-wider text-538-muted w-10">Pitch</th>
-            <th className={headerCls + " w-10"}>Use%</th>
-            <th className={headerCls + " w-14"}>P Whiff%</th>
-            <th className={headerCls + " w-14"}>P Str%</th>
-            <th className={headerCls + " w-14"}>B Whiff%</th>
-            <th className={headerCls + " w-14"}>B OPS</th>
-            <th className={headerCls + " w-14"}>B RV/100</th>
-            <th className="pb-1 w-8" />
+            <th className="text-left pb-2 text-xs font-bold uppercase tracking-wider text-538-muted px-2">Pitch</th>
+            <th className={headerCls}>Use%</th>
+            <th className={headerCls}>P Whiff%</th>
+            <th className={headerCls}>P Str%</th>
+            <th className={headerCls}>B Whiff%</th>
+            <th className={headerCls}>B OPS</th>
+            <th className={headerCls}>B RV/100</th>
+            <th className="pb-2 px-2" />
           </tr>
         </thead>
         <tbody>
           {pitchMix.slice(0, 7).map(p => {
             const b = batMap.get(p.type)
-            // Edge: positive = pitcher advantage
             const edgeScore =
               ((p.whiffPct ?? 22) - 22) / 22 * 0.35
               + ((p.strikePct ?? 62) - 62) / 20 * 0.25
               - ((b?.ops ?? 0.700) - 0.700) / 0.300 * 0.40
             const edgeLabel = edgeScore > 0.15 ? '← P' : edgeScore < -0.12 ? 'B →' : '~'
-            const edgeColor = edgeScore > 0.15 ? '#4ADE80' : edgeScore < -0.12 ? '#F87171' : '#6B7280'
+            const edgeColor = edgeScore > 0.15 ? '#4ade80' : edgeScore < -0.12 ? '#f87171' : '#6b7280'
             return (
-              <tr key={p.type} className="border-t border-538-border/30">
-                <td className="py-0.5">
-                  <span className="text-[8px] font-bold" style={{ color: p.color }}>{p.type}</span>
-                  <span className="text-[7px] text-538-muted ml-1 hidden sm:inline">{p.name.split(' ').slice(-1)[0]}</span>
+              <tr key={p.type} className="border-t border-538-border/40">
+                <td className="py-1.5 px-2">
+                  <span className="text-sm font-bold" style={{ color: p.color }}>{p.type}</span>
+                  <span className="text-xs text-538-muted ml-2">{p.name}</span>
                 </td>
                 <td className={cellCls}>{p.pct}%</td>
-                <td className={cellCls + " " + (p.whiffPct != null && p.whiffPct > 28 ? 'text-green-400' : '')}>
+                <td className={cellCls + (p.whiffPct != null && p.whiffPct > 28 ? ' text-green-400' : '')}>
                   {p.whiffPct != null ? p.whiffPct.toFixed(0) + '%' : '—'}
                 </td>
                 <td className={cellCls}>
                   {p.strikePct != null ? p.strikePct.toFixed(0) + '%' : '—'}
                 </td>
-                <td className={cellCls + " " + (b?.whiff != null && b.whiff > 28 ? 'text-green-400' : b?.whiff != null && b.whiff < 18 ? 'text-red-400' : '')}>
+                <td className={cellCls + (b?.whiff != null && b.whiff > 28 ? ' text-green-400' : b?.whiff != null && b.whiff < 18 ? ' text-red-400' : '')}>
                   {b?.whiff != null ? b.whiff.toFixed(0) + '%' : '—'}
                 </td>
-                <td className={cellCls + " " + (b?.ops != null && b.ops > 0.800 ? 'text-red-400' : b?.ops != null && b.ops < 0.600 ? 'text-green-400' : '')}>
+                <td className={cellCls + (b?.ops != null && b.ops > 0.800 ? ' text-red-400' : b?.ops != null && b.ops < 0.600 ? ' text-green-400' : '')}>
                   {b?.ops != null ? b.ops.toFixed(3) : '—'}
                 </td>
-                <td className={cellCls + " " + (b?.rv != null && b.rv > 0 ? 'text-red-400' : b?.rv != null && b.rv < 0 ? 'text-green-400' : '')}>
+                <td className={cellCls + (b?.rv != null && b.rv > 0 ? ' text-red-400' : b?.rv != null && b.rv < 0 ? ' text-green-400' : '')}>
                   {b?.rv != null ? (b.rv >= 0 ? '+' : '') + b.rv.toFixed(1) : '—'}
                 </td>
-                <td className="py-0.5 text-right text-[7.5px] font-bold" style={{ color: edgeColor }}>{edgeLabel}</td>
+                <td className="py-1.5 px-2 text-right text-xs font-bold" style={{ color: edgeColor }}>{edgeLabel}</td>
               </tr>
             )
           })}
         </tbody>
       </table>
-      <p className="text-[7px] text-538-muted mt-1">← P = pitcher edge &nbsp;·&nbsp; B → = batter edge &nbsp;·&nbsp; Catcher&apos;s view</p>
+      <p className="text-xs text-538-muted mt-1 px-2">← P = pitcher edge &nbsp;·&nbsp; B → = batter edge</p>
     </div>
   )
 }
 
 function AbOutcomeBar({ k, bb, hr, h, out }: { k: number; bb: number; hr: number; h: number; out: number }) {
   const segments = [
-    { label: 'K',   pct: k,   color: '#F87171' },
-    { label: 'BB',  pct: bb,  color: '#60A5FA' },
-    { label: 'HR',  pct: hr,  color: '#FBBF24' },
-    { label: 'H',   pct: h,   color: '#4ADE80' },
-    { label: 'Out', pct: out, color: '#6B7280' },
+    { label: 'K',   pct: k,   color: '#f87171' },
+    { label: 'BB',  pct: bb,  color: '#60a5fa' },
+    { label: 'HR',  pct: hr,  color: '#fbbf24' },
+    { label: 'H',   pct: h,   color: '#4ade80' },
+    { label: 'Out', pct: out, color: '#6b7280' },
   ]
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {segments.map(s => (
-        <div key={s.label} className="flex items-center gap-1.5">
-          <span className="text-[8px] font-bold text-538-muted w-6 text-right shrink-0">{s.label}</span>
-          <div className="flex-1 bg-538-border/20 rounded-full overflow-hidden h-2.5">
+        <div key={s.label} className="flex items-center gap-2">
+          <span className="text-xs font-bold text-538-muted w-7 text-right shrink-0">{s.label}</span>
+          <div className="flex-1 bg-538-border/20 rounded-full overflow-hidden h-3">
             <div className="h-full rounded-full" style={{ width: `${Math.round(s.pct * 100)}%`, backgroundColor: s.color }} />
           </div>
-          <span className="text-[8px] font-mono text-538-muted w-8 text-left shrink-0">{(s.pct * 100).toFixed(0)}%</span>
+          <span className="text-xs font-mono text-538-text w-9 text-left shrink-0">{(s.pct * 100).toFixed(0)}%</span>
         </div>
       ))}
     </div>
@@ -516,14 +512,14 @@ function NextPitchPred({ pitchMix, balls, strikes, lastType }: {
     .sort((a, b) => b.adjPct - a.adjPct)
     .slice(0, 4)
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {preds.map(p => (
-        <div key={p.type} className="flex items-center gap-1.5">
-          <span className="text-[8px] font-bold w-5 shrink-0" style={{ color: p.color }}>{p.type}</span>
-          <div className="flex-1 bg-538-border/20 rounded-full overflow-hidden h-2">
+        <div key={p.type} className="flex items-center gap-2">
+          <span className="text-xs font-bold w-7 shrink-0" style={{ color: p.color }}>{p.type}</span>
+          <div className="flex-1 bg-538-border/20 rounded-full overflow-hidden h-3">
             <div className="h-full rounded-full" style={{ width: `${p.adjPct}%`, backgroundColor: p.color }} />
           </div>
-          <span className="text-[8px] font-mono text-538-muted w-7 text-left shrink-0">{p.adjPct}%</span>
+          <span className="text-xs font-mono text-538-text w-9 text-left shrink-0">{p.adjPct}%</span>
         </div>
       ))}
     </div>
@@ -544,46 +540,46 @@ function PlayByPlayFeed({ plays, batterGameStats, batterName, awayAbbr, homeAbbr
   return (
     <div className="border-t border-538-border/50 pt-3 space-y-2">
       <div className="flex items-center justify-between">
-        <div className="text-2xs font-bold uppercase tracking-widest text-538-muted">Recent Plays</div>
+        <div className="text-xs font-bold uppercase tracking-widest text-538-muted">Recent Plays</div>
         {batterGameStats && (
           <button onClick={() => setShowBox(v => !v)}
-            className="text-[8px] font-bold text-538-muted hover:text-538-text transition-colors">
+            className="text-xs font-bold text-538-muted hover:text-538-text transition-colors">
             {batterName?.split(' ').slice(-1)[0]} today {showBox ? '▲' : '▼'}
           </button>
         )}
       </div>
       {showBox && batterGameStats && (
-        <div className="bg-538-border/10 rounded-lg px-3 py-2 flex gap-4 flex-wrap">
+        <div className="bg-538-border/10 rounded-lg px-4 py-3 flex gap-5 flex-wrap">
           {[
             ['AB', batterGameStats.ab], ['H', batterGameStats.h],
             ['HR', batterGameStats.hr], ['RBI', batterGameStats.rbi],
             ['BB', batterGameStats.bb], ['K', batterGameStats.k],
           ].map(([label, val]) => (
             <div key={label} className="text-center">
-              <div className="text-[7.5px] text-538-muted">{label}</div>
-              <div className="text-sm font-black text-538-text">{val}</div>
+              <div className="text-xs text-538-muted">{label}</div>
+              <div className="text-lg font-black text-538-text">{val}</div>
             </div>
           ))}
           {batterId && (
             <a href={`/batters/${batterId}`} target="_blank" rel="noreferrer"
-              className="self-center text-[8px] text-538-orange hover:underline ml-auto">Season →</a>
+              className="self-center text-xs text-538-orange hover:underline ml-auto">Season →</a>
           )}
         </div>
       )}
-      <div className="space-y-0.5 max-h-48 overflow-y-auto pr-1">
-        {plays.length === 0 && <p className="text-[8px] text-538-muted">No plays yet</p>}
+      <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
+        {plays.length === 0 && <p className="text-xs text-538-muted">No plays yet</p>}
         {plays.map((play, i) => {
           if (!play.description) return null
           const col = RESULT_COLORS[play.eventType] ?? '#9CA3AF'
           const half = HALF_ICONS[play.half] ?? ''
           return (
-            <div key={i} className="flex items-start gap-2 py-0.5">
-              <span className="text-[7.5px] font-mono text-538-muted shrink-0 w-10">
+            <div key={i} className="flex items-start gap-3 py-0.5">
+              <span className="text-xs font-mono text-538-muted shrink-0 w-10">
                 {half}{play.inning}
               </span>
-              <span className="text-[8px] leading-tight" style={{ color: col }}>{play.description}</span>
+              <span className="text-xs leading-snug flex-1" style={{ color: col }}>{play.description}</span>
               {play.awayScore != null && (
-                <span className="text-[7.5px] font-mono text-538-muted ml-auto shrink-0">
+                <span className="text-xs font-mono text-538-muted shrink-0">
                   {awayAbbr} {play.awayScore}–{play.homeScore} {homeAbbr}
                 </span>
               )}
@@ -768,93 +764,104 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
     : zoneData?.zones ?? null
 
   return (
-    <div className="border-t border-538-border bg-538-bg/50 px-4 py-4 space-y-5">
+    <div className="border-t border-538-border bg-538-bg/50 px-5 py-5 space-y-6">
 
-      {/* ── Scoreboard row ── */}
-      <div className="flex items-center gap-4 flex-wrap">
-        <div className="flex items-center gap-2">
-          <div className="text-center">
-            <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted">{live.awayAbbr}</div>
-            <div className="text-2xl font-black text-538-text leading-none">{live.awayScore ?? '—'}</div>
-          </div>
-          <div className="text-538-muted font-black">–</div>
-          <div className="text-center">
-            <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted">{live.homeAbbr}</div>
-            <div className="text-2xl font-black text-538-text leading-none">{live.homeScore ?? '—'}</div>
-          </div>
-        </div>
+      {/* ── Row 1: Scoreboard + Matchup Table side by side ── */}
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
 
-        <div className="pl-3 border-l border-538-border flex flex-col gap-0.5">
-          <div className="text-[8px] font-bold text-green-400">{halfArrow}{live.inning ?? '—'} {live.inningHalf ?? ''}</div>
-          <div className="flex gap-1 items-center">
-            {outDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-yellow-400 border-yellow-400' : 'border-538-muted'}`} />)}
-            <span className="text-[8px] text-538-muted ml-1">{live.outs} out{live.outs !== 1 ? 's' : ''}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-[7.5px] text-538-muted">B</span>
-            {ballDots.map((on, i) => <span key={i} className={`inline-block w-1.5 h-1.5 rounded-full border ${on ? 'bg-green-400 border-green-400' : 'border-538-muted'}`} />)}
-            <span className="text-[7.5px] text-538-muted ml-1">S</span>
-            {strikeDots.map((on, i) => <span key={i} className={`inline-block w-1.5 h-1.5 rounded-full border ${on ? 'bg-red-400 border-red-400' : 'border-538-muted'}`} />)}
-          </div>
-        </div>
-
-        {live.bases && (
-          <div className="pl-3 border-l border-538-border">
-            <svg viewBox="0 0 44 44" width={40} height={40}>
-              <rect x={16} y={2}  width={12} height={12} rx={1} transform="rotate(45 22 8)"  fill={live.bases.second ? '#FBBF24':'#374151'} stroke="#4B5563" strokeWidth={1}/>
-              <rect x={2}  y={16} width={12} height={12} rx={1} transform="rotate(45 8 22)"  fill={live.bases.third  ? '#FBBF24':'#374151'} stroke="#4B5563" strokeWidth={1}/>
-              <rect x={30} y={16} width={12} height={12} rx={1} transform="rotate(45 36 22)" fill={live.bases.first  ? '#FBBF24':'#374151'} stroke="#4B5563" strokeWidth={1}/>
-              <rect x={16} y={30} width={12} height={12} rx={1} transform="rotate(45 22 36)" fill="#374151" stroke="#4B5563" strokeWidth={1}/>
-            </svg>
-          </div>
-        )}
-
-        <div className="pl-3 border-l border-538-border flex gap-4 flex-wrap">
-          <div>
-            <div className="text-[7.5px] text-538-muted uppercase tracking-wider">Pitcher</div>
-            {live.pitcherName
-              ? <a href={`/pitchers/${live.pitcherId}`} target="_blank" rel="noreferrer"
-                  className="text-[10px] font-bold text-538-text hover:text-538-orange">{live.pitcherName}</a>
-              : <span className="text-[10px] text-538-muted">—</span>}
-            <div className="text-[7.5px] text-538-muted">{live.pitcherTeam} · {live.pitcherHand}HP
-              {live.currentPitcherStats && ` · ${live.currentPitcherStats.ip} IP ${live.currentPitcherStats.pc}P`}
+        {/* Scoreboard block — fixed width on desktop */}
+        <div className="flex flex-wrap gap-4 items-center shrink-0 lg:min-w-[340px]">
+          {/* Score */}
+          <div className="flex items-center gap-3">
+            <div className="text-center">
+              <div className="text-xs font-bold uppercase tracking-widest text-538-muted">{live.awayAbbr}</div>
+              <div className="text-4xl font-black text-538-text leading-none">{live.awayScore ?? '—'}</div>
+            </div>
+            <div className="text-2xl text-538-muted font-black">–</div>
+            <div className="text-center">
+              <div className="text-xs font-bold uppercase tracking-widest text-538-muted">{live.homeAbbr}</div>
+              <div className="text-4xl font-black text-538-text leading-none">{live.homeScore ?? '—'}</div>
             </div>
           </div>
-          <div>
-            <div className="text-[7.5px] text-538-muted uppercase tracking-wider">Batter</div>
-            {live.batterName
-              ? <a href={`/batters/${live.batterId}`} target="_blank" rel="noreferrer"
-                  className="text-[10px] font-bold text-538-text hover:text-538-orange">{live.batterName}</a>
-              : <span className="text-[10px] text-538-muted">—</span>}
-            <div className="text-[7.5px] text-538-muted">{live.batterTeam} · {live.batterStand === 'L' ? 'LHB' : live.batterStand === 'S' ? 'Switch' : 'RHB'}</div>
+
+          {/* Inning + count + outs */}
+          <div className="pl-4 border-l border-538-border flex flex-col gap-1">
+            <div className="text-sm font-bold text-green-400">{halfArrow}{live.inning ?? '—'} {live.inningHalf ?? ''}</div>
+            <div className="flex gap-1.5 items-center">
+              {outDots.map((on, i) => <span key={i} className={`inline-block w-2.5 h-2.5 rounded-full border-2 ${on ? 'bg-yellow-400 border-yellow-400' : 'border-538-muted'}`} />)}
+              <span className="text-xs text-538-muted ml-1">{live.outs} out{live.outs !== 1 ? 's' : ''}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold text-538-muted w-4">B</span>
+              {ballDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border-2 ${on ? 'bg-green-400 border-green-400' : 'border-538-muted'}`} />)}
+              <span className="text-xs font-bold text-538-muted ml-2 w-4">S</span>
+              {strikeDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border-2 ${on ? 'bg-red-400 border-red-400' : 'border-538-muted'}`} />)}
+            </div>
+          </div>
+
+          {/* Bases diamond */}
+          {live.bases && (
+            <div className="pl-4 border-l border-538-border">
+              <svg viewBox="0 0 52 52" width={52} height={52}>
+                <rect x={18} y={2}  width={14} height={14} rx={1} transform="rotate(45 25 9)"  fill={live.bases.second ? '#fbbf24':'#374151'} stroke="#4b5563" strokeWidth={1.5}/>
+                <rect x={2}  y={18} width={14} height={14} rx={1} transform="rotate(45 9 25)"  fill={live.bases.third  ? '#fbbf24':'#374151'} stroke="#4b5563" strokeWidth={1.5}/>
+                <rect x={34} y={18} width={14} height={14} rx={1} transform="rotate(45 41 25)" fill={live.bases.first  ? '#fbbf24':'#374151'} stroke="#4b5563" strokeWidth={1.5}/>
+                <rect x={18} y={34} width={14} height={14} rx={1} transform="rotate(45 25 41)" fill="#374151" stroke="#4b5563" strokeWidth={1.5}/>
+              </svg>
+            </div>
+          )}
+
+          {/* Pitcher / Batter */}
+          <div className="pl-4 border-l border-538-border flex flex-col gap-2">
+            <div>
+              <div className="text-xs text-538-muted uppercase tracking-wider font-bold mb-0.5">Pitcher</div>
+              {live.pitcherName
+                ? <a href={`/pitchers/${live.pitcherId}`} target="_blank" rel="noreferrer"
+                    className="text-base font-bold text-538-text hover:text-538-orange leading-none">{live.pitcherName}</a>
+                : <span className="text-base text-538-muted">—</span>}
+              <div className="text-xs text-538-muted mt-0.5">
+                {live.pitcherTeam} · {live.pitcherHand}HP
+                {live.currentPitcherStats && ` · ${live.currentPitcherStats.ip} IP · ${live.currentPitcherStats.pc}P · ${live.currentPitcherStats.k}K`}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-538-muted uppercase tracking-wider font-bold mb-0.5">Batter</div>
+              {live.batterName
+                ? <a href={`/batters/${live.batterId}`} target="_blank" rel="noreferrer"
+                    className="text-base font-bold text-538-text hover:text-538-orange leading-none">{live.batterName}</a>
+                : <span className="text-base text-538-muted">—</span>}
+              <div className="text-xs text-538-muted mt-0.5">
+                {live.batterTeam} · {live.batterStand === 'L' ? 'LHB' : live.batterStand === 'S' ? 'Switch' : 'RHB'}
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Matchup table — fills remaining horizontal space */}
+        {pitchMix && pitchMix.length > 0 && (
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-2">Pitcher Arsenal vs Batter</div>
+            <MatchupTable pitchMix={pitchMix} batterStats={batterStats} />
+          </div>
+        )}
       </div>
 
-      {/* ── Matchup edge table ── */}
-      {pitchMix && pitchMix.length > 0 && (
-        <div>
-          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">Pitcher Arsenal vs Batter</div>
-          <MatchupTable pitchMix={pitchMix} batterStats={batterStats} />
-        </div>
-      )}
-
-      {/* ── Zone heatmap + Outcome/Next pitch ── */}
-      <div className="flex flex-wrap gap-6 items-start">
+      {/* ── Row 2: Zone heatmap · Outcome · Next Pitch ── */}
+      <div className="flex flex-col sm:flex-row gap-8 items-start">
 
         {/* Savant heatmap */}
         {zoneData && (
-          <div>
+          <div className="shrink-0">
             <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted">Zone · RV/Pitch</div>
+              <div className="text-xs font-bold uppercase tracking-widest text-538-muted">Zone · RV/Pitch</div>
               <div className="inline-flex border border-538-border rounded overflow-hidden">
                 <button onClick={() => setPitchToggle('ALL')}
-                  className={`px-1.5 py-0.5 text-[8px] font-bold transition-colors ${pitchToggle === 'ALL' ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
+                  className={`px-2 py-1 text-xs font-bold transition-colors ${pitchToggle === 'ALL' ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
                   All
                 </button>
                 {(pitchMix ?? []).slice(0, 5).map(p => (
                   <button key={p.type} onClick={() => setPitchToggle(p.type)}
-                    className={`px-1.5 py-0.5 text-[8px] font-bold transition-colors ${pitchToggle === p.type ? 'bg-538-orange text-white' : 'text-538-muted'}`}
+                    className={`px-2 py-1 text-xs font-bold transition-colors ${pitchToggle === p.type ? 'bg-538-orange text-white' : ''}`}
                     style={pitchToggle === p.type ? {} : { color: p.color }}>
                     {p.type}
                   </button>
@@ -863,47 +870,50 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
             </div>
             {activePTZones
               ? <SavantHeatmap zones={activePTZones} pitchLabel={pitchToggle !== 'ALL' ? pitchToggle : undefined} />
-              : <div className="text-[8px] text-538-muted">No zone data for {pitchToggle}</div>
+              : <div className="text-xs text-538-muted py-4">No zone data for {pitchToggle}</div>
             }
-            <p className="text-[7.5px] text-538-muted mt-1">Catcher&apos;s view · season · red = batter-friendly</p>
+            <p className="text-xs text-538-muted mt-1.5">
+              Catcher&apos;s view · season averages<br/>
+              <span className="text-red-400">Red</span> = batter-friendly (+ RV) &nbsp;·&nbsp; <span className="text-blue-400">Blue</span> = pitcher-friendly (− RV)
+            </p>
           </div>
         )}
 
-        {/* Outcome + next pitch */}
-        <div className="flex flex-col gap-4 min-w-[180px]">
+        {/* Outcome + Next pitch — expand to fill */}
+        <div className="flex flex-col sm:flex-row gap-8 flex-1">
           {abOutcome && (
-            <div>
-              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">
+            <div className="flex-1">
+              <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-3">
                 AB Outcome ({count.balls}–{count.strikes})
               </div>
               <AbOutcomeBar {...abOutcome} />
-              <p className="text-[7px] text-538-muted mt-1">Based on batter&apos;s season rates · count-adjusted</p>
+              <p className="text-xs text-538-muted mt-2">Season rates · count-adjusted</p>
             </div>
           )}
 
           {nextPitches && (
-            <div>
-              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">
+            <div className="flex-1">
+              <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-3">
                 Likely Next Pitch
               </div>
               <NextPitchPred {...nextPitches} />
-              <p className="text-[7px] text-538-muted mt-1">Usage + count + sequence heuristic</p>
+              <p className="text-xs text-538-muted mt-2">Usage + count + sequence heuristic</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* ── Current AB pitch sequence ── */}
+      {/* ── Row 3: This AB pitch sequence ── */}
       {abPitches.length > 0 && (
         <div>
-          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-1">This AB</div>
-          <div className="max-w-xs">
+          <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-2">This AB</div>
+          <div className="flex flex-wrap gap-x-6">
             {abPitches.map((p, i) => <LivePitchDot key={i} pitch={p} idx={i} />)}
           </div>
         </div>
       )}
 
-      {/* ── Play-by-play + box score ── */}
+      {/* ── Row 4: Play-by-play + box score ── */}
       <PlayByPlayFeed
         plays={live.recentPlays ?? []}
         batterGameStats={live.batterGameStats}
@@ -913,7 +923,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
         batterId={live.batterId}
       />
 
-      <p className="text-[7.5px] text-538-muted">Auto-refreshes every 15s</p>
+      <p className="text-xs text-538-muted">Auto-refreshes every 15s</p>
     </div>
   )
 }
