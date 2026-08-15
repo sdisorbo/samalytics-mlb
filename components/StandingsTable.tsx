@@ -119,11 +119,21 @@ interface Props {
   teamWar?: Record<string, number>
 }
 
+type ViewMode = 'flat' | 'division' | 'wildcard'
+
+interface WcTeam extends EnrichedStanding {
+  wcGb: number | null   // null = division leader
+  isDivLeader: boolean
+  wcSpot: number | null // 1-3 = in WC, null = out or div leader
+}
+
 export default function StandingsTable({ standings, teamWar = {} }: Props) {
   const [sortKey, setSortKey] = useState<StandingSortKey>('wins')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
-  const [groupByDivision, setGroupByDivision] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('flat')
   const [search, setSearch] = useState('')
+
+  const groupByDivision = viewMode === 'division'
 
   // Enrich standings with team WAR
   const enriched: EnrichedStanding[] = useMemo(() => {
@@ -168,12 +178,52 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
       const bucket = map.get(normalized)
       if (bucket) bucket.push(row)
     }
-    // Sort within each division by wins desc
     for (const [, bucket] of map) {
       bucket.sort((a, b) => b.wins - a.wins || a.losses - b.losses)
     }
     return map
   }, [enriched, groupByDivision])
+
+  // Wild card grouping: AL and NL, sorted by W%, division leaders marked, WC GB computed
+  const wcGrouped = useMemo(() => {
+    if (viewMode !== 'wildcard') return null
+    const leagues: Record<string, EnrichedStanding[]> = { AL: [], NL: [] }
+    for (const row of enriched) {
+      const norm = normalizeDivision(row.division)
+      if (norm.startsWith('AL')) leagues.AL.push(row)
+      else leagues.NL.push(row)
+    }
+    return (['AL', 'NL'] as const).map(league => {
+      const teams = leagues[league]
+      // Find best record per division → division leaders
+      const divBest = new Map<string, EnrichedStanding>()
+      for (const t of teams) {
+        const div = normalizeDivision(t.division)
+        const cur = divBest.get(div)
+        if (!cur || t.wins > cur.wins || (t.wins === cur.wins && t.losses < cur.losses)) {
+          divBest.set(div, t)
+        }
+      }
+      const divLeaderAbbrs = new Set(Array.from(divBest.values()).map(t => t.team_abbr))
+      // Sort all teams by win% (wins desc, losses asc)
+      const sorted = [...teams].sort((a, b) => b.wins - a.wins || a.losses - b.losses)
+      // Non-div-leaders = WC contenders, in their own order
+      const wcContenders = sorted.filter(t => !divLeaderAbbrs.has(t.team_abbr))
+      const wcCutoff = wcContenders[2] // 3 WC spots per league
+      const wcTeams: WcTeam[] = sorted.map(t => {
+        if (divLeaderAbbrs.has(t.team_abbr)) {
+          return { ...t, wcGb: null, isDivLeader: true, wcSpot: null }
+        }
+        const wcIdx = wcContenders.indexOf(t)
+        const wcSpot = wcIdx < 3 ? wcIdx + 1 : null
+        const wcGb = wcCutoff
+          ? ((wcCutoff.wins - t.wins) + (t.losses - wcCutoff.losses)) / 2
+          : 0
+        return { ...t, wcGb, isDivLeader: false, wcSpot }
+      })
+      return { league, teams: wcTeams }
+    })
+  }, [enriched, viewMode])
 
   function SortIcon({ col }: { col: StandingSortKey }) {
     if (sortKey !== col) return <span className="ml-0.5 opacity-25">↕</span>
@@ -221,7 +271,14 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
     }
   }, [enriched])
 
-  const rows = groupByDivision ? null : sortedStandings
+  const rows = viewMode === 'flat' ? sortedStandings : null
+
+  const btnCls = (mode: ViewMode) => clsx(
+    'text-xs font-semibold uppercase tracking-wide px-3 py-1.5 rounded-lg border transition-colors',
+    viewMode === mode
+      ? 'bg-538-orange text-white border-538-orange'
+      : 'bg-surface text-538-muted border-538-border hover:border-538-text'
+  )
 
   return (
     <div>
@@ -234,16 +291,11 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
           onChange={e => setSearch(e.target.value)}
           className="border border-538-border rounded px-3 py-1.5 text-sm bg-surface text-538-text placeholder-538-muted focus:outline-none focus:ring-1 focus:ring-538-orange w-40"
         />
-        <button
-          onClick={() => setGroupByDivision(v => !v)}
-          className={clsx(
-            'text-xs font-semibold uppercase tracking-wide px-3 py-1.5 rounded-lg border transition-colors',
-            groupByDivision
-              ? 'bg-538-orange text-white border-538-orange'
-              : 'bg-surface text-538-muted border-538-border hover:border-538-text'
-          )}
-        >
+        <button onClick={() => setViewMode(v => v === 'division' ? 'flat' : 'division')} className={btnCls('division')}>
           By Division
+        </button>
+        <button onClick={() => setViewMode(v => v === 'wildcard' ? 'flat' : 'wildcard')} className={btnCls('wildcard')}>
+          Wild Card
         </button>
         <span className="text-xs text-538-muted">Click column headers to sort</span>
       </div>
@@ -258,6 +310,7 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
               <th className="text-right text-538-muted text-2xs uppercase tracking-widest">PCT</th>
               <Th col="run_diff">Run Diff</Th>
               {groupByDivision && <th className="text-right text-538-muted text-2xs uppercase tracking-widest">GB</th>}
+              {viewMode === 'wildcard' && <th className="text-right text-538-muted text-2xs uppercase tracking-widest">WC GB</th>}
               <Th col="team_war">WAR</Th>
               <Th col="elo_rating">ELO</Th>
               <Th col="elo_change_7d">Δ7d</Th>
@@ -268,17 +321,26 @@ export default function StandingsTable({ standings, teamWar = {} }: Props) {
             </tr>
           </thead>
           <tbody>
-            {groupByDivision && grouped
+            {viewMode === 'wildcard' && wcGrouped
+              ? wcGrouped.map(({ league, teams }) => (
+                  <Fragment key={league}>
+                    <tr className="division-header">
+                      <td colSpan={14} className="sticky left-0" style={{ borderLeft: `3px solid ${league === 'AL' ? '#457b9d' : '#e63946'}` }}>
+                        {league === 'AL' ? 'American League' : 'National League'}
+                      </td>
+                    </tr>
+                    {teams.map(row => (
+                      <TeamRow key={row.team_abbr} row={row} colStats={colStats} gb={null} wcMode wcGb={row.wcGb} isDivLeader={row.isDivLeader} wcSpot={row.wcSpot} />
+                    ))}
+                  </Fragment>
+                ))
+              : groupByDivision && grouped
               ? Array.from(grouped.entries()).map(([division, teams]) => {
                   const leader = teams[0]
                   return (
                     <Fragment key={division}>
                       <tr className="division-header">
-                        <td
-                          colSpan={13}
-                          className="sticky left-0"
-                          style={{ borderLeft: `3px solid ${divisionColor(division)}` }}
-                        >
+                        <td colSpan={13} className="sticky left-0" style={{ borderLeft: `3px solid ${divisionColor(division)}` }}>
                           {division}
                         </td>
                       </tr>
@@ -304,7 +366,10 @@ interface ColStats {
   ws: { median: number; max: number }
 }
 
-function TeamRow({ row, colStats, gb }: { row: EnrichedStanding; colStats: ColStats; gb: number | null }) {
+function TeamRow({ row, colStats, gb, wcMode, wcGb, isDivLeader, wcSpot }: {
+  row: EnrichedStanding; colStats: ColStats; gb: number | null
+  wcMode?: boolean; wcGb?: number | null; isDivLeader?: boolean; wcSpot?: number | null
+}) {
   const total = row.wins + row.losses
   const pctVal = total > 0 ? (row.wins / total).toFixed(3) : '.000'
   const playoffProb = row.playoff_probability
@@ -319,6 +384,12 @@ function TeamRow({ row, colStats, gb }: { row: EnrichedStanding; colStats: ColSt
           <Link href={`/teams/${row.team_abbr}`} className="font-medium text-538-text hover:text-538-accent transition-colors">
             {row.team}
           </Link>
+          {wcMode && isDivLeader && (
+            <span className="text-2xs font-bold px-1 py-px rounded" style={{ background: '#3c999e22', color: '#3c999e' }}>DIV</span>
+          )}
+          {wcMode && !isDivLeader && wcSpot != null && wcSpot <= 3 && (
+            <span className="text-2xs font-bold px-1 py-px rounded" style={{ background: '#e6394622', color: '#e63946' }}>WC{wcSpot}</span>
+          )}
         </div>
       </td>
 
@@ -345,6 +416,24 @@ function TeamRow({ row, colStats, gb }: { row: EnrichedStanding; colStats: ColSt
       {showGb && (
         <td className="text-right text-538-muted tabular">
           {gb === 0 ? '—' : gb % 1 === 0 ? gb.toFixed(0) : gb.toFixed(1)}
+        </td>
+      )}
+
+      {/* WC GB — wild card view only */}
+      {wcMode && (
+        <td className="text-right tabular">
+          {isDivLeader
+            ? <span className="text-2xs font-bold text-538-muted">DIV</span>
+            : wcGb != null && wcGb <= 0
+              // In the wild card: show "In" for cutoff team, "+X.X" lead for teams ahead
+              ? <span className="font-semibold" style={{ color: '#e63946' }}>
+                  {wcGb === 0 ? 'In' : `+${Math.abs(wcGb).toFixed(1)}`}
+                </span>
+              // Out: games behind the 3rd WC spot
+              : wcGb != null
+                ? <span className="text-538-muted">{wcGb.toFixed(1)}</span>
+                : '—'
+          }
         </td>
       )}
 
