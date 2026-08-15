@@ -268,6 +268,327 @@ interface GameState {
   outs: number | null
   bases: { first: boolean; second: boolean; third: boolean } | null
   breakdownOpen: boolean
+  liveOpen: boolean
+}
+
+// ── Live Game Panel ───────────────────────────────────────────────────────────
+
+interface AbPitch {
+  type: string; desc: string; code: string; result: string
+  balls: number; strikes: number; speed: number | null
+  pX: number | null; pZ: number | null
+}
+interface LiveState {
+  gameState: string
+  awayAbbr: string; homeAbbr: string
+  awayScore: number | null; homeScore: number | null
+  inning: number | null; inningHalf: string | null; outs: number
+  bases: { first: boolean; second: boolean; third: boolean }
+  batterId: number | null; batterName: string | null; batterStand: string; batterTeam: string
+  pitcherId: number | null; pitcherName: string | null; pitcherHand: string; pitcherTeam: string
+  count: { balls: number; strikes: number }
+  abPitches: AbPitch[]
+  currentPitcherStats: { ip: string; k: number; bb: number; hits: number; er: number; pc: number } | null
+}
+interface MiniZoneCell { row: number; col: number; pa: number; avg_rv: number | null; ops: number | null }
+interface MiniZoneData { zones: MiniZoneCell[][]; batterName: string; stand: string }
+interface PitchMixEntry { type: string; name: string; color: string; pct: number; whiffPct: number | null }
+
+const PITCH_COLORS_LIVE: Record<string, string> = {
+  FF:'#EF4444',SI:'#F97316',FC:'#F59E0B',FT:'#F97316',
+  SL:'#8B5CF6',ST:'#A78BFA',SV:'#7C3AED',
+  CU:'#3B82F6',KC:'#60A5FA',SW:'#93C5FD',
+  CH:'#10B981',FS:'#34D399',FO:'#6EE7B7',
+  KN:'#94A3B8',EP:'#CBD5E1',
+}
+
+const LIVE_RESULT_COLOR: Record<string, string> = {
+  B:'#3B82F6', S:'#F87171', C:'#F87171', F:'#FCD34D', X:'#34D399',
+}
+
+function LivePitchDot({ pitch, idx }: { pitch: AbPitch; idx: number }) {
+  const ptColor = PITCH_COLORS_LIVE[pitch.type] ?? '#78909C'
+  const resColor = LIVE_RESULT_COLOR[pitch.code] ?? '#9CA3AF'
+  return (
+    <div className="flex items-center gap-1.5 py-0.5">
+      <span className="text-[8px] font-mono text-538-muted w-3 text-right">{idx + 1}</span>
+      <span className="text-[8px] font-bold w-6" style={{ color: ptColor }}>{pitch.type || '??'}</span>
+      {pitch.speed && <span className="text-[8px] font-mono text-538-muted">{pitch.speed}</span>}
+      <span className="text-[8px] font-mono" style={{ color: resColor }}>{pitch.result || pitch.code}</span>
+      <span className="text-[8px] font-mono text-538-muted ml-auto">{pitch.balls}-{pitch.strikes}</span>
+    </div>
+  )
+}
+
+function LiveZoneMini({ zoneData, metric }: { zoneData: MiniZoneData; metric: 'rv' | 'ops' }) {
+  const cells = zoneData.zones.flat()
+  const vals = cells.map(c => metric === 'rv' ? c.avg_rv : c.ops).filter((v): v is number => v !== null)
+  if (!vals.length) return null
+  const minV = Math.min(...vals), maxV = Math.max(...vals)
+  const range = maxV - minV || 0.001
+  const TEAL = '#3C999E', PINK = '#9B405A'
+  function lerp(a: number, b: number, t: number) { return a + (b-a)*t }
+  function hexToRgb(h: string): [number,number,number] { const n=parseInt(h.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255] }
+  function cellColor(val: number | null) {
+    if (val === null) return '#374151'
+    let t = (val - minV) / range
+    if (metric !== 'rv') t = 1 - t
+    const [tr,tg,tb2] = hexToRgb(TEAL); const [pr,pg,pb] = hexToRgb(PINK)
+    return '#'+[lerp(tr,pr,t),lerp(tg,pg,t),lerp(tb2,pb,t)].map(v=>''+Math.round(v).toString(16).padStart(2,'0')).join('')
+  }
+  const CW = 28, CH = 24, COLS = 5, ROWS = 5
+  const W = CW*COLS, H = CH*ROWS
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ display:'block' }}>
+      {zoneData.zones.map((row, r) => row.map((cell, c) => {
+        const val = metric === 'rv' ? cell.avg_rv : cell.ops
+        const color = cellColor(val)
+        return (
+          <g key={`${r}-${c}`}>
+            <rect x={c*CW+1} y={r*CH+1} width={CW-2} height={CH-2} rx={2} fill={color} />
+            {val !== null && (
+              <text x={c*CW+CW/2} y={r*CH+CH/2} textAnchor="middle" dominantBaseline="middle"
+                fontSize={6.5} fill="#fff" fontFamily="monospace" fontWeight={700}>
+                {metric === 'rv' ? (val>=0?'+':'')+val.toFixed(2) : val.toFixed(3).replace(/^0/,'')}
+              </text>
+            )}
+          </g>
+        )
+      }))}
+      <rect x={CW} y={CH} width={CW*3} height={CH*3} fill="none" stroke="#94A3B8" strokeWidth={1.5} />
+    </svg>
+  )
+}
+
+function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbbr: string; homeAbbr: string }) {
+  const [live, setLive] = useState<LiveState | null>(null)
+  const [error, setError] = useState(false)
+  const [zoneData, setZoneData] = useState<MiniZoneData | null>(null)
+  const [pitchMix, setPitchMix] = useState<PitchMixEntry[] | null>(null)
+  const [zoneMetric, setZoneMetric] = useState<'rv' | 'ops'>('rv')
+  const lastBatterRef  = useRef<number | null>(null)
+  const lastPitcherRef = useRef<number | null>(null)
+  const season = new Date().getFullYear()
+
+  const fetchLive = useCallback(async () => {
+    try {
+      const r = await fetch(`/api/live-game/${gamePk}`, { cache: 'no-store' })
+      if (!r.ok) { setError(true); return }
+      const d: LiveState = await r.json()
+      setLive(d); setError(false)
+    } catch { setError(true) }
+  }, [gamePk])
+
+  // Lazy-load batter zone data when batter changes
+  useEffect(() => {
+    if (!live?.batterId || live.batterId === lastBatterRef.current) return
+    lastBatterRef.current = live.batterId
+    setZoneData(null)
+    fetch(`/api/batter-season/zones?batterId=${live.batterId}&season=${season}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d || !d.zones) return
+        setZoneData({ zones: d.zones, batterName: d.batterName, stand: d.stand ?? 'R' })
+      })
+      .catch(() => null)
+  }, [live?.batterId, season])
+
+  // Lazy-load pitcher pitch mix when pitcher changes
+  useEffect(() => {
+    if (!live?.pitcherId || live.pitcherId === lastPitcherRef.current) return
+    lastPitcherRef.current = live.pitcherId
+    setPitchMix(null)
+    fetch(`/api/pitcher-pitch-mix?pitcherId=${live.pitcherId}&season=${season}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d?.pitchTypes) return
+        const total = d.pitchTypes.reduce((s: number, p: Record<string,unknown>) => s + (p.count as number), 0)
+        setPitchMix(d.pitchTypes.map((p: Record<string,unknown>) => ({
+          type:     p.type as string,
+          name:     p.name as string,
+          color:    (PITCH_COLORS_LIVE[p.type as string] ?? '#78909C'),
+          pct:      total > 0 ? Math.round(((p.count as number) / total) * 100) : 0,
+          whiffPct: p.whiffPct as number | null,
+        })))
+      })
+      .catch(() => null)
+  }, [live?.pitcherId, season])
+
+  // Poll every 15 seconds
+  useEffect(() => {
+    fetchLive()
+    const id = setInterval(fetchLive, 15000)
+    return () => clearInterval(id)
+  }, [fetchLive])
+
+  if (error) return (
+    <div className="border-t border-538-border px-4 py-3 text-2xs text-538-muted">
+      Could not load live feed — will retry automatically.
+    </div>
+  )
+  if (!live) return (
+    <div className="border-t border-538-border px-4 py-3 text-2xs text-538-muted animate-pulse">
+      Loading live data…
+    </div>
+  )
+
+  const { count, abPitches, currentPitcherStats } = live
+  const halfArrow = live.inningHalf === 'Top' ? '▲' : live.inningHalf === 'Bottom' ? '▼' : ''
+  const ballDots   = Array.from({ length: 4 }, (_, i) => i < count.balls)
+  const strikeDots = Array.from({ length: 3 }, (_, i) => i < count.strikes)
+  const outDots    = Array.from({ length: 3 }, (_, i) => i < (live.outs ?? 0))
+
+  return (
+    <div className="border-t border-538-border bg-538-bg/50 px-4 py-4 space-y-4">
+      {/* Scoreboard */}
+      <div className="flex items-stretch gap-3 flex-wrap">
+        {/* Score */}
+        <div className="flex items-center gap-2">
+          <div className="text-center">
+            <div className="text-2xs text-538-muted uppercase tracking-wider">{live.awayAbbr}</div>
+            <div className="text-2xl font-black text-538-text">{live.awayScore ?? '—'}</div>
+          </div>
+          <div className="text-538-muted font-black text-lg">–</div>
+          <div className="text-center">
+            <div className="text-2xs text-538-muted uppercase tracking-wider">{live.homeAbbr}</div>
+            <div className="text-2xl font-black text-538-text">{live.homeScore ?? '—'}</div>
+          </div>
+        </div>
+
+        {/* Inning + outs + count */}
+        <div className="flex flex-col justify-center gap-1 pl-3 border-l border-538-border">
+          <div className="text-2xs font-bold text-green-400">
+            {halfArrow}{live.inning ?? '—'} {live.inningHalf ?? ''}
+          </div>
+          <div className="flex gap-1 items-center">
+            {outDots.map((on, i) => (
+              <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-yellow-400 border-yellow-400' : 'border-538-muted'}`} />
+            ))}
+            <span className="text-2xs text-538-muted ml-1">out{(live.outs ?? 0) !== 1 ? 's' : ''}</span>
+          </div>
+          {/* Count */}
+          <div className="flex items-center gap-1">
+            <span className="text-2xs text-538-muted">B</span>
+            {ballDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-green-400 border-green-400' : 'border-538-muted'}`} />)}
+            <span className="text-2xs text-538-muted ml-1">S</span>
+            {strikeDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-red-400 border-red-400' : 'border-538-muted'}`} />)}
+          </div>
+        </div>
+
+        {/* Bases */}
+        {live.bases && (
+          <div className="flex items-center pl-3 border-l border-538-border">
+            <svg viewBox="0 0 44 44" width={44} height={44}>
+              {/* 2B top */}
+              <rect x={16} y={2} width={12} height={12} rx={1} transform="rotate(45 22 8)"
+                fill={live.bases.second ? '#FBBF24' : '#374151'} stroke="#4B5563" strokeWidth={1} />
+              {/* 3B left */}
+              <rect x={2} y={16} width={12} height={12} rx={1} transform="rotate(45 8 22)"
+                fill={live.bases.third ? '#FBBF24' : '#374151'} stroke="#4B5563" strokeWidth={1} />
+              {/* 1B right */}
+              <rect x={30} y={16} width={12} height={12} rx={1} transform="rotate(45 36 22)"
+                fill={live.bases.first ? '#FBBF24' : '#374151'} stroke="#4B5563" strokeWidth={1} />
+              {/* HP bottom */}
+              <rect x={16} y={30} width={12} height={12} rx={1} transform="rotate(45 22 36)"
+                fill="#374151" stroke="#4B5563" strokeWidth={1} />
+            </svg>
+          </div>
+        )}
+      </div>
+
+      {/* Pitcher vs Batter */}
+      <div className="flex flex-wrap gap-4">
+        {/* Pitcher */}
+        <div className="min-w-[160px]">
+          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-1">Pitcher</div>
+          {live.pitcherName ? (
+            <>
+              <a href={`/pitchers/${live.pitcherId}`} target="_blank" rel="noreferrer"
+                className="text-sm font-bold text-538-text hover:text-538-orange transition-colors">
+                {live.pitcherName}
+              </a>
+              <div className="text-2xs text-538-muted">{live.pitcherTeam} · {live.pitcherHand}HP</div>
+              {currentPitcherStats && (
+                <div className="text-2xs text-538-muted mt-0.5 font-mono">
+                  {currentPitcherStats.ip} IP · {currentPitcherStats.pc} P · {currentPitcherStats.k}K {currentPitcherStats.bb}BB
+                </div>
+              )}
+            </>
+          ) : <span className="text-2xs text-538-muted">—</span>}
+        </div>
+
+        {/* Batter */}
+        <div className="min-w-[160px]">
+          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-1">Batter</div>
+          {live.batterName ? (
+            <>
+              <a href={`/batters/${live.batterId}`} target="_blank" rel="noreferrer"
+                className="text-sm font-bold text-538-text hover:text-538-orange transition-colors">
+                {live.batterName}
+              </a>
+              <div className="text-2xs text-538-muted">{live.batterTeam} · {live.batterStand === 'L' ? 'LHB' : live.batterStand === 'S' ? 'Switch' : 'RHB'}</div>
+            </>
+          ) : <span className="text-2xs text-538-muted">—</span>}
+        </div>
+      </div>
+
+      {/* Current AB pitches */}
+      {abPitches.length > 0 && (
+        <div>
+          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-1">This AB</div>
+          <div className="max-w-xs">
+            {abPitches.map((p, i) => <LivePitchDot key={i} pitch={p} idx={i} />)}
+          </div>
+        </div>
+      )}
+
+      {/* Pitcher pitch mix + Batter zone (side by side) */}
+      <div className="flex flex-wrap gap-6">
+        {/* Pitcher mix */}
+        {pitchMix && pitchMix.length > 0 && (
+          <div>
+            <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">Pitcher Arsenal</div>
+            <div className="space-y-1">
+              {pitchMix.slice(0, 6).map(p => (
+                <div key={p.type} className="flex items-center gap-2">
+                  <span className="text-2xs font-bold font-mono w-5" style={{ color: p.color }}>{p.type}</span>
+                  <div className="w-24 bg-538-border/30 rounded-sm h-2.5 overflow-hidden">
+                    <div className="h-full rounded-sm" style={{ width: `${p.pct}%`, backgroundColor: p.color }} />
+                  </div>
+                  <span className="text-2xs font-mono text-538-muted">{p.pct}%</span>
+                  {p.whiffPct !== null && (
+                    <span className="text-2xs text-538-muted">{p.whiffPct.toFixed(0)}% whiff</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Batter zone heatmap */}
+        {zoneData && (
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted">Batter Zones</div>
+              <div className="inline-flex border border-538-border rounded overflow-hidden">
+                {(['rv', 'ops'] as const).map(m => (
+                  <button key={m} onClick={() => setZoneMetric(m)}
+                    className={`px-1.5 py-0.5 text-[8px] font-bold transition-colors ${zoneMetric === m ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
+                    {m === 'rv' ? 'Avg RV' : 'OPS'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <LiveZoneMini zoneData={zoneData} metric={zoneMetric} />
+            <p className="text-[7.5px] text-538-muted mt-1">Catcher&apos;s view · season avg</p>
+          </div>
+        )}
+      </div>
+
+      {/* Auto-refresh note */}
+      <p className="text-[7.5px] text-538-muted">Auto-refreshes every 15s</p>
+    </div>
+  )
 }
 
 // ── Run Distribution Chart ────────────────────────────────────────────────────
@@ -855,6 +1176,14 @@ function MatchupCard({
           >
             Game Breakdown
           </button>
+          {game.gameStatus === 'Live' && (
+            <button
+              onClick={() => onUpdate({ liveOpen: !game.liveOpen })}
+              className={`text-2xs border rounded px-2.5 py-1.5 font-semibold transition-colors ${game.liveOpen ? 'bg-green-900/30 border-green-500 text-green-400' : 'border-green-700 text-green-500 hover:bg-green-900/20'}`}
+            >
+              {game.liveOpen ? '● Following Live' : '● Follow Live'}
+            </button>
+          )}
           <button
             onClick={() => onUpdate({ swapTarget: swapTarget?.type === 'away-pitcher' ? null : { type: 'away-pitcher' } })}
             className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors hidden sm:block"
@@ -908,6 +1237,11 @@ function MatchupCard({
           gameStatus={game.gameStatus}
           onClose={() => onUpdate({ breakdownOpen: false })}
         />
+      )}
+
+      {/* Live game panel */}
+      {game.liveOpen && game.gameStatus === 'Live' && (
+        <LiveGamePanel gamePk={game.gameId} awayAbbr={game.awayTeamAbbr} homeAbbr={game.homeTeamAbbr} />
       )}
 
       {/* Expanded details */}
@@ -1094,6 +1428,7 @@ export default function MatchupLab({
         outs: sg.outs ?? null,
         bases: sg.bases ?? null,
         breakdownOpen: false,
+        liveOpen: false,
       }
     },
     [pitchers, players],

@@ -336,6 +336,7 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     let batterName = `Batter ${batterId}`
     let teamAbbr   = ''
+    let stand: 'L' | 'R' | 'S' = 'R'
     let seasonStats: SeasonStats = {
       avg: 0, obp: 0, slg: 0, ops: 0, k_pct: 0, bb_pct: 0, whiff_pct: 0, rv_per_100: 0, rv_per_100_pct: 50,
       hr: 0, rbi: 0, sb: 0, hits: 0, ab: 0, pa: 0,
@@ -380,6 +381,8 @@ export async function GET(req: Request): Promise<NextResponse> {
         batterName = person.fullName ?? batterName
         const ct = person.currentTeam
         teamAbbr = (ct?.abbreviation ?? (ct?.id ? TEAM_ID_TO_ABBR[ct.id] : '') ?? '').toUpperCase()
+        const batSideCode = person.batSide?.code as string | undefined
+        if (batSideCode === 'L' || batSideCode === 'S') stand = batSideCode
       }
     }
 
@@ -570,6 +573,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     return NextResponse.json({
       batterName,
       teamAbbr,
+      stand,
       season,
       seasonStats,
       zones,
