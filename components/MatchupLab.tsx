@@ -410,7 +410,7 @@ function AbPitchZone({ pitches }: { pitches: AbPitch[] }) {
   function dotStyle(p: AbPitch): { fill: string; stroke: string } {
     const color = PITCH_COLORS_LIVE[p.type] ?? '#78909C'
     const isBall = p.code === 'B'
-    return { fill: isBall ? 'transparent' : color, stroke: color }
+    return { fill: isBall ? 'transparent' : color, stroke: isBall ? '#4ade80' : color }
   }
 
   return (
