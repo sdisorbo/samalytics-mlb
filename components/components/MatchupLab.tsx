@@ -278,11 +278,6 @@ interface AbPitch {
   balls: number; strikes: number; speed: number | null
   pX: number | null; pZ: number | null
 }
-interface LivePlay {
-  description: string; eventType: string
-  inning: number; half: string; ordinalNum: string; rbi: number
-  awayScore: number | null; homeScore: number | null
-}
 interface LiveState {
   gameState: string
   awayAbbr: string; homeAbbr: string
@@ -294,18 +289,10 @@ interface LiveState {
   count: { balls: number; strikes: number }
   abPitches: AbPitch[]
   currentPitcherStats: { ip: string; k: number; bb: number; hits: number; er: number; pc: number } | null
-  batterGameStats: { ab: number; h: number; hr: number; rbi: number; bb: number; k: number; lob: number } | null
-  recentPlays: LivePlay[]
 }
 interface MiniZoneCell { row: number; col: number; pa: number; avg_rv: number | null; ops: number | null }
-interface MiniZoneData {
-  zones: MiniZoneCell[][]
-  pitchTypeZones: Array<{ code: string; name: string; zones: MiniZoneCell[][] }>
-  batterName: string; stand: string
-  seasonStats: { k_pct: number; bb_pct: number; avg: number; slg: number; hr: number; pa: number } | null
-}
-interface PitchMixEntry { type: string; name: string; color: string; pct: number; whiffPct: number | null; strikePct: number | null }
-interface BatterPitchStat { type: string; whiff: number | null; ops: number | null; rv: number | null; count: number }
+interface MiniZoneData { zones: MiniZoneCell[][]; batterName: string; stand: string }
+interface PitchMixEntry { type: string; name: string; color: string; pct: number; whiffPct: number | null }
 
 const PITCH_COLORS_LIVE: Record<string, string> = {
   FF:'#EF4444',SI:'#F97316',FC:'#F59E0B',FT:'#F97316',
@@ -314,85 +301,9 @@ const PITCH_COLORS_LIVE: Record<string, string> = {
   CH:'#10B981',FS:'#34D399',FO:'#6EE7B7',
   KN:'#94A3B8',EP:'#CBD5E1',
 }
+
 const LIVE_RESULT_COLOR: Record<string, string> = {
-  B:'#3B82F6',S:'#F87171',C:'#F87171',F:'#FCD34D',X:'#34D399',
-}
-const FB_TYPES = new Set(['FF','SI','FT','FC'])
-
-// Count adjustment multipliers for AB outcome prediction
-const COUNT_K_MULT: Record<string, number> = {
-  '0-0':1.0,'0-1':1.25,'0-2':1.80,
-  '1-0':0.85,'1-1':1.05,'1-2':1.50,
-  '2-0':0.65,'2-1':0.90,'2-2':1.30,
-  '3-0':0.30,'3-1':0.60,'3-2':1.15,
-}
-const COUNT_BB_MULT: Record<string, number> = {
-  '0-0':1.0,'0-1':0.75,'0-2':0.45,
-  '1-0':1.15,'1-1':0.90,'1-2':0.60,
-  '2-0':1.40,'2-1':1.15,'2-2':0.80,
-  '3-0':2.50,'3-1':1.70,'3-2':1.30,
-}
-
-function liveClamp(v: number, lo: number, hi: number) { return Math.min(hi, Math.max(lo, v)) }
-
-function rvHeatColor(val: number | null, absMax: number): string {
-  if (val == null) return 'transparent'
-  const t = liveClamp(val / (absMax || 0.001), -1, 1)
-  if (t >= 0) {
-    // neutral → red (batter-friendly)
-    const r = 220, g = Math.round(220 - 170 * t), b = Math.round(220 - 170 * t)
-    return `rgb(${r},${g},${b})`
-  } else {
-    // neutral → blue (pitcher-friendly)
-    const s = -t
-    const r = Math.round(220 - 160 * s), g = Math.round(220 - 120 * s), b = 220
-    return `rgb(${r},${g},${b})`
-  }
-}
-
-// Savant-style smooth heatmap using SVG blur filter
-function SavantHeatmap({ zones, pitchLabel }: { zones: MiniZoneCell[][]; pitchLabel?: string }) {
-  const CW = 32, CH = 28, COLS = 5, ROWS = 5
-  const W = CW * COLS, H = CH * ROWS
-  const vals = zones.flat().map(c => c.avg_rv).filter((v): v is number => v != null)
-  if (!vals.length) return (
-    <div style={{width: W, height: H}} className="flex items-center justify-center bg-538-border/10 rounded">
-      <span className="text-[9px] text-538-muted">No data</span>
-    </div>
-  )
-  const absMax = Math.max(Math.abs(Math.min(...vals)), Math.abs(Math.max(...vals)), 0.01)
-  const filterId = `blur-${(pitchLabel ?? 'all').replace(/\W/g, '')}`
-  return (
-    <div style={{ position: 'relative', display: 'inline-block', lineHeight: 0 }}>
-      <svg width={W} height={H} style={{ display: 'block', borderRadius: 4 }}>
-        <defs>
-          <filter id={filterId} x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
-          </filter>
-        </defs>
-        {/* Blurred color layer */}
-        <g filter={`url(#${filterId})`}>
-          {zones.map((row, r) => row.map((cell, c) => (
-            <rect key={`${r}-${c}`}
-              x={c * CW} y={r * CH} width={CW} height={CH}
-              fill={rvHeatColor(cell.avg_rv, absMax)} />
-          )))}
-        </g>
-        {/* Strike zone overlay — sharp */}
-        <rect x={CW} y={CH} width={CW * 3} height={CH * 3}
-          fill="none" stroke="rgba(148,163,184,0.8)" strokeWidth={1.5} />
-        {/* Plate marker */}
-        <line x1={CW * 2.5} y1={CH * 4 + 2} x2={CW * 2.5} y2={H}
-          stroke="rgba(100,116,139,0.5)" strokeWidth={0.8} strokeDasharray="3,2" />
-      </svg>
-      {pitchLabel && (
-        <div className="absolute top-1 left-1 text-[7px] font-bold px-1 rounded"
-          style={{ background: 'rgba(15,23,42,0.7)', color: '#94A3B8' }}>
-          {pitchLabel}
-        </div>
-      )}
-    </div>
-  )
+  B:'#3B82F6', S:'#F87171', C:'#F87171', F:'#FCD34D', X:'#34D399',
 }
 
 function LivePitchDot({ pitch, idx }: { pitch: AbPitch; idx: number }) {
@@ -409,189 +320,43 @@ function LivePitchDot({ pitch, idx }: { pitch: AbPitch; idx: number }) {
   )
 }
 
-function MatchupTable({ pitchMix, batterStats }: {
-  pitchMix: PitchMixEntry[]
-  batterStats: BatterPitchStat[] | null
-}) {
-  const headerCls = "text-[7.5px] font-bold uppercase tracking-wider text-538-muted pb-1 text-right"
-  const cellCls   = "text-[8px] font-mono text-right py-0.5"
-  const batMap = new Map(batterStats?.map(b => [b.type, b]) ?? [])
-
-  return (
-    <div className="overflow-x-auto">
-      <table style={{ borderCollapse: 'collapse', fontSize: 8, minWidth: 380 }}>
-        <thead>
-          <tr>
-            <th className="text-left pb-1 text-[7.5px] font-bold uppercase tracking-wider text-538-muted w-10">Pitch</th>
-            <th className={headerCls + " w-10"}>Use%</th>
-            <th className={headerCls + " w-14"}>P Whiff%</th>
-            <th className={headerCls + " w-14"}>P Str%</th>
-            <th className={headerCls + " w-14"}>B Whiff%</th>
-            <th className={headerCls + " w-14"}>B OPS</th>
-            <th className={headerCls + " w-14"}>B RV/100</th>
-            <th className="pb-1 w-8" />
-          </tr>
-        </thead>
-        <tbody>
-          {pitchMix.slice(0, 7).map(p => {
-            const b = batMap.get(p.type)
-            // Edge: positive = pitcher advantage
-            const edgeScore =
-              ((p.whiffPct ?? 22) - 22) / 22 * 0.35
-              + ((p.strikePct ?? 62) - 62) / 20 * 0.25
-              - ((b?.ops ?? 0.700) - 0.700) / 0.300 * 0.40
-            const edgeLabel = edgeScore > 0.15 ? '← P' : edgeScore < -0.12 ? 'B →' : '~'
-            const edgeColor = edgeScore > 0.15 ? '#4ADE80' : edgeScore < -0.12 ? '#F87171' : '#6B7280'
-            return (
-              <tr key={p.type} className="border-t border-538-border/30">
-                <td className="py-0.5">
-                  <span className="text-[8px] font-bold" style={{ color: p.color }}>{p.type}</span>
-                  <span className="text-[7px] text-538-muted ml-1 hidden sm:inline">{p.name.split(' ').slice(-1)[0]}</span>
-                </td>
-                <td className={cellCls}>{p.pct}%</td>
-                <td className={cellCls + " " + (p.whiffPct != null && p.whiffPct > 28 ? 'text-green-400' : '')}>
-                  {p.whiffPct != null ? p.whiffPct.toFixed(0) + '%' : '—'}
-                </td>
-                <td className={cellCls}>
-                  {p.strikePct != null ? p.strikePct.toFixed(0) + '%' : '—'}
-                </td>
-                <td className={cellCls + " " + (b?.whiff != null && b.whiff > 28 ? 'text-green-400' : b?.whiff != null && b.whiff < 18 ? 'text-red-400' : '')}>
-                  {b?.whiff != null ? b.whiff.toFixed(0) + '%' : '—'}
-                </td>
-                <td className={cellCls + " " + (b?.ops != null && b.ops > 0.800 ? 'text-red-400' : b?.ops != null && b.ops < 0.600 ? 'text-green-400' : '')}>
-                  {b?.ops != null ? b.ops.toFixed(3) : '—'}
-                </td>
-                <td className={cellCls + " " + (b?.rv != null && b.rv > 0 ? 'text-red-400' : b?.rv != null && b.rv < 0 ? 'text-green-400' : '')}>
-                  {b?.rv != null ? (b.rv >= 0 ? '+' : '') + b.rv.toFixed(1) : '—'}
-                </td>
-                <td className="py-0.5 text-right text-[7.5px] font-bold" style={{ color: edgeColor }}>{edgeLabel}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      <p className="text-[7px] text-538-muted mt-1">← P = pitcher edge &nbsp;·&nbsp; B → = batter edge &nbsp;·&nbsp; Catcher&apos;s view</p>
-    </div>
-  )
-}
-
-function AbOutcomeBar({ k, bb, hr, h, out }: { k: number; bb: number; hr: number; h: number; out: number }) {
-  const segments = [
-    { label: 'K',   pct: k,   color: '#F87171' },
-    { label: 'BB',  pct: bb,  color: '#60A5FA' },
-    { label: 'HR',  pct: hr,  color: '#FBBF24' },
-    { label: 'H',   pct: h,   color: '#4ADE80' },
-    { label: 'Out', pct: out, color: '#6B7280' },
-  ]
-  return (
-    <div className="space-y-1">
-      {segments.map(s => (
-        <div key={s.label} className="flex items-center gap-1.5">
-          <span className="text-[8px] font-bold text-538-muted w-6 text-right shrink-0">{s.label}</span>
-          <div className="flex-1 bg-538-border/20 rounded-full overflow-hidden h-2.5">
-            <div className="h-full rounded-full" style={{ width: `${Math.round(s.pct * 100)}%`, backgroundColor: s.color }} />
-          </div>
-          <span className="text-[8px] font-mono text-538-muted w-8 text-left shrink-0">{(s.pct * 100).toFixed(0)}%</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function NextPitchPred({ pitchMix, balls, strikes, lastType }: {
-  pitchMix: PitchMixEntry[]
-  balls: number; strikes: number; lastType: string | null
-}) {
-  const fbAdj = balls >= 3 ? 1.4 : balls >= 2 ? 1.15 : strikes >= 2 ? 0.8 : 1.0
-  const raw: Record<string, number> = {}
-  pitchMix.forEach(p => {
-    const isFb = FB_TYPES.has(p.type)
-    const mult = isFb ? fbAdj : (fbAdj > 1 ? 1 / Math.sqrt(fbAdj) : 1)
-    const seqPenalty = p.type === lastType && !isFb ? 0.72 : 1.0
-    raw[p.type] = (p.pct / 100) * mult * seqPenalty
-  })
-  const total = Object.values(raw).reduce((s, v) => s + v, 0) || 1
-  const preds = pitchMix
-    .map(p => ({ ...p, adjPct: Math.round((raw[p.type] ?? 0) / total * 100) }))
-    .sort((a, b) => b.adjPct - a.adjPct)
-    .slice(0, 4)
-  return (
-    <div className="space-y-1">
-      {preds.map(p => (
-        <div key={p.type} className="flex items-center gap-1.5">
-          <span className="text-[8px] font-bold w-5 shrink-0" style={{ color: p.color }}>{p.type}</span>
-          <div className="flex-1 bg-538-border/20 rounded-full overflow-hidden h-2">
-            <div className="h-full rounded-full" style={{ width: `${p.adjPct}%`, backgroundColor: p.color }} />
-          </div>
-          <span className="text-[8px] font-mono text-538-muted w-7 text-left shrink-0">{p.adjPct}%</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function PlayByPlayFeed({ plays, batterGameStats, batterName, awayAbbr, homeAbbr, batterId }: {
-  plays: LivePlay[]
-  batterGameStats: LiveState['batterGameStats']
-  batterName: string | null; awayAbbr: string; homeAbbr: string; batterId: number | null
-}) {
-  const [showBox, setShowBox] = useState(false)
-  const HALF_ICONS: Record<string, string> = { top: '▲', bottom: '▼', 'Top': '▲', 'Bottom': '▼' }
-  const RESULT_COLORS: Record<string, string> = {
-    home_run:'#FBBF24', single:'#4ADE80', double:'#34D399', triple:'#34D399',
-    walk:'#60A5FA', hit_by_pitch:'#60A5FA', strikeout:'#9CA3AF', strikeout_double_play:'#9CA3AF',
+function LiveZoneMini({ zoneData, metric }: { zoneData: MiniZoneData; metric: 'rv' | 'ops' }) {
+  const cells = zoneData.zones.flat()
+  const vals = cells.map(c => metric === 'rv' ? c.avg_rv : c.ops).filter((v): v is number => v !== null)
+  if (!vals.length) return null
+  const minV = Math.min(...vals), maxV = Math.max(...vals)
+  const range = maxV - minV || 0.001
+  const TEAL = '#3C999E', PINK = '#9B405A'
+  function lerp(a: number, b: number, t: number) { return a + (b-a)*t }
+  function hexToRgb(h: string): [number,number,number] { const n=parseInt(h.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255] }
+  function cellColor(val: number | null) {
+    if (val === null) return '#374151'
+    let t = (val - minV) / range
+    if (metric !== 'rv') t = 1 - t
+    const [tr,tg,tb2] = hexToRgb(TEAL); const [pr,pg,pb] = hexToRgb(PINK)
+    return '#'+[lerp(tr,pr,t),lerp(tg,pg,t),lerp(tb2,pb,t)].map(v=>''+Math.round(v).toString(16).padStart(2,'0')).join('')
   }
+  const CW = 28, CH = 24, COLS = 5, ROWS = 5
+  const W = CW*COLS, H = CH*ROWS
   return (
-    <div className="border-t border-538-border/50 pt-3 space-y-2">
-      <div className="flex items-center justify-between">
-        <div className="text-2xs font-bold uppercase tracking-widest text-538-muted">Recent Plays</div>
-        {batterGameStats && (
-          <button onClick={() => setShowBox(v => !v)}
-            className="text-[8px] font-bold text-538-muted hover:text-538-text transition-colors">
-            {batterName?.split(' ').slice(-1)[0]} today {showBox ? '▲' : '▼'}
-          </button>
-        )}
-      </div>
-      {showBox && batterGameStats && (
-        <div className="bg-538-border/10 rounded-lg px-3 py-2 flex gap-4 flex-wrap">
-          {[
-            ['AB', batterGameStats.ab], ['H', batterGameStats.h],
-            ['HR', batterGameStats.hr], ['RBI', batterGameStats.rbi],
-            ['BB', batterGameStats.bb], ['K', batterGameStats.k],
-          ].map(([label, val]) => (
-            <div key={label} className="text-center">
-              <div className="text-[7.5px] text-538-muted">{label}</div>
-              <div className="text-sm font-black text-538-text">{val}</div>
-            </div>
-          ))}
-          {batterId && (
-            <a href={`/batters/${batterId}`} target="_blank" rel="noreferrer"
-              className="self-center text-[8px] text-538-orange hover:underline ml-auto">Season →</a>
-          )}
-        </div>
-      )}
-      <div className="space-y-0.5 max-h-48 overflow-y-auto pr-1">
-        {plays.length === 0 && <p className="text-[8px] text-538-muted">No plays yet</p>}
-        {plays.map((play, i) => {
-          if (!play.description) return null
-          const col = RESULT_COLORS[play.eventType] ?? '#9CA3AF'
-          const half = HALF_ICONS[play.half] ?? ''
-          return (
-            <div key={i} className="flex items-start gap-2 py-0.5">
-              <span className="text-[7.5px] font-mono text-538-muted shrink-0 w-10">
-                {half}{play.inning}
-              </span>
-              <span className="text-[8px] leading-tight" style={{ color: col }}>{play.description}</span>
-              {play.awayScore != null && (
-                <span className="text-[7.5px] font-mono text-538-muted ml-auto shrink-0">
-                  {awayAbbr} {play.awayScore}–{play.homeScore} {homeAbbr}
-                </span>
-              )}
-            </div>
-          )
-        })}
-      </div>
-    </div>
+    <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ display:'block' }}>
+      {zoneData.zones.map((row, r) => row.map((cell, c) => {
+        const val = metric === 'rv' ? cell.avg_rv : cell.ops
+        const color = cellColor(val)
+        return (
+          <g key={`${r}-${c}`}>
+            <rect x={c*CW+1} y={r*CH+1} width={CW-2} height={CH-2} rx={2} fill={color} />
+            {val != null && (
+              <text x={c*CW+CW/2} y={r*CH+CH/2} textAnchor="middle" dominantBaseline="middle"
+                fontSize={6.5} fill="#fff" fontFamily="monospace" fontWeight={700}>
+                {metric === 'rv' ? (val>=0?'+':'')+val.toFixed(2) : val.toFixed(3).replace(/^0/,'')}
+              </text>
+            )}
+          </g>
+        )
+      }))}
+      <rect x={CW} y={CH} width={CW*3} height={CH*3} fill="none" stroke="#94A3B8" strokeWidth={1.5} />
+    </svg>
   )
 }
 
@@ -600,8 +365,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
   const [error, setError] = useState(false)
   const [zoneData, setZoneData] = useState<MiniZoneData | null>(null)
   const [pitchMix, setPitchMix] = useState<PitchMixEntry[] | null>(null)
-  const [batterStats, setBatterStats] = useState<BatterPitchStat[] | null>(null)
-  const [pitchToggle, setPitchToggle] = useState('ALL')
+  const [zoneMetric, setZoneMetric] = useState<'rv' | 'ops'>('rv')
   const lastBatterRef  = useRef<number | null>(null)
   const lastPitcherRef = useRef<number | null>(null)
   const season = new Date().getFullYear()
@@ -615,99 +379,39 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
     } catch { setError(true) }
   }, [gamePk])
 
-  // Batter data: zones + scenario stats
+  // Lazy-load batter zone data when batter changes
   useEffect(() => {
     if (!live?.batterId || live.batterId === lastBatterRef.current) return
     lastBatterRef.current = live.batterId
-    setZoneData(null); setBatterStats(null); setPitchToggle('ALL')
-
+    setZoneData(null)
     fetch(`/api/batter-season/zones?batterId=${live.batterId}&season=${season}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
-        if (!d?.zones) return
-        setZoneData({
-          zones: d.zones,
-          pitchTypeZones: (d.pitchTypes ?? []).map((p: Record<string,unknown>) => ({
-            code: p.code as string,
-            name: p.name as string,
-            zones: p.zones as MiniZoneCell[][],
-          })),
-          batterName: d.batterName,
-          stand: d.stand ?? 'R',
-          seasonStats: d.seasonStats ? {
-            k_pct: (d.seasonStats as Record<string,number>).k_pct,
-            bb_pct: (d.seasonStats as Record<string,number>).bb_pct,
-            avg: (d.seasonStats as Record<string,number>).avg,
-            slg: (d.seasonStats as Record<string,number>).slg,
-            hr: (d.seasonStats as Record<string,number>).hr,
-            pa: (d.seasonStats as Record<string,number>).pa,
-          } : null,
-        })
-      }).catch(() => null)
-
-    fetch(`/api/batter-scenario?batterId=${live.batterId}&season=${season}`)
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (!d?.byPT) return
-        const stats: BatterPitchStat[] = Object.entries(d.byPT as Record<string, Record<string, Record<string, {count:number;swings:number;whiffs:number;pa:number;h:number;bb:number;ab:number;tb:number;rv_sum:number}>>>)
-          .map(([type, byHand]) => {
-            const agg = { count:0, swings:0, whiffs:0, pa:0, h:0, bb:0, ab:0, tb:0, rv_sum:0 }
-            Object.values(byHand).forEach(byCount =>
-              Object.values(byCount).forEach(b => {
-                agg.count += b.count; agg.swings += b.swings; agg.whiffs += b.whiffs
-                agg.pa += b.pa; agg.h += b.h; agg.bb += b.bb
-                agg.ab += b.ab; agg.tb += b.tb; agg.rv_sum += b.rv_sum
-              })
-            )
-            if (agg.count < 15) return null
-            const obp = agg.pa >= 15 ? (agg.h + agg.bb) / agg.pa : null
-            const slg = agg.ab >= 15 ? agg.tb / agg.ab : null
-            return {
-              type,
-              whiff: agg.swings >= 8 ? (agg.whiffs / agg.swings) * 100 : null,
-              ops: obp != null && slg != null ? obp + slg : null,
-              rv: agg.pa >= 15 ? (agg.rv_sum / agg.pa) * 100 : null,
-              count: agg.count,
-            }
-          })
-          .filter((s): s is BatterPitchStat => s !== null)
-        setBatterStats(stats)
-      }).catch(() => null)
+        if (!d || !d.zones) return
+        setZoneData({ zones: d.zones, batterName: d.batterName, stand: d.stand ?? 'R' })
+      })
+      .catch(() => null)
   }, [live?.batterId, season])
 
-  // Pitcher pitch mix
+  // Lazy-load pitcher pitch mix when pitcher changes
   useEffect(() => {
     if (!live?.pitcherId || live.pitcherId === lastPitcherRef.current) return
     lastPitcherRef.current = live.pitcherId
     setPitchMix(null)
-
     fetch(`/api/pitcher-pitch-mix?pitcherId=${live.pitcherId}&season=${season}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (!d?.pitchTypes) return
-        // Aggregate byAbPitch to get whiff% and strike% per pitch type
-        const agg: Record<string, {count:number;whiffs:number;strikes:number}> = {}
-        if (d.byAbPitch) {
-          Object.values(d.byAbPitch as Record<string, Record<string,{count:number;whiffs:number;strikes:number}>>).forEach(byPT => {
-            Object.entries(byPT).forEach(([pt, s]) => {
-              agg[pt] ??= {count:0, whiffs:0, strikes:0}
-              agg[pt].count += s.count; agg[pt].whiffs += s.whiffs; agg[pt].strikes += s.strikes
-            })
-          })
-        }
         const total = d.pitchTypes.reduce((s: number, p: Record<string,unknown>) => s + (p.count as number), 0)
-        setPitchMix(d.pitchTypes.map((p: Record<string,unknown>) => {
-          const a = agg[p.type as string]
-          return {
-            type:      p.type as string,
-            name:      p.name as string,
-            color:     PITCH_COLORS_LIVE[p.type as string] ?? '#78909C',
-            pct:       total > 0 ? Math.round(((p.count as number) / total) * 100) : 0,
-            whiffPct:  a && a.count >= 20 ? Math.round((a.whiffs / a.count) * 100) : null,
-            strikePct: a && a.count >= 20 ? Math.round((a.strikes / a.count) * 100) : null,
-          }
-        }))
-      }).catch(() => null)
+        setPitchMix(d.pitchTypes.map((p: Record<string,unknown>) => ({
+          type:     p.type as string,
+          name:     p.name as string,
+          color:    (PITCH_COLORS_LIVE[p.type as string] ?? '#78909C'),
+          pct:      total > 0 ? Math.round(((p.count as number) / total) * 100) : 0,
+          whiffPct: p.whiffPct as number | null,
+        })))
+      })
+      .catch(() => null)
   }, [live?.pitcherId, season])
 
   // Poll every 15 seconds
@@ -716,34 +420,6 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
     const id = setInterval(fetchLive, 15000)
     return () => clearInterval(id)
   }, [fetchLive])
-
-  // Derived: AB outcome prediction
-  const abOutcome = useMemo(() => {
-    const ss = zoneData?.seasonStats
-    if (!live || !ss || ss.pa < 50) return null
-    const k  = ss.k_pct / 100, bb = ss.bb_pct / 100
-    const { balls, strikes } = live.count
-    const key = `${balls}-${strikes}`
-    const kAdj  = liveClamp(k  * (COUNT_K_MULT[key]  ?? 1), 0, 0.65)
-    const bbAdj = liveClamp(bb * (COUNT_BB_MULT[key] ?? 1), 0, 0.50)
-    const hrBase = ss.pa > 0 ? ss.hr / ss.pa : 0
-    const hBase  = liveClamp(ss.avg * (1 - bb) - hrBase, 0, 0.35)
-    const inPlayBase = hrBase + hBase + Math.max(0, 1 - k - bb - hrBase - hBase)
-    const inPlayAdj  = liveClamp(1 - kAdj - bbAdj, 0, 1)
-    const scale = inPlayBase > 0 ? inPlayAdj / inPlayBase : 1
-    const hrAdj  = liveClamp(hrBase * scale, 0, 0.15)
-    const hAdj   = liveClamp(hBase  * scale, 0, 0.35)
-    const outAdj = liveClamp(1 - kAdj - bbAdj - hrAdj - hAdj, 0, 0.80)
-    return { k: kAdj, bb: bbAdj, hr: hrAdj, h: hAdj, out: outAdj }
-  }, [live?.count, zoneData])
-
-  // Derived: next pitch prediction
-  const nextPitches = useMemo(() => {
-    if (!pitchMix || !live) return null
-    const { balls, strikes } = live.count
-    const lastType = live.abPitches.length > 0 ? live.abPitches[live.abPitches.length - 1].type : null
-    return { pitchMix, balls, strikes, lastType }
-  }, [pitchMix, live?.count, live?.abPitches])
 
   if (error) return (
     <div className="border-t border-538-border px-4 py-3 text-2xs text-538-muted">
@@ -756,144 +432,107 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
     </div>
   )
 
-  const { count, abPitches } = live
-  const halfArrow  = live.inningHalf === 'Top' ? '▲' : live.inningHalf === 'Bottom' ? '▼' : ''
+  const { count, abPitches, currentPitcherStats } = live
+  const halfArrow = live.inningHalf === 'Top' ? '▲' : live.inningHalf === 'Bottom' ? '▼' : ''
   const ballDots   = Array.from({ length: 4 }, (_, i) => i < count.balls)
   const strikeDots = Array.from({ length: 3 }, (_, i) => i < count.strikes)
   const outDots    = Array.from({ length: 3 }, (_, i) => i < (live.outs ?? 0))
 
-  // Zones to show in heatmap
-  const activePTZones = pitchToggle !== 'ALL'
-    ? zoneData?.pitchTypeZones.find(p => p.code === pitchToggle)?.zones ?? null
-    : zoneData?.zones ?? null
-
   return (
-    <div className="border-t border-538-border bg-538-bg/50 px-4 py-4 space-y-5">
-
-      {/* ── Scoreboard row ── */}
-      <div className="flex items-center gap-4 flex-wrap">
+    <div className="border-t border-538-border bg-538-bg/50 px-4 py-4 space-y-4">
+      {/* Scoreboard */}
+      <div className="flex items-stretch gap-3 flex-wrap">
+        {/* Score */}
         <div className="flex items-center gap-2">
           <div className="text-center">
-            <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted">{live.awayAbbr}</div>
-            <div className="text-2xl font-black text-538-text leading-none">{live.awayScore ?? '—'}</div>
+            <div className="text-2xs text-538-muted uppercase tracking-wider">{live.awayAbbr}</div>
+            <div className="text-2xl font-black text-538-text">{live.awayScore ?? '—'}</div>
           </div>
-          <div className="text-538-muted font-black">–</div>
+          <div className="text-538-muted font-black text-lg">–</div>
           <div className="text-center">
-            <div className="text-[8px] font-bold uppercase tracking-widest text-538-muted">{live.homeAbbr}</div>
-            <div className="text-2xl font-black text-538-text leading-none">{live.homeScore ?? '—'}</div>
+            <div className="text-2xs text-538-muted uppercase tracking-wider">{live.homeAbbr}</div>
+            <div className="text-2xl font-black text-538-text">{live.homeScore ?? '—'}</div>
           </div>
         </div>
 
-        <div className="pl-3 border-l border-538-border flex flex-col gap-0.5">
-          <div className="text-[8px] font-bold text-green-400">{halfArrow}{live.inning ?? '—'} {live.inningHalf ?? ''}</div>
+        {/* Inning + outs + count */}
+        <div className="flex flex-col justify-center gap-1 pl-3 border-l border-538-border">
+          <div className="text-2xs font-bold text-green-400">
+            {halfArrow}{live.inning ?? '—'} {live.inningHalf ?? ''}
+          </div>
           <div className="flex gap-1 items-center">
-            {outDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-yellow-400 border-yellow-400' : 'border-538-muted'}`} />)}
-            <span className="text-[8px] text-538-muted ml-1">{live.outs} out{live.outs !== 1 ? 's' : ''}</span>
+            {outDots.map((on, i) => (
+              <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-yellow-400 border-yellow-400' : 'border-538-muted'}`} />
+            ))}
+            <span className="text-2xs text-538-muted ml-1">out{(live.outs ?? 0) !== 1 ? 's' : ''}</span>
           </div>
+          {/* Count */}
           <div className="flex items-center gap-1">
-            <span className="text-[7.5px] text-538-muted">B</span>
-            {ballDots.map((on, i) => <span key={i} className={`inline-block w-1.5 h-1.5 rounded-full border ${on ? 'bg-green-400 border-green-400' : 'border-538-muted'}`} />)}
-            <span className="text-[7.5px] text-538-muted ml-1">S</span>
-            {strikeDots.map((on, i) => <span key={i} className={`inline-block w-1.5 h-1.5 rounded-full border ${on ? 'bg-red-400 border-red-400' : 'border-538-muted'}`} />)}
+            <span className="text-2xs text-538-muted">B</span>
+            {ballDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-green-400 border-green-400' : 'border-538-muted'}`} />)}
+            <span className="text-2xs text-538-muted ml-1">S</span>
+            {strikeDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border ${on ? 'bg-red-400 border-red-400' : 'border-538-muted'}`} />)}
           </div>
         </div>
 
+        {/* Bases */}
         {live.bases && (
-          <div className="pl-3 border-l border-538-border">
-            <svg viewBox="0 0 44 44" width={40} height={40}>
-              <rect x={16} y={2}  width={12} height={12} rx={1} transform="rotate(45 22 8)"  fill={live.bases.second ? '#FBBF24':'#374151'} stroke="#4B5563" strokeWidth={1}/>
-              <rect x={2}  y={16} width={12} height={12} rx={1} transform="rotate(45 8 22)"  fill={live.bases.third  ? '#FBBF24':'#374151'} stroke="#4B5563" strokeWidth={1}/>
-              <rect x={30} y={16} width={12} height={12} rx={1} transform="rotate(45 36 22)" fill={live.bases.first  ? '#FBBF24':'#374151'} stroke="#4B5563" strokeWidth={1}/>
-              <rect x={16} y={30} width={12} height={12} rx={1} transform="rotate(45 22 36)" fill="#374151" stroke="#4B5563" strokeWidth={1}/>
+          <div className="flex items-center pl-3 border-l border-538-border">
+            <svg viewBox="0 0 44 44" width={44} height={44}>
+              {/* 2B top */}
+              <rect x={16} y={2} width={12} height={12} rx={1} transform="rotate(45 22 8)"
+                fill={live.bases.second ? '#FBBF24' : '#374151'} stroke="#4B5563" strokeWidth={1} />
+              {/* 3B left */}
+              <rect x={2} y={16} width={12} height={12} rx={1} transform="rotate(45 8 22)"
+                fill={live.bases.third ? '#FBBF24' : '#374151'} stroke="#4B5563" strokeWidth={1} />
+              {/* 1B right */}
+              <rect x={30} y={16} width={12} height={12} rx={1} transform="rotate(45 36 22)"
+                fill={live.bases.first ? '#FBBF24' : '#374151'} stroke="#4B5563" strokeWidth={1} />
+              {/* HP bottom */}
+              <rect x={16} y={30} width={12} height={12} rx={1} transform="rotate(45 22 36)"
+                fill="#374151" stroke="#4B5563" strokeWidth={1} />
             </svg>
           </div>
         )}
+      </div>
 
-        <div className="pl-3 border-l border-538-border flex gap-4 flex-wrap">
-          <div>
-            <div className="text-[7.5px] text-538-muted uppercase tracking-wider">Pitcher</div>
-            {live.pitcherName
-              ? <a href={`/pitchers/${live.pitcherId}`} target="_blank" rel="noreferrer"
-                  className="text-[10px] font-bold text-538-text hover:text-538-orange">{live.pitcherName}</a>
-              : <span className="text-[10px] text-538-muted">—</span>}
-            <div className="text-[7.5px] text-538-muted">{live.pitcherTeam} · {live.pitcherHand}HP
-              {live.currentPitcherStats && ` · ${live.currentPitcherStats.ip} IP ${live.currentPitcherStats.pc}P`}
-            </div>
-          </div>
-          <div>
-            <div className="text-[7.5px] text-538-muted uppercase tracking-wider">Batter</div>
-            {live.batterName
-              ? <a href={`/batters/${live.batterId}`} target="_blank" rel="noreferrer"
-                  className="text-[10px] font-bold text-538-text hover:text-538-orange">{live.batterName}</a>
-              : <span className="text-[10px] text-538-muted">—</span>}
-            <div className="text-[7.5px] text-538-muted">{live.batterTeam} · {live.batterStand === 'L' ? 'LHB' : live.batterStand === 'S' ? 'Switch' : 'RHB'}</div>
-          </div>
+      {/* Pitcher vs Batter */}
+      <div className="flex flex-wrap gap-4">
+        {/* Pitcher */}
+        <div className="min-w-[160px]">
+          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-1">Pitcher</div>
+          {live.pitcherName ? (
+            <>
+              <a href={`/pitchers/${live.pitcherId}`} target="_blank" rel="noreferrer"
+                className="text-sm font-bold text-538-text hover:text-538-orange transition-colors">
+                {live.pitcherName}
+              </a>
+              <div className="text-2xs text-538-muted">{live.pitcherTeam} · {live.pitcherHand}HP</div>
+              {currentPitcherStats && (
+                <div className="text-2xs text-538-muted mt-0.5 font-mono">
+                  {currentPitcherStats.ip} IP · {currentPitcherStats.pc} P · {currentPitcherStats.k}K {currentPitcherStats.bb}BB
+                </div>
+              )}
+            </>
+          ) : <span className="text-2xs text-538-muted">—</span>}
+        </div>
+
+        {/* Batter */}
+        <div className="min-w-[160px]">
+          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-1">Batter</div>
+          {live.batterName ? (
+            <>
+              <a href={`/batters/${live.batterId}`} target="_blank" rel="noreferrer"
+                className="text-sm font-bold text-538-text hover:text-538-orange transition-colors">
+                {live.batterName}
+              </a>
+              <div className="text-2xs text-538-muted">{live.batterTeam} · {live.batterStand === 'L' ? 'LHB' : live.batterStand === 'S' ? 'Switch' : 'RHB'}</div>
+            </>
+          ) : <span className="text-2xs text-538-muted">—</span>}
         </div>
       </div>
 
-      {/* ── Matchup edge table ── */}
-      {pitchMix && pitchMix.length > 0 && (
-        <div>
-          <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">Pitcher Arsenal vs Batter</div>
-          <MatchupTable pitchMix={pitchMix} batterStats={batterStats} />
-        </div>
-      )}
-
-      {/* ── Zone heatmap + Outcome/Next pitch ── */}
-      <div className="flex flex-wrap gap-6 items-start">
-
-        {/* Savant heatmap */}
-        {zoneData && (
-          <div>
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted">Zone · RV/Pitch</div>
-              <div className="inline-flex border border-538-border rounded overflow-hidden">
-                <button onClick={() => setPitchToggle('ALL')}
-                  className={`px-1.5 py-0.5 text-[8px] font-bold transition-colors ${pitchToggle === 'ALL' ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
-                  All
-                </button>
-                {(pitchMix ?? []).slice(0, 5).map(p => (
-                  <button key={p.type} onClick={() => setPitchToggle(p.type)}
-                    className={`px-1.5 py-0.5 text-[8px] font-bold transition-colors ${pitchToggle === p.type ? 'bg-538-orange text-white' : 'text-538-muted'}`}
-                    style={pitchToggle === p.type ? {} : { color: p.color }}>
-                    {p.type}
-                  </button>
-                ))}
-              </div>
-            </div>
-            {activePTZones
-              ? <SavantHeatmap zones={activePTZones} pitchLabel={pitchToggle !== 'ALL' ? pitchToggle : undefined} />
-              : <div className="text-[8px] text-538-muted">No zone data for {pitchToggle}</div>
-            }
-            <p className="text-[7.5px] text-538-muted mt-1">Catcher&apos;s view · season · red = batter-friendly</p>
-          </div>
-        )}
-
-        {/* Outcome + next pitch */}
-        <div className="flex flex-col gap-4 min-w-[180px]">
-          {abOutcome && (
-            <div>
-              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">
-                AB Outcome ({count.balls}–{count.strikes})
-              </div>
-              <AbOutcomeBar {...abOutcome} />
-              <p className="text-[7px] text-538-muted mt-1">Based on batter&apos;s season rates · count-adjusted</p>
-            </div>
-          )}
-
-          {nextPitches && (
-            <div>
-              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">
-                Likely Next Pitch
-              </div>
-              <NextPitchPred {...nextPitches} />
-              <p className="text-[7px] text-538-muted mt-1">Usage + count + sequence heuristic</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ── Current AB pitch sequence ── */}
+      {/* Current AB pitches */}
       {abPitches.length > 0 && (
         <div>
           <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-1">This AB</div>
@@ -903,16 +542,50 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
         </div>
       )}
 
-      {/* ── Play-by-play + box score ── */}
-      <PlayByPlayFeed
-        plays={live.recentPlays ?? []}
-        batterGameStats={live.batterGameStats}
-        batterName={live.batterName}
-        awayAbbr={live.awayAbbr}
-        homeAbbr={live.homeAbbr}
-        batterId={live.batterId}
-      />
+      {/* Pitcher pitch mix + Batter zone (side by side) */}
+      <div className="flex flex-wrap gap-6">
+        {/* Pitcher mix */}
+        {pitchMix && pitchMix.length > 0 && (
+          <div>
+            <div className="text-2xs font-bold uppercase tracking-widest text-538-muted mb-2">Pitcher Arsenal</div>
+            <div className="space-y-1">
+              {pitchMix.slice(0, 6).map(p => (
+                <div key={p.type} className="flex items-center gap-2">
+                  <span className="text-2xs font-bold font-mono w-5" style={{ color: p.color }}>{p.type}</span>
+                  <div className="w-24 bg-538-border/30 rounded-sm h-2.5 overflow-hidden">
+                    <div className="h-full rounded-sm" style={{ width: `${p.pct}%`, backgroundColor: p.color }} />
+                  </div>
+                  <span className="text-2xs font-mono text-538-muted">{p.pct}%</span>
+                  {p.whiffPct != null && (
+                    <span className="text-2xs text-538-muted">{p.whiffPct.toFixed(0)}% whiff</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
+        {/* Batter zone heatmap */}
+        {zoneData && (
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="text-2xs font-bold uppercase tracking-widest text-538-muted">Batter Zones</div>
+              <div className="inline-flex border border-538-border rounded overflow-hidden">
+                {(['rv', 'ops'] as const).map(m => (
+                  <button key={m} onClick={() => setZoneMetric(m)}
+                    className={`px-1.5 py-0.5 text-[8px] font-bold transition-colors ${zoneMetric === m ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
+                    {m === 'rv' ? 'Avg RV' : 'OPS'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <LiveZoneMini zoneData={zoneData} metric={zoneMetric} />
+            <p className="text-[7.5px] text-538-muted mt-1">Catcher&apos;s view · season avg</p>
+          </div>
+        )}
+      </div>
+
+      {/* Auto-refresh note */}
       <p className="text-[7.5px] text-538-muted">Auto-refreshes every 15s</p>
     </div>
   )
