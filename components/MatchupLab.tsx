@@ -475,8 +475,8 @@ function MatchupTable({ pitchMix, batterStats }: {
   const batMap = new Map(batterStats?.map(b => [b.type, b]) ?? [])
 
   return (
-    <div className="overflow-x-auto w-full">
-      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <div className="overflow-x-auto">
+      <table style={{ borderCollapse: 'collapse', minWidth: 520 }}>
         <thead>
           <tr>
             <th className="text-left pb-2 text-xs font-bold uppercase tracking-wider text-538-muted px-2">Pitch</th>
@@ -637,7 +637,7 @@ function PlayByPlayFeed({ plays, batterGameStats, batterName, awayAbbr, homeAbbr
               <span className="text-xs font-mono text-538-muted shrink-0 w-10">
                 {half}{play.inning}
               </span>
-              <span className="text-xs leading-snug flex-1" style={{ color: col }}>{play.description}</span>
+              <span className="text-xs leading-snug flex-1 min-w-0 break-words" style={{ color: col }}>{play.description}</span>
               {play.awayScore != null && (
                 <span className="text-xs font-mono text-538-muted shrink-0">
                   {awayAbbr} {play.awayScore}–{play.homeScore} {homeAbbr}
@@ -824,13 +824,13 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
     : zoneData?.zones ?? null
 
   return (
-    <div className="border-t border-538-border bg-538-bg/50 px-5 py-5 space-y-6">
+    <div className="border-t border-538-border bg-538-bg/50 px-4 py-5 space-y-6 overflow-x-hidden max-w-full">
 
       {/* ── Row 1: Scoreboard + Matchup Table side by side ── */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
 
-        {/* Scoreboard block — fixed width on desktop */}
-        <div className="flex flex-wrap gap-4 items-center shrink-0 lg:min-w-[340px]">
+        {/* Scoreboard block — fixed width on desktop, wraps naturally on mobile */}
+        <div className="flex flex-wrap gap-4 items-start shrink-0 lg:min-w-[340px] max-w-full">
           {/* Score */}
           <div className="flex items-center gap-3">
             <div className="text-center">
@@ -911,7 +911,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
       </div>
 
       {/* ── Row 2: Zone heatmap · Outcome · Next Pitch ── */}
-      <div className="flex flex-col sm:flex-row gap-8 items-start">
+      <div className="flex flex-col sm:flex-row gap-8 items-start overflow-x-auto pb-1">
 
         {/* Savant heatmap */}
         {zoneData && (
