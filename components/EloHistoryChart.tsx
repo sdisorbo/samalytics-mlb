@@ -355,7 +355,7 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
               return (
                 <Line
                   key={abbr}
-                  type="monotone"
+                  type="linear"
                   dataKey={abbr}
                   stroke={color}
                   strokeWidth={2}
