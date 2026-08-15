@@ -106,18 +106,25 @@ export async function GET(req: NextRequest) {
         const abval = isAb ? 1 : 0
         const rvval = rv(resultEvt)
 
+        // Track pre-pitch count: ev.count is the count AFTER the pitch result,
+        // so the count for pitch i is the count from the previous pitch's ev.count.
+        let preBalls = 0, preStrikes = 0
+
         for (let i = 0; i < events.length; i++) {
           const ev = events[i]
           if (!ev.isPitch) continue
 
+          // Snapshot pre-pitch count before updating
+          const ck = `${preBalls}-${preStrikes}`
+
+          // Update for next pitch
+          const cnt = ev.count as { balls?: number; strikes?: number } | undefined
+          preBalls   = cnt?.balls   ?? preBalls
+          preStrikes = cnt?.strikes ?? preStrikes
+
           const details = ev.details as Record<string, unknown> | undefined
           const pt      = ((details?.type as Record<string, string>)?.code) ?? ''
           if (!pt || pt === 'PO' || pt === 'IN' || pt === 'AB') continue
-
-          const cnt     = ev.count as { balls?: number; strikes?: number } | undefined
-          const balls   = cnt?.balls ?? 0
-          const strikes = cnt?.strikes ?? 0
-          const ck      = `${balls}-${strikes}`
 
           const code    = (details?.code as string) ?? ''
           const isSwing = SWING_CODES.has(code)
