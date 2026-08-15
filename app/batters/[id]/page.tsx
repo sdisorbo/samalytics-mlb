@@ -1773,9 +1773,9 @@ export default function BatterPage({ params }: { params: { id: string } }) {
         <div className="bg-surface border border-538-border rounded-xl p-4">
           <div className="flex items-baseline gap-2 mb-3"><span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Zone Breakdown</span><span className="text-[9px] text-538-muted">· Last 40 games</span></div>
           <div className="flex items-end gap-1">
-            {stand !== 'R' && <BatterSilhouette stand="L" height={GRID_H} />}
+            {stand === 'L' && <BatterSilhouette stand="L" height={GRID_H} />}
             <ZoneGrid zones={zones} pitchTypes={pitchTypes} selectedPitchType={selectedPitchType} activeStat={activeStat} />
-            {stand === 'R' && <BatterSilhouette stand="R" height={GRID_H} />}
+            {stand !== 'L' && <BatterSilhouette stand="R" height={GRID_H} />}
           </div>
         </div>
         <div className="bg-surface border border-538-border rounded-xl p-4">
