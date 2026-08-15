@@ -346,7 +346,7 @@ function LiveZoneMini({ zoneData, metric }: { zoneData: MiniZoneData; metric: 'r
         return (
           <g key={`${r}-${c}`}>
             <rect x={c*CW+1} y={r*CH+1} width={CW-2} height={CH-2} rx={2} fill={color} />
-            {val !== null && (
+            {val != null && (
               <text x={c*CW+CW/2} y={r*CH+CH/2} textAnchor="middle" dominantBaseline="middle"
                 fontSize={6.5} fill="#fff" fontFamily="monospace" fontWeight={700}>
                 {metric === 'rv' ? (val>=0?'+':'')+val.toFixed(2) : val.toFixed(3).replace(/^0/,'')}
@@ -556,7 +556,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
                     <div className="h-full rounded-sm" style={{ width: `${p.pct}%`, backgroundColor: p.color }} />
                   </div>
                   <span className="text-2xs font-mono text-538-muted">{p.pct}%</span>
-                  {p.whiffPct !== null && (
+                  {p.whiffPct != null && (
                     <span className="text-2xs text-538-muted">{p.whiffPct.toFixed(0)}% whiff</span>
                   )}
                 </div>
