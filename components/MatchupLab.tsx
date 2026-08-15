@@ -392,6 +392,66 @@ function SavantHeatmap({ zones, pitchLabel }: { zones: MiniZoneCell[][]; pitchLa
   )
 }
 
+// Mini pitch-location zone — plots each pitch in the current AB on a strike zone
+function AbPitchZone({ pitches }: { pitches: AbPitch[] }) {
+  const W = 116, H = 148
+  // MLB coordinate bounds for the view window
+  const VX1 = -1.65, VX2 = 1.65, VZ1 = 0.8, VZ2 = 4.3
+  // Strike zone (rule book: SZ_X = ±8.5in = ±0.708ft, SZ_Z = 1.5–3.5ft)
+  const SZX1 = -0.83, SZX2 = 0.83, SZZ1 = 1.5, SZZ2 = 3.5
+
+  function sx(px: number) { return (px - VX1) / (VX2 - VX1) * W }
+  function sy(pz: number) { return (1 - (pz - VZ1) / (VZ2 - VZ1)) * H }
+
+  const zoneX = sx(SZX1), zoneY = sy(SZZ2)
+  const zoneW = sx(SZX2) - zoneX, zoneH = sy(SZZ1) - zoneY
+
+  // Pitch dot color by result type
+  function dotStyle(p: AbPitch): { fill: string; stroke: string } {
+    const color = PITCH_COLORS_LIVE[p.type] ?? '#78909C'
+    const isBall = p.code === 'B'
+    return { fill: isBall ? 'transparent' : color, stroke: color }
+  }
+
+  return (
+    <div>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        {/* Strike zone */}
+        <rect x={zoneX} y={zoneY} width={zoneW} height={zoneH}
+          fill="rgba(255,255,255,0.04)" stroke="rgba(148,163,184,0.65)" strokeWidth={1.5} rx={1} />
+        {/* Thirds grid */}
+        {[1/3, 2/3].map(t => (
+          <g key={t}>
+            <line x1={zoneX + zoneW*t} y1={zoneY} x2={zoneX + zoneW*t} y2={zoneY+zoneH} stroke="rgba(148,163,184,0.18)" strokeWidth={0.8}/>
+            <line x1={zoneX} y1={zoneY + zoneH*t} x2={zoneX+zoneW} y2={zoneY + zoneH*t} stroke="rgba(148,163,184,0.18)" strokeWidth={0.8}/>
+          </g>
+        ))}
+        {/* Home plate silhouette */}
+        <polygon
+          points={`${W/2-9},${H-6} ${W/2+9},${H-6} ${W/2+11},${H-4} ${W/2},${H-1} ${W/2-11},${H-4}`}
+          fill="rgba(148,163,184,0.25)" />
+        {/* Pitches — oldest first so latest is on top */}
+        {pitches.map((p, i) => {
+          if (p.pX == null || p.pZ == null) return null
+          const x = sx(p.pX), y = sy(p.pZ)
+          const { fill, stroke } = dotStyle(p)
+          const isStrike = p.code !== 'B'
+          return (
+            <g key={i}>
+              <circle cx={x} cy={y} r={7} fill={fill} stroke={stroke} strokeWidth={isStrike ? 0 : 2} opacity={0.88} />
+              <text x={x} y={y} textAnchor="middle" dominantBaseline="middle"
+                fontSize={5.5} fontWeight="bold" fill={isStrike ? '#fff' : stroke}>
+                {i + 1}
+              </text>
+            </g>
+          )
+        })}
+      </svg>
+      <p className="text-[9px] text-538-muted mt-0.5 text-center">Catcher&apos;s view · filled = strike</p>
+    </div>
+  )
+}
+
 function LivePitchDot({ pitch, idx }: { pitch: AbPitch; idx: number }) {
   const ptColor = PITCH_COLORS_LIVE[pitch.type] ?? '#78909C'
   const resColor = LIVE_RESULT_COLOR[pitch.code] ?? '#9CA3AF'
@@ -784,7 +844,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
             </div>
           </div>
 
-          {/* Inning + count + outs */}
+          {/* Inning + count + outs + live pitch zone */}
           <div className="pl-4 border-l border-538-border flex flex-col gap-1">
             <div className="text-sm font-bold text-green-400">{halfArrow}{live.inning ?? '—'} {live.inningHalf ?? ''}</div>
             <div className="flex gap-1.5 items-center">
@@ -796,6 +856,10 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
               {ballDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border-2 ${on ? 'bg-green-400 border-green-400' : 'border-538-muted'}`} />)}
               <span className="text-xs font-bold text-538-muted ml-2 w-4">S</span>
               {strikeDots.map((on, i) => <span key={i} className={`inline-block w-2 h-2 rounded-full border-2 ${on ? 'bg-red-400 border-red-400' : 'border-538-muted'}`} />)}
+            </div>
+            {/* Live at-bat pitch location zone */}
+            <div className="mt-1">
+              <AbPitchZone pitches={abPitches} />
             </div>
           </div>
 
@@ -852,8 +916,13 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
         {/* Savant heatmap */}
         {zoneData && (
           <div className="shrink-0">
+            <div className="mb-2">
+              <div className="text-xs font-bold uppercase tracking-widest text-538-muted">
+                {zoneData.batterName ? `${zoneData.batterName.split(' ').slice(-1)[0]}'s` : 'Batter'} Season Zone Performance
+              </div>
+              <div className="text-[9px] text-538-muted mb-1">Run value per pitch by zone — toggle by pitch type below</div>
+            </div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <div className="text-xs font-bold uppercase tracking-widest text-538-muted">Zone · RV/Pitch</div>
               <div className="inline-flex border border-538-border rounded overflow-hidden">
                 <button onClick={() => setPitchToggle('ALL')}
                   className={`px-2 py-1 text-xs font-bold transition-colors ${pitchToggle === 'ALL' ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
