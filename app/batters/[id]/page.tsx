@@ -716,35 +716,22 @@ function SeasonRvChart({ games, war, batterId, batterName, teamAbbr }: {
 // ── Batter Silhouette ──────────────────────────────────────────────────────────
 
 function BatterSilhouette({ stand, height = 165 }: { stand: 'L' | 'R' | 'S'; height?: number }) {
-  const w = Math.round(height * 0.42)
+  const w = Math.round(height * 0.52)
   const flip = stand === 'L'
   return (
-    <svg
-      viewBox="0 0 75 190"
-      width={w} height={height}
-      fill="currentColor"
-      className="text-538-muted opacity-[0.18] shrink-0 select-none"
-      style={flip ? { transform: 'scaleX(-1)' } : undefined}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/batter_silhouette.png"
+      width={w}
+      height={height}
+      alt=""
       aria-hidden
-    >
-      {/* Bat barrel */}
-      <path d="M5 6 L1 22 L5 23 L9 8 Z" />
-      {/* Bat handle */}
-      <path d="M9 8 L22 46 L26 44 L13 6 Z" />
-      {/* Head + helmet */}
-      <ellipse cx="51" cy="25" rx="14" ry="16" />
-      <path d="M37 27 L30 31 L31 36 L37 33 Z" />
-      {/* Arm to bat grip */}
-      <path d="M42 40 L24 44 L26 50 L44 46 Z" />
-      {/* Torso */}
-      <path d="M43 42 C35 52 31 67 33 82 L35 97 L57 97 C61 82 59 65 53 52 Z" />
-      {/* Legs */}
-      <path d="M35 97 L24 142 L18 178 L30 178 L36 148 L41 148 L41 97 Z" />
-      <path d="M57 97 L41 97 L41 148 L47 148 L52 178 L64 178 L58 142 Z" />
-      {/* Feet */}
-      <ellipse cx="22" cy="180" rx="13" ry="6" />
-      <ellipse cx="57" cy="180" rx="13" ry="6" />
-    </svg>
+      className="shrink-0 select-none opacity-20"
+      style={{
+        objectFit: 'contain',
+        transform: flip ? 'scaleX(-1)' : undefined,
+      }}
+    />
   )
 }
 
