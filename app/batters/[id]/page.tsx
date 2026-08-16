@@ -1772,12 +1772,18 @@ export default function BatterPage({ params }: { params: { id: string } }) {
       <div className="flex flex-col sm:flex-row gap-6 items-start">
         <div className="bg-surface border border-538-border rounded-xl p-4">
           <div className="flex items-baseline gap-2 mb-3"><span className="text-[10px] font-bold uppercase tracking-widest text-538-muted">Zone Breakdown</span><span className="text-[9px] text-538-muted">· Last 40 games</span></div>
-          <div className="overflow-x-auto">
-            <div className="flex items-end gap-1" style={{ width: 'max-content' }}>
-              {stand !== 'L' && <BatterSilhouette stand="R" height={Math.round(GRID_H * 1.35)} />}
-              <ZoneGrid zones={zones} pitchTypes={pitchTypes} selectedPitchType={selectedPitchType} activeStat={activeStat} />
-              {stand === 'L' && <BatterSilhouette stand="L" height={Math.round(GRID_H * 1.35)} />}
-            </div>
+          <div className="flex items-end gap-1">
+            {stand !== 'L' && (
+              <div className="hidden sm:block shrink-0">
+                <BatterSilhouette stand="R" height={Math.round(GRID_H * 1.35)} />
+              </div>
+            )}
+            <ZoneGrid zones={zones} pitchTypes={pitchTypes} selectedPitchType={selectedPitchType} activeStat={activeStat} />
+            {stand === 'L' && (
+              <div className="hidden sm:block shrink-0">
+                <BatterSilhouette stand="L" height={Math.round(GRID_H * 1.35)} />
+              </div>
+            )}
           </div>
         </div>
         <div className="bg-surface border border-538-border rounded-xl p-4">
