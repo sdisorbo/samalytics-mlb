@@ -1199,13 +1199,14 @@ function PitcherPanel({
           <div className="text-2xs font-semibold uppercase tracking-widest text-538-muted mb-1.5">
             Pitch Arsenal
           </div>
-          <table className="w-full text-2xs">
+          <div className="overflow-x-auto">
+          <table style={{ borderCollapse: 'collapse', minWidth: 260 }} className="text-2xs">
             <thead>
               <tr className="border-b border-538-border text-538-muted">
-                <th className="text-left py-1 font-semibold">Pitch</th>
-                <th className="text-right py-1 font-semibold">Use%</th>
-                <th className="text-right py-1 font-semibold">Velo</th>
-                <th className="text-right py-1 font-semibold">BA</th>
+                <th className="text-left py-1 pr-3 font-semibold">Pitch</th>
+                <th className="text-right py-1 px-2 font-semibold">Use%</th>
+                <th className="text-right py-1 px-2 font-semibold">Velo</th>
+                <th className="text-right py-1 pl-2 font-semibold">BA</th>
               </tr>
             </thead>
             <tbody>
@@ -1219,6 +1220,7 @@ function PitcherPanel({
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>
