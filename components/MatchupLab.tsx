@@ -492,10 +492,14 @@ function MatchupTable({ pitchMix, batterStats }: {
         <tbody>
           {pitchMix.slice(0, 7).map(p => {
             const b = batMap.get(p.type)
-            const edgeScore =
-              ((p.whiffPct ?? 22) - 22) / 22 * 0.35
-              + ((p.strikePct ?? 62) - 62) / 20 * 0.25
-              - ((b?.ops ?? 0.700) - 0.700) / 0.300 * 0.40
+            const rv = b?.rv ?? null
+            const edgeScore = rv != null
+              ? -rv / 6 * 0.55
+                + ((p.whiffPct ?? 22) - 22) / 22 * 0.30
+                + ((p.strikePct ?? 62) - 62) / 20 * 0.15
+              : ((p.whiffPct ?? 22) - 22) / 22 * 0.35
+                + ((p.strikePct ?? 62) - 62) / 20 * 0.25
+                - ((b?.ops ?? 0.700) - 0.700) / 0.300 * 0.40
             const edgeLabel = edgeScore > 0.15 ? '← P' : edgeScore < -0.12 ? 'B →' : '~'
             const edgeColor = edgeScore > 0.15 ? '#4ade80' : edgeScore < -0.12 ? '#f87171' : '#6b7280'
             return (
