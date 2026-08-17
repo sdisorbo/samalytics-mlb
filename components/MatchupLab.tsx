@@ -831,7 +831,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
     <div className="border-t border-538-border bg-538-bg/50 px-4 py-5 space-y-6 w-full min-w-0">
 
       {/* ── Row 1: Scoreboard + Matchup Table side by side ── */}
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
 
         {/* Scoreboard block — fixed width on desktop, wraps naturally on mobile */}
         <div className="flex flex-wrap gap-4 items-start shrink-0 lg:min-w-[340px] max-w-full">
