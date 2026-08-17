@@ -145,8 +145,54 @@ export async function GET(
       }
     })()
 
-    // Recent plays (last 18, reversed so newest first)
+    // All-game pitches grouped by pitcher
     const allPlaysArr = (plays?.allPlays as Record<string, unknown>[]) ?? []
+    const gamePitchersMap = new Map<number, {
+      pitcherId: number; pitcherName: string; pitcherHand: string
+      pitches: Array<{ type: string; pX: number|null; pZ: number|null; result: string; code: string; speed: number|null; inning: number; half: string }>
+    }>()
+    for (const play of allPlaysArr) {
+      const pm = (play.matchup as Record<string, unknown>) ?? {}
+      const pitcherP = pm.pitcher as Record<string, unknown> | undefined
+      if (!pitcherP) continue
+      const pid = pitcherP.id as number
+      if (!pid) continue
+      if (!gamePitchersMap.has(pid)) {
+        gamePitchersMap.set(pid, {
+          pitcherId: pid,
+          pitcherName: (pitcherP.fullName as string) ?? '',
+          pitcherHand: ((pm.pitchHand as Record<string, string>)?.code) ?? 'R',
+          pitches: [],
+        })
+      }
+      const entry = gamePitchersMap.get(pid)!
+      const about = play.about as Record<string, unknown> | undefined
+      const playInning = (about?.inning as number) ?? 0
+      const playHalf = (about?.halfInning as string) ?? ''
+      for (const ev of (play.playEvents as Record<string, unknown>[]) ?? []) {
+        if (!ev.isPitch) continue
+        const det = ev.details as Record<string, unknown> | undefined
+        const pd  = ev.pitchData as Record<string, unknown> | undefined
+        const ptCode = (det?.type as Record<string, string>)?.code ?? ''
+        const coords = pd?.coordinates as Record<string, number> | undefined
+        const spd = pd?.startSpeed as number | undefined
+        entry.pitches.push({
+          type: ptCode,
+          pX: coords?.pX ?? null,
+          pZ: coords?.pZ ?? null,
+          result: (det?.description as string) ?? '',
+          code: (det?.code as string) ?? '',
+          speed: spd ? Math.round(spd) : null,
+          inning: playInning,
+          half: playHalf,
+        })
+      }
+    }
+    const gamePitches = Array.from(gamePitchersMap.values())
+      .filter(p => p.pitches.length > 0)
+      .sort((a, b) => b.pitches.length - a.pitches.length)
+
+    // Recent plays (last 18, reversed so newest first)
     const recentPlays = allPlaysArr.slice(-18).reverse().map(p => {
       const about  = p.about  as Record<string, unknown> | undefined
       const result = p.result as Record<string, unknown> | undefined
@@ -175,6 +221,7 @@ export async function GET(
       currentPitcherStats,
       batterGameStats,
       recentPlays,
+      gamePitches,
     })
   } catch {
     return NextResponse.json({ error: 'internal' }, { status: 500 })

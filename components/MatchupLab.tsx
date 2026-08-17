@@ -297,6 +297,7 @@ interface LiveState {
   currentPitcherStats: { ip: string; k: number; bb: number; hits: number; er: number; pc: number } | null
   batterGameStats: { ab: number; h: number; hr: number; rbi: number; bb: number; k: number; lob: number } | null
   recentPlays: LivePlay[]
+  gamePitches: GamePitcherData[]
 }
 interface MiniZoneCell { row: number; col: number; pa: number; avg_rv: number | null; ops: number | null }
 interface MiniZoneData {
@@ -305,6 +306,8 @@ interface MiniZoneData {
   batterName: string; stand: string
   seasonStats: { k_pct: number; bb_pct: number; avg: number; slg: number; hr: number; pa: number } | null
 }
+interface GamePitch { type: string; pX: number|null; pZ: number|null; result: string; code: string; speed: number|null; inning: number; half: string }
+interface GamePitcherData { pitcherId: number; pitcherName: string; pitcherHand: string; pitches: GamePitch[] }
 interface PitchMixEntry { type: string; name: string; color: string; pct: number; whiffPct: number | null; strikePct: number | null }
 interface BatterPitchStat { type: string; whiff: number | null; ops: number | null; rv: number | null; count: number }
 
@@ -655,6 +658,125 @@ function PlayByPlayFeed({ plays, batterGameStats, batterName, awayAbbr, homeAbbr
   )
 }
 
+// ── Game Pitch Map ────────────────────────────────────────────────────────────
+
+function GamePitchMap({ gamePitches, currentPitcherId }: { gamePitches: GamePitcherData[]; currentPitcherId: number | null }) {
+  const defaultId = currentPitcherId ?? gamePitches[0]?.pitcherId ?? null
+  const [selId, setSelId] = useState<number | null>(defaultId)
+  const [ptFilter, setPtFilter] = useState<string>('all')
+
+  // Keep selected pitcher synced when current pitcher changes mid-game
+  const prevIdRef = useRef(currentPitcherId)
+  useEffect(() => {
+    if (currentPitcherId !== prevIdRef.current) {
+      prevIdRef.current = currentPitcherId
+      if (currentPitcherId != null) { setSelId(currentPitcherId); setPtFilter('all') }
+    }
+  }, [currentPitcherId])
+
+  const pitcher = gamePitches.find(p => p.pitcherId === selId) ?? gamePitches[0]
+
+  const pitchTypes = useMemo(() => {
+    if (!pitcher) return []
+    const m = new Map<string, { count: number; color: string }>()
+    for (const p of pitcher.pitches) {
+      if (!p.type) continue
+      const e = m.get(p.type)
+      if (e) e.count++
+      else m.set(p.type, { count: 1, color: PITCH_COLORS_LIVE[p.type] ?? '#78909C' })
+    }
+    return [...m.entries()].map(([type, v]) => ({ type, ...v })).sort((a, b) => b.count - a.count)
+  }, [pitcher])
+
+  const visiblePitches = useMemo(() =>
+    ptFilter === 'all' ? (pitcher?.pitches ?? []) : (pitcher?.pitches ?? []).filter(p => p.type === ptFilter),
+  [pitcher, ptFilter])
+
+  if (!gamePitches.length) return null
+
+  const W = 200, H = 260
+  const VX1 = -1.65, VX2 = 1.65, VZ1 = 0.8, VZ2 = 4.3
+  const SZX1 = -0.83, SZX2 = 0.83, SZZ1 = 1.5, SZZ2 = 3.5
+  const sx = (px: number) => (px - VX1) / (VX2 - VX1) * W
+  const sy = (pz: number) => (1 - (pz - VZ1) / (VZ2 - VZ1)) * H
+  const zoneX = sx(SZX1), zoneY = sy(SZZ2)
+  const zoneW = sx(SZX2) - zoneX, zoneH = sy(SZZ1) - zoneY
+
+  return (
+    <div className="shrink-0">
+      <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-2">Game Pitch Map</div>
+
+      {/* Pitcher selector */}
+      <div className="flex flex-wrap gap-1 mb-2">
+        {gamePitches.map(p => (
+          <button key={p.pitcherId}
+            onClick={() => { setSelId(p.pitcherId); setPtFilter('all') }}
+            className={`text-[9px] font-bold px-2 py-0.5 rounded transition-colors ${
+              pitcher?.pitcherId === p.pitcherId
+                ? 'bg-538-orange text-white'
+                : 'border border-538-border text-538-muted hover:text-538-text'
+            }`}
+          >
+            {p.pitcherName.split(' ').slice(-1)[0]}
+            <span className="font-normal opacity-60 ml-1">{p.pitches.length}P</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Pitch type filter */}
+      <div className="flex flex-wrap gap-1 mb-2">
+        <button onClick={() => setPtFilter('all')}
+          className={`text-[9px] font-bold px-2 py-0.5 rounded transition-colors ${
+            ptFilter === 'all' ? 'bg-538-text text-538-bg' : 'border border-538-border text-538-muted hover:text-538-text'
+          }`}>
+          All
+        </button>
+        {pitchTypes.map(pt => (
+          <button key={pt.type}
+            onClick={() => setPtFilter(ptFilter === pt.type ? 'all' : pt.type)}
+            className="text-[9px] font-bold px-2 py-0.5 rounded transition-colors border"
+            style={{
+              backgroundColor: ptFilter === pt.type ? pt.color : 'transparent',
+              borderColor: pt.color,
+              color: ptFilter === pt.type ? '#fff' : pt.color,
+            }}>
+            {pt.type} <span className="font-normal opacity-70">{pt.count}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Zone */}
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        <rect x={zoneX} y={zoneY} width={zoneW} height={zoneH}
+          fill="rgba(255,255,255,0.04)" stroke="rgba(148,163,184,0.65)" strokeWidth={1.5} rx={1} />
+        {[1/3, 2/3].map(t => (
+          <g key={t}>
+            <line x1={zoneX + zoneW*t} y1={zoneY} x2={zoneX + zoneW*t} y2={zoneY+zoneH} stroke="rgba(148,163,184,0.18)" strokeWidth={0.8}/>
+            <line x1={zoneX} y1={zoneY + zoneH*t} x2={zoneX+zoneW} y2={zoneY + zoneH*t} stroke="rgba(148,163,184,0.18)" strokeWidth={0.8}/>
+          </g>
+        ))}
+        <polygon points={`${W/2-13},${H-8} ${W/2+13},${H-8} ${W/2+15},${H-5} ${W/2},${H-1} ${W/2-15},${H-5}`}
+          fill="rgba(148,163,184,0.25)" />
+        {visiblePitches.map((p, i) => {
+          if (p.pX == null || p.pZ == null) return null
+          const x = sx(p.pX), y = sy(p.pZ)
+          const color = PITCH_COLORS_LIVE[p.type] ?? '#78909C'
+          const isBall = p.code === 'B'
+          return (
+            <circle key={i} cx={x} cy={y} r={5}
+              fill={isBall ? 'transparent' : color}
+              stroke={isBall ? '#4ade80' : color}
+              strokeWidth={isBall ? 1.5 : 0}
+              opacity={0.78}
+            />
+          )
+        })}
+      </svg>
+      <p className="text-[9px] text-538-muted mt-0.5">Catcher&apos;s view · filled = strike · {visiblePitches.filter(p => p.pX != null).length} pitches</p>
+    </div>
+  )
+}
+
 function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbbr: string; homeAbbr: string }) {
   const [live, setLive] = useState<LiveState | null>(null)
   const [error, setError] = useState(false)
@@ -986,7 +1108,12 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
         </div>
       )}
 
-      {/* ── Row 4: Play-by-play + box score ── */}
+      {/* ── Row 4: Game pitch map ── */}
+      {live.gamePitches?.length > 0 && (
+        <GamePitchMap gamePitches={live.gamePitches} currentPitcherId={live.pitcherId} />
+      )}
+
+      {/* ── Row 5: Play-by-play + box score ── */}
       <PlayByPlayFeed
         plays={live.recentPlays ?? []}
         batterGameStats={live.batterGameStats}
