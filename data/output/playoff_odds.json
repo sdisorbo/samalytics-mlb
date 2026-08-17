@@ -1,188 +1,196 @@
 {
-  "last_updated": "2026-08-17T02:35:24",
+  "last_updated": "2026-08-17T10:33:22",
   "simulations": 1000,
   "results": [
     {
       "team": "MIL",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.067,
-      "win_ds": 0.526,
-      "win_cs": 0.312,
-      "win_ws": 0.183
+      "win_wildcard": 0.065,
+      "win_ds": 0.549,
+      "win_cs": 0.331,
+      "win_ws": 0.202
     },
     {
       "team": "TB",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.055,
-      "win_ds": 0.527,
-      "win_cs": 0.291,
-      "win_ws": 0.15
+      "win_wildcard": 0.066,
+      "win_ds": 0.522,
+      "win_cs": 0.308,
+      "win_ws": 0.16
+    },
+    {
+      "team": "BOS",
+      "playoff_probability": 0.993,
+      "win_wildcard": 0.557,
+      "win_ds": 0.349,
+      "win_cs": 0.215,
+      "win_ws": 0.108
     },
     {
       "team": "ATL",
       "playoff_probability": 0.995,
-      "win_wildcard": 0.265,
-      "win_ds": 0.444,
-      "win_cs": 0.218,
-      "win_ws": 0.119
+      "win_wildcard": 0.248,
+      "win_ds": 0.432,
+      "win_cs": 0.195,
+      "win_ws": 0.104
     },
     {
       "team": "CHC",
-      "playoff_probability": 0.995,
-      "win_wildcard": 0.532,
-      "win_ds": 0.333,
-      "win_cs": 0.183,
-      "win_ws": 0.108
+      "playoff_probability": 0.983,
+      "win_wildcard": 0.533,
+      "win_ds": 0.321,
+      "win_cs": 0.172,
+      "win_ws": 0.096
     },
     {
       "team": "CWS",
-      "playoff_probability": 0.965,
-      "win_wildcard": 0.077,
+      "playoff_probability": 0.975,
+      "win_wildcard": 0.087,
       "win_ds": 0.493,
-      "win_cs": 0.244,
-      "win_ws": 0.105
-    },
-    {
-      "team": "BOS",
-      "playoff_probability": 0.987,
-      "win_wildcard": 0.561,
-      "win_ds": 0.319,
-      "win_cs": 0.19,
-      "win_ws": 0.103
+      "win_cs": 0.212,
+      "win_ws": 0.082
     },
     {
       "team": "SD",
-      "playoff_probability": 0.859,
-      "win_wildcard": 0.42,
-      "win_ds": 0.238,
-      "win_cs": 0.123,
-      "win_ws": 0.072
-    },
-    {
-      "team": "LAD",
-      "playoff_probability": 0.992,
-      "win_wildcard": 0.27,
-      "win_ds": 0.282,
-      "win_cs": 0.097,
-      "win_ws": 0.038
-    },
-    {
-      "team": "HOU",
-      "playoff_probability": 0.91,
-      "win_wildcard": 0.446,
-      "win_ds": 0.257,
-      "win_cs": 0.11,
-      "win_ws": 0.034
+      "playoff_probability": 0.877,
+      "win_wildcard": 0.415,
+      "win_ds": 0.233,
+      "win_cs": 0.127,
+      "win_ws": 0.069
     },
     {
       "team": "NYY",
-      "playoff_probability": 0.979,
-      "win_wildcard": 0.396,
-      "win_ds": 0.187,
-      "win_cs": 0.076,
-      "win_ws": 0.027
+      "playoff_probability": 0.98,
+      "win_wildcard": 0.381,
+      "win_ds": 0.191,
+      "win_cs": 0.092,
+      "win_ws": 0.04
     },
     {
-      "team": "BAL",
-      "playoff_probability": 0.34,
-      "win_wildcard": 0.155,
-      "win_ds": 0.073,
-      "win_cs": 0.03,
-      "win_ws": 0.015
+      "team": "LAD",
+      "playoff_probability": 0.994,
+      "win_wildcard": 0.284,
+      "win_ds": 0.289,
+      "win_cs": 0.103,
+      "win_ws": 0.039
     },
     {
-      "team": "PHI",
-      "playoff_probability": 0.538,
-      "win_wildcard": 0.206,
-      "win_ds": 0.089,
-      "win_cs": 0.033,
-      "win_ws": 0.014
-    },
-    {
-      "team": "TOR",
-      "playoff_probability": 0.327,
-      "win_wildcard": 0.139,
-      "win_ds": 0.068,
-      "win_cs": 0.034,
-      "win_ws": 0.014
+      "team": "HOU",
+      "playoff_probability": 0.902,
+      "win_wildcard": 0.433,
+      "win_ds": 0.247,
+      "win_cs": 0.095,
+      "win_ws": 0.034
     },
     {
       "team": "AZ",
-      "playoff_probability": 0.446,
-      "win_wildcard": 0.179,
-      "win_ds": 0.067,
-      "win_cs": 0.031,
-      "win_ws": 0.013
+      "playoff_probability": 0.454,
+      "win_wildcard": 0.187,
+      "win_ds": 0.076,
+      "win_cs": 0.033,
+      "win_ws": 0.018
+    },
+    {
+      "team": "PHI",
+      "playoff_probability": 0.511,
+      "win_wildcard": 0.2,
+      "win_ds": 0.078,
+      "win_cs": 0.034,
+      "win_ws": 0.015
+    },
+    {
+      "team": "BAL",
+      "playoff_probability": 0.323,
+      "win_wildcard": 0.145,
+      "win_ds": 0.061,
+      "win_cs": 0.022,
+      "win_ws": 0.012
+    },
+    {
+      "team": "TOR",
+      "playoff_probability": 0.329,
+      "win_wildcard": 0.157,
+      "win_ds": 0.056,
+      "win_cs": 0.024,
+      "win_ws": 0.009
     },
     {
       "team": "DET",
-      "playoff_probability": 0.238,
-      "win_wildcard": 0.08,
-      "win_ds": 0.049,
-      "win_cs": 0.017,
-      "win_ws": 0.003
+      "playoff_probability": 0.232,
+      "win_wildcard": 0.072,
+      "win_ds": 0.046,
+      "win_cs": 0.023,
+      "win_ws": 0.008
+    },
+    {
+      "team": "SEA",
+      "playoff_probability": 0.071,
+      "win_wildcard": 0.026,
+      "win_ds": 0.012,
+      "win_cs": 0.004,
+      "win_ws": 0.002
     },
     {
       "team": "MIN",
-      "playoff_probability": 0.069,
-      "win_wildcard": 0.021,
-      "win_ds": 0.008,
+      "playoff_probability": 0.063,
+      "win_wildcard": 0.025,
+      "win_ds": 0.009,
       "win_cs": 0.004,
       "win_ws": 0.001
     },
     {
-      "team": "MIA",
-      "playoff_probability": 0.075,
-      "win_wildcard": 0.025,
+      "team": "STL",
+      "playoff_probability": 0.092,
+      "win_wildcard": 0.035,
       "win_ds": 0.01,
-      "win_cs": 0.001,
+      "win_cs": 0.003,
       "win_ws": 0.001
     },
     {
       "team": "CLE",
-      "playoff_probability": 0.054,
-      "win_wildcard": 0.02,
-      "win_ds": 0.005,
-      "win_cs": 0.002,
-      "win_ws": 0.0
-    },
-    {
-      "team": "SEA",
-      "playoff_probability": 0.062,
-      "win_wildcard": 0.027,
+      "playoff_probability": 0.067,
+      "win_wildcard": 0.022,
       "win_ds": 0.008,
       "win_cs": 0.001,
       "win_ws": 0.0
     },
     {
-      "team": "STL",
-      "playoff_probability": 0.09,
+      "team": "TEX",
+      "playoff_probability": 0.065,
+      "win_wildcard": 0.029,
+      "win_ds": 0.006,
+      "win_cs": 0.0,
+      "win_ws": 0.0
+    },
+    {
+      "team": "MIA",
+      "playoff_probability": 0.087,
       "win_wildcard": 0.031,
-      "win_ds": 0.009,
+      "win_ds": 0.011,
       "win_cs": 0.002,
       "win_ws": 0.0
     },
     {
-      "team": "TEX",
-      "playoff_probability": 0.069,
-      "win_wildcard": 0.023,
-      "win_ds": 0.006,
-      "win_cs": 0.001,
-      "win_ws": 0.0
-    },
-    {
-      "team": "WSH",
-      "playoff_probability": 0.001,
+      "team": "PIT",
+      "playoff_probability": 0.005,
       "win_wildcard": 0.001,
       "win_ds": 0.0,
       "win_cs": 0.0,
       "win_ws": 0.0
     },
     {
-      "team": "PIT",
-      "playoff_probability": 0.009,
-      "win_wildcard": 0.004,
-      "win_ds": 0.002,
+      "team": "CIN",
+      "playoff_probability": 0.001,
+      "win_wildcard": 0.001,
+      "win_ds": 0.001,
+      "win_cs": 0.0,
+      "win_ws": 0.0
+    },
+    {
+      "team": "WSH",
+      "playoff_probability": 0.001,
+      "win_wildcard": 0.0,
+      "win_ds": 0.0,
       "win_cs": 0.0,
       "win_ws": 0.0
     }
