@@ -1340,6 +1340,160 @@ const COUNT_GRID = [
 
 interface BarItem { type: string; color: string; value: number | null; fmt: string }
 
+type SplitMetric = {
+  type: string; color: string
+  swing: number; whiff: number | null; hc: number | null; ops: number | null; rv: number | null
+}
+
+async function exportSplitsImage(opts: {
+  batterId: string; batterName: string; teamAbbr: string
+  metrics: SplitMetric[]; hand: 'all' | 'L' | 'R'; count: string
+}) {
+  const { batterId, batterName, teamAbbr, metrics, hand, count } = opts
+  const toFmt = (v: number | null, d: number, s = '') => v !== null ? `${v.toFixed(d)}${s}` : ''
+  const toRvFmt = (v: number | null) => v !== null ? (v >= 0 ? '+' : '') + v.toFixed(1) : ''
+
+  const SCALE = 2; const W = 760; const PAD = 16
+  const IMG_SIZE = 40; const HDR_H = 64; const COL_HDR_H = 22; const ROW_H = 20
+
+  const columns = [
+    { title: 'Swing %',  items: metrics.map(m => ({ type: m.type, color: m.color, value: m.swing,  fmt: toFmt(m.swing, 0, '%') })), isRv: false },
+    { title: 'Whiff %',  items: metrics.map(m => ({ type: m.type, color: m.color, value: m.whiff,  fmt: toFmt(m.whiff, 0, '%') })), isRv: false },
+    { title: 'HC %',     items: metrics.map(m => ({ type: m.type, color: m.color, value: m.hc,     fmt: toFmt(m.hc, 0, '%') })),    isRv: false },
+    { title: 'OPS',      items: metrics.map(m => ({ type: m.type, color: m.color, value: m.ops,    fmt: toFmt(m.ops, 3) })),          isRv: false },
+    { title: 'RV/100',   items: metrics.map(m => ({ type: m.type, color: m.color, value: m.rv,     fmt: toRvFmt(m.rv) })),            isRv: true  },
+  ]
+  const validPerCol = columns.map(c =>
+    c.items.filter(i => i.value !== null).sort((a, b) => b.value! - a.value!)
+  )
+  const maxRows = Math.max(...validPerCol.map(c => c.length), 0)
+  const H = PAD + HDR_H + COL_HDR_H + maxRows * ROW_H + 32 + PAD
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * SCALE; canvas.height = H * SCALE
+  const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+
+  ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+  const slug = ESPN_ABBR_EXPORT[teamAbbr] ?? teamAbbr.toLowerCase()
+  const [headshotImg, logoImg, siteLogoImg] = await Promise.all([
+    loadImg(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${batterId}/headshot/67/current`),
+    loadImg(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+    loadImg('/logo.png'),
+  ])
+
+  // Header headshot
+  const hY = PAD + (HDR_H - IMG_SIZE) / 2
+  if (headshotImg) {
+    const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+    let dw = IMG_SIZE, dh = IMG_SIZE, dx = PAD, dy = hY
+    if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2 }
+    else { dw = IMG_SIZE; dh = IMG_SIZE / ar; dy = hY - (dh - IMG_SIZE) / 2 }
+    ctx.save(); ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+    ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+  } else {
+    ctx.fillStyle = '#3D405B'; ctx.beginPath()
+    ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+  }
+
+  // Name + team + filters
+  const nameX = PAD + IMG_SIZE + 10
+  ctx.textBaseline = 'middle'; ctx.textAlign = 'left'
+  ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 15px system-ui, sans-serif'
+  ctx.fillText(batterName, nameX, hY + 12)
+  ctx.fillStyle = '#9CA3AF'; ctx.font = '11px system-ui, sans-serif'
+  ctx.fillText(`${teamAbbr} · Pitch Splits`, nameX, hY + 30)
+  const handLabel = hand === 'all' ? 'vs All Pitchers' : hand === 'L' ? 'vs LHP' : 'vs RHP'
+  const countLabel = count === 'all' ? 'All Counts' : `Count ${count}`
+  ctx.fillStyle = '#6B7280'; ctx.font = '10px system-ui, sans-serif'
+  ctx.fillText(`${handLabel} · ${countLabel}`, nameX, hY + 48)
+
+  // Logo
+  if (logoImg) ctx.drawImage(logoImg, W - PAD - IMG_SIZE, hY, IMG_SIZE, IMG_SIZE)
+
+  // Divider
+  ctx.strokeStyle = '#2A313C'; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(PAD, PAD + HDR_H); ctx.lineTo(W - PAD, PAD + HDR_H); ctx.stroke()
+
+  // Columns
+  const colW = (W - PAD * 2) / columns.length
+  const colStartY = PAD + HDR_H
+
+  columns.forEach((col, ci) => {
+    const valid = validPerCol[ci]
+    const x = PAD + ci * colW
+    const absMax = Math.max(...valid.map(i => Math.abs(i.value!)), 0.01)
+    const LABEL_W = 28; const VAL_W = 40; const GAP = 4
+    const barX = x + LABEL_W + GAP; const barMaxW = colW - LABEL_W - VAL_W - GAP * 2
+
+    // Column header
+    ctx.fillStyle = '#6B7280'; ctx.font = 'bold 8px system-ui, sans-serif'
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+    ctx.fillText(col.title.toUpperCase(), x + colW / 2, colStartY + COL_HDR_H / 2)
+
+    valid.forEach((item, ri) => {
+      const rowCY = colStartY + COL_HDR_H + ri * ROW_H + ROW_H / 2
+      const neg = (item.value ?? 0) < 0
+      const barColor = col.isRv ? (neg ? '#F87171' : '#34D399') : item.color
+      const pct = Math.min(1, Math.abs(item.value!) / absMax)
+
+      // Pitch code
+      ctx.fillStyle = item.color; ctx.font = 'bold 9px monospace'
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+      ctx.fillText(item.type, x + LABEL_W, rowCY)
+
+      // Bar bg
+      ctx.fillStyle = '#1E2937'
+      canvasRoundRect(ctx, barX, rowCY - 5, barMaxW, 10, 2); ctx.fill()
+
+      // Bar fill
+      if (pct > 0) {
+        ctx.fillStyle = barColor
+        canvasRoundRect(ctx, barX, rowCY - 5, Math.max(4, barMaxW * pct), 10, 2); ctx.fill()
+      }
+
+      // Value
+      ctx.fillStyle = col.isRv ? (neg ? '#F87171' : '#34D399') : '#9CA3AF'
+      ctx.font = '9px monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+      ctx.fillText(item.fmt, x + colW - 4, rowCY)
+    })
+
+    if (ci < columns.length - 1) {
+      ctx.strokeStyle = '#2A313C'; ctx.lineWidth = 0.5
+      ctx.beginPath()
+      ctx.moveTo(x + colW, colStartY + COL_HDR_H)
+      ctx.lineTo(x + colW, colStartY + COL_HDR_H + maxRows * ROW_H)
+      ctx.stroke()
+    }
+  })
+
+  // Footer
+  const footerY = H - PAD - 8
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#6B7280'
+  if (siteLogoImg) {
+    ctx.drawImage(siteLogoImg, PAD, footerY - 8, 14, 14)
+    ctx.font = '9px system-ui, sans-serif'; ctx.fillText('samalytics', PAD + 18, footerY)
+  } else {
+    ctx.font = '9px system-ui, sans-serif'; ctx.fillText('samalytics', PAD, footerY)
+  }
+
+  await new Promise<void>(resolve => {
+    canvas.toBlob(async blob => {
+      if (!blob) { resolve(); return }
+      try {
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+      } catch {
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a'); a.href = url
+        a.download = `${batterName.replace(/\s+/g, '_')}_splits.png`; a.click()
+        URL.revokeObjectURL(url)
+      }
+      resolve()
+    }, 'image/png')
+  })
+}
+
 function BarColumn({ title, items, isRv }: { title: string; items: BarItem[]; isRv?: boolean }) {
   const valid = items.filter(i => i.value !== null)
   if (!valid.length) return null
@@ -1366,9 +1520,12 @@ function BarColumn({ title, items, isRv }: { title: string; items: BarItem[]; is
   )
 }
 
-function BatterScenarioCharts({ data }: { data: BatterScenarioData }) {
+function BatterScenarioCharts({ data, batterId, batterName, teamAbbr }: {
+  data: BatterScenarioData; batterId: string; batterName: string; teamAbbr: string
+}) {
   const [hand, setHand] = useState<'all' | 'L' | 'R'>('all')
   const [count, setCount] = useState('all')
+  const [copying, setCopying] = useState(false)
 
   const metrics = useMemo(() => {
     return data.pitchTypes.map(pt => {
@@ -1455,9 +1612,22 @@ function BatterScenarioCharts({ data }: { data: BatterScenarioData }) {
             <BarColumn title="OPS" items={metrics.map(m => ({ type: m.type, color: m.color, value: m.ops, fmt: toFmt(m.ops, 3) }))} />
             <BarColumn title="RV/100 PA" items={metrics.map(m => ({ type: m.type, color: m.color, value: m.rv, fmt: toRvFmt(m.rv) }))} isRv />
           </div>
-          <p className="text-[7.5px] text-538-muted leading-relaxed">
-            HC% = hard contact (EV ≥ 95) as % of contact · Whiff% = whiffs per swing · RV/100 = run value on outcome pitches
-          </p>
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <p className="text-[7.5px] text-538-muted leading-relaxed">
+              HC% = hard contact (EV ≥ 95) as % of contact · Whiff% = whiffs per swing · RV/100 = run value on outcome pitches
+            </p>
+            <button
+              onClick={async () => {
+                setCopying(true)
+                await exportSplitsImage({ batterId, batterName, teamAbbr, metrics, hand, count })
+                setCopying(false)
+              }}
+              disabled={copying}
+              className="text-[8px] font-bold uppercase tracking-widest px-2 py-1 rounded border border-538-border text-538-muted hover:text-538-text hover:border-538-text transition-colors disabled:opacity-40 shrink-0"
+            >
+              {copying ? 'Copying…' : 'Copy as Image'}
+            </button>
+          </div>
         </>
       ) : (
         <p className="text-[9px] text-538-muted py-2">No data for selected scenario (try a less specific filter)</p>
@@ -1713,7 +1883,7 @@ export default function BatterPage({ params }: { params: { id: string } }) {
           <div className="text-[9px] text-538-muted">· Last 40 games</div>
         </div>
         {scenarioData && scenarioData.pitchTypes.length > 0 ? (
-          <BatterScenarioCharts data={scenarioData} />
+          <BatterScenarioCharts data={scenarioData} batterId={batterId} batterName={batterName} teamAbbr={teamAbbr ?? ''} />
         ) : scenarioLoading ? (
           <p className="text-[9px] text-538-muted">Loading scenario data…</p>
         ) : (
