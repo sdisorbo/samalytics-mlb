@@ -1036,48 +1036,11 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
         )}
       </div>
 
-      {/* ── Row 2: Zone heatmap · Outcome · Next Pitch ── */}
-      <div className="flex flex-col sm:flex-row gap-8 items-start overflow-x-auto pb-1">
-
-        {/* Savant heatmap */}
-        {zoneData && (
-          <div className="shrink-0">
-            <div className="mb-2">
-              <div className="text-xs font-bold uppercase tracking-widest text-538-muted">
-                {zoneData.batterName ? `${zoneData.batterName.split(' ').slice(-1)[0]}'s` : 'Batter'} Season Zone Performance
-              </div>
-              <div className="text-[9px] text-538-muted mb-1">Run value per pitch by zone — toggle by pitch type below</div>
-            </div>
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <div className="inline-flex border border-538-border rounded overflow-hidden">
-                <button onClick={() => setPitchToggle('ALL')}
-                  className={`px-2 py-1 text-xs font-bold transition-colors ${pitchToggle === 'ALL' ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
-                  All
-                </button>
-                {(pitchMix ?? []).slice(0, 5).map(p => (
-                  <button key={p.type} onClick={() => setPitchToggle(p.type)}
-                    className={`px-2 py-1 text-xs font-bold transition-colors ${pitchToggle === p.type ? 'bg-538-orange text-white' : ''}`}
-                    style={pitchToggle === p.type ? {} : { color: p.color }}>
-                    {p.type}
-                  </button>
-                ))}
-              </div>
-            </div>
-            {activePTZones
-              ? <SavantHeatmap zones={activePTZones} pitchLabel={pitchToggle !== 'ALL' ? pitchToggle : undefined} />
-              : <div className="text-xs text-538-muted py-4">No zone data for {pitchToggle}</div>
-            }
-            <p className="text-xs text-538-muted mt-1.5">
-              Catcher&apos;s view · season averages<br/>
-              <span className="text-red-400">Red</span> = batter-friendly (+ RV) &nbsp;·&nbsp; <span className="text-blue-400">Blue</span> = pitcher-friendly (− RV)
-            </p>
-          </div>
-        )}
-
-        {/* Outcome + Next pitch — expand to fill */}
-        <div className="flex flex-col sm:flex-row gap-8 flex-1">
+      {/* ── Row 2: Bar charts — Outcome + Next Pitch side by side ── */}
+      {(abOutcome || nextPitches) && (
+        <div className="flex flex-col sm:flex-row gap-8">
           {abOutcome && (
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-3">
                 AB Outcome ({count.balls}–{count.strikes})
               </div>
@@ -1085,9 +1048,8 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
               <p className="text-xs text-538-muted mt-2">Season rates · count-adjusted</p>
             </div>
           )}
-
           {nextPitches && (
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-3">
                 Likely Next Pitch
               </div>
@@ -1096,9 +1058,55 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
             </div>
           )}
         </div>
-      </div>
+      )}
 
-      {/* ── Row 3: This AB pitch sequence ── */}
+      {/* ── Row 3: Zone maps — Savant heatmap + Game pitch map side by side ── */}
+      {(zoneData || live.gamePitches?.length > 0) && (
+        <div className="flex flex-col sm:flex-row gap-8 items-start overflow-x-auto pb-1">
+
+          {/* Batter RV heatmap */}
+          {zoneData && (
+            <div className="shrink-0">
+              <div className="mb-2">
+                <div className="text-xs font-bold uppercase tracking-widest text-538-muted">
+                  {zoneData.batterName ? `${zoneData.batterName.split(' ').slice(-1)[0]}'s` : 'Batter'} Season Zone Performance
+                </div>
+                <div className="text-[9px] text-538-muted mb-1">Run value per pitch by zone — toggle by pitch type below</div>
+              </div>
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                <div className="inline-flex border border-538-border rounded overflow-hidden">
+                  <button onClick={() => setPitchToggle('ALL')}
+                    className={`px-2 py-1 text-xs font-bold transition-colors ${pitchToggle === 'ALL' ? 'bg-538-orange text-white' : 'text-538-muted'}`}>
+                    All
+                  </button>
+                  {(pitchMix ?? []).slice(0, 5).map(p => (
+                    <button key={p.type} onClick={() => setPitchToggle(p.type)}
+                      className={`px-2 py-1 text-xs font-bold transition-colors ${pitchToggle === p.type ? 'bg-538-orange text-white' : ''}`}
+                      style={pitchToggle === p.type ? {} : { color: p.color }}>
+                      {p.type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {activePTZones
+                ? <SavantHeatmap zones={activePTZones} pitchLabel={pitchToggle !== 'ALL' ? pitchToggle : undefined} />
+                : <div className="text-xs text-538-muted py-4">No zone data for {pitchToggle}</div>
+              }
+              <p className="text-xs text-538-muted mt-1.5">
+                Catcher&apos;s view · season averages<br/>
+                <span className="text-red-400">Red</span> = batter-friendly (+ RV) &nbsp;·&nbsp; <span className="text-blue-400">Blue</span> = pitcher-friendly (− RV)
+              </p>
+            </div>
+          )}
+
+          {/* Pitcher game pitch map */}
+          {live.gamePitches?.length > 0 && (
+            <GamePitchMap gamePitches={live.gamePitches} currentPitcherId={live.pitcherId} />
+          )}
+        </div>
+      )}
+
+      {/* ── Row 4: This AB pitch sequence ── */}
       {abPitches.length > 0 && (
         <div>
           <div className="text-xs font-bold uppercase tracking-widest text-538-muted mb-2">This AB</div>
@@ -1106,11 +1114,6 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
             {abPitches.map((p, i) => <LivePitchDot key={i} pitch={p} idx={i} />)}
           </div>
         </div>
-      )}
-
-      {/* ── Row 4: Game pitch map ── */}
-      {live.gamePitches?.length > 0 && (
-        <GamePitchMap gamePitches={live.gamePitches} currentPitcherId={live.pitcherId} />
       )}
 
       {/* ── Row 5: Play-by-play + box score ── */}
