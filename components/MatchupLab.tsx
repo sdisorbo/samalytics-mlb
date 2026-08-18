@@ -664,6 +664,8 @@ function GamePitchMap({ gamePitches, currentPitcherId }: { gamePitches: GamePitc
   const defaultId = currentPitcherId ?? gamePitches[0]?.pitcherId ?? null
   const [selId, setSelId] = useState<number | null>(defaultId)
   const [ptFilter, setPtFilter] = useState<string>('all')
+  const [copying, setCopying] = useState(false)
+  const svgRef = useRef<SVGSVGElement>(null)
 
   // Keep selected pitcher synced when current pitcher changes mid-game
   const prevIdRef = useRef(currentPitcherId)
@@ -693,6 +695,61 @@ function GamePitchMap({ gamePitches, currentPitcherId }: { gamePitches: GamePitc
   [pitcher, ptFilter])
 
   if (!gamePitches.length) return null
+
+  async function copyMap() {
+    if (!svgRef.current || !pitcher) return
+    setCopying(true)
+    try {
+      const SCALE = 2, W = 200, H = 260, HDR = 36, PAD = 10
+      const canvas = document.createElement('canvas')
+      canvas.width = (W + PAD * 2) * SCALE
+      canvas.height = (H + HDR + PAD) * SCALE
+      const ctx = canvas.getContext('2d')!
+      ctx.scale(SCALE, SCALE)
+      ctx.fillStyle = '#0D1117'
+      ctx.fillRect(0, 0, W + PAD * 2, H + HDR + PAD)
+
+      // Header text
+      ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 12px system-ui, sans-serif'
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+      ctx.fillText(pitcher.pitcherName, PAD, PAD)
+      ctx.fillStyle = '#9CA3AF'; ctx.font = '10px system-ui, sans-serif'
+      const filterLabel = ptFilter === 'all' ? 'All Pitches' : ptFilter
+      ctx.fillText(`${filterLabel} · ${visiblePitches.filter(p => p.pX != null).length} pitches`, PAD, PAD + 16)
+
+      // Serialize SVG and draw it
+      const svgStr = new XMLSerializer().serializeToString(svgRef.current)
+      const svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' })
+      const url = URL.createObjectURL(svgBlob)
+      await new Promise<void>(resolve => {
+        const img = new Image()
+        img.onload = () => {
+          ctx.drawImage(img, PAD, HDR, W, H)
+          URL.revokeObjectURL(url)
+          resolve()
+        }
+        img.onerror = () => { URL.revokeObjectURL(url); resolve() }
+        img.src = url
+      })
+
+      await new Promise<void>(resolve => {
+        canvas.toBlob(async blob => {
+          if (!blob) { resolve(); return }
+          try {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+          } catch {
+            const a = document.createElement('a')
+            a.href = URL.createObjectURL(blob)
+            a.download = `${pitcher.pitcherName.replace(/\s+/g, '_')}_pitches.png`
+            a.click()
+          }
+          resolve()
+        }, 'image/png')
+      })
+    } finally {
+      setCopying(false)
+    }
+  }
 
   const W = 200, H = 260
   const VX1 = -1.65, VX2 = 1.65, VZ1 = 0.8, VZ2 = 4.3
@@ -746,7 +803,7 @@ function GamePitchMap({ gamePitches, currentPitcherId }: { gamePitches: GamePitc
       </div>
 
       {/* Zone */}
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+      <svg ref={svgRef} width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block', background: '#0D1117' }}>
         <rect x={zoneX} y={zoneY} width={zoneW} height={zoneH}
           fill="rgba(255,255,255,0.04)" stroke="rgba(148,163,184,0.65)" strokeWidth={1.5} rx={1} />
         {[1/3, 2/3].map(t => (
@@ -772,7 +829,13 @@ function GamePitchMap({ gamePitches, currentPitcherId }: { gamePitches: GamePitc
           )
         })}
       </svg>
-      <p className="text-[9px] text-538-muted mt-0.5">Catcher&apos;s view · filled = strike · {visiblePitches.filter(p => p.pX != null).length} pitches</p>
+      <div className="flex items-center justify-between mt-0.5 gap-2">
+        <p className="text-[9px] text-538-muted">Catcher&apos;s view · filled = strike · {visiblePitches.filter(p => p.pX != null).length} pitches</p>
+        <button onClick={copyMap} disabled={copying}
+          className="text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border border-538-border text-538-muted hover:text-538-text hover:border-538-text transition-colors disabled:opacity-40 shrink-0">
+          {copying ? 'Copying…' : 'Copy'}
+        </button>
+      </div>
     </div>
   )
 }
