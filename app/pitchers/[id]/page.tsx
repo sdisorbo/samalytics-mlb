@@ -1240,6 +1240,40 @@ export default function PitcherPage({ params }: { params: { id: string } }) {
       {loading && <p className="text-538-muted text-sm">Loading pitcher data…</p>}
       {error && <div className="py-8 text-sm text-red-500">{error}</div>}
 
+      {/* Last 3 starts/appearances */}
+      {gameRarData.length > 0 && (
+        <div>
+          <div className="text-[10px] font-bold uppercase tracking-widest text-538-muted mb-2">
+            Last {Math.min(3, gameRarData.length)} {gameRarData.some(g => parseFloat(g.ip) >= 3) ? 'Starts' : 'Appearances'}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {gameRarData.slice(-3).reverse().map(g => {
+              const good = g.rv >= 0
+              return (
+                <Link key={g.gamePk} href={`/analysis/game/${g.gamePk}`}
+                  className="bg-surface border border-538-border rounded-xl p-3 hover:border-538-orange transition-colors group block">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[9px] text-538-muted font-semibold tabular-nums">{g.date}</span>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded tabular-nums ${good ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'}`}>
+                      {good ? '+' : ''}{g.rv.toFixed(2)} RV
+                    </span>
+                  </div>
+                  <div className="text-xs font-bold text-538-text mb-2">vs {g.opp}</div>
+                  <div className="flex gap-3 text-[10px] text-538-muted">
+                    <span>IP <span className="font-semibold text-538-text">{g.ip}</span></span>
+                    <span>ER <span className="font-semibold text-538-text">{g.er}</span></span>
+                    <span>K <span className="font-semibold text-538-text">{g.k}</span></span>
+                  </div>
+                  <div className="text-[9px] text-538-orange mt-2 opacity-0 group-hover:opacity-100 transition-opacity font-semibold">
+                    View full summary →
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Career stats table */}
       {careerSeasons.length > 0 && (
         <div>
