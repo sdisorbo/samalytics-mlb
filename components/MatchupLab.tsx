@@ -784,6 +784,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
   const [pitchMix, setPitchMix] = useState<PitchMixEntry[] | null>(null)
   const [batterStats, setBatterStats] = useState<BatterPitchStat[] | null>(null)
   const [pitchToggle, setPitchToggle] = useState('ALL')
+  const [exporting, setExporting] = useState(false)
   const lastBatterRef  = useRef<number | null>(null)
   const lastPitcherRef = useRef<number | null>(null)
   const season = new Date().getFullYear()
@@ -948,8 +949,6 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
   const activePTZones = pitchToggle !== 'ALL'
     ? zoneData?.pitchTypeZones.find(p => p.code === pitchToggle)?.zones ?? null
     : zoneData?.zones ?? null
-
-  const [exporting, setExporting] = useState(false)
 
   async function exportLivePanelImage() {
     if (!live) return
