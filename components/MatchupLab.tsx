@@ -949,6 +949,218 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
     ? zoneData?.pitchTypeZones.find(p => p.code === pitchToggle)?.zones ?? null
     : zoneData?.zones ?? null
 
+  const [exporting, setExporting] = useState(false)
+
+  async function exportLivePanelImage() {
+    if (!live) return
+    const SCALE = 2, W = 820, PAD = 16
+    // Measure needed height dynamically
+    const hasOutcome   = !!abOutcome
+    const hasNextPitch = !!nextPitches
+    const hasHeatmap   = !!activePTZones
+    const hasGameMap   = (live.gamePitches?.length ?? 0) > 0
+    const barsH     = (hasOutcome || hasNextPitch) ? 120 : 0
+    const mapsH     = (hasHeatmap || hasGameMap)   ? 300 : 0
+    const H = PAD + 64 + (barsH ? barsH + 12 : 0) + (mapsH ? mapsH + 12 : 0) + 28 + PAD
+
+    const canvas = document.createElement('canvas')
+    canvas.width = W * SCALE; canvas.height = H * SCALE
+    const ctx = canvas.getContext('2d')!; ctx.scale(SCALE, SCALE)
+
+    ctx.fillStyle = '#0D1117'; ctx.fillRect(0, 0, W, H)
+
+    // ── Header ────────────────────────────────────────────────────────────
+    let y = PAD
+
+    // Score block
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 10px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+    ctx.fillText(live.awayAbbr, PAD, y + 4)
+    ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 32px system-ui, sans-serif'
+    ctx.fillText(String(live.awayScore ?? '—'), PAD, y + 18)
+    ctx.fillStyle = '#6B7280'; ctx.font = 'bold 20px system-ui, sans-serif'
+    ctx.fillText('–', PAD + 56, y + 22)
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 10px system-ui, sans-serif'
+    ctx.fillText(live.homeAbbr, PAD + 76, y + 4)
+    ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 32px system-ui, sans-serif'
+    ctx.fillText(String(live.homeScore ?? '—'), PAD + 76, y + 18)
+
+    // Inning + count
+    const halfArrowExp = live.inningHalf === 'Top' ? '▲' : live.inningHalf === 'Bottom' ? '▼' : ''
+    ctx.fillStyle = '#4ADE80'; ctx.font = 'bold 12px system-ui, sans-serif'
+    ctx.fillText(`${halfArrowExp} ${live.inning ?? '—'} ${live.inningHalf ?? ''}`, PAD + 148, y + 4)
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '11px system-ui, sans-serif'
+    ctx.fillText(`${live.count.balls}-${live.count.strikes} · ${live.outs} out${live.outs !== 1 ? 's' : ''}`, PAD + 148, y + 22)
+
+    // Pitcher vs batter
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 9px system-ui, sans-serif'
+    ctx.fillText('PITCHER', PAD + 280, y + 4)
+    ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 12px system-ui, sans-serif'
+    ctx.fillText(live.pitcherName ?? '—', PAD + 280, y + 18)
+    ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 9px system-ui, sans-serif'
+    ctx.fillText('BATTER', PAD + 460, y + 4)
+    ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 12px system-ui, sans-serif'
+    ctx.fillText(live.batterName ?? '—', PAD + 460, y + 18)
+
+    // Divider
+    y += 56
+    ctx.strokeStyle = '#2A313C'; ctx.lineWidth = 1
+    ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke()
+    y += 10
+
+    // ── Bar charts ────────────────────────────────────────────────────────
+    if (hasOutcome || hasNextPitch) {
+      const colW = (W - PAD * 2 - 20) / 2
+
+      function drawBars(bars: {label: string; pct: number; color: string}[], startX: number, title: string) {
+        ctx.fillStyle = '#6B7280'; ctx.font = 'bold 9px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+        ctx.fillText(title.toUpperCase(), startX, y)
+        let by = y + 16
+        for (const seg of bars) {
+          ctx.fillStyle = '#6B7280'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+          ctx.fillText(seg.label, startX + 24, by + 5)
+          ctx.fillStyle = '#1E2937'
+          ctx.beginPath(); ctx.roundRect(startX + 28, by, colW - 68, 10, 3); ctx.fill()
+          ctx.fillStyle = seg.color
+          const bw = Math.max(4, (colW - 68) * Math.min(1, seg.pct))
+          ctx.beginPath(); ctx.roundRect(startX + 28, by, bw, 10, 3); ctx.fill()
+          ctx.fillStyle = '#E6EDF3'; ctx.font = '10px monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+          ctx.fillText(`${Math.round(seg.pct * 100)}%`, startX + 28 + (colW - 68) + 6, by + 5)
+          by += 18
+        }
+      }
+
+      if (hasOutcome && abOutcome) {
+        drawBars([
+          { label: 'K',   pct: abOutcome.k,   color: '#f87171' },
+          { label: 'BB',  pct: abOutcome.bb,  color: '#60a5fa' },
+          { label: 'HR',  pct: abOutcome.hr,  color: '#fbbf24' },
+          { label: 'H',   pct: abOutcome.h,   color: '#4ade80' },
+          { label: 'Out', pct: abOutcome.out, color: '#6b7280' },
+        ], PAD, `AB Outcome (${live.count.balls}–${live.count.strikes})`)
+      }
+
+      if (hasNextPitch && nextPitches) {
+        const { pitchMix: pm, balls, strikes, lastType } = nextPitches
+        const fbAdj = balls >= 3 ? 1.4 : balls >= 2 ? 1.15 : strikes >= 2 ? 0.8 : 1.0
+        const raw: Record<string, number> = {}
+        pm.forEach(p => {
+          const isFb = FB_TYPES.has(p.type)
+          const mult = isFb ? fbAdj : (fbAdj > 1 ? 1 / Math.sqrt(fbAdj) : 1)
+          raw[p.type] = (p.pct / 100) * mult * (p.type === lastType && !isFb ? 0.72 : 1)
+        })
+        const tot = Object.values(raw).reduce((s, v) => s + v, 0) || 1
+        const preds = pm.map(p => ({ ...p, adjPct: Math.round((raw[p.type] ?? 0) / tot * 100) }))
+          .sort((a, b) => b.adjPct - a.adjPct).slice(0, 4)
+        drawBars(
+          preds.map(p => ({ label: p.type, pct: p.adjPct / 100, color: p.color })),
+          PAD + colW + 20, 'Likely Next Pitch'
+        )
+      }
+
+      y += barsH + 2
+      ctx.strokeStyle = '#2A313C'; ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke()
+      y += 10
+    }
+
+    // ── Zone maps ─────────────────────────────────────────────────────────
+    if (hasHeatmap || hasGameMap) {
+      // Savant heatmap
+      if (hasHeatmap && activePTZones) {
+        const CW = 30, CH = 44
+        const zones = activePTZones
+        const vals = zones.flat().map(c => c.avg_rv).filter((v): v is number => v != null)
+        const absMax = Math.max(...vals.map(Math.abs), 0.01)
+
+        ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 9px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+        ctx.fillText((zoneData?.batterName?.split(' ').slice(-1)[0] ?? 'Batter') + ' Season Zone RV', PAD, y)
+        const hmY = y + 18
+
+        ctx.save(); ctx.filter = 'blur(9px)'
+        zones.forEach((row, r) => row.forEach((cell, c) => {
+          const color = rvHeatColor(cell.avg_rv, absMax)
+          ctx.fillStyle = color
+          ctx.fillRect(PAD + c * CW, hmY + r * CH, CW, CH)
+        }))
+        ctx.restore()
+
+        // Strike zone overlay
+        ctx.strokeStyle = 'rgba(148,163,184,0.85)'; ctx.lineWidth = 2
+        ctx.strokeRect(PAD + CW, hmY + CH, CW * 3, CH * 3)
+
+        // Pitch type label
+        if (pitchToggle !== 'ALL') {
+          ctx.fillStyle = 'rgba(15,23,42,0.8)'; ctx.beginPath()
+          ctx.roundRect(PAD + 4, hmY + 4, 24, 14, 3); ctx.fill()
+          ctx.fillStyle = '#94A3B8'; ctx.font = 'bold 9px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+          ctx.fillText(pitchToggle, PAD + 16, hmY + 11)
+        }
+
+        ctx.fillStyle = '#6B7280'; ctx.font = '9px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+        ctx.fillText('Red = batter edge · Blue = pitcher edge', PAD, hmY + CH * 5 + 6)
+      }
+
+      // Game pitch map
+      if (hasGameMap) {
+        const mapOffX = PAD + 30 * 5 + 32
+        const pitcher = live.gamePitches?.find(p => p.pitcherId === live.pitcherId) ?? live.gamePitches?.[0]
+        if (pitcher) {
+          ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 9px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+          ctx.fillText(`${pitcher.pitcherName.split(' ').slice(-1)[0]} · Game Pitches (${pitcher.pitches.length})`, mapOffX, y)
+
+          const MW = 180, MH = 240, mapY = y + 18
+          const VX1 = -1.65, VX2 = 1.65, VZ1 = 0.8, VZ2 = 4.3
+          const SZX1 = -0.83, SZX2 = 0.83, SZZ1 = 1.5, SZZ2 = 3.5
+          const sx = (px: number) => mapOffX + (px - VX1) / (VX2 - VX1) * MW
+          const sy = (pz: number) => mapY + (1 - (pz - VZ1) / (VZ2 - VZ1)) * MH
+          const zX = sx(SZX1), zY = sy(SZZ2), zW = sx(SZX2) - zX, zH = sy(SZZ1) - zY
+
+          ctx.strokeStyle = 'rgba(148,163,184,0.65)'; ctx.lineWidth = 1.5
+          ctx.strokeRect(zX, zY, zW, zH)
+          // Grid thirds
+          ctx.strokeStyle = 'rgba(148,163,184,0.18)'; ctx.lineWidth = 0.8
+          ;[1/3, 2/3].forEach(t => {
+            ctx.beginPath(); ctx.moveTo(zX + zW*t, zY); ctx.lineTo(zX + zW*t, zY+zH); ctx.stroke()
+            ctx.beginPath(); ctx.moveTo(zX, zY + zH*t); ctx.lineTo(zX+zW, zY + zH*t); ctx.stroke()
+          })
+
+          for (const p of pitcher.pitches) {
+            if (p.pX == null || p.pZ == null) continue
+            const color = PITCH_COLORS_LIVE[p.type] ?? '#78909C'
+            const isBall = p.code === 'B'
+            ctx.beginPath(); ctx.arc(sx(p.pX), sy(p.pZ), 4.5, 0, Math.PI * 2)
+            ctx.fillStyle = isBall ? 'transparent' : color
+            ctx.fill()
+            if (isBall) { ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5; ctx.stroke() }
+          }
+
+          ctx.fillStyle = '#6B7280'; ctx.font = '9px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+          ctx.fillText("Filled = strike · green outline = ball", mapOffX, mapY + MH + 6)
+        }
+      }
+
+      y += mapsH + 2
+    }
+
+    // ── Footer ────────────────────────────────────────────────────────────
+    ctx.fillStyle = '#6B7280'; ctx.font = '9px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
+    ctx.fillText('samalytics · live game snapshot', PAD, H - PAD / 2)
+
+    await new Promise<void>(resolve => {
+      canvas.toBlob(async blob => {
+        if (!blob) { resolve(); return }
+        try {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+        } catch {
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement('a'); a.href = url; a.download = `live_${live.awayAbbr}_vs_${live.homeAbbr}.png`; a.click()
+          URL.revokeObjectURL(url)
+        }
+        resolve()
+      }, 'image/png')
+    })
+  }
+
   return (
     <div className="border-t border-538-border bg-538-bg/50 px-4 py-5 space-y-6 w-full min-w-0">
 
@@ -1126,7 +1338,16 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
         batterId={live.batterId}
       />
 
-      <p className="text-xs text-538-muted">Auto-refreshes every 15s</p>
+      <div className="flex items-center justify-between gap-4">
+        <p className="text-xs text-538-muted">Auto-refreshes every 15s</p>
+        <button
+          onClick={async () => { setExporting(true); await exportLivePanelImage(); setExporting(false) }}
+          disabled={exporting}
+          className="text-[8px] font-bold uppercase tracking-widest px-2 py-1 rounded border border-538-border text-538-muted hover:text-538-text hover:border-538-text transition-colors disabled:opacity-40 shrink-0"
+        >
+          {exporting ? 'Copying…' : 'Copy as Image'}
+        </button>
+      </div>
     </div>
   )
 }
