@@ -329,6 +329,7 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
               dot={false}
               activeDot={false}
               legendType="none"
+              type="monotone"
               connectNulls
             />
             <Line
@@ -339,6 +340,7 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
               dot={false}
               activeDot={false}
               legendType="none"
+              type="monotone"
               connectNulls
             />
 
@@ -355,7 +357,7 @@ export default function EloHistoryChart({ history, topTeams, allTeams }: Props) 
               return (
                 <Line
                   key={abbr}
-                  type="linear"
+                  type="monotone"
                   dataKey={abbr}
                   stroke={color}
                   strokeWidth={2}
