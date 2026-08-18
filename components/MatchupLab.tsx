@@ -313,6 +313,25 @@ interface BatterPitchStat { type: string; whiff: number | null; ops: number | nu
 
 // Use the shared palette from lib/pitchColors (same as pitcher pages)
 const PITCH_COLORS_LIVE = PITCH_COLORS
+
+function loadImgML(src: string): Promise<HTMLImageElement | null> {
+  return new Promise(resolve => {
+    const img = new Image(); img.crossOrigin = 'anonymous'
+    img.onload = () => resolve(img); img.onerror = () => resolve(null); img.src = src
+  })
+}
+const ESPN_ABBR_ML: Record<string, string> = {
+  AZ:'ari', ARI:'ari', WSH:'wsh', CWS:'cws',
+  TB:'tb', TBR:'tb', KC:'kc', KCR:'kc',
+  SD:'sd', SDP:'sd', SF:'sf', SFG:'sf',
+}
+function canvasRoundRectML(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r)
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h)
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r)
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath()
+}
 const LIVE_RESULT_COLOR: Record<string, string> = {
   B:'#60a5fa',S:'#f87171',C:'#f87171',F:'#fcd34d',X:'#4ade80',
 }
@@ -660,7 +679,7 @@ function PlayByPlayFeed({ plays, batterGameStats, batterName, awayAbbr, homeAbbr
 
 // ── Game Pitch Map ────────────────────────────────────────────────────────────
 
-function GamePitchMap({ gamePitches, currentPitcherId }: { gamePitches: GamePitcherData[]; currentPitcherId: number | null }) {
+function GamePitchMap({ gamePitches, currentPitcherId, awayAbbr, homeAbbr }: { gamePitches: GamePitcherData[]; currentPitcherId: number | null; awayAbbr: string; homeAbbr: string }) {
   const defaultId = currentPitcherId ?? gamePitches[0]?.pitcherId ?? null
   const [selId, setSelId] = useState<number | null>(defaultId)
   const [ptFilter, setPtFilter] = useState<string>('all')
@@ -700,37 +719,91 @@ function GamePitchMap({ gamePitches, currentPitcherId }: { gamePitches: GamePitc
     if (!svgRef.current || !pitcher) return
     setCopying(true)
     try {
-      const SCALE = 2, W = 200, H = 260, HDR = 36, PAD = 10
+      const SCALE = 2
+      const SVG_W = 200, SVG_H = 260
+      const PAD = 10, HDR = 56, FOOTER = 24
+      const TOTAL_W = SVG_W + PAD * 2
+      const TOTAL_H = HDR + SVG_H + FOOTER
+
       const canvas = document.createElement('canvas')
-      canvas.width = (W + PAD * 2) * SCALE
-      canvas.height = (H + HDR + PAD) * SCALE
+      canvas.width = TOTAL_W * SCALE; canvas.height = TOTAL_H * SCALE
       const ctx = canvas.getContext('2d')!
       ctx.scale(SCALE, SCALE)
       ctx.fillStyle = '#0D1117'
-      ctx.fillRect(0, 0, W + PAD * 2, H + HDR + PAD)
+      ctx.fillRect(0, 0, TOTAL_W, TOTAL_H)
 
-      // Header text
-      ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 12px system-ui, sans-serif'
-      ctx.textAlign = 'left'; ctx.textBaseline = 'top'
-      ctx.fillText(pitcher.pitcherName, PAD, PAD)
-      ctx.fillStyle = '#9CA3AF'; ctx.font = '10px system-ui, sans-serif'
+      // Derive pitcher team: "top" half → home team pitching, "bottom" → away team pitching
+      const firstHalf = pitcher.pitches[0]?.half ?? 'top'
+      const pitcherTeamAbbr = firstHalf === 'top' ? homeAbbr : awayAbbr
+      const slug = ESPN_ABBR_ML[pitcherTeamAbbr] ?? pitcherTeamAbbr.toLowerCase()
+
+      const [headshotImg, logoImg, siteLogoImg] = await Promise.all([
+        loadImgML(`https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${pitcher.pitcherId}/headshot/67/current`),
+        loadImgML(`https://a.espncdn.com/i/teamlogos/mlb/500/${slug}.png`),
+        loadImgML('/logo.png'),
+      ])
+
+      // ── Header ──
+      const IMG_SIZE = 36
+      const hY = (HDR - IMG_SIZE) / 2
+
+      // Headshot circle (left)
+      if (headshotImg) {
+        const ar = headshotImg.naturalWidth / headshotImg.naturalHeight
+        let dw, dh, dx, dy
+        if (ar >= 1) { dh = IMG_SIZE; dw = IMG_SIZE * ar; dx = PAD - (dw - IMG_SIZE) / 2; dy = hY }
+        else          { dw = IMG_SIZE; dh = IMG_SIZE / ar; dx = PAD; dy = hY - (dh - IMG_SIZE) / 2 }
+        ctx.save(); ctx.beginPath()
+        ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.clip()
+        ctx.drawImage(headshotImg, dx, dy, dw, dh); ctx.restore()
+      } else {
+        ctx.fillStyle = '#3D405B'; ctx.beginPath()
+        ctx.arc(PAD + IMG_SIZE / 2, hY + IMG_SIZE / 2, IMG_SIZE / 2, 0, Math.PI * 2); ctx.fill()
+      }
+
+      // Team logo (right)
+      const lx = TOTAL_W - PAD - IMG_SIZE
+      if (logoImg) {
+        ctx.drawImage(logoImg, lx, hY, IMG_SIZE, IMG_SIZE)
+      } else {
+        ctx.fillStyle = '#374151'; canvasRoundRectML(ctx, lx, hY, IMG_SIZE, IMG_SIZE, 6); ctx.fill()
+        ctx.fillStyle = '#9CA3AF'; ctx.font = 'bold 9px sans-serif'
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+        ctx.fillText(pitcherTeamAbbr, lx + IMG_SIZE / 2, hY + IMG_SIZE / 2)
+      }
+
+      // Pitcher name + filter label centered
       const filterLabel = ptFilter === 'all' ? 'All Pitches' : ptFilter
-      ctx.fillText(`${filterLabel} · ${visiblePitches.filter(p => p.pX != null).length} pitches`, PAD, PAD + 16)
+      const pitchCount = visiblePitches.filter(p => p.pX != null).length
+      ctx.fillStyle = '#E6EDF3'; ctx.font = 'bold 11px system-ui, sans-serif'
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText(pitcher.pitcherName, TOTAL_W / 2, HDR / 2 - 7)
+      ctx.fillStyle = '#9CA3AF'; ctx.font = '9px system-ui, sans-serif'
+      ctx.fillText(`${filterLabel} · ${pitchCount} pitches`, TOTAL_W / 2, HDR / 2 + 8)
 
-      // Serialize SVG and draw it
+      // ── SVG zone ──
       const svgStr = new XMLSerializer().serializeToString(svgRef.current)
       const svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' })
-      const url = URL.createObjectURL(svgBlob)
+      const svgUrl = URL.createObjectURL(svgBlob)
       await new Promise<void>(resolve => {
         const img = new Image()
-        img.onload = () => {
-          ctx.drawImage(img, PAD, HDR, W, H)
-          URL.revokeObjectURL(url)
-          resolve()
-        }
-        img.onerror = () => { URL.revokeObjectURL(url); resolve() }
-        img.src = url
+        img.onload = () => { ctx.drawImage(img, PAD, HDR, SVG_W, SVG_H); URL.revokeObjectURL(svgUrl); resolve() }
+        img.onerror = () => { URL.revokeObjectURL(svgUrl); resolve() }
+        img.src = svgUrl
       })
+
+      // ── Footer: samalytics logo + name ──
+      const LOGO_H = 14, LOGO_W = Math.round(LOGO_H * 989 / 623)
+      const footerY = HDR + SVG_H + (FOOTER - LOGO_H) / 2
+      ctx.fillStyle = '#4B5563'; ctx.font = '8px system-ui, sans-serif'
+      if (siteLogoImg) {
+        ctx.drawImage(siteLogoImg, TOTAL_W - PAD - LOGO_W, footerY, LOGO_W, LOGO_H)
+        ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+        ctx.fillText('samalytics', TOTAL_W - PAD - LOGO_W - 4, footerY + LOGO_H / 2)
+      } else {
+        ctx.textAlign = 'right'; ctx.textBaseline = 'middle'
+        ctx.fillText('samalytics', TOTAL_W - PAD, footerY + LOGO_H / 2)
+      }
 
       await new Promise<void>(resolve => {
         canvas.toBlob(async blob => {
@@ -1375,7 +1448,7 @@ function LiveGamePanel({ gamePk, awayAbbr, homeAbbr }: { gamePk: number; awayAbb
 
           {/* Pitcher game pitch map */}
           {live.gamePitches?.length > 0 && (
-            <GamePitchMap gamePitches={live.gamePitches} currentPitcherId={live.pitcherId} />
+            <GamePitchMap gamePitches={live.gamePitches} currentPitcherId={live.pitcherId} awayAbbr={live.awayAbbr} homeAbbr={live.homeAbbr} />
           )}
         </div>
       )}
