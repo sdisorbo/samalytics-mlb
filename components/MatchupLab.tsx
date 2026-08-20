@@ -244,6 +244,7 @@ type SwapTarget =
 
 interface GameState {
   gameId: number
+  gameDate: string
   awayTeamId: number
   homeTeamId: number
   awayTeamName: string
@@ -1954,7 +1955,7 @@ function MatchupCard({
               ? <span className="text-green-400">● {game.inningHalf === 'Top' ? '▲' : game.inningHalf === 'Bottom' ? '▼' : ''}{game.inning ?? ''} Live</span>
               : game.gameStatus === 'Final'
               ? <span className="text-538-muted">Final</span>
-              : <span className="text-538-muted">{game.gameDate ? new Date(game.gameDate).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }) : ''}</span>}
+              : <span className="text-538-muted">{new Date(game.gameDate).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' })}</span>}
           </span>
           <span className="text-2xs text-538-muted">
             {played ? 'Score' : sr ? 'Win probability' : ''}
@@ -2289,6 +2290,7 @@ export default function MatchupLab({
 
       return {
         gameId: sg.gamePk,
+        gameDate: sg.gameDate,
         awayTeamId: sg.awayTeamId,
         homeTeamId: sg.homeTeamId,
         awayTeamName: sg.awayTeamName,
