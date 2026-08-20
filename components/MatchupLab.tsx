@@ -2536,17 +2536,20 @@ export default function MatchupLab({
               </button>
             </div>
           )}
-          {games.map((game) => (
-            <MatchupCard
-              key={game.gameId}
-              game={game}
-              pitchers={pitchers}
-              players={players}
-              pitcherArsenals={pitcherArsenals}
-              standings={standings}
-              onUpdate={(updates) => updateGame(game.gameId, updates)}
-            />
-          ))}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {games.map((game) => (
+              <div key={game.gameId} className={game.expanded || game.breakdownOpen || game.liveOpen ? 'sm:col-span-2 lg:col-span-3' : ''}>
+                <MatchupCard
+                  game={game}
+                  pitchers={pitchers}
+                  players={players}
+                  pitcherArsenals={pitcherArsenals}
+                  standings={standings}
+                  onUpdate={(updates) => updateGame(game.gameId, updates)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
