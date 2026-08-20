@@ -1965,7 +1965,7 @@ function MatchupCard({
         {/* Away team row */}
         <div className="flex items-center gap-2.5 py-1.5">
           <img src={`https://www.mlbstatic.com/team-logos/${game.awayTeamId}.svg`} alt={game.awayTeamAbbr}
-            width={34} height={34} className="object-contain shrink-0"
+            className="object-contain shrink-0" style={{ width: 32, height: 32, minWidth: 32 }}
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
           <div className="min-w-0 flex-1">
             <div className="font-semibold text-sm text-538-text leading-tight">
@@ -2008,7 +2008,7 @@ function MatchupCard({
         {/* Home team row */}
         <div className="flex items-center gap-2.5 py-1.5">
           <img src={`https://www.mlbstatic.com/team-logos/${game.homeTeamId}.svg`} alt={game.homeTeamAbbr}
-            width={34} height={34} className="object-contain shrink-0"
+            className="object-contain shrink-0" style={{ width: 32, height: 32, minWidth: 32 }}
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
           <div className="min-w-0 flex-1">
             <div className="font-semibold text-sm text-538-text leading-tight">
