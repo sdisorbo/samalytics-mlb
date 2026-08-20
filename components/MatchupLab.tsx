@@ -1939,170 +1939,158 @@ function MatchupCard({
 
   const swapTarget = game.swapTarget
 
+  const played = (game.gameStatus === 'Final' || game.gameStatus === 'Live') && game.awayScore !== null && game.homeScore !== null
+  const awayWinPct = sr ? Math.round(sr.awayWinPct * 100) : null
+  const homeWinPct = sr ? Math.round(sr.homeWinPct * 100) : null
+  const awayLeading = played ? (game.awayScore as number) > (game.homeScore as number) : (awayWinPct ?? 50) >= 50
+
   return (
-    <div className="border border-538-border rounded-sm bg-surface overflow-hidden">
-      {/* Collapsed header */}
-      <div className="p-4">
-        {/* Teams row */}
-        <div className="flex items-center justify-between gap-2 mb-3">
-          {/* Away */}
-          <div className="flex items-center gap-2 flex-1 min-w-0">
-            <img
-              src={`https://www.mlbstatic.com/team-logos/${game.awayTeamId}.svg`}
-              alt={game.awayTeamAbbr}
-              className="w-8 h-8 object-contain flex-shrink-0"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-            />
-            <div className="min-w-0">
-              <div className="font-bold text-538-text text-sm leading-tight truncate">{game.awayTeamName}</div>
-              <div className="text-2xs text-538-muted leading-tight">
-                {game.awayPitcher.isTbd ? (
-                  <span className="text-amber-700">
-                    SP: TBD
-                  </span>
-                ) : (
-                  <span className="truncate block max-w-[140px] sm:max-w-none">SP: {game.awayPitcher.name}</span>
-                )}
-              </div>
+    <div className="border border-538-border rounded-xl bg-surface overflow-hidden">
+      <div className="p-3">
+        {/* Top row: status / time + label */}
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-2xs font-semibold">
+            {game.gameStatus === 'Live'
+              ? <span className="text-green-400">● {game.inningHalf === 'Top' ? '▲' : game.inningHalf === 'Bottom' ? '▼' : ''}{game.inning ?? ''} Live</span>
+              : game.gameStatus === 'Final'
+              ? <span className="text-538-muted">Final</span>
+              : <span className="text-538-muted">{game.time}</span>}
+          </span>
+          <span className="text-2xs text-538-muted">
+            {played ? 'Score' : sr ? 'Win probability' : ''}
+          </span>
+        </div>
+
+        {/* Away team row */}
+        <div className="flex items-center gap-2.5 py-1.5">
+          <img src={`https://www.mlbstatic.com/team-logos/${game.awayTeamId}.svg`} alt={game.awayTeamAbbr}
+            width={34} height={34} className="object-contain shrink-0"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+          <div className="min-w-0 flex-1">
+            <div className="font-semibold text-sm text-538-text leading-tight">
+              <span className="hidden sm:inline">{game.awayTeamName}</span>
+              <span className="sm:hidden">{game.awayTeamAbbr}</span>
+            </div>
+            <div className="text-2xs text-538-muted leading-tight">
+              {game.awayPitcher.isTbd
+                ? <span className="text-amber-600">SP: TBD</span>
+                : <span>SP: {game.awayPitcher.name}</span>}
+              <span className="mx-1 opacity-40">·</span>
+              Elo {awayElo.toFixed(0)}
+              <span className="ml-1">
+                <span className="text-538-green">W +{awayDelta.winDelta}</span>
+                <span className="text-538-muted"> / L {awayDelta.lossDelta}</span>
+              </span>
             </div>
           </div>
-
-          <div className="text-538-muted font-light text-lg px-2 flex-shrink-0">vs</div>
-
-          {/* Home */}
-          <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
-            <div className="min-w-0 text-right">
-              <div className="font-bold text-538-text text-sm leading-tight truncate">{game.homeTeamName}</div>
-              <div className="text-2xs text-538-muted leading-tight">
-                {game.homePitcher.isTbd ? (
-                  <span className="text-amber-700">
-                    SP: TBD
-                  </span>
-                ) : (
-                  <span className="truncate block max-w-[140px] sm:max-w-none text-right">SP: {game.homePitcher.name}</span>
-                )}
-              </div>
-            </div>
-            <img
-              src={`https://www.mlbstatic.com/team-logos/${game.homeTeamId}.svg`}
-              alt={game.homeTeamAbbr}
-              className="w-8 h-8 object-contain flex-shrink-0"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-            />
+          <div className="text-right shrink-0 w-14">
+            {played ? (
+              <span className={`text-xl font-black tabular-nums ${awayLeading ? 'text-538-text' : 'text-538-muted'}`}>
+                {game.awayScore}
+              </span>
+            ) : awayWinPct != null ? (
+              <span className={`text-xl font-black tabular-nums ${awayLeading ? 'text-538-orange' : 'text-538-muted'}`}>
+                {awayWinPct}%
+              </span>
+            ) : null}
           </div>
         </div>
 
-        {/* Sim results row */}
-        {sr ? (
-          <div
-            className="grid grid-cols-3 gap-2 mb-3 text-center cursor-pointer"
-            onClick={() => onUpdate({ breakdownOpen: true })}
-            title="Click to open game breakdown"
-          >
-            <div>
-              <div className="text-2xs text-538-muted uppercase tracking-wider mb-0.5">Away Win</div>
-              <div className="text-2xl font-black text-538-orange">{(sr.awayWinPct * 100).toFixed(0)}%</div>
-              <div className="text-2xs text-538-muted">±{(sr.confidenceInterval * 100).toFixed(1)}%</div>
-            </div>
-            <div>
-              {(game.gameStatus === 'Final' || game.gameStatus === 'Live') &&
-               game.awayScore !== null && game.homeScore !== null ? (
-                <>
-                  <div className="text-2xs uppercase tracking-wider mb-0.5 font-bold"
-                    style={{ color: game.gameStatus === 'Live' ? '#16a34a' : '#888' }}>
-                    {game.gameStatus === 'Live'
-                      ? `● ${game.inningHalf === 'Top' ? '▲' : game.inningHalf === 'Bottom' ? '▼' : ''}${game.inning ?? ''} Live`
-                      : 'Final'}
-                  </div>
-                  <div className="text-xl font-black text-538-text">
-                    {game.awayScore} – {game.homeScore}
-                  </div>
-                  {game.gameStatus === 'Live' && game.bases && (
-                    <div className="flex justify-center mt-1">
-                      <BaseDiamond bases={game.bases} outs={game.outs ?? 0} />
-                    </div>
-                  )}
-                  <div className="text-2xs text-538-muted mt-0.5">
-                    proj. {sr.avgAwayRuns.toFixed(1)} – {sr.avgHomeRuns.toFixed(1)}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="text-2xs text-538-muted uppercase tracking-wider mb-0.5">Proj. Score</div>
-                  <div className="text-base font-bold text-538-text mt-1">
-                    {sr.avgAwayRuns.toFixed(1)} — {sr.avgHomeRuns.toFixed(1)}
-                  </div>
-                </>
-              )}
-            </div>
-            <div>
-              <div className="text-2xs text-538-muted uppercase tracking-wider mb-0.5">Home Win</div>
-              <div className="text-2xl font-black text-538-orange">{(sr.homeWinPct * 100).toFixed(0)}%</div>
-              <div className="text-2xs text-538-muted">±{(sr.confidenceInterval * 100).toFixed(1)}%</div>
-            </div>
-          </div>
-        ) : (
-          <div className="flex items-center justify-center py-4 text-2xs text-538-muted">
-            Simulating…
+        {/* Win-prob bar */}
+        {!played && awayWinPct != null && (
+          <div className="h-1 rounded-full overflow-hidden my-0.5 flex" style={{ background: 'var(--color-border, #3D405B)' }}>
+            <div style={{ width: `${awayWinPct}%`, background: awayLeading ? '#F4845F' : 'var(--color-border, #3D405B)' }} />
+            <div style={{ width: `${homeWinPct}%`, background: !awayLeading ? '#F4845F' : 'var(--color-border, #3D405B)' }} />
           </div>
         )}
 
-        {/* ELO deltas */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-2xs mb-3 border-t border-538-border pt-2 gap-1">
-          <div className="flex gap-2 flex-wrap">
-            <span className="text-538-muted font-semibold">{game.awayTeamAbbr}</span>
-            <span className="text-538-muted">ELO {awayElo.toFixed(0)}</span>
-            <span className="text-538-border hidden sm:inline">·</span>
-            <span>W: <span className="font-bold text-538-green">+{awayDelta.winDelta}</span></span>
-            <span>L: <span className="font-bold text-538-red">{awayDelta.lossDelta}</span></span>
+        {/* Home team row */}
+        <div className="flex items-center gap-2.5 py-1.5">
+          <img src={`https://www.mlbstatic.com/team-logos/${game.homeTeamId}.svg`} alt={game.homeTeamAbbr}
+            width={34} height={34} className="object-contain shrink-0"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+          <div className="min-w-0 flex-1">
+            <div className="font-semibold text-sm text-538-text leading-tight">
+              <span className="hidden sm:inline">{game.homeTeamName}</span>
+              <span className="sm:hidden">{game.homeTeamAbbr}</span>
+              <span className="ml-1.5 text-2xs text-538-muted font-normal">(home)</span>
+            </div>
+            <div className="text-2xs text-538-muted leading-tight">
+              {game.homePitcher.isTbd
+                ? <span className="text-amber-600">SP: TBD</span>
+                : <span>SP: {game.homePitcher.name}</span>}
+              <span className="mx-1 opacity-40">·</span>
+              Elo {homeElo.toFixed(0)}
+              <span className="ml-1">
+                <span className="text-538-green">W +{homeDelta.winDelta}</span>
+                <span className="text-538-muted"> / L {homeDelta.lossDelta}</span>
+              </span>
+            </div>
           </div>
-          <div className="flex gap-2 flex-wrap sm:justify-end">
-            <span className="text-538-muted font-semibold">{game.homeTeamAbbr}</span>
-            <span className="text-538-muted">ELO {homeElo.toFixed(0)}</span>
-            <span className="text-538-border hidden sm:inline">·</span>
-            <span>W: <span className="font-bold text-538-green">+{homeDelta.winDelta}</span></span>
-            <span>L: <span className="font-bold text-538-red">{homeDelta.lossDelta}</span></span>
+          <div className="text-right shrink-0 w-14">
+            {played ? (
+              <span className={`text-xl font-black tabular-nums ${!awayLeading ? 'text-538-text' : 'text-538-muted'}`}>
+                {game.homeScore}
+              </span>
+            ) : homeWinPct != null ? (
+              <span className={`text-xl font-black tabular-nums ${!awayLeading ? 'text-538-orange' : 'text-538-muted'}`}>
+                {homeWinPct}%
+              </span>
+            ) : null}
           </div>
         </div>
 
+        {/* Live base diamond + proj score */}
+        {played && sr && (
+          <div className="flex items-center justify-between mt-1 px-0.5">
+            {game.gameStatus === 'Live' && game.bases
+              ? <BaseDiamond bases={game.bases} outs={game.outs ?? 0} />
+              : <span />}
+            <span className="text-2xs text-538-muted tabular-nums">
+              proj. {sr.avgAwayRuns.toFixed(1)} – {sr.avgHomeRuns.toFixed(1)}
+              {sr && <span className="ml-1 opacity-60">±{(sr.confidenceInterval * 100).toFixed(1)}%</span>}
+            </span>
+          </div>
+        )}
+
         {/* Action row */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-538-border flex-wrap">
           <button
             onClick={() => onUpdate({ breakdownOpen: true })}
-            className="text-2xs border rounded px-2.5 py-1.5 font-semibold transition-colors hover:opacity-80"
+            className="text-2xs border rounded px-2 py-1 font-semibold transition-colors hover:opacity-80"
             style={{ borderColor: '#1467EB', color: '#1467EB' }}
           >
-            Game Breakdown
+            Breakdown
           </button>
           {game.gameStatus === 'Live' && (
             <button
               onClick={() => onUpdate({ liveOpen: !game.liveOpen })}
-              className={`text-2xs border rounded px-2.5 py-1.5 font-semibold transition-colors ${game.liveOpen ? 'bg-green-900/30 border-green-500 text-green-400' : 'border-green-700 text-green-500 hover:bg-green-900/20'}`}
+              className={`text-2xs border rounded px-2 py-1 font-semibold transition-colors ${game.liveOpen ? 'bg-green-900/30 border-green-500 text-green-400' : 'border-green-700 text-green-500 hover:bg-green-900/20'}`}
             >
-              {game.liveOpen ? '● Following Live' : '● Follow Live'}
+              {game.liveOpen ? '● Live' : '● Follow Live'}
             </button>
           )}
           <button
             onClick={() => onUpdate({ swapTarget: swapTarget?.type === 'away-pitcher' ? null : { type: 'away-pitcher' } })}
-            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors hidden sm:block"
+            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors hidden sm:block"
           >
             {game.awayPitcher.isTbd ? '+ Away SP' : `Swap ${game.awayTeamAbbr} SP`}
           </button>
           <button
             onClick={() => onUpdate({ swapTarget: swapTarget?.type === 'home-pitcher' ? null : { type: 'home-pitcher' } })}
-            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors hidden sm:block"
+            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors hidden sm:block"
           >
             {game.homePitcher.isTbd ? '+ Home SP' : `Swap ${game.homeTeamAbbr} SP`}
           </button>
           <button
             onClick={handleSimulate}
-            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors ml-auto"
+            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:border-538-orange hover:text-538-orange transition-colors ml-auto"
           >
             Re-run
           </button>
           <button
             onClick={() => onUpdate({ expanded: !game.expanded })}
-            className="text-2xs border border-538-border rounded px-2 py-1.5 text-538-muted hover:bg-538-bg transition-colors flex items-center gap-1"
+            className="text-2xs border border-538-border rounded px-2 py-1 text-538-muted hover:bg-538-bg transition-colors flex items-center gap-1"
           >
             <span className={`inline-block transition-transform ${game.expanded ? 'rotate-180' : ''}`}>▼</span>
             <span className="hidden sm:inline">{game.expanded ? 'Collapse' : 'Details'}</span>
