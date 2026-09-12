@@ -23663,7 +23663,7 @@
         "opponent": "STL",
         "home": true,
         "actual_runs": 4,
-        "team_rv": -1.662,
+        "team_rv": -1.305,
         "batters": [
           {
             "name": "Tim Tawa",
@@ -23686,19 +23686,19 @@
             "rv": -0.016
           },
           {
+            "name": "Ketel Marte",
+            "pa": 3,
+            "rv": -0.148
+          },
+          {
             "name": "Corbin Carroll",
             "pa": 2,
             "rv": -0.412
           },
           {
-            "name": "Ketel Marte",
-            "pa": 4,
-            "rv": -0.48
-          },
-          {
             "name": "Max Kepler",
-            "pa": 4,
-            "rv": -0.695
+            "pa": 3,
+            "rv": -0.67
           },
           {
             "name": "Nolan Arenado",
@@ -29283,7 +29283,7 @@
         "opponent": "NYY",
         "home": true,
         "actual_runs": 2,
-        "team_rv": -0.048,
+        "team_rv": -0.291,
         "batters": [
           {
             "name": "Samuel Basallo",
@@ -29326,14 +29326,14 @@
             "rv": -0.478
           },
           {
-            "name": "Colton Cowser",
-            "pa": 3,
-            "rv": -0.749
-          },
-          {
             "name": "Adley Rutschman",
             "pa": 4,
             "rv": -0.919
+          },
+          {
+            "name": "Colton Cowser",
+            "pa": 4,
+            "rv": -0.992
           }
         ]
       },
@@ -35008,7 +35008,7 @@
         "opponent": "ATH",
         "home": false,
         "actual_runs": 4,
-        "team_rv": -0.961,
+        "team_rv": -0.807,
         "batters": [
           {
             "name": "Colton Cowser",
@@ -35021,14 +35021,14 @@
             "rv": 0.475
           },
           {
+            "name": "Carlos Narváez",
+            "pa": 3,
+            "rv": 0.471
+          },
+          {
             "name": "Dylan Beavers",
             "pa": 2,
             "rv": 0.424
-          },
-          {
-            "name": "Carlos Narváez",
-            "pa": 4,
-            "rv": 0.317
           },
           {
             "name": "Blaze Alexander",
@@ -41423,7 +41423,7 @@
         "opponent": "TB",
         "home": true,
         "actual_runs": 10,
-        "team_rv": 5.254,
+        "team_rv": 4.86,
         "batters": [
           {
             "name": "Carlos Narváez",
@@ -41436,14 +41436,14 @@
             "rv": 1.899
           },
           {
-            "name": "Caleb Durbin",
-            "pa": 4,
-            "rv": 1.067
-          },
-          {
             "name": "Anthony Seigler",
             "pa": 2,
             "rv": 0.936
+          },
+          {
+            "name": "Caleb Durbin",
+            "pa": 3,
+            "rv": 0.673
           },
           {
             "name": "Ceddanne Rafaela",
@@ -50388,7 +50388,7 @@
         "opponent": "MIN",
         "home": true,
         "actual_runs": 2,
-        "team_rv": -2.704,
+        "team_rv": -2.483,
         "batters": [
           {
             "name": "Nico Hoerner",
@@ -50416,6 +50416,11 @@
             "rv": -0.447
           },
           {
+            "name": "Alex Bregman",
+            "pa": 2,
+            "rv": -0.519
+          },
+          {
             "name": "Ian Happ",
             "pa": 2,
             "rv": -0.562
@@ -50424,11 +50429,6 @@
             "name": "Dansby Swanson",
             "pa": 3,
             "rv": -0.657
-          },
-          {
-            "name": "Alex Bregman",
-            "pa": 3,
-            "rv": -0.74
           },
           {
             "name": "Carson Kelly",
@@ -59258,7 +59258,7 @@
         "opponent": "COL",
         "home": false,
         "actual_runs": 7,
-        "team_rv": -0.904,
+        "team_rv": -0.603,
         "batters": [
           {
             "name": "Elly De La Cruz",
@@ -59291,6 +59291,11 @@
             "rv": -0.39
           },
           {
+            "name": "TJ Friedl",
+            "pa": 2,
+            "rv": -0.531
+          },
+          {
             "name": "Spencer Steer",
             "pa": 2,
             "rv": -0.568
@@ -59304,11 +59309,6 @@
             "name": "Ke'Bryan Hayes",
             "pa": 3,
             "rv": -0.758
-          },
-          {
-            "name": "TJ Friedl",
-            "pa": 3,
-            "rv": -0.832
           }
         ]
       },
@@ -77433,17 +77433,12 @@
         "opponent": "CIN",
         "home": true,
         "actual_runs": 2,
-        "team_rv": -1.523,
+        "team_rv": -1.881,
         "batters": [
           {
             "name": "Willi Castro",
             "pa": 3,
             "rv": 1.657
-          },
-          {
-            "name": "Cole Carrigg",
-            "pa": 1,
-            "rv": 0.358
           },
           {
             "name": "Jake McCarthy",
@@ -79628,7 +79623,7 @@
         "opponent": "ATL",
         "home": false,
         "actual_runs": 4,
-        "team_rv": 0.378,
+        "team_rv": 0.552,
         "batters": [
           {
             "name": "Zac Veen",
@@ -79671,14 +79666,14 @@
             "rv": -0.262
           },
           {
+            "name": "Willi Castro",
+            "pa": 4,
+            "rv": -0.323
+          },
+          {
             "name": "Connor Norby",
             "pa": 2,
             "rv": -0.422
-          },
-          {
-            "name": "Willi Castro",
-            "pa": 5,
-            "rv": -0.497
           }
         ]
       },
@@ -82913,7 +82908,7 @@
         "opponent": "KC",
         "home": true,
         "actual_runs": 6,
-        "team_rv": 2.973,
+        "team_rv": 2.669,
         "batters": [
           {
             "name": "Derek Hill",
@@ -82944,6 +82939,11 @@
             "name": "Andrew Benintendi",
             "pa": 3,
             "rv": -0.27
+          },
+          {
+            "name": "Edgar Quero",
+            "pa": 1,
+            "rv": -0.304
           },
           {
             "name": "Randal Grichuk",
@@ -97938,7 +97938,7 @@
         "opponent": "LAD",
         "home": true,
         "actual_runs": 1,
-        "team_rv": -2.084,
+        "team_rv": -1.863,
         "batters": [
           {
             "name": "Max Clark",
@@ -97954,6 +97954,11 @@
             "name": "Gleyber Torres",
             "pa": 2,
             "rv": 0.17
+          },
+          {
+            "name": "Ben Malgeri",
+            "pa": 2,
+            "rv": -0.457
           },
           {
             "name": "Javier Báez",
@@ -97974,11 +97979,6 @@
             "name": "Hao-Yu Lee",
             "pa": 2,
             "rv": -0.676
-          },
-          {
-            "name": "Ben Malgeri",
-            "pa": 3,
-            "rv": -0.678
           },
           {
             "name": "Dillon Dingler",
@@ -104753,7 +104753,7 @@
         "opponent": "BAL",
         "home": true,
         "actual_runs": 2,
-        "team_rv": -1.299,
+        "team_rv": -1.009,
         "batters": [
           {
             "name": "Yordan Alvarez",
@@ -104776,6 +104776,11 @@
             "rv": -0.147
           },
           {
+            "name": "Christian Walker",
+            "pa": 4,
+            "rv": -0.171
+          },
+          {
             "name": "Isaac Paredes",
             "pa": 3,
             "rv": -0.265
@@ -104784,11 +104789,6 @@
             "name": "Christian Vázquez",
             "pa": 1,
             "rv": -0.327
-          },
-          {
-            "name": "Christian Walker",
-            "pa": 5,
-            "rv": -0.461
           },
           {
             "name": "Cam Smith",
@@ -113568,17 +113568,17 @@
         "opponent": "SD",
         "home": true,
         "actual_runs": 7,
-        "team_rv": 0.364,
+        "team_rv": 0.017,
         "batters": [
           {
-            "name": "Carter Jensen",
-            "pa": 3,
-            "rv": 1.69
+            "name": "Lane Thomas",
+            "pa": 2,
+            "rv": 1.26
           },
           {
-            "name": "Lane Thomas",
-            "pa": 3,
-            "rv": 1.042
+            "name": "Carter Jensen",
+            "pa": 2,
+            "rv": 1.125
           },
           {
             "name": "Michael Massey",
@@ -122403,7 +122403,7 @@
         "opponent": "DET",
         "home": true,
         "actual_runs": 1,
-        "team_rv": -1.344,
+        "team_rv": -1.128,
         "batters": [
           {
             "name": "Vaughn Grissom",
@@ -122441,6 +122441,11 @@
             "rv": -0.274
           },
           {
+            "name": "Logan O'Hoppe",
+            "pa": 2,
+            "rv": -0.5
+          },
+          {
             "name": "Josh Lowe",
             "pa": 3,
             "rv": -0.556
@@ -122454,11 +122459,6 @@
             "name": "Jo Adell",
             "pa": 3,
             "rv": -0.692
-          },
-          {
-            "name": "Logan O'Hoppe",
-            "pa": 3,
-            "rv": -0.716
           }
         ]
       },
@@ -149368,7 +149368,7 @@
         "opponent": "MIA",
         "home": true,
         "actual_runs": 2,
-        "team_rv": -0.645,
+        "team_rv": -0.333,
         "batters": [
           {
             "name": "Joey Ortiz",
@@ -149382,8 +149382,8 @@
           },
           {
             "name": "Christian Yelich",
-            "pa": 4,
-            "rv": 0.199
+            "pa": 3,
+            "rv": 0.511
           },
           {
             "name": "William Contreras",
@@ -202253,8 +202253,13 @@
         "opponent": "KC",
         "home": false,
         "actual_runs": 6,
-        "team_rv": -1.116,
+        "team_rv": -0.924,
         "batters": [
+          {
+            "name": "Luis Campusano",
+            "pa": 2,
+            "rv": 0.718
+          },
           {
             "name": "Fernando Tatis Jr.",
             "pa": 2,
@@ -202264,11 +202269,6 @@
             "name": "Miguel Andujar",
             "pa": 2,
             "rv": 0.593
-          },
-          {
-            "name": "Luis Campusano",
-            "pa": 3,
-            "rv": 0.526
           },
           {
             "name": "Ty France",
@@ -219788,12 +219788,12 @@
         "opponent": "SEA",
         "home": false,
         "actual_runs": 7,
-        "team_rv": 1.634,
+        "team_rv": 0.878,
         "batters": [
           {
             "name": "Bryce Eldridge",
-            "pa": 3,
-            "rv": 1.859
+            "pa": 2,
+            "rv": 2.093
           },
           {
             "name": "Drew Cavanaugh",
@@ -219804,11 +219804,6 @@
             "name": "Jung Hoo Lee",
             "pa": 3,
             "rv": 0.317
-          },
-          {
-            "name": "Willy Adames",
-            "pa": 5,
-            "rv": 0.145
           },
           {
             "name": "Heliot Ramos",
@@ -219829,6 +219824,11 @@
             "name": "Rafael Devers",
             "pa": 3,
             "rv": -0.544
+          },
+          {
+            "name": "Willy Adames",
+            "pa": 4,
+            "rv": -0.845
           },
           {
             "name": "Drew Gilbert",
@@ -234348,7 +234348,7 @@
         "opponent": "TOR",
         "home": false,
         "actual_runs": 7,
-        "team_rv": 2.643,
+        "team_rv": 2.108,
         "batters": [
           {
             "name": "Jonny DeLuca",
@@ -234372,8 +234372,8 @@
           },
           {
             "name": "Ben Williamson",
-            "pa": 4,
-            "rv": 0.382
+            "pa": 5,
+            "rv": 0.151
           },
           {
             "name": "Cedric Mullins",
@@ -234397,8 +234397,8 @@
           },
           {
             "name": "Yandy Díaz",
-            "pa": 5,
-            "rv": -0.854
+            "pa": 6,
+            "rv": -1.158
           }
         ]
       },
@@ -237553,7 +237553,7 @@
         "opponent": "BOS",
         "home": false,
         "actual_runs": 0,
-        "team_rv": -3.909,
+        "team_rv": -3.606,
         "batters": [
           {
             "name": "Taylor Walls",
@@ -237591,14 +237591,14 @@
             "rv": -0.657
           },
           {
+            "name": "Chandler Simpson",
+            "pa": 2,
+            "rv": -0.693
+          },
+          {
             "name": "Yandy Díaz",
             "pa": 3,
             "rv": -0.798
-          },
-          {
-            "name": "Chandler Simpson",
-            "pa": 3,
-            "rv": -0.996
           }
         ]
       },
@@ -239888,12 +239888,12 @@
         "opponent": "SD",
         "home": true,
         "actual_runs": 9,
-        "team_rv": 7.074,
+        "team_rv": 7.308,
         "batters": [
           {
             "name": "Yandy Díaz",
-            "pa": 3,
-            "rv": 3.042
+            "pa": 2,
+            "rv": 3.276
           },
           {
             "name": "Cedric Mullins",
@@ -246658,7 +246658,7 @@
         "opponent": "ATL",
         "home": false,
         "actual_runs": 1,
-        "team_rv": -3.094,
+        "team_rv": -2.876,
         "batters": [
           {
             "name": "Brandon Nimmo",
@@ -246707,8 +246707,8 @@
           },
           {
             "name": "Josh Jung",
-            "pa": 4,
-            "rv": -0.901
+            "pa": 3,
+            "rv": -0.683
           },
           {
             "name": "Jake Burger",
@@ -255923,13 +255923,8 @@
         "opponent": "CWS",
         "home": true,
         "actual_runs": 4,
-        "team_rv": 3.446,
+        "team_rv": 0.99,
         "batters": [
-          {
-            "name": "George Springer",
-            "pa": 3,
-            "rv": 1.983
-          },
           {
             "name": "Ernie Clement",
             "pa": 4,
@@ -255969,6 +255964,11 @@
             "name": "Jonatan Clase",
             "pa": 1,
             "rv": -0.231
+          },
+          {
+            "name": "George Springer",
+            "pa": 2,
+            "rv": -0.473
           },
           {
             "name": "Daulton Varsho",
@@ -261648,7 +261648,7 @@
         "opponent": "CIN",
         "home": false,
         "actual_runs": 10,
-        "team_rv": 3.988,
+        "team_rv": 5.575,
         "batters": [
           {
             "name": "Luis García Jr.",
@@ -261659,6 +261659,11 @@
             "name": "Daylen Lile",
             "pa": 4,
             "rv": 1.115
+          },
+          {
+            "name": "Brady House",
+            "pa": 5,
+            "rv": 1.114
           },
           {
             "name": "James Wood",
@@ -261689,11 +261694,6 @@
             "name": "José Tena",
             "pa": 5,
             "rv": -0.415
-          },
-          {
-            "name": "Brady House",
-            "pa": 4,
-            "rv": -0.473
           }
         ]
       },
@@ -265083,17 +265083,17 @@
         "opponent": "ATH",
         "home": false,
         "actual_runs": 23,
-        "team_rv": 8.674,
+        "team_rv": 8.302,
         "batters": [
-          {
-            "name": "Curtis Mead",
-            "pa": 4,
-            "rv": 3.006
-          },
           {
             "name": "Andrés Chaparro",
             "pa": 4,
             "rv": 2.777
+          },
+          {
+            "name": "Curtis Mead",
+            "pa": 3,
+            "rv": 2.634
           },
           {
             "name": "Daylen Lile",
