@@ -1,117 +1,117 @@
 {
-  "last_updated": "2026-09-23T14:54:32",
+  "last_updated": "2026-09-24T06:13:12",
   "simulations": 1000,
   "results": [
-    {
-      "team": "TB",
-      "playoff_probability": 1.0,
-      "win_wildcard": 0.0,
-      "win_ds": 0.696,
-      "win_cs": 0.502,
-      "win_ws": 0.265
-    },
     {
       "team": "MIL",
       "playoff_probability": 1.0,
       "win_wildcard": 0.0,
-      "win_ds": 0.628,
-      "win_cs": 0.371,
-      "win_ws": 0.233
+      "win_ds": 0.669,
+      "win_cs": 0.422,
+      "win_ws": 0.285
+    },
+    {
+      "team": "TB",
+      "playoff_probability": 1.0,
+      "win_wildcard": 0.0,
+      "win_ds": 0.657,
+      "win_cs": 0.473,
+      "win_ws": 0.229
     },
     {
       "team": "LAD",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.0,
-      "win_ds": 0.555,
-      "win_cs": 0.278,
-      "win_ws": 0.172
-    },
-    {
-      "team": "SD",
-      "playoff_probability": 0.992,
-      "win_wildcard": 0.569,
-      "win_ds": 0.268,
-      "win_cs": 0.139,
-      "win_ws": 0.076
+      "win_wildcard": 0.001,
+      "win_ds": 0.587,
+      "win_cs": 0.263,
+      "win_ws": 0.149
     },
     {
       "team": "NYY",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.635,
-      "win_ds": 0.297,
-      "win_cs": 0.156,
-      "win_ws": 0.066
+      "win_wildcard": 0.665,
+      "win_ds": 0.348,
+      "win_cs": 0.196,
+      "win_ws": 0.09
+    },
+    {
+      "team": "SD",
+      "playoff_probability": 1.0,
+      "win_wildcard": 0.632,
+      "win_ds": 0.276,
+      "win_cs": 0.14,
+      "win_ws": 0.081
     },
     {
       "team": "CLE",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.166,
-      "win_ds": 0.44,
-      "win_cs": 0.172,
-      "win_ws": 0.052
+      "win_wildcard": 0.144,
+      "win_ds": 0.444,
+      "win_cs": 0.175,
+      "win_ws": 0.05
     },
     {
       "team": "ATL",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.573,
-      "win_ds": 0.241,
-      "win_cs": 0.096,
-      "win_ws": 0.042
+      "win_wildcard": 0.594,
+      "win_ds": 0.239,
+      "win_cs": 0.09,
+      "win_ws": 0.044
     },
     {
       "team": "PHI",
-      "playoff_probability": 1.0,
+      "playoff_probability": 0.997,
       "win_wildcard": 0.45,
-      "win_ds": 0.179,
-      "win_cs": 0.075,
-      "win_ws": 0.038
+      "win_ds": 0.148,
+      "win_cs": 0.058,
+      "win_ws": 0.035
     },
     {
       "team": "BOS",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.378,
-      "win_ds": 0.14,
-      "win_cs": 0.059,
+      "win_wildcard": 0.336,
+      "win_ds": 0.144,
+      "win_cs": 0.067,
       "win_ws": 0.017
     },
     {
       "team": "CHC",
-      "playoff_probability": 1.0,
-      "win_wildcard": 0.405,
-      "win_ds": 0.128,
-      "win_cs": 0.04,
-      "win_ws": 0.014
-    },
-    {
-      "team": "HOU",
-      "playoff_probability": 0.693,
-      "win_wildcard": 0.354,
-      "win_ds": 0.147,
-      "win_cs": 0.036,
-      "win_ws": 0.011
+      "playoff_probability": 0.995,
+      "win_wildcard": 0.32,
+      "win_ds": 0.081,
+      "win_cs": 0.027,
+      "win_ws": 0.009
     },
     {
       "team": "CWS",
       "playoff_probability": 1.0,
-      "win_wildcard": 0.307,
-      "win_ds": 0.218,
-      "win_cs": 0.067,
-      "win_ws": 0.011
+      "win_wildcard": 0.317,
+      "win_ds": 0.189,
+      "win_cs": 0.043,
+      "win_ws": 0.005
+    },
+    {
+      "team": "HOU",
+      "playoff_probability": 0.71,
+      "win_wildcard": 0.382,
+      "win_ds": 0.155,
+      "win_cs": 0.034,
+      "win_ws": 0.003
     },
     {
       "team": "TEX",
-      "playoff_probability": 0.307,
-      "win_wildcard": 0.16,
-      "win_ds": 0.062,
-      "win_cs": 0.008,
+      "playoff_probability": 0.29,
+      "win_wildcard": 0.156,
+      "win_ds": 0.063,
+      "win_cs": 0.012,
       "win_ws": 0.003
     },
     {
       "team": "AZ",
       "playoff_probability": 0.008,
       "win_wildcard": 0.003,
-      "win_ds": 0.001,
-      "win_cs": 0.001,
+      "win_ds": 0.0,
+      "win_cs": 0.0,
       "win_ws": 0.0
     }
   ]
