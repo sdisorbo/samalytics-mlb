@@ -569,7 +569,7 @@
     "fip_percentile": 95,
     "k9_percentile": 99,
     "bb9_percentile": 59,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 696146,
@@ -1933,7 +1933,7 @@
     "fip_percentile": 85,
     "k9_percentile": 77,
     "bb9_percentile": 29,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 663542,
@@ -2457,7 +2457,7 @@
     "strikeouts": 49,
     "walks": 23,
     "home_runs_allowed": 3,
-    "era_percentile": 63,
+    "era_percentile": 62,
     "fip_percentile": 79,
     "k9_percentile": 21,
     "bb9_percentile": 56,
@@ -3300,6 +3300,28 @@
     "whip_percentile": 57
   },
   {
+    "player_id": 677865,
+    "name": "Justin Bruihl",
+    "team": "STL",
+    "team_name": "St. Louis Cardinals",
+    "division": "National League Central",
+    "era": 3.59,
+    "fip": 3.49,
+    "xfip": null,
+    "k_per_9": 6.14,
+    "bb_per_9": 3.24,
+    "whip": 1.33,
+    "innings_pitched": 77.7,
+    "strikeouts": 53,
+    "walks": 28,
+    "home_runs_allowed": 4,
+    "era_percentile": 68,
+    "fip_percentile": 72,
+    "k9_percentile": 9,
+    "bb9_percentile": 56,
+    "whip_percentile": 49
+  },
+  {
     "player_id": 681517,
     "name": "Kyle Leahy",
     "team": "STL",
@@ -3320,28 +3342,6 @@
     "k9_percentile": 47,
     "bb9_percentile": 78,
     "whip_percentile": 47
-  },
-  {
-    "player_id": 677865,
-    "name": "Justin Bruihl",
-    "team": "STL",
-    "team_name": "St. Louis Cardinals",
-    "division": "National League Central",
-    "era": 3.71,
-    "fip": 3.49,
-    "xfip": null,
-    "k_per_9": 6.14,
-    "bb_per_9": 3.24,
-    "whip": 1.33,
-    "innings_pitched": 77.7,
-    "strikeouts": 53,
-    "walks": 28,
-    "home_runs_allowed": 4,
-    "era_percentile": 62,
-    "fip_percentile": 72,
-    "k9_percentile": 9,
-    "bb9_percentile": 56,
-    "whip_percentile": 49
   },
   {
     "player_id": 669165,
@@ -3891,7 +3891,7 @@
     "fip_percentile": 67,
     "k9_percentile": 66,
     "bb9_percentile": 32,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 668933,
@@ -4067,7 +4067,7 @@
     "fip_percentile": 66,
     "k9_percentile": 57,
     "bb9_percentile": 76,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 689266,
@@ -5070,7 +5070,7 @@
     "xfip": null,
     "k_per_9": 10.8,
     "bb_per_9": 2.95,
-    "whip": 1.25,
+    "whip": 1.23,
     "innings_pitched": 36.7,
     "strikeouts": 44,
     "walks": 12,
@@ -5079,7 +5079,7 @@
     "fip_percentile": 58,
     "k9_percentile": 88,
     "bb9_percentile": 66,
-    "whip_percentile": 61
+    "whip_percentile": 65
   },
   {
     "player_id": 656427,
@@ -5189,7 +5189,7 @@
     "fip_percentile": 56,
     "k9_percentile": 55,
     "bb9_percentile": 64,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 702070,
@@ -5453,7 +5453,7 @@
     "fip_percentile": 54,
     "k9_percentile": 17,
     "bb9_percentile": 67,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 593974,
@@ -6377,7 +6377,7 @@
     "fip_percentile": 46,
     "k9_percentile": 37,
     "bb9_percentile": 33,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 605447,
@@ -6901,7 +6901,7 @@
     "strikeouts": 97,
     "walks": 47,
     "home_runs_allowed": 12,
-    "era_percentile": 63,
+    "era_percentile": 62,
     "fip_percentile": 42,
     "k9_percentile": 57,
     "bb9_percentile": 25,
@@ -6923,7 +6923,7 @@
     "strikeouts": 73,
     "walks": 26,
     "home_runs_allowed": 12,
-    "era_percentile": 63,
+    "era_percentile": 62,
     "fip_percentile": 42,
     "k9_percentile": 37,
     "bb9_percentile": 72,
@@ -6993,7 +6993,7 @@
     "fip_percentile": 41,
     "k9_percentile": 3,
     "bb9_percentile": 90,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 664141,
@@ -7015,7 +7015,7 @@
     "fip_percentile": 41,
     "k9_percentile": 6,
     "bb9_percentile": 37,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 669372,
@@ -7037,7 +7037,7 @@
     "fip_percentile": 41,
     "k9_percentile": 36,
     "bb9_percentile": 42,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 690928,
@@ -7895,7 +7895,7 @@
     "fip_percentile": 34,
     "k9_percentile": 69,
     "bb9_percentile": 23,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 804267,
@@ -8159,7 +8159,7 @@
     "fip_percentile": 31,
     "k9_percentile": 5,
     "bb9_percentile": 94,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 605288,
@@ -8753,7 +8753,7 @@
     "fip_percentile": 26,
     "k9_percentile": 7,
     "bb9_percentile": 37,
-    "whip_percentile": 64
+    "whip_percentile": 63
   },
   {
     "player_id": 663969,
