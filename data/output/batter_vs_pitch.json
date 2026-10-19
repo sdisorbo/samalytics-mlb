@@ -271,18 +271,6 @@
         "run_value_per_100": -1.2
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 10,
-        "woba": 0.2,
-        "xwoba": 0.25,
-        "ba": 0.1,
-        "slg": 0.4,
-        "whiff_pct": 46.2,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -1.1
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 10,
@@ -293,6 +281,18 @@
         "whiff_pct": 17.4,
         "hard_hit_pct": 33.3,
         "run_value_per_100": -1.6
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 10,
+        "woba": 0.2,
+        "xwoba": 0.25,
+        "ba": 0.1,
+        "slg": 0.4,
+        "whiff_pct": 46.2,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -1.1
       }
     ]
   },
@@ -500,7 +500,7 @@
         "slg": 0.217,
         "whiff_pct": 17.4,
         "hard_hit_pct": 41.2,
-        "run_value_per_100": -1.8
+        "run_value_per_100": -1.9
       },
       {
         "pitch_type": "FC",
@@ -1413,18 +1413,6 @@
         "run_value_per_100": 1.0
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 57,
-        "woba": 0.447,
-        "xwoba": 0.318,
-        "ba": 0.286,
-        "slg": 0.633,
-        "whiff_pct": 24.4,
-        "hard_hit_pct": 29.7,
-        "run_value_per_100": 2.5
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 57,
@@ -1435,6 +1423,18 @@
         "whiff_pct": 21.9,
         "hard_hit_pct": 31.7,
         "run_value_per_100": 2.8
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 57,
+        "woba": 0.447,
+        "xwoba": 0.318,
+        "ba": 0.286,
+        "slg": 0.633,
+        "whiff_pct": 24.4,
+        "hard_hit_pct": 29.7,
+        "run_value_per_100": 2.5
       },
       {
         "pitch_type": "FC",
@@ -1726,7 +1726,7 @@
         "slg": 0.091,
         "whiff_pct": 33.3,
         "hard_hit_pct": 28.6,
-        "run_value_per_100": -8.2
+        "run_value_per_100": -8.1
       }
     ]
   },
@@ -1839,18 +1839,6 @@
         "run_value_per_100": -2.3
       },
       {
-        "pitch_type": "SI",
-        "pitch_name": "Sinker",
-        "pa": 42,
-        "woba": 0.29,
-        "xwoba": 0.34,
-        "ba": 0.211,
-        "slg": 0.289,
-        "whiff_pct": 12.8,
-        "hard_hit_pct": 40.6,
-        "run_value_per_100": -1.4
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 42,
@@ -1861,6 +1849,18 @@
         "whiff_pct": 33.7,
         "hard_hit_pct": 27.8,
         "run_value_per_100": 0.9
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 42,
+        "woba": 0.29,
+        "xwoba": 0.34,
+        "ba": 0.211,
+        "slg": 0.289,
+        "whiff_pct": 12.8,
+        "hard_hit_pct": 40.6,
+        "run_value_per_100": -1.4
       },
       {
         "pitch_type": "SL",
@@ -2265,18 +2265,6 @@
         "run_value_per_100": -1.8
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
-        "pa": 25,
-        "woba": 0.374,
-        "xwoba": 0.311,
-        "ba": 0.4,
-        "slg": 0.44,
-        "whiff_pct": 13.3,
-        "hard_hit_pct": 26.1,
-        "run_value_per_100": 0.5
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 25,
@@ -2287,6 +2275,18 @@
         "whiff_pct": 28.6,
         "hard_hit_pct": 50.0,
         "run_value_per_100": 0.2
+      },
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "pa": 25,
+        "woba": 0.374,
+        "xwoba": 0.311,
+        "ba": 0.4,
+        "slg": 0.44,
+        "whiff_pct": 13.3,
+        "hard_hit_pct": 26.1,
+        "run_value_per_100": 0.5
       },
       {
         "pitch_type": "CU",
@@ -2344,18 +2344,6 @@
         "run_value_per_100": -0.9
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 27,
-        "woba": 0.402,
-        "xwoba": 0.347,
-        "ba": 0.2,
-        "slg": 0.4,
-        "whiff_pct": 51.1,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 2.3
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 27,
@@ -2366,6 +2354,18 @@
         "whiff_pct": 46.9,
         "hard_hit_pct": 30.8,
         "run_value_per_100": -0.5
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 27,
+        "woba": 0.402,
+        "xwoba": 0.347,
+        "ba": 0.2,
+        "slg": 0.4,
+        "whiff_pct": 51.1,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 2.3
       },
       {
         "pitch_type": "FC",
@@ -2777,7 +2777,7 @@
         "slg": 0.15,
         "whiff_pct": 37.0,
         "hard_hit_pct": 36.4,
-        "run_value_per_100": -3.4
+        "run_value_per_100": -3.5
       }
     ]
   },
@@ -2868,7 +2868,7 @@
         "slg": 0.3,
         "whiff_pct": 33.3,
         "hard_hit_pct": 0.0,
-        "run_value_per_100": -2.0
+        "run_value_per_100": -1.9
       }
     ]
   },
@@ -2981,18 +2981,6 @@
         "run_value_per_100": -1.6
       },
       {
-        "pitch_type": "FF",
-        "pitch_name": "4-Seam Fastball",
-        "pa": 17,
-        "woba": 0.497,
-        "xwoba": 0.361,
-        "ba": 0.438,
-        "slg": 0.688,
-        "whiff_pct": 15.0,
-        "hard_hit_pct": 53.8,
-        "run_value_per_100": 4.1
-      },
-      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 17,
@@ -3003,6 +2991,18 @@
         "whiff_pct": 24.1,
         "hard_hit_pct": 33.3,
         "run_value_per_100": -1.5
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 17,
+        "woba": 0.497,
+        "xwoba": 0.361,
+        "ba": 0.438,
+        "slg": 0.688,
+        "whiff_pct": 15.0,
+        "hard_hit_pct": 53.8,
+        "run_value_per_100": 4.1
       },
       {
         "pitch_type": "CH",
@@ -3491,18 +3491,6 @@
         "run_value_per_100": -4.6
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 13,
-        "woba": 0.0,
-        "xwoba": 0.088,
-        "ba": 0.0,
-        "slg": 0.0,
-        "whiff_pct": 37.5,
-        "hard_hit_pct": 0.0,
-        "run_value_per_100": -5.2
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 13,
@@ -3513,6 +3501,18 @@
         "whiff_pct": 34.6,
         "hard_hit_pct": 20.0,
         "run_value_per_100": -5.4
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 13,
+        "woba": 0.0,
+        "xwoba": 0.088,
+        "ba": 0.0,
+        "slg": 0.0,
+        "whiff_pct": 37.5,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": -5.2
       }
     ]
   },
@@ -3874,18 +3874,6 @@
         "run_value_per_100": 1.9
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 10,
-        "woba": 0.27,
-        "xwoba": 0.216,
-        "ba": 0.3,
-        "slg": 0.3,
-        "whiff_pct": 42.1,
-        "hard_hit_pct": 0.0,
-        "run_value_per_100": 0.1
-      },
-      {
         "pitch_type": "CU",
         "pitch_name": "Curveball",
         "pa": 10,
@@ -3896,6 +3884,18 @@
         "whiff_pct": 18.2,
         "hard_hit_pct": 0.0,
         "run_value_per_100": 3.1
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 10,
+        "woba": 0.27,
+        "xwoba": 0.216,
+        "ba": 0.3,
+        "slg": 0.3,
+        "whiff_pct": 42.1,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": 0.1
       }
     ]
   },
@@ -3941,18 +3941,6 @@
         "run_value_per_100": 3.3
       },
       {
-        "pitch_type": "SI",
-        "pitch_name": "Sinker",
-        "pa": 10,
-        "woba": 0.55,
-        "xwoba": 0.568,
-        "ba": 0.429,
-        "slg": 0.714,
-        "whiff_pct": 4.5,
-        "hard_hit_pct": 83.3,
-        "run_value_per_100": 0.7
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 10,
@@ -3963,6 +3951,18 @@
         "whiff_pct": 11.8,
         "hard_hit_pct": 14.3,
         "run_value_per_100": -1.2
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 10,
+        "woba": 0.55,
+        "xwoba": 0.568,
+        "ba": 0.429,
+        "slg": 0.714,
+        "whiff_pct": 4.5,
+        "hard_hit_pct": 83.3,
+        "run_value_per_100": 0.7
       }
     ]
   },
@@ -4230,7 +4230,7 @@
         "pitch_name": "Split-Finger",
         "pa": 26,
         "woba": 0.331,
-        "xwoba": 0.368,
+        "xwoba": 0.369,
         "ba": 0.292,
         "slg": 0.292,
         "whiff_pct": 31.0,
@@ -4273,7 +4273,7 @@
         "pitch_name": "Sinker",
         "pa": 12,
         "woba": 0.371,
-        "xwoba": 0.321,
+        "xwoba": 0.322,
         "ba": 0.3,
         "slg": 0.4,
         "whiff_pct": 0.0,
@@ -4994,7 +4994,7 @@
         "slg": 0.378,
         "whiff_pct": 23.3,
         "hard_hit_pct": 54.8,
-        "run_value_per_100": -0.1
+        "run_value_per_100": -0.2
       },
       {
         "pitch_type": "FS",
@@ -6871,18 +6871,6 @@
         "run_value_per_100": -0.5
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 39,
-        "woba": 0.189,
-        "xwoba": 0.273,
-        "ba": 0.162,
-        "slg": 0.243,
-        "whiff_pct": 20.0,
-        "hard_hit_pct": 25.0,
-        "run_value_per_100": -2.2
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 39,
@@ -6893,6 +6881,18 @@
         "whiff_pct": 19.2,
         "hard_hit_pct": 46.4,
         "run_value_per_100": 1.1
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 39,
+        "woba": 0.189,
+        "xwoba": 0.273,
+        "ba": 0.162,
+        "slg": 0.243,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -2.2
       }
     ]
   },
@@ -7582,18 +7582,6 @@
         "run_value_per_100": -0.5
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 25,
-        "woba": 0.196,
-        "xwoba": 0.324,
-        "ba": 0.16,
-        "slg": 0.28,
-        "whiff_pct": 22.0,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -1.0
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 25,
@@ -7604,6 +7592,18 @@
         "whiff_pct": 30.6,
         "hard_hit_pct": 42.9,
         "run_value_per_100": 1.2
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 25,
+        "woba": 0.196,
+        "xwoba": 0.324,
+        "ba": 0.16,
+        "slg": 0.28,
+        "whiff_pct": 22.0,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -1.0
       },
       {
         "pitch_type": "ST",
@@ -7625,18 +7625,6 @@
     "team": "CIN",
     "vs_pitches": [
       {
-        "pitch_type": "FF",
-        "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.391,
-        "xwoba": 0.343,
-        "ba": 0.222,
-        "slg": 0.556,
-        "whiff_pct": 26.1,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": 0.3
-      },
-      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 11,
@@ -7647,6 +7635,18 @@
         "whiff_pct": 36.8,
         "hard_hit_pct": 0.0,
         "run_value_per_100": -8.7
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.391,
+        "xwoba": 0.343,
+        "ba": 0.222,
+        "slg": 0.556,
+        "whiff_pct": 26.1,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 0.3
       }
     ]
   },
@@ -8111,18 +8111,6 @@
         "run_value_per_100": 6.7
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 29,
-        "woba": 0.498,
-        "xwoba": 0.459,
-        "ba": 0.357,
-        "slg": 0.821,
-        "whiff_pct": 27.9,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": 4.5
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 29,
@@ -8133,6 +8121,18 @@
         "whiff_pct": 18.9,
         "hard_hit_pct": 50.0,
         "run_value_per_100": 3.3
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 29,
+        "woba": 0.498,
+        "xwoba": 0.459,
+        "ba": 0.357,
+        "slg": 0.821,
+        "whiff_pct": 27.9,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": 4.5
       },
       {
         "pitch_type": "CU",
@@ -8640,18 +8640,6 @@
         "run_value_per_100": -1.3
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 41,
-        "woba": 0.321,
-        "xwoba": 0.316,
-        "ba": 0.229,
-        "slg": 0.343,
-        "whiff_pct": 15.8,
-        "hard_hit_pct": 34.5,
-        "run_value_per_100": 1.3
-      },
-      {
         "pitch_type": "CU",
         "pitch_name": "Curveball",
         "pa": 41,
@@ -8662,6 +8650,18 @@
         "whiff_pct": 16.7,
         "hard_hit_pct": 51.6,
         "run_value_per_100": 1.1
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 41,
+        "woba": 0.321,
+        "xwoba": 0.316,
+        "ba": 0.229,
+        "slg": 0.343,
+        "whiff_pct": 15.8,
+        "hard_hit_pct": 34.5,
+        "run_value_per_100": 1.3
       },
       {
         "pitch_type": "FC",
@@ -8807,7 +8807,7 @@
         "slg": 0.617,
         "whiff_pct": 22.4,
         "hard_hit_pct": 44.4,
-        "run_value_per_100": 1.8
+        "run_value_per_100": 1.9
       },
       {
         "pitch_type": "SL",
@@ -9229,18 +9229,6 @@
         "run_value_per_100": 0.1
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 48,
-        "woba": 0.306,
-        "xwoba": 0.28,
-        "ba": 0.227,
-        "slg": 0.409,
-        "whiff_pct": 38.5,
-        "hard_hit_pct": 29.0,
-        "run_value_per_100": 0.8
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 48,
@@ -9251,6 +9239,18 @@
         "whiff_pct": 23.9,
         "hard_hit_pct": 40.5,
         "run_value_per_100": -2.6
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 48,
+        "woba": 0.306,
+        "xwoba": 0.28,
+        "ba": 0.227,
+        "slg": 0.409,
+        "whiff_pct": 38.5,
+        "hard_hit_pct": 29.0,
+        "run_value_per_100": 0.8
       },
       {
         "pitch_type": "CU",
@@ -9411,18 +9411,6 @@
         "run_value_per_100": -6.1
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 12,
-        "woba": 0.225,
-        "xwoba": 0.204,
-        "ba": 0.25,
-        "slg": 0.25,
-        "whiff_pct": 40.7,
-        "hard_hit_pct": 12.5,
-        "run_value_per_100": -1.2
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 12,
@@ -9433,6 +9421,18 @@
         "whiff_pct": 60.9,
         "hard_hit_pct": 60.0,
         "run_value_per_100": 2.9
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 12,
+        "woba": 0.225,
+        "xwoba": 0.204,
+        "ba": 0.25,
+        "slg": 0.25,
+        "whiff_pct": 40.7,
+        "hard_hit_pct": 12.5,
+        "run_value_per_100": -1.2
       },
       {
         "pitch_type": "ST",
@@ -9822,7 +9822,7 @@
         "slg": 0.544,
         "whiff_pct": 31.5,
         "hard_hit_pct": 34.1,
-        "run_value_per_100": 2.8
+        "run_value_per_100": 2.9
       },
       {
         "pitch_type": "SI",
@@ -9870,7 +9870,7 @@
         "slg": 0.739,
         "whiff_pct": 16.7,
         "hard_hit_pct": 52.9,
-        "run_value_per_100": 2.1
+        "run_value_per_100": 2.2
       },
       {
         "pitch_type": "FS",
@@ -10237,18 +10237,6 @@
         "run_value_per_100": -0.6
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
-        "pa": 39,
-        "woba": 0.419,
-        "xwoba": 0.405,
-        "ba": 0.306,
-        "slg": 0.639,
-        "whiff_pct": 15.1,
-        "hard_hit_pct": 41.2,
-        "run_value_per_100": 1.0
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 39,
@@ -10259,6 +10247,18 @@
         "whiff_pct": 33.3,
         "hard_hit_pct": 36.0,
         "run_value_per_100": 1.3
+      },
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "pa": 39,
+        "woba": 0.419,
+        "xwoba": 0.405,
+        "ba": 0.306,
+        "slg": 0.639,
+        "whiff_pct": 15.1,
+        "hard_hit_pct": 41.2,
+        "run_value_per_100": 1.0
       },
       {
         "pitch_type": "CU",
@@ -10974,7 +10974,7 @@
         "slg": 0.68,
         "whiff_pct": 18.2,
         "hard_hit_pct": 45.0,
-        "run_value_per_100": 1.9
+        "run_value_per_100": 2.0
       },
       {
         "pitch_type": "ST",
@@ -11882,18 +11882,6 @@
         "run_value_per_100": -3.9
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 18,
-        "woba": 0.1,
-        "xwoba": 0.097,
-        "ba": 0.111,
-        "slg": 0.111,
-        "whiff_pct": 26.3,
-        "hard_hit_pct": 0.0,
-        "run_value_per_100": -1.7
-      },
-      {
         "pitch_type": "FS",
         "pitch_name": "Split-Finger",
         "pa": 18,
@@ -11904,6 +11892,18 @@
         "whiff_pct": 28.6,
         "hard_hit_pct": 41.7,
         "run_value_per_100": -4.6
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 18,
+        "woba": 0.1,
+        "xwoba": 0.097,
+        "ba": 0.111,
+        "slg": 0.111,
+        "whiff_pct": 26.3,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": -1.7
       }
     ]
   },
@@ -11949,18 +11949,6 @@
         "run_value_per_100": -3.0
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 16,
-        "woba": 0.088,
-        "xwoba": 0.124,
-        "ba": 0.0,
-        "slg": 0.0,
-        "whiff_pct": 39.0,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -2.6
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 16,
@@ -11971,6 +11959,18 @@
         "whiff_pct": 32.0,
         "hard_hit_pct": 55.6,
         "run_value_per_100": 4.2
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 16,
+        "woba": 0.088,
+        "xwoba": 0.124,
+        "ba": 0.0,
+        "slg": 0.0,
+        "whiff_pct": 39.0,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -2.6
       },
       {
         "pitch_type": "CU",
@@ -12064,18 +12064,6 @@
         "run_value_per_100": 0.1
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 49,
-        "woba": 0.37,
-        "xwoba": 0.348,
-        "ba": 0.298,
-        "slg": 0.489,
-        "whiff_pct": 26.7,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 1.1
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 49,
@@ -12086,6 +12074,18 @@
         "whiff_pct": 23.2,
         "hard_hit_pct": 41.7,
         "run_value_per_100": 0.1
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 49,
+        "woba": 0.37,
+        "xwoba": 0.348,
+        "ba": 0.298,
+        "slg": 0.489,
+        "whiff_pct": 26.7,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 1.1
       },
       {
         "pitch_type": "FS",
@@ -13675,7 +13675,7 @@
         "slg": 0.44,
         "whiff_pct": 21.4,
         "hard_hit_pct": 27.3,
-        "run_value_per_100": 2.6
+        "run_value_per_100": 2.5
       },
       {
         "pitch_type": "FC",
@@ -13778,7 +13778,7 @@
         "slg": 0.222,
         "whiff_pct": 22.0,
         "hard_hit_pct": 18.2,
-        "run_value_per_100": -0.5
+        "run_value_per_100": -0.6
       },
       {
         "pitch_type": "CU",
@@ -13967,7 +13967,7 @@
         "slg": 0.5,
         "whiff_pct": 14.8,
         "hard_hit_pct": 40.6,
-        "run_value_per_100": -0.6
+        "run_value_per_100": -0.5
       },
       {
         "pitch_type": "SL",
@@ -14247,7 +14247,7 @@
         "slg": 0.667,
         "whiff_pct": 19.2,
         "hard_hit_pct": 55.6,
-        "run_value_per_100": 1.0
+        "run_value_per_100": 0.9
       },
       {
         "pitch_type": "CH",
@@ -14616,18 +14616,6 @@
         "run_value_per_100": 2.2
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 39,
-        "woba": 0.168,
-        "xwoba": 0.186,
-        "ba": 0.088,
-        "slg": 0.118,
-        "whiff_pct": 52.5,
-        "hard_hit_pct": 31.3,
-        "run_value_per_100": -3.4
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 39,
@@ -14638,6 +14626,18 @@
         "whiff_pct": 39.6,
         "hard_hit_pct": 50.0,
         "run_value_per_100": 3.2
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 39,
+        "woba": 0.168,
+        "xwoba": 0.186,
+        "ba": 0.088,
+        "slg": 0.118,
+        "whiff_pct": 52.5,
+        "hard_hit_pct": 31.3,
+        "run_value_per_100": -3.4
       },
       {
         "pitch_type": "ST",
@@ -16143,7 +16143,7 @@
         "slg": 0.0,
         "whiff_pct": 9.5,
         "hard_hit_pct": 18.8,
-        "run_value_per_100": -5.0
+        "run_value_per_100": -5.1
       },
       {
         "pitch_type": "SI",
@@ -16692,18 +16692,6 @@
         "run_value_per_100": 4.9
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 11,
-        "woba": 0.082,
-        "xwoba": 0.09,
-        "ba": 0.091,
-        "slg": 0.091,
-        "whiff_pct": 73.3,
-        "hard_hit_pct": 25.0,
-        "run_value_per_100": -5.7
-      },
-      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 11,
@@ -16714,6 +16702,18 @@
         "whiff_pct": 27.6,
         "hard_hit_pct": 60.0,
         "run_value_per_100": 1.6
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 11,
+        "woba": 0.082,
+        "xwoba": 0.09,
+        "ba": 0.091,
+        "slg": 0.091,
+        "whiff_pct": 73.3,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -5.7
       }
     ]
   },
@@ -17218,7 +17218,7 @@
         "slg": 0.273,
         "whiff_pct": 26.1,
         "hard_hit_pct": 33.3,
-        "run_value_per_100": 0.1
+        "run_value_per_100": 0.2
       }
     ]
   },
@@ -17331,18 +17331,6 @@
         "run_value_per_100": -2.5
       },
       {
-        "pitch_type": "SI",
-        "pitch_name": "Sinker",
-        "pa": 18,
-        "woba": 0.269,
-        "xwoba": 0.318,
-        "ba": 0.235,
-        "slg": 0.294,
-        "whiff_pct": 11.4,
-        "hard_hit_pct": 41.2,
-        "run_value_per_100": -1.6
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 18,
@@ -17353,6 +17341,18 @@
         "whiff_pct": 48.3,
         "hard_hit_pct": 50.0,
         "run_value_per_100": 1.1
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 18,
+        "woba": 0.269,
+        "xwoba": 0.318,
+        "ba": 0.235,
+        "slg": 0.294,
+        "whiff_pct": 11.4,
+        "hard_hit_pct": 41.2,
+        "run_value_per_100": -1.6
       },
       {
         "pitch_type": "ST",
@@ -17886,7 +17886,7 @@
         "slg": 0.154,
         "whiff_pct": 26.7,
         "hard_hit_pct": 35.3,
-        "run_value_per_100": -1.6
+        "run_value_per_100": -1.5
       },
       {
         "pitch_type": "SL",
@@ -18202,7 +18202,7 @@
         "slg": 0.369,
         "whiff_pct": 27.6,
         "hard_hit_pct": 51.0,
-        "run_value_per_100": -0.2
+        "run_value_per_100": -0.1
       },
       {
         "pitch_type": "CH",
@@ -18471,18 +18471,6 @@
         "run_value_per_100": -1.0
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 23,
-        "woba": 0.217,
-        "xwoba": 0.218,
-        "ba": 0.19,
-        "slg": 0.19,
-        "whiff_pct": 50.0,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -1.3
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 23,
@@ -18493,6 +18481,18 @@
         "whiff_pct": 26.1,
         "hard_hit_pct": 30.0,
         "run_value_per_100": 1.9
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 23,
+        "woba": 0.217,
+        "xwoba": 0.218,
+        "ba": 0.19,
+        "slg": 0.19,
+        "whiff_pct": 50.0,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": -1.3
       }
     ]
   },
@@ -18906,7 +18906,7 @@
         "pitch_name": "Changeup",
         "pa": 32,
         "woba": 0.464,
-        "xwoba": 0.345,
+        "xwoba": 0.346,
         "ba": 0.346,
         "slg": 0.692,
         "whiff_pct": 13.7,
@@ -18923,7 +18923,7 @@
         "slg": 0.433,
         "whiff_pct": 22.4,
         "hard_hit_pct": 26.1,
-        "run_value_per_100": 2.2
+        "run_value_per_100": 2.3
       },
       {
         "pitch_type": "CU",
@@ -19132,18 +19132,6 @@
         "run_value_per_100": 1.0
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 31,
-        "woba": 0.166,
-        "xwoba": 0.209,
-        "ba": 0.111,
-        "slg": 0.148,
-        "whiff_pct": 39.0,
-        "hard_hit_pct": 18.8,
-        "run_value_per_100": -2.2
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 31,
@@ -19154,6 +19142,18 @@
         "whiff_pct": 15.9,
         "hard_hit_pct": 58.3,
         "run_value_per_100": 0.7
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 31,
+        "woba": 0.166,
+        "xwoba": 0.209,
+        "ba": 0.111,
+        "slg": 0.148,
+        "whiff_pct": 39.0,
+        "hard_hit_pct": 18.8,
+        "run_value_per_100": -2.2
       }
     ]
   },
@@ -19211,18 +19211,6 @@
         "run_value_per_100": 0.0
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 44,
-        "woba": 0.309,
-        "xwoba": 0.327,
-        "ba": 0.256,
-        "slg": 0.385,
-        "whiff_pct": 25.7,
-        "hard_hit_pct": 61.5,
-        "run_value_per_100": 1.4
-      },
-      {
         "pitch_type": "CU",
         "pitch_name": "Curveball",
         "pa": 44,
@@ -19233,6 +19221,18 @@
         "whiff_pct": 22.7,
         "hard_hit_pct": 37.9,
         "run_value_per_100": 0.6
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 44,
+        "woba": 0.309,
+        "xwoba": 0.327,
+        "ba": 0.256,
+        "slg": 0.385,
+        "whiff_pct": 25.7,
+        "hard_hit_pct": 61.5,
+        "run_value_per_100": 1.4
       },
       {
         "pitch_type": "FC",
@@ -19771,7 +19771,7 @@
         "slg": 0.333,
         "whiff_pct": 15.0,
         "hard_hit_pct": 33.3,
-        "run_value_per_100": -1.4
+        "run_value_per_100": -1.5
       }
     ]
   },
@@ -19908,18 +19908,6 @@
         "run_value_per_100": -1.3
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
-        "pa": 39,
-        "woba": 0.399,
-        "xwoba": 0.38,
-        "ba": 0.324,
-        "slg": 0.5,
-        "whiff_pct": 20.8,
-        "hard_hit_pct": 26.7,
-        "run_value_per_100": 0.3
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 39,
@@ -19930,6 +19918,18 @@
         "whiff_pct": 28.7,
         "hard_hit_pct": 25.0,
         "run_value_per_100": 0.5
+      },
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "pa": 39,
+        "woba": 0.399,
+        "xwoba": 0.38,
+        "ba": 0.324,
+        "slg": 0.5,
+        "whiff_pct": 20.8,
+        "hard_hit_pct": 26.7,
+        "run_value_per_100": 0.3
       },
       {
         "pitch_type": "CU",
@@ -20011,16 +20011,16 @@
         "run_value_per_100": -1.4
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
         "pa": 12,
-        "woba": 0.225,
-        "xwoba": 0.254,
-        "ba": 0.091,
-        "slg": 0.364,
-        "whiff_pct": 55.2,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -0.9
+        "woba": 0.342,
+        "xwoba": 0.367,
+        "ba": 0.273,
+        "slg": 0.455,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 44.4,
+        "run_value_per_100": -0.1
       },
       {
         "pitch_type": "CU",
@@ -20035,16 +20035,16 @@
         "run_value_per_100": -0.4
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
         "pa": 12,
-        "woba": 0.342,
-        "xwoba": 0.367,
-        "ba": 0.273,
-        "slg": 0.455,
-        "whiff_pct": 20.0,
-        "hard_hit_pct": 44.4,
-        "run_value_per_100": -0.1
+        "woba": 0.225,
+        "xwoba": 0.254,
+        "ba": 0.091,
+        "slg": 0.364,
+        "whiff_pct": 55.2,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -0.9
       }
     ]
   },
@@ -20387,18 +20387,6 @@
         "run_value_per_100": -1.4
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 10,
-        "woba": 0.265,
-        "xwoba": 0.206,
-        "ba": 0.125,
-        "slg": 0.25,
-        "whiff_pct": 45.0,
-        "hard_hit_pct": 25.0,
-        "run_value_per_100": -1.2
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 10,
@@ -20409,6 +20397,18 @@
         "whiff_pct": 26.3,
         "hard_hit_pct": 12.5,
         "run_value_per_100": 4.7
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 10,
+        "woba": 0.265,
+        "xwoba": 0.206,
+        "ba": 0.125,
+        "slg": 0.25,
+        "whiff_pct": 45.0,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -1.2
       }
     ]
   },
@@ -20439,7 +20439,7 @@
         "slg": 0.357,
         "whiff_pct": 18.3,
         "hard_hit_pct": 36.0,
-        "run_value_per_100": -0.4
+        "run_value_per_100": -0.3
       },
       {
         "pitch_type": "CH",
@@ -21337,7 +21337,7 @@
         "slg": 0.559,
         "whiff_pct": 32.1,
         "hard_hit_pct": 46.2,
-        "run_value_per_100": 3.1
+        "run_value_per_100": 3.0
       },
       {
         "pitch_type": "CH",
@@ -21747,18 +21747,6 @@
         "run_value_per_100": -1.2
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
-        "pa": 13,
-        "woba": 0.331,
-        "xwoba": 0.278,
-        "ba": 0.308,
-        "slg": 0.462,
-        "whiff_pct": 18.2,
-        "hard_hit_pct": 16.7,
-        "run_value_per_100": 0.5
-      },
-      {
         "pitch_type": "CU",
         "pitch_name": "Curveball",
         "pa": 13,
@@ -21769,6 +21757,18 @@
         "whiff_pct": 34.4,
         "hard_hit_pct": 54.5,
         "run_value_per_100": -2.8
+      },
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "pa": 13,
+        "woba": 0.331,
+        "xwoba": 0.278,
+        "ba": 0.308,
+        "slg": 0.462,
+        "whiff_pct": 18.2,
+        "hard_hit_pct": 16.7,
+        "run_value_per_100": 0.5
       }
     ]
   },
@@ -22226,18 +22226,6 @@
         "run_value_per_100": 0.4
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 40,
-        "woba": 0.219,
-        "xwoba": 0.247,
-        "ba": 0.162,
-        "slg": 0.243,
-        "whiff_pct": 40.0,
-        "hard_hit_pct": 37.0,
-        "run_value_per_100": -1.1
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 40,
@@ -22248,6 +22236,18 @@
         "whiff_pct": 27.7,
         "hard_hit_pct": 30.6,
         "run_value_per_100": 1.1
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 40,
+        "woba": 0.219,
+        "xwoba": 0.247,
+        "ba": 0.162,
+        "slg": 0.243,
+        "whiff_pct": 40.0,
+        "hard_hit_pct": 37.0,
+        "run_value_per_100": -1.1
       },
       {
         "pitch_type": "CU",
@@ -22774,18 +22774,6 @@
         "run_value_per_100": 0.4
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 47,
-        "woba": 0.249,
-        "xwoba": 0.253,
-        "ba": 0.136,
-        "slg": 0.341,
-        "whiff_pct": 24.2,
-        "hard_hit_pct": 28.6,
-        "run_value_per_100": -1.3
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 47,
@@ -22798,6 +22786,18 @@
         "run_value_per_100": 2.1
       },
       {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 47,
+        "woba": 0.249,
+        "xwoba": 0.253,
+        "ba": 0.136,
+        "slg": 0.341,
+        "whiff_pct": 24.2,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": -1.3
+      },
+      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 36,
@@ -22807,7 +22807,7 @@
         "slg": 0.903,
         "whiff_pct": 28.9,
         "hard_hit_pct": 53.8,
-        "run_value_per_100": 2.4
+        "run_value_per_100": 2.5
       },
       {
         "pitch_type": "ST",
@@ -23358,18 +23358,6 @@
         "run_value_per_100": 1.1
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 12,
-        "woba": 0.245,
-        "xwoba": 0.254,
-        "ba": 0.1,
-        "slg": 0.4,
-        "whiff_pct": 32.3,
-        "hard_hit_pct": 16.7,
-        "run_value_per_100": -0.5
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 12,
@@ -23380,6 +23368,18 @@
         "whiff_pct": 16.0,
         "hard_hit_pct": 20.0,
         "run_value_per_100": 2.0
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 12,
+        "woba": 0.245,
+        "xwoba": 0.254,
+        "ba": 0.1,
+        "slg": 0.4,
+        "whiff_pct": 32.3,
+        "hard_hit_pct": 16.7,
+        "run_value_per_100": -0.5
       }
     ]
   },
@@ -23839,18 +23839,6 @@
         "run_value_per_100": -1.5
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 42,
-        "woba": 0.271,
-        "xwoba": 0.236,
-        "ba": 0.189,
-        "slg": 0.243,
-        "whiff_pct": 21.7,
-        "hard_hit_pct": 17.2,
-        "run_value_per_100": -1.6
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 42,
@@ -23861,6 +23849,18 @@
         "whiff_pct": 36.0,
         "hard_hit_pct": 21.4,
         "run_value_per_100": -1.4
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 42,
+        "woba": 0.271,
+        "xwoba": 0.236,
+        "ba": 0.189,
+        "slg": 0.243,
+        "whiff_pct": 21.7,
+        "hard_hit_pct": 17.2,
+        "run_value_per_100": -1.6
       },
       {
         "pitch_type": "FC",
@@ -24025,7 +24025,7 @@
         "pitch_name": "Slider",
         "pa": 16,
         "woba": 0.181,
-        "xwoba": 0.236,
+        "xwoba": 0.235,
         "ba": 0.063,
         "slg": 0.25,
         "whiff_pct": 31.3,
@@ -24042,7 +24042,7 @@
         "slg": 0.8,
         "whiff_pct": 24.1,
         "hard_hit_pct": 20.0,
-        "run_value_per_100": 4.1
+        "run_value_per_100": 4.0
       },
       {
         "pitch_type": "FC",
@@ -24231,7 +24231,7 @@
         "pitch_name": "Curveball",
         "pa": 12,
         "woba": 0.296,
-        "xwoba": 0.167,
+        "xwoba": 0.166,
         "ba": 0.1,
         "slg": 0.2,
         "whiff_pct": 36.4,
@@ -24500,18 +24500,6 @@
         "run_value_per_100": 0.2
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 26,
-        "woba": 0.194,
-        "xwoba": 0.246,
-        "ba": 0.154,
-        "slg": 0.308,
-        "whiff_pct": 39.5,
-        "hard_hit_pct": 46.7,
-        "run_value_per_100": -0.8
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 26,
@@ -24522,6 +24510,18 @@
         "whiff_pct": 29.2,
         "hard_hit_pct": 30.0,
         "run_value_per_100": 0.3
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 26,
+        "woba": 0.194,
+        "xwoba": 0.246,
+        "ba": 0.154,
+        "slg": 0.308,
+        "whiff_pct": 39.5,
+        "hard_hit_pct": 46.7,
+        "run_value_per_100": -0.8
       }
     ]
   },
@@ -24588,7 +24588,7 @@
         "slg": 0.463,
         "whiff_pct": 14.5,
         "hard_hit_pct": 27.0,
-        "run_value_per_100": 0.8
+        "run_value_per_100": 0.7
       },
       {
         "pitch_type": "CH",
@@ -25742,7 +25742,7 @@
         "slg": 0.286,
         "whiff_pct": 17.2,
         "hard_hit_pct": 41.2,
-        "run_value_per_100": -0.6
+        "run_value_per_100": -0.7
       },
       {
         "pitch_type": "CH",
@@ -26030,18 +26030,6 @@
         "run_value_per_100": -1.8
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 15,
-        "woba": 0.213,
-        "xwoba": 0.264,
-        "ba": 0.154,
-        "slg": 0.154,
-        "whiff_pct": 44.8,
-        "hard_hit_pct": 0.0,
-        "run_value_per_100": -1.4
-      },
-      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 15,
@@ -26054,11 +26042,23 @@
         "run_value_per_100": -3.4
       },
       {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 15,
+        "woba": 0.213,
+        "xwoba": 0.264,
+        "ba": 0.154,
+        "slg": 0.154,
+        "whiff_pct": 44.8,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": -1.4
+      },
+      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 14,
         "woba": 0.268,
-        "xwoba": 0.315,
+        "xwoba": 0.316,
         "ba": 0.231,
         "slg": 0.308,
         "whiff_pct": 25.0,
@@ -26540,18 +26540,6 @@
         "run_value_per_100": 0.2
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 46,
-        "woba": 0.265,
-        "xwoba": 0.29,
-        "ba": 0.227,
-        "slg": 0.318,
-        "whiff_pct": 10.5,
-        "hard_hit_pct": 34.2,
-        "run_value_per_100": -1.3
-      },
-      {
         "pitch_type": "CU",
         "pitch_name": "Curveball",
         "pa": 46,
@@ -26562,6 +26550,18 @@
         "whiff_pct": 25.0,
         "hard_hit_pct": 25.7,
         "run_value_per_100": -0.8
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 46,
+        "woba": 0.265,
+        "xwoba": 0.29,
+        "ba": 0.227,
+        "slg": 0.318,
+        "whiff_pct": 10.5,
+        "hard_hit_pct": 34.2,
+        "run_value_per_100": -1.3
       },
       {
         "pitch_type": "FC",
@@ -26719,7 +26719,7 @@
         "slg": 0.556,
         "whiff_pct": 11.1,
         "hard_hit_pct": 43.8,
-        "run_value_per_100": 4.8
+        "run_value_per_100": 4.7
       },
       {
         "pitch_type": "CH",
@@ -27042,7 +27042,7 @@
         "slg": 0.433,
         "whiff_pct": 9.2,
         "hard_hit_pct": 41.8,
-        "run_value_per_100": -0.1
+        "run_value_per_100": -0.2
       },
       {
         "pitch_type": "CH",
@@ -27105,6 +27105,18 @@
         "run_value_per_100": 1.5
       },
       {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 18,
+        "woba": 0.347,
+        "xwoba": 0.25,
+        "ba": 0.294,
+        "slg": 0.471,
+        "whiff_pct": 16.0,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": 0.0
+      },
+      {
         "pitch_type": "CU",
         "pitch_name": "Curveball",
         "pa": 18,
@@ -27115,18 +27127,6 @@
         "whiff_pct": 11.1,
         "hard_hit_pct": 13.3,
         "run_value_per_100": -3.0
-      },
-      {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 18,
-        "woba": 0.347,
-        "xwoba": 0.251,
-        "ba": 0.294,
-        "slg": 0.471,
-        "whiff_pct": 16.0,
-        "hard_hit_pct": 28.6,
-        "run_value_per_100": 0.0
       }
     ]
   },
@@ -27172,18 +27172,6 @@
         "run_value_per_100": -3.2
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 29,
-        "woba": 0.252,
-        "xwoba": 0.279,
-        "ba": 0.12,
-        "slg": 0.32,
-        "whiff_pct": 38.9,
-        "hard_hit_pct": 25.0,
-        "run_value_per_100": -0.3
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 29,
@@ -27194,6 +27182,18 @@
         "whiff_pct": 35.1,
         "hard_hit_pct": 31.3,
         "run_value_per_100": -3.6
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 29,
+        "woba": 0.252,
+        "xwoba": 0.279,
+        "ba": 0.12,
+        "slg": 0.32,
+        "whiff_pct": 38.9,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -0.3
       },
       {
         "pitch_type": "FC",
@@ -27311,18 +27311,6 @@
         "run_value_per_100": 0.8
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 36,
-        "woba": 0.217,
-        "xwoba": 0.22,
-        "ba": 0.129,
-        "slg": 0.194,
-        "whiff_pct": 39.4,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -1.8
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 36,
@@ -27333,6 +27321,18 @@
         "whiff_pct": 14.5,
         "hard_hit_pct": 34.5,
         "run_value_per_100": -1.5
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 36,
+        "woba": 0.217,
+        "xwoba": 0.22,
+        "ba": 0.129,
+        "slg": 0.194,
+        "whiff_pct": 39.4,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": -1.8
       }
     ]
   },
@@ -27686,7 +27686,7 @@
         "pitch_name": "Slider",
         "pa": 38,
         "woba": 0.187,
-        "xwoba": 0.191,
+        "xwoba": 0.192,
         "ba": 0.091,
         "slg": 0.091,
         "whiff_pct": 41.4,
@@ -27785,18 +27785,6 @@
         "run_value_per_100": -3.2
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 26,
-        "woba": 0.296,
-        "xwoba": 0.24,
-        "ba": 0.24,
-        "slg": 0.32,
-        "whiff_pct": 31.3,
-        "hard_hit_pct": 47.1,
-        "run_value_per_100": 0.8
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 26,
@@ -27807,6 +27795,18 @@
         "whiff_pct": 24.5,
         "hard_hit_pct": 47.4,
         "run_value_per_100": 2.0
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 26,
+        "woba": 0.296,
+        "xwoba": 0.24,
+        "ba": 0.24,
+        "slg": 0.32,
+        "whiff_pct": 31.3,
+        "hard_hit_pct": 47.1,
+        "run_value_per_100": 0.8
       },
       {
         "pitch_type": "FS",
@@ -27864,18 +27864,6 @@
         "run_value_per_100": -0.6
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 42,
-        "woba": 0.243,
-        "xwoba": 0.244,
-        "ba": 0.065,
-        "slg": 0.129,
-        "whiff_pct": 42.9,
-        "hard_hit_pct": 5.6,
-        "run_value_per_100": -0.6
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 42,
@@ -27885,6 +27873,18 @@
         "slg": 0.256,
         "whiff_pct": 34.5,
         "hard_hit_pct": 34.6,
+        "run_value_per_100": -0.6
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 42,
+        "woba": 0.243,
+        "xwoba": 0.244,
+        "ba": 0.065,
+        "slg": 0.129,
+        "whiff_pct": 42.9,
+        "hard_hit_pct": 5.6,
         "run_value_per_100": -0.6
       },
       {
@@ -28182,7 +28182,7 @@
         "slg": 0.757,
         "whiff_pct": 34.7,
         "hard_hit_pct": 62.5,
-        "run_value_per_100": 4.9
+        "run_value_per_100": 5.0
       },
       {
         "pitch_type": "FC",
@@ -28276,16 +28276,16 @@
         "run_value_per_100": 1.1
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
         "pa": 10,
-        "woba": 0.23,
-        "xwoba": 0.259,
-        "ba": 0.125,
-        "slg": 0.125,
-        "whiff_pct": 40.6,
-        "hard_hit_pct": 25.0,
-        "run_value_per_100": -1.2
+        "woba": 0.39,
+        "xwoba": 0.377,
+        "ba": 0.286,
+        "slg": 0.286,
+        "whiff_pct": 33.3,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": 2.4
       },
       {
         "pitch_type": "FC",
@@ -28300,16 +28300,16 @@
         "run_value_per_100": 3.3
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
         "pa": 10,
-        "woba": 0.39,
-        "xwoba": 0.377,
-        "ba": 0.286,
-        "slg": 0.286,
-        "whiff_pct": 33.3,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": 2.4
+        "woba": 0.23,
+        "xwoba": 0.259,
+        "ba": 0.125,
+        "slg": 0.125,
+        "whiff_pct": 40.6,
+        "hard_hit_pct": 25.0,
+        "run_value_per_100": -1.2
       }
     ]
   },
@@ -28474,7 +28474,7 @@
         "pitch_name": "Cutter",
         "pa": 14,
         "woba": 0.4,
-        "xwoba": 0.284,
+        "xwoba": 0.283,
         "ba": 0.357,
         "slg": 0.571,
         "whiff_pct": 31.3,
@@ -28853,18 +28853,6 @@
         "run_value_per_100": -5.3
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 15,
-        "woba": 0.143,
-        "xwoba": 0.21,
-        "ba": 0.133,
-        "slg": 0.2,
-        "whiff_pct": 30.6,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -2.6
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 15,
@@ -28875,6 +28863,18 @@
         "whiff_pct": 30.8,
         "hard_hit_pct": 36.4,
         "run_value_per_100": 1.2
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 15,
+        "woba": 0.143,
+        "xwoba": 0.21,
+        "ba": 0.133,
+        "slg": 0.2,
+        "whiff_pct": 30.6,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -2.6
       },
       {
         "pitch_type": "CU",
@@ -29185,7 +29185,7 @@
         "pitch_name": "Sweeper",
         "pa": 28,
         "woba": 0.134,
-        "xwoba": 0.126,
+        "xwoba": 0.127,
         "ba": 0.111,
         "slg": 0.148,
         "whiff_pct": 38.2,
@@ -29666,7 +29666,7 @@
         "pitch_name": "Slider",
         "pa": 34,
         "woba": 0.394,
-        "xwoba": 0.323,
+        "xwoba": 0.324,
         "ba": 0.25,
         "slg": 0.536,
         "whiff_pct": 39.1,
@@ -29975,7 +29975,7 @@
         "slg": 0.188,
         "whiff_pct": 21.7,
         "hard_hit_pct": 31.0,
-        "run_value_per_100": -3.0
+        "run_value_per_100": -3.1
       },
       {
         "pitch_type": "CH",
@@ -30172,18 +30172,6 @@
         "run_value_per_100": -2.7
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 30,
-        "woba": 0.215,
-        "xwoba": 0.155,
-        "ba": 0.2,
-        "slg": 0.3,
-        "whiff_pct": 35.1,
-        "hard_hit_pct": 28.6,
-        "run_value_per_100": -0.9
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 30,
@@ -30194,6 +30182,18 @@
         "whiff_pct": 17.1,
         "hard_hit_pct": 24.0,
         "run_value_per_100": -0.3
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 30,
+        "woba": 0.215,
+        "xwoba": 0.155,
+        "ba": 0.2,
+        "slg": 0.3,
+        "whiff_pct": 35.1,
+        "hard_hit_pct": 28.6,
+        "run_value_per_100": -0.9
       },
       {
         "pitch_type": "CU",
@@ -30610,18 +30610,6 @@
         "run_value_per_100": 0.2
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 16,
-        "woba": 0.144,
-        "xwoba": 0.146,
-        "ba": 0.077,
-        "slg": 0.077,
-        "whiff_pct": 50.0,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": -2.3
-      },
-      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 16,
@@ -30632,6 +30620,18 @@
         "whiff_pct": 35.0,
         "hard_hit_pct": 100.0,
         "run_value_per_100": -1.8
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 16,
+        "woba": 0.144,
+        "xwoba": 0.146,
+        "ba": 0.077,
+        "slg": 0.077,
+        "whiff_pct": 50.0,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": -2.3
       },
       {
         "pitch_type": "CH",
@@ -31134,7 +31134,7 @@
         "slg": 0.308,
         "whiff_pct": 13.8,
         "hard_hit_pct": 15.4,
-        "run_value_per_100": 2.3
+        "run_value_per_100": 2.2
       }
     ]
   },
@@ -31319,18 +31319,6 @@
         "run_value_per_100": 1.0
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 15,
-        "woba": 0.477,
-        "xwoba": 0.388,
-        "ba": 0.385,
-        "slg": 0.462,
-        "whiff_pct": 20.0,
-        "hard_hit_pct": 16.7,
-        "run_value_per_100": 3.3
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 15,
@@ -31341,6 +31329,18 @@
         "whiff_pct": 21.4,
         "hard_hit_pct": 22.2,
         "run_value_per_100": 5.2
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 15,
+        "woba": 0.477,
+        "xwoba": 0.388,
+        "ba": 0.385,
+        "slg": 0.462,
+        "whiff_pct": 20.0,
+        "hard_hit_pct": 16.7,
+        "run_value_per_100": 3.3
       }
     ]
   },
@@ -32537,7 +32537,7 @@
         "pitch_name": "Slider",
         "pa": 88,
         "woba": 0.321,
-        "xwoba": 0.271,
+        "xwoba": 0.272,
         "ba": 0.26,
         "slg": 0.377,
         "whiff_pct": 42.3,
@@ -32616,7 +32616,7 @@
         "pitch_name": "Changeup",
         "pa": 48,
         "woba": 0.303,
-        "xwoba": 0.285,
+        "xwoba": 0.284,
         "ba": 0.2,
         "slg": 0.356,
         "whiff_pct": 36.1,
@@ -33016,7 +33016,7 @@
         "pitch_name": "Sweeper",
         "pa": 10,
         "woba": 0.3,
-        "xwoba": 0.332,
+        "xwoba": 0.331,
         "ba": 0.143,
         "slg": 0.143,
         "whiff_pct": 20.0,
@@ -33040,7 +33040,7 @@
         "slg": 0.565,
         "whiff_pct": 29.4,
         "hard_hit_pct": 43.4,
-        "run_value_per_100": 0.8
+        "run_value_per_100": 0.9
       },
       {
         "pitch_type": "CH",
@@ -33455,18 +33455,6 @@
         "run_value_per_100": 2.2
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 51,
-        "woba": 0.3,
-        "xwoba": 0.33,
-        "ba": 0.195,
-        "slg": 0.317,
-        "whiff_pct": 16.3,
-        "hard_hit_pct": 38.9,
-        "run_value_per_100": -0.2
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 51,
@@ -33477,6 +33465,18 @@
         "whiff_pct": 12.9,
         "hard_hit_pct": 55.0,
         "run_value_per_100": 2.1
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 51,
+        "woba": 0.3,
+        "xwoba": 0.33,
+        "ba": 0.195,
+        "slg": 0.317,
+        "whiff_pct": 16.3,
+        "hard_hit_pct": 38.9,
+        "run_value_per_100": -0.2
       },
       {
         "pitch_type": "ST",
@@ -33929,18 +33929,6 @@
         "run_value_per_100": 0.1
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 55,
-        "woba": 0.261,
-        "xwoba": 0.31,
-        "ba": 0.231,
-        "slg": 0.308,
-        "whiff_pct": 17.2,
-        "hard_hit_pct": 31.8,
-        "run_value_per_100": 0.2
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 55,
@@ -33950,6 +33938,18 @@
         "slg": 0.462,
         "whiff_pct": 14.0,
         "hard_hit_pct": 30.4,
+        "run_value_per_100": 0.2
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 55,
+        "woba": 0.261,
+        "xwoba": 0.31,
+        "ba": 0.231,
+        "slg": 0.308,
+        "whiff_pct": 17.2,
+        "hard_hit_pct": 31.8,
         "run_value_per_100": 0.2
       },
       {
@@ -34494,18 +34494,6 @@
         "run_value_per_100": 1.7
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
-        "pa": 40,
-        "woba": 0.29,
-        "xwoba": 0.305,
-        "ba": 0.297,
-        "slg": 0.297,
-        "whiff_pct": 16.3,
-        "hard_hit_pct": 31.4,
-        "run_value_per_100": -1.5
-      },
-      {
         "pitch_type": "CU",
         "pitch_name": "Curveball",
         "pa": 40,
@@ -34516,6 +34504,18 @@
         "whiff_pct": 15.6,
         "hard_hit_pct": 35.3,
         "run_value_per_100": 2.8
+      },
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "pa": 40,
+        "woba": 0.29,
+        "xwoba": 0.305,
+        "ba": 0.297,
+        "slg": 0.297,
+        "whiff_pct": 16.3,
+        "hard_hit_pct": 31.4,
+        "run_value_per_100": -1.5
       },
       {
         "pitch_type": "FS",
@@ -34597,18 +34597,6 @@
         "run_value_per_100": 1.6
       },
       {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 31,
-        "woba": 0.347,
-        "xwoba": 0.323,
-        "ba": 0.222,
-        "slg": 0.519,
-        "whiff_pct": 25.9,
-        "hard_hit_pct": 42.1,
-        "run_value_per_100": 1.2
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 31,
@@ -34619,6 +34607,18 @@
         "whiff_pct": 19.4,
         "hard_hit_pct": 41.7,
         "run_value_per_100": 4.9
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 31,
+        "woba": 0.347,
+        "xwoba": 0.323,
+        "ba": 0.222,
+        "slg": 0.519,
+        "whiff_pct": 25.9,
+        "hard_hit_pct": 42.1,
+        "run_value_per_100": 1.2
       },
       {
         "pitch_type": "ST",
@@ -34673,19 +34673,7 @@
         "slg": 0.846,
         "whiff_pct": 22.6,
         "hard_hit_pct": 69.2,
-        "run_value_per_100": 4.7
-      },
-      {
-        "pitch_type": "CU",
-        "pitch_name": "Curveball",
-        "pa": 10,
-        "woba": 0.425,
-        "xwoba": 0.394,
-        "ba": 0.286,
-        "slg": 0.429,
-        "whiff_pct": 25.0,
-        "hard_hit_pct": 80.0,
-        "run_value_per_100": 2.9
+        "run_value_per_100": 4.8
       },
       {
         "pitch_type": "CH",
@@ -34710,6 +34698,18 @@
         "whiff_pct": 33.3,
         "hard_hit_pct": 62.5,
         "run_value_per_100": 1.0
+      },
+      {
+        "pitch_type": "CU",
+        "pitch_name": "Curveball",
+        "pa": 10,
+        "woba": 0.425,
+        "xwoba": 0.394,
+        "ba": 0.286,
+        "slg": 0.429,
+        "whiff_pct": 25.0,
+        "hard_hit_pct": 80.0,
+        "run_value_per_100": 2.9
       }
     ]
   },
@@ -34776,7 +34776,7 @@
         "slg": 0.308,
         "whiff_pct": 28.0,
         "hard_hit_pct": 25.0,
-        "run_value_per_100": 1.6
+        "run_value_per_100": 1.5
       },
       {
         "pitch_type": "CH",
@@ -34956,18 +34956,6 @@
     "team": "PIT",
     "vs_pitches": [
       {
-        "pitch_type": "SI",
-        "pitch_name": "Sinker",
-        "pa": 156,
-        "woba": 0.391,
-        "xwoba": 0.331,
-        "ba": 0.362,
-        "slg": 0.406,
-        "whiff_pct": 17.9,
-        "hard_hit_pct": 37.6,
-        "run_value_per_100": 0.5
-      },
-      {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
         "pa": 156,
@@ -34978,6 +34966,18 @@
         "whiff_pct": 16.0,
         "hard_hit_pct": 40.9,
         "run_value_per_100": 0.2
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 156,
+        "woba": 0.391,
+        "xwoba": 0.331,
+        "ba": 0.362,
+        "slg": 0.406,
+        "whiff_pct": 17.9,
+        "hard_hit_pct": 37.6,
+        "run_value_per_100": 0.5
       },
       {
         "pitch_type": "SL",
@@ -35152,7 +35152,7 @@
         "slg": 0.647,
         "whiff_pct": 41.5,
         "hard_hit_pct": 72.7,
-        "run_value_per_100": 4.1
+        "run_value_per_100": 4.0
       }
     ]
   },
@@ -35707,7 +35707,7 @@
         "pitch_name": "Slider",
         "pa": 38,
         "woba": 0.195,
-        "xwoba": 0.278,
+        "xwoba": 0.279,
         "ba": 0.111,
         "slg": 0.278,
         "whiff_pct": 29.9,
@@ -36064,7 +36064,7 @@
         "pitch_name": "Split-Finger",
         "pa": 18,
         "woba": 0.258,
-        "xwoba": 0.277,
+        "xwoba": 0.278,
         "ba": 0.25,
         "slg": 0.313,
         "whiff_pct": 44.4,
@@ -36103,18 +36103,6 @@
         "run_value_per_100": 0.7
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 59,
-        "woba": 0.349,
-        "xwoba": 0.312,
-        "ba": 0.25,
-        "slg": 0.365,
-        "whiff_pct": 41.7,
-        "hard_hit_pct": 43.8,
-        "run_value_per_100": 1.0
-      },
-      {
         "pitch_type": "SI",
         "pitch_name": "Sinker",
         "pa": 59,
@@ -36125,6 +36113,18 @@
         "whiff_pct": 20.7,
         "hard_hit_pct": 71.9,
         "run_value_per_100": -0.3
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 59,
+        "woba": 0.349,
+        "xwoba": 0.312,
+        "ba": 0.25,
+        "slg": 0.365,
+        "whiff_pct": 41.7,
+        "hard_hit_pct": 43.8,
+        "run_value_per_100": 1.0
       },
       {
         "pitch_type": "CU",
@@ -36452,7 +36452,7 @@
         "slg": 0.229,
         "whiff_pct": 31.1,
         "hard_hit_pct": 21.2,
-        "run_value_per_100": -0.4
+        "run_value_per_100": -0.3
       },
       {
         "pitch_type": "FS",
@@ -37331,18 +37331,6 @@
         "run_value_per_100": 0.7
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 90,
-        "woba": 0.359,
-        "xwoba": 0.403,
-        "ba": 0.277,
-        "slg": 0.518,
-        "whiff_pct": 26.2,
-        "hard_hit_pct": 47.1,
-        "run_value_per_100": 1.4
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 90,
@@ -37353,6 +37341,18 @@
         "whiff_pct": 31.0,
         "hard_hit_pct": 52.7,
         "run_value_per_100": 2.3
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 90,
+        "woba": 0.359,
+        "xwoba": 0.403,
+        "ba": 0.277,
+        "slg": 0.518,
+        "whiff_pct": 26.2,
+        "hard_hit_pct": 47.1,
+        "run_value_per_100": 1.4
       },
       {
         "pitch_type": "CU",
@@ -37814,7 +37814,7 @@
         "pitch_name": "Curveball",
         "pa": 10,
         "woba": 0.18,
-        "xwoba": 0.189,
+        "xwoba": 0.188,
         "ba": 0.2,
         "slg": 0.2,
         "whiff_pct": 47.4,
@@ -38080,7 +38080,7 @@
         "slg": 0.294,
         "whiff_pct": 30.3,
         "hard_hit_pct": 40.0,
-        "run_value_per_100": -0.3
+        "run_value_per_100": -0.4
       }
     ]
   },
@@ -38350,7 +38350,7 @@
         "pitch_name": "Split-Finger",
         "pa": 12,
         "woba": 0.15,
-        "xwoba": 0.162,
+        "xwoba": 0.163,
         "ba": 0.167,
         "slg": 0.167,
         "whiff_pct": 30.6,
@@ -38432,18 +38432,6 @@
         "run_value_per_100": 0.8
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 39,
-        "woba": 0.21,
-        "xwoba": 0.208,
-        "ba": 0.167,
-        "slg": 0.222,
-        "whiff_pct": 44.4,
-        "hard_hit_pct": 33.3,
-        "run_value_per_100": -1.9
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 39,
@@ -38454,6 +38442,18 @@
         "whiff_pct": 31.6,
         "hard_hit_pct": 50.0,
         "run_value_per_100": 2.6
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 39,
+        "woba": 0.21,
+        "xwoba": 0.208,
+        "ba": 0.167,
+        "slg": 0.222,
+        "whiff_pct": 44.4,
+        "hard_hit_pct": 33.3,
+        "run_value_per_100": -1.9
       },
       {
         "pitch_type": "ST",
@@ -38791,18 +38791,6 @@
         "run_value_per_100": 1.3
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
-        "pa": 42,
-        "woba": 0.287,
-        "xwoba": 0.335,
-        "ba": 0.182,
-        "slg": 0.212,
-        "whiff_pct": 32.0,
-        "hard_hit_pct": 28.0,
-        "run_value_per_100": -1.4
-      },
-      {
         "pitch_type": "CH",
         "pitch_name": "Changeup",
         "pa": 42,
@@ -38813,6 +38801,18 @@
         "whiff_pct": 35.5,
         "hard_hit_pct": 37.0,
         "run_value_per_100": 1.2
+      },
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "pa": 42,
+        "woba": 0.287,
+        "xwoba": 0.335,
+        "ba": 0.182,
+        "slg": 0.212,
+        "whiff_pct": 32.0,
+        "hard_hit_pct": 28.0,
+        "run_value_per_100": -1.4
       },
       {
         "pitch_type": "ST",
@@ -39700,7 +39700,7 @@
         "pitch_name": "Curveball",
         "pa": 18,
         "woba": 0.661,
-        "xwoba": 0.38,
+        "xwoba": 0.381,
         "ba": 0.5,
         "slg": 0.944,
         "whiff_pct": 11.8,
@@ -40222,7 +40222,7 @@
         "slg": 0.552,
         "whiff_pct": 20.8,
         "hard_hit_pct": 28.6,
-        "run_value_per_100": 0.4
+        "run_value_per_100": 0.3
       },
       {
         "pitch_type": "ST",
@@ -40997,7 +40997,7 @@
         "pitch_name": "Split-Finger",
         "pa": 12,
         "woba": 0.133,
-        "xwoba": 0.337,
+        "xwoba": 0.336,
         "ba": 0.091,
         "slg": 0.091,
         "whiff_pct": 41.9,
@@ -41498,18 +41498,6 @@
         "run_value_per_100": -1.6
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 16,
-        "woba": 0.213,
-        "xwoba": 0.19,
-        "ba": 0.2,
-        "slg": 0.2,
-        "whiff_pct": 32.3,
-        "hard_hit_pct": 22.2,
-        "run_value_per_100": -2.2
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 16,
@@ -41520,6 +41508,18 @@
         "whiff_pct": 20.0,
         "hard_hit_pct": 45.5,
         "run_value_per_100": 1.5
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 16,
+        "woba": 0.213,
+        "xwoba": 0.19,
+        "ba": 0.2,
+        "slg": 0.2,
+        "whiff_pct": 32.3,
+        "hard_hit_pct": 22.2,
+        "run_value_per_100": -2.2
       }
     ]
   },
@@ -41866,7 +41866,7 @@
         "slg": 0.384,
         "whiff_pct": 19.9,
         "hard_hit_pct": 31.3,
-        "run_value_per_100": -0.7
+        "run_value_per_100": -0.6
       },
       {
         "pitch_type": "SI",
@@ -41929,18 +41929,6 @@
         "run_value_per_100": -0.9
       },
       {
-        "pitch_type": "ST",
-        "pitch_name": "Sweeper",
-        "pa": 13,
-        "woba": 0.221,
-        "xwoba": 0.193,
-        "ba": 0.1,
-        "slg": 0.2,
-        "whiff_pct": 19.0,
-        "hard_hit_pct": 0.0,
-        "run_value_per_100": -0.5
-      },
-      {
         "pitch_type": "FS",
         "pitch_name": "Split-Finger",
         "pa": 13,
@@ -41951,6 +41939,18 @@
         "whiff_pct": 66.7,
         "hard_hit_pct": 0.0,
         "run_value_per_100": 1.2
+      },
+      {
+        "pitch_type": "ST",
+        "pitch_name": "Sweeper",
+        "pa": 13,
+        "woba": 0.221,
+        "xwoba": 0.193,
+        "ba": 0.1,
+        "slg": 0.2,
+        "whiff_pct": 19.0,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": -0.5
       }
     ]
   },
@@ -42518,18 +42518,6 @@
         "run_value_per_100": -2.2
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 13,
-        "woba": 0.346,
-        "xwoba": 0.25,
-        "ba": 0.25,
-        "slg": 0.5,
-        "whiff_pct": 47.8,
-        "hard_hit_pct": 40.0,
-        "run_value_per_100": 0.0
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 13,
@@ -42540,6 +42528,18 @@
         "whiff_pct": 15.8,
         "hard_hit_pct": 18.2,
         "run_value_per_100": 0.6
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 13,
+        "woba": 0.346,
+        "xwoba": 0.25,
+        "ba": 0.25,
+        "slg": 0.5,
+        "whiff_pct": 47.8,
+        "hard_hit_pct": 40.0,
+        "run_value_per_100": 0.0
       }
     ]
   },
@@ -42548,18 +42548,6 @@
     "name": "Tommy White",
     "team": "ATH",
     "vs_pitches": [
-      {
-        "pitch_type": "SI",
-        "pitch_name": "Sinker",
-        "pa": 48,
-        "woba": 0.289,
-        "xwoba": 0.272,
-        "ba": 0.277,
-        "slg": 0.362,
-        "whiff_pct": 13.5,
-        "hard_hit_pct": 26.2,
-        "run_value_per_100": -2.3
-      },
       {
         "pitch_type": "FF",
         "pitch_name": "4-Seam Fastball",
@@ -42571,6 +42559,18 @@
         "whiff_pct": 15.8,
         "hard_hit_pct": 42.1,
         "run_value_per_100": -1.1
+      },
+      {
+        "pitch_type": "SI",
+        "pitch_name": "Sinker",
+        "pa": 48,
+        "woba": 0.289,
+        "xwoba": 0.272,
+        "ba": 0.277,
+        "slg": 0.362,
+        "whiff_pct": 13.5,
+        "hard_hit_pct": 26.2,
+        "run_value_per_100": -2.3
       },
       {
         "pitch_type": "SL",
@@ -43052,18 +43052,6 @@
         "run_value_per_100": 0.7
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 28,
-        "woba": 0.248,
-        "xwoba": 0.27,
-        "ba": 0.125,
-        "slg": 0.292,
-        "whiff_pct": 49.0,
-        "hard_hit_pct": 50.0,
-        "run_value_per_100": -0.1
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 28,
@@ -43074,6 +43062,18 @@
         "whiff_pct": 11.6,
         "hard_hit_pct": 31.6,
         "run_value_per_100": 1.2
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 28,
+        "woba": 0.248,
+        "xwoba": 0.27,
+        "ba": 0.125,
+        "slg": 0.292,
+        "whiff_pct": 49.0,
+        "hard_hit_pct": 50.0,
+        "run_value_per_100": -0.1
       },
       {
         "pitch_type": "ST",
@@ -43258,18 +43258,6 @@
         "run_value_per_100": 1.0
       },
       {
-        "pitch_type": "FS",
-        "pitch_name": "Split-Finger",
-        "pa": 10,
-        "woba": 0.27,
-        "xwoba": 0.223,
-        "ba": 0.3,
-        "slg": 0.3,
-        "whiff_pct": 60.0,
-        "hard_hit_pct": 60.0,
-        "run_value_per_100": 0.4
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 10,
@@ -43280,6 +43268,18 @@
         "whiff_pct": 38.1,
         "hard_hit_pct": 37.5,
         "run_value_per_100": -1.7
+      },
+      {
+        "pitch_type": "FS",
+        "pitch_name": "Split-Finger",
+        "pa": 10,
+        "woba": 0.27,
+        "xwoba": 0.223,
+        "ba": 0.3,
+        "slg": 0.3,
+        "whiff_pct": 60.0,
+        "hard_hit_pct": 60.0,
+        "run_value_per_100": 0.4
       }
     ]
   },
@@ -43676,12 +43676,12 @@
         "pitch_name": "4-Seam Fastball",
         "pa": 39,
         "woba": 0.267,
-        "xwoba": 0.246,
+        "xwoba": 0.247,
         "ba": 0.152,
         "slg": 0.333,
         "whiff_pct": 39.5,
         "hard_hit_pct": 33.3,
-        "run_value_per_100": -0.2
+        "run_value_per_100": -0.3
       },
       {
         "pitch_type": "ST",
@@ -43854,18 +43854,6 @@
         "run_value_per_100": -4.4
       },
       {
-        "pitch_type": "SL",
-        "pitch_name": "Slider",
-        "pa": 15,
-        "woba": 0.064,
-        "xwoba": 0.149,
-        "ba": 0.071,
-        "slg": 0.071,
-        "whiff_pct": 26.3,
-        "hard_hit_pct": 0.0,
-        "run_value_per_100": -5.6
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 15,
@@ -43876,6 +43864,18 @@
         "whiff_pct": 29.4,
         "hard_hit_pct": 0.0,
         "run_value_per_100": -2.7
+      },
+      {
+        "pitch_type": "SL",
+        "pitch_name": "Slider",
+        "pa": 15,
+        "woba": 0.064,
+        "xwoba": 0.149,
+        "ba": 0.071,
+        "slg": 0.071,
+        "whiff_pct": 26.3,
+        "hard_hit_pct": 0.0,
+        "run_value_per_100": -5.6
       }
     ]
   },
@@ -44019,18 +44019,6 @@
         "run_value_per_100": 1.2
       },
       {
-        "pitch_type": "CH",
-        "pitch_name": "Changeup",
-        "pa": 41,
-        "woba": 0.291,
-        "xwoba": 0.214,
-        "ba": 0.216,
-        "slg": 0.297,
-        "whiff_pct": 36.7,
-        "hard_hit_pct": 23.1,
-        "run_value_per_100": 0.4
-      },
-      {
         "pitch_type": "FC",
         "pitch_name": "Cutter",
         "pa": 41,
@@ -44041,6 +44029,18 @@
         "whiff_pct": 19.7,
         "hard_hit_pct": 61.3,
         "run_value_per_100": 1.2
+      },
+      {
+        "pitch_type": "CH",
+        "pitch_name": "Changeup",
+        "pa": 41,
+        "woba": 0.291,
+        "xwoba": 0.214,
+        "ba": 0.216,
+        "slg": 0.297,
+        "whiff_pct": 36.7,
+        "hard_hit_pct": 23.1,
+        "run_value_per_100": 0.4
       },
       {
         "pitch_type": "CU",
@@ -44328,18 +44328,6 @@
         "run_value_per_100": -0.1
       },
       {
-        "pitch_type": "FC",
-        "pitch_name": "Cutter",
-        "pa": 15,
-        "woba": 0.387,
-        "xwoba": 0.317,
-        "ba": 0.267,
-        "slg": 0.667,
-        "whiff_pct": 32.3,
-        "hard_hit_pct": 58.3,
-        "run_value_per_100": -0.6
-      },
-      {
         "pitch_type": "ST",
         "pitch_name": "Sweeper",
         "pa": 15,
@@ -44350,6 +44338,18 @@
         "whiff_pct": 13.0,
         "hard_hit_pct": 33.3,
         "run_value_per_100": 1.3
+      },
+      {
+        "pitch_type": "FC",
+        "pitch_name": "Cutter",
+        "pa": 15,
+        "woba": 0.387,
+        "xwoba": 0.317,
+        "ba": 0.267,
+        "slg": 0.667,
+        "whiff_pct": 32.3,
+        "hard_hit_pct": 58.3,
+        "run_value_per_100": -0.6
       },
       {
         "pitch_type": "CU",
@@ -44828,7 +44828,7 @@
         "slg": 0.125,
         "whiff_pct": 38.5,
         "hard_hit_pct": 28.6,
-        "run_value_per_100": -2.5
+        "run_value_per_100": -2.4
       }
     ]
   },
@@ -45915,7 +45915,7 @@
         "slg": 0.286,
         "whiff_pct": 36.6,
         "hard_hit_pct": 24.1,
-        "run_value_per_100": -1.6
+        "run_value_per_100": -1.7
       },
       {
         "pitch_type": "CU",
@@ -46389,7 +46389,7 @@
         "pitch_name": "Sinker",
         "pa": 115,
         "woba": 0.363,
-        "xwoba": 0.329,
+        "xwoba": 0.33,
         "ba": 0.317,
         "slg": 0.386,
         "whiff_pct": 6.2,
@@ -46682,18 +46682,6 @@
     "team": "WSH",
     "vs_pitches": [
       {
-        "pitch_type": "FF",
-        "pitch_name": "4-Seam Fastball",
-        "pa": 11,
-        "woba": 0.309,
-        "xwoba": 0.272,
-        "ba": 0.273,
-        "slg": 0.455,
-        "whiff_pct": 36.7,
-        "hard_hit_pct": 57.1,
-        "run_value_per_100": -1.5
-      },
-      {
         "pitch_type": "SL",
         "pitch_name": "Slider",
         "pa": 11,
@@ -46704,6 +46692,18 @@
         "whiff_pct": 31.8,
         "hard_hit_pct": 60.0,
         "run_value_per_100": 3.6
+      },
+      {
+        "pitch_type": "FF",
+        "pitch_name": "4-Seam Fastball",
+        "pa": 11,
+        "woba": 0.309,
+        "xwoba": 0.272,
+        "ba": 0.273,
+        "slg": 0.455,
+        "whiff_pct": 36.7,
+        "hard_hit_pct": 57.1,
+        "run_value_per_100": -1.5
       }
     ]
   },
